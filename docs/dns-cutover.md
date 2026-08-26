@@ -72,10 +72,13 @@ records that change.**
 
 ### ℹ️ Two oddities I found — neither affects this migration
 
-**`go.indiecore.net` → `192.0.2.1`.** That IP is a reserved "example" address from RFC 5737;
-nothing is actually there. I tested it: HTTPS hangs and times out, HTTP returns a redirect.
-This looks like a half-finished link shortener. It is unrelated to your website and email, so
-**leave it** — we are not touching it. Clean it up later if you don't recognise it.
+**`go.indiecore.net` → `192.0.2.1`.** This is your Play Store short-link service
+(`go.indiecore.net/0/pmn` → the Number Match listing). The `192.0.2.1` address is a deliberate
+placeholder: it is never contacted, because the orange cloud makes Cloudflare answer the
+request itself and a Redirect Rule sends the visitor to Google Play.
+
+**This migration does not touch it.** We only change the bare domain and `www`. Your short
+links keep working throughout, and afterwards.
 
 **Two `NS` records pointing at `dns1/dns2.registrar-servers.com`.** Those are Namecheap's
 nameservers, left over from before you moved to Cloudflare. I checked what the internet
