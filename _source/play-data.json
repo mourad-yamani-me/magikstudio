@@ -46,5 +46,17 @@
     "contentRating": "Everyone",
     "developer": "IndieCoreDev",
     "category": "Puzzle"
+  },
+  "word-slot": {
+    "slug": "word-slot",
+    "pkg": "com.wordslot.app",
+    "title": "Word Slot: Fill-In Crossword",
+    "short": "Fill-in word puzzles: slot blocks into a crossword grid. No timer, no losing.",
+    "desc": "Word Slot is a calm fill-in crossword puzzle for people who like to think without a clock running.<br><br>Every stage hands you a crossword grid that has been cut into letter blocks and scattered around the board. Your job is to slot each block back into the word grid so that every row and every column reads as a real word. Easy to pick up, and genuinely hard by the end.<br><br>WHAT MAKES IT DIFFERENT<br>The board never tells you whether a block is in the right place. It only shows you what the letters currently spell. There are no green ticks and no red crosses to lean on, so you confirm the answer by reading it yourself. When a stage finally clicks, the deduction was yours.<br><br>NO TIMER. NO LIVES. NO WAY TO LOSE.<br>This is a relaxing word game, not a race. Nothing counts down and nothing runs out. You can put a board away mid-thought and pick it up later. The only score is a 1-3 star rating for how cleanly you rebuilt the grid, and most boards can be solved more than one way.<br><br>392 HAND-BUILT STAGES<br>A full campaign of 392 word puzzles, hand-made rather than generated. It opens with gentle 3x3 grids and builds to dense 18x9 finales. The difficulty is deliberately shaped, so a hard stage is followed by room to breathe instead of a straight climb.<br><br>FEATURES<br>* 392 fill-in crossword stages, from 3x3 to 18x9 word grids<br>* No timer, no lives, no fail state: a calm puzzle game at your own pace<br>* 1-3 stars per stage, based on how few blocks you misplaced<br>* Multiple valid solutions on most boards<br>* Five optional power-ups: Check, Sweep, Anchor, Ghost Line, Blueprint<br>* Coins from clears and stars, plus a daily reward chest<br>* Weekly and all-time leaderboards: pick a nickname, no account needed<br>* Cloud save, dark mode and haptics<br>* Optional reminder notification, off unless you turn it on<br>* Free to play, single player<br><br>POWER-UPS THAT STAY OPTIONAL<br>Check, Sweep, Anchor, Ghost Line and Blueprint are bought with coins you earn by playing. They are there for the stage that will not budge. Never required, and never in the way of solving it yourself.<br><br>PLAY ANONYMOUSLY<br>Word Slot starts the moment you open it. No sign-up, no account, no email. Google sign-in is there only if you want to carry your progress to a new phone.<br><br>FOR PUZZLE PEOPLE<br>If you like crossword puzzles, word fit and fill-in puzzles, word blocks, or a good logic puzzle, this is built for you. A word puzzle game for adults who want something to actually solve.<br><br>Free, with ads. Optional rewarded video if you want extra coins.",
+    "updated": "Aug 26, 2026",
+    "installs": "0+",
+    "contentRating": "Everyone",
+    "developer": "IndieCoreDev",
+    "category": "Word"
   }
 }

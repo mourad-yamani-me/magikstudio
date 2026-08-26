@@ -108,6 +108,9 @@ function enhanceImages(html){
 
 /* ───────── game data ───────── */
 const GAMES = [
+  { key:'word-slot',    slug:'word-slot',                 legacy:'privacy-policy-for-word-slot', offline:false,
+    blurb:'A crossword cut into blocks and scattered across the board. Slot every piece back until each row and column reads as a real word \u2014 and nothing on screen tells you when you are right. Working that out is the game.',
+    feats:['392 hand-built stages','No timer, no fail state','Weekly leaderboards','Cloud save & dark mode'] },
   { key:'soda-jam',     slug:'soda-jam-color-sort',       legacy:'privacy-policy-for-soda-jam-color-sort',
     blurb:'Pour, sort and clear the bottles until every colour finds its place. It starts gentle and turns genuinely mean — in the best way.',
     feats:['Hundreds of levels','No timer pressure','Undo & hints','Plays offline'] },
@@ -126,16 +129,7 @@ const GAMES = [
            shots:shotsFor(g.key), icon:`${g.key}-icon.jpg`, live:true };
 });
 
-const WORD_SLOT = {
-  key:'word-slot', slug:'word-slot', legacy:'privacy-policy-for-word-slot', live:false,
-  name:'Word Slot', category:'Word', pkg:'com.wordslot.app', contentRating:'Everyone', updated:'Aug 25, 2026',
-  tagline:'Spin letters into words across handcrafted stages.',
-  blurb:'Spin letters into words across handcrafted stages. Stars, coins and power-ups earned by playing, cloud save across devices, and weekly leaderboards that start fresh every week.',
-  feats:['Handcrafted stages','Weekly leaderboards','Cloud save','Delete-my-data button'],
-  desc:'Word Slot is a word puzzle game built around handcrafted stages rather than endless random boards.<br><br>Spin the letters, find every word, and earn stars, coins and power-ups by playing — there is nothing to buy. Your progress saves to the cloud so you can pick the game up on another device, and weekly leaderboards start fresh every week so a good run always counts for something.<br><br>A "Delete My Data" button in the settings wipes your cloud save and leaderboard entries whenever you want.',
-  shots:[], icon:null,
-};
-const ALL = [...GAMES, WORD_SLOT];
+const ALL = GAMES;
 
 /* ───────── privacy policy parsing ───────── */
 function parsePolicy(legacySlug){
@@ -470,7 +464,7 @@ function pageHome(){
 <section class="hero"><div class="shell hero-grid">
   <div>
     <div class="chip rv"><span class="dot"></span> ${GAMES.length} games live · 100% free</div>
-    <h1 class="rv">FOUR PUZZLES.<br><span class="grad">ZERO PAYWALLS.</span></h1>
+    <h1 class="rv">FIVE PUZZLES.<br><span class="grad">ZERO PAYWALLS.</span></h1>
     <p class="lede rv">Free puzzle games for Android that never ask for your wallet. No in-app purchases, no sign-up, and every one of them works without a signal.</p>
     <div class="cta-row rv">
       <a class="btn btn-primary" href="#games">${PLAY_ICON} Browse the games</a>
@@ -483,7 +477,7 @@ function pageHome(){
   <div class="phones" id="phones">
     <div class="glowpad"></div>
     <div class="phone p2" data-depth="26"><div class="scr"><img data-hero fetchpriority="low" src="/assets/games/gridsmash-02.jpg" alt="Color Block Puzzle Master gameplay" loading="lazy"></div></div>
-    <div class="phone p3" data-depth="20"><div class="scr"><img data-hero fetchpriority="low" src="/assets/games/logo-quiz-01.jpg" alt="Logo Quiz gameplay" loading="lazy"></div></div>
+    <div class="phone p3" data-depth="20"><div class="scr"><img data-hero fetchpriority="low" src="/assets/games/word-slot-01.jpg" alt="Word Slot: Fill-In Crossword gameplay" loading="lazy"></div></div>
     <div class="phone p1" data-depth="42"><div class="scr"><img data-hero src="/assets/games/soda-jam-02.jpg" alt="Soda Jam: Color Sort gameplay" width="250" height="444" fetchpriority="high"></div></div>
   </div>
 </div></section>
@@ -494,7 +488,7 @@ function pageHome(){
   <div class="sec-head rv">
     <span class="eyebrow">The catalogue</span>
     <h2>Pick your next obsession.</h2>
-    <p>Four games on Google Play right now, and a fifth on the way. Every one of them free, start to finish.</p>
+    <p>Five games on Google Play right now. Every one of them free, start to finish.</p>
   </div>
   ${ALL.map(gameRow).join('\n')}
 </div></section>
@@ -527,7 +521,7 @@ function pageHome(){
 </div></section>`;
   return layout({
     title:'Indie Core Dev — Free puzzle games for Android',
-    desc:'Four free puzzle games for Android with no in-app purchases, no sign-up and offline play. Made in France by Indie Core Dev.',
+    desc:'Five free puzzle games for Android with no in-app purchases, no sign-up and offline play. Made in France by Indie Core Dev.',
     canonical:'/', cur:'games', body,
     ogimg:'/assets/og/home.jpg',
     jsonld:[{'@context':'https://schema.org','@type':'Organization',name:'Indie Core Dev',url:SITE,email:EMAIL,
@@ -564,7 +558,7 @@ function pageGame(g){
         : `<span class="soon"><span class="dot"></span> Coming soon to Google Play</span>`}
       <a class="btn btn-ghost" href="/privacy/${g.slug}/">Privacy policy</a>
     </div>
-    <div class="trust rv"><span>${TICK} Free to play</span><span>${TICK} No purchases</span><span>${TICK} Plays offline</span></div>
+    <div class="trust rv"><span>${TICK} Free to play</span><span>${TICK} No purchases</span>${g.offline===false?'':`<span>${TICK} Plays offline</span>`}</div>
     <dl class="meta rv">${metaRows.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
   </div>
   <div class="game-media rv"><div class="halo"></div>

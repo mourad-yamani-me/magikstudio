@@ -59,14 +59,14 @@ ${inner}
 <div class="brand"><b>D</b> INDIE CORE DEV</div>
 </body></html>`;
 
-const gameCard = (name, tagline, icon, shot) => page(`
+const gameCard = (name, tagline, icon, shot, offline = true) => page(`
 <div class="wrap${shot ? ' tight' : ''}">
   ${icon ? `<img class="icon" src="${icon}">` : ''}
   <div class="txt">
     <div class="kick">Free on Google Play</div>
     <h1>${esc(name)}</h1>
     <div class="sub">${esc(tagline)}</div>
-    <div class="pills"><span>No purchases</span><span>No sign-up</span><span>Plays offline</span></div>
+    <div class="pills"><span>No purchases</span><span>No sign-up</span>${offline ? '<span>Plays offline</span>' : ''}</div>
   </div>
 </div>
 ${shot ? `<div class="shot"><img src="${shot}"></div>` : ''}`);
@@ -80,20 +80,22 @@ const heroCard = (kick, title, sub, icons) => page(`
 </div></div>`);
 
 /* targets */
-const KEYS = { 'soda-jam':'soda-jam', 'gridsmash':'gridsmash', 'logo-quiz':'logo-quiz', 'perfectmatch':'perfectmatch' };
+const KEYS = { 'word-slot':'word-slot', 'soda-jam':'soda-jam', 'gridsmash':'gridsmash',
+               'logo-quiz':'logo-quiz', 'perfectmatch':'perfectmatch' };
+const OFFLINE = { 'word-slot': false };   // its store listing makes no offline claim
 const targets = {};
 for (const k of Object.keys(KEYS)) {
   const p = play[k];
   const shots = fs.readdirSync(G).filter(f => f.startsWith(k+'-') && /-\d+\.jpg$/.test(f)).sort();
-  targets[k] = gameCard(p.title, p.short, b64(`${k}-icon.jpg`), shots.length ? b64(shots[0]) : null);
+  targets[k] = gameCard(p.title, p.short, b64(`${k}-icon.jpg`),
+                        shots.length ? b64(shots[0]) : null, OFFLINE[k] !== false);
 }
-targets['word-slot'] = gameCard('Word Slot', 'Spin letters into words across handcrafted stages. Coming soon.', null, null);
 
 const allIcons = Object.keys(KEYS).map(k => b64(`${k}-icon.jpg`));
-targets['home']    = heroCard('4 games · 100% free', 'FOUR PUZZLES.<br>ZERO PAYWALLS.',
-  'Free puzzle games for Android with no in-app purchases, no sign-up, and offline play.', allIcons);
+targets['home']    = heroCard('5 games · 100% free', 'FIVE PUZZLES.<br>ZERO PAYWALLS.',
+  'Free puzzle games for Android with no in-app purchases and no sign-up.', allIcons);
 targets['default'] = heroCard('Indie Core Dev', 'FREE PUZZLE<br>GAMES.',
-  'A one-person game studio in France. Four games on Google Play, all free, all playable offline.', allIcons);
+  'A one-person game studio in France. Five games on Google Play, all free.', allIcons);
 
 /* render */
 let n = 0;
