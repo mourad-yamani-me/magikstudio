@@ -129,6 +129,58 @@ npm run build
 npx wrangler deploy
 ```
 
+# Part 1b — About that Settings page in the dashboard
+
+You will see a **Settings** tab on the Worker with sections for Runtime, Build, General and so
+on. Almost none of it should be touched by hand.
+
+**The repository is the source of truth.** `wrangler.jsonc` describes this Worker, and every
+deploy applies it. Anything you change by hand in the dashboard gets overwritten on the next
+deploy — so a manual tweak looks like it works, then silently reverts.
+
+| Dashboard section | What to do |
+| --- | --- |
+| **Runtime variables and secrets** | Nothing. Greyed out — a static-asset Worker has no code to read variables. |
+| **Observability** (Logpush, Tail) | Nothing. Also unavailable for the same reason. |
+| **Runtime → Compatibility date** | Nothing. Set from `wrangler.jsonc`. |
+| **Runtime → Cache / Placement** | Leave at the defaults. Browser caching comes from `dist/_headers`; Cloudflare's edge caching for static assets is automatic. |
+| **Build → Git repository** | 🔴 **Do not connect.** See below. |
+| **Trigger events** | Nothing. Unavailable for static assets. |
+| **General → Name** | Leave as `indie-core-dev`. It must match `wrangler.jsonc`. |
+| **Domains** (separate tab) | This *is* used — in Part 6, to add your custom domain. |
+| **Danger zone → Delete** | Obviously not. |
+
+## 🔴 Do not connect a Git repository here
+
+The **Build → Git repository** section offers GitHub and GitLab buttons. Connecting one turns
+on **Workers Builds** — Cloudflare's own CI, which would build and deploy your site itself on
+every push.
+
+That is the same trap as "Connect to Git" when creating the project, and it is worse now,
+because you would end up with **two systems deploying the same site**:
+
+- GitHub Actions: builds → verifies links and metadata → runs the Lighthouse budget → deploys
+- Workers Builds: builds → deploys, with **no checks at all**
+
+They would race each other, and whichever finished last would win. A broken build that our
+pipeline correctly refused to ship could get published anyway.
+
+**Leave that section empty.** GitHub Actions pushes to Cloudflare; Cloudflare never pulls.
+
+## A note on your other Worker
+
+Your account also has a Worker called **`rough-queen-3dc2`** (visible in the sidebar's
+Recents). That auto-generated name suggests it was created quickly — possibly the redirector
+behind `go.indiecore.net`.
+
+**Check what it does before deleting it.** Open it, look at its **Domains** tab, and see
+whether `go.indiecore.net` is routed to it. If it is, leave it alone — that is your Play Store
+short-link service. If it is genuinely unused, deleting it is harmless.
+
+Either way it is unrelated to this migration.
+
+---
+
 # Part 2 — Create an API token
 
 **What this is:** a password GitHub uses to upload your site to Cloudflare. You are going to

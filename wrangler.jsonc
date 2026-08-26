@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "indie-core-dev",
-  "compatibility_date": "2026-08-01",
+  "compatibility_date": "2026-08-26",
 
   // Static-assets-only Worker: no server code, Cloudflare serves dist/ directly.
   // _headers and _redirects inside dist/ are honoured natively.
@@ -11,9 +11,5 @@
     "html_handling": "auto-trailing-slash",
     // unknown paths get dist/404.html with a real 404 status
     "not_found_handling": "404-page"
-  },
-
-  "observability": {
-    "enabled": true
   }
 }
