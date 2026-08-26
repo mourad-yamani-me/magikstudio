@@ -77,6 +77,32 @@ Link to the game — /games/<slug>/ and the Play Store
 These give returning players a reason to come back and help the site rank for your game
 names.
 
+## Embedding gist files in the article
+
+`code:` renders a link card at the top. To show the code *inline*, where you are talking
+about it, use an embed:
+
+```
+{{gist:wrangler.jsonc}}          the whole file
+{{gist:ci-cd.yml#head}}          everything above `jobs:`
+{{gist:ci-cd.yml#preview}}       one job, found by name
+{{gist:ci-cd.yml:94-160}}        explicit lines — avoid, they rot
+```
+
+**Prefer anchors over line numbers.** `#head` and `#<jobname>` are resolved from the YAML
+structure, so they keep pointing at the right thing when the file changes above them. Line
+numbers silently start showing the wrong code.
+
+The content is read from `gist/` at build time — the same files the gist is published from —
+so the article, the gist and the live config cannot drift apart. Each embed gets a header
+with the filename and a link to that specific file in the gist.
+
+The build **fails** if the filename does not exist in `gist/`, so a renamed file can't leave
+a silent hole in a published post.
+
+GitHub's own `<script>` embed is deliberately not used: it is a render-blocking third-party
+request, arrives unstyled, and would break the Lighthouse budget.
+
 ## Code: gist or repo?
 
 | Gist | Repo |

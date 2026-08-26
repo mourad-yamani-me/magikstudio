@@ -207,6 +207,80 @@ const SITE_CSS = fs.readFileSync(path.join(ROOT,'src/styles.css'),'utf8')
 
 /* ───────── blog ───────── */
 const BLOG_DIR = path.join(ROOT, 'content/blog');
+const GIST_DIR = path.join(ROOT, 'gist');
+
+/* Embeds a gist file inline, at the point in the article where it is being
+   discussed. The content comes from gist/ — the same files the gist is
+   published from — so the article, the gist and the live config cannot drift.
+   GitHub's <script> embed is deliberately avoided: it is a render-blocking
+   third-party request, unstyled, and would break the performance budget.
+
+     {{gist:wrangler.jsonc}}          whole file
+     {{gist:ci-cd.yml#head}}          everything above `jobs:`
+     {{gist:ci-cd.yml#preview}}       one job, found by name
+     {{gist:ci-cd.yml:64-92}}         explicit lines (fragile — prefer #anchors)
+
+   Anchors are resolved from the YAML structure, so they survive edits above
+   them; line numbers do not.
+*/
+const gistAnchor = name => 'file-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const LANG = { '.jsonc': 'json', '.json': 'json', '.yml': 'yaml', '.yaml': 'yaml', '.md': 'markdown', '.mjs': 'javascript', '.js': 'javascript' };
+
+function embedGists(body, gistUrl, postFile) {
+  return body.replace(/\{\{gist:([^:#}]+)(?:#([\w-]+))?(?::(\d+)-(\d+))?\}\}/g, (_, name, anchor, from, to) => {
+    const file = path.join(GIST_DIR, name.trim());
+    if (!fs.existsSync(file)) {
+      throw new Error(`${postFile}: {{gist:${name}}} — gist/${name.trim()} does not exist`);
+    }
+    let content = fs.readFileSync(file, 'utf8').replace(/\s+$/, '');
+    let note = '';
+
+    if (anchor) {
+      const lines = content.split('\n');
+      if (anchor === 'head') {
+        const j = lines.findIndex(l => /^jobs:\s*$/.test(l));
+        if (j < 0) throw new Error(`${postFile}: {{gist:${name}#head}} — no top-level "jobs:" key found`);
+        content = lines.slice(0, j).join('\n').replace(/\s+$/, '');
+        note = ' — triggers and permissions';
+      } else {
+        // find `  <anchor>:` and take everything until the next key at that indent
+        const start = lines.findIndex(l => new RegExp(`^(\\s+)${anchor}:\\s*$`).test(l));
+        if (start < 0) throw new Error(`${postFile}: {{gist:${name}#${anchor}}} — no "${anchor}:" key in gist/${name.trim()}`);
+        const indent = lines[start].match(/^\s*/)[0].length;
+        let end = lines.length;
+        for (let i = start + 1; i < lines.length; i++) {
+          const l = lines[i];
+          if (l.trim() === '' || l.startsWith(' '.repeat(indent + 1))) continue;
+          if (/^\s*#/.test(l)) continue;
+          end = i; break;
+        }
+        content = lines.slice(start, end).join('\n').replace(/\s+$/, '');
+        note = ` — ${anchor} job`;
+      }
+    } else if (from) {
+      const lines = content.split('\n');
+      if (+to > lines.length) throw new Error(`${postFile}: {{gist:${name}:${from}-${to}}} — file has only ${lines.length} lines`);
+      content = lines.slice(+from - 1, +to).join('\n');
+      note = ` lines ${from}–${to}`;
+    }
+    const lang = LANG[path.extname(name.trim())] || '';
+    const href = gistUrl ? `${gistUrl}#${gistAnchor(name.trim())}` : '';
+    // marked renders the fence; the surrounding markup is passed through as HTML
+    return [
+      `<figure class="gembed">`,
+      `<figcaption><span class="gfile">${esc(name.trim())}${note}</span>`,
+      href ? `<a href="${href}" target="_blank" rel="noopener">Open in gist<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>` : '',
+      `</figcaption>`,
+      '',
+      '```' + lang,
+      content,
+      '```',
+      '',
+      `</figure>`,
+      '',
+    ].join('\n');
+  });
+}
 
 /** minimal frontmatter: `key: value` lines, plus `tags: [a, b]` */
 function frontmatter(raw){
@@ -245,7 +319,7 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
       code: meta.code || meta.repo || meta.gist || '',
       codeLabel: meta.codeLabel || meta.repoLabel || '',
       minutes: Math.max(1, Math.round(words / 200)),
-      html: marked.parse(body, { mangle: false, headerIds: false }),
+      html: marked.parse(embedGists(body, meta.code || '', f), { mangle: false, headerIds: false }),
     };
   })
   .filter(p => !p.draft)

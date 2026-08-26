@@ -3,6 +3,8 @@ title: Deploying a static site to Cloudflare Workers
 date: 2026-08-26
 description: A build-verify-deploy pipeline on Cloudflare's free tier, and the five traps that cost me an evening — including one that silently takes your staging URL offline.
 tags: [cloudflare, ci-cd, github-actions, hosting]
+code: https://gist.github.com/IndieCoreDev/11369ffb01a68f04f0bfc9f803922b17
+codeLabel: Both files, ready to copy
 draft: false
 ---
 
@@ -26,6 +28,14 @@ git push
 
 The important part is that **deploy depends on the checks**. A broken build never reaches
 the internet. Pull requests get a preview URL; merges to `main` go live.
+
+The triggers and permissions that make that safe:
+
+{{gist:ci-cd.yml#head}}
+
+`permissions: contents: read` at the top means every job starts with the minimum, and only
+the one that comments on pull requests gets more. The `concurrency` block cancels superseded
+runs on a branch but never interrupts a production deploy.
 
 ## Trap 1: "Upload assets" gives you a Worker, not Pages
 
@@ -103,29 +113,15 @@ started returning 404, and per-version preview URLs stopped being generated — 
 have silently broken pull request previews, since the CI job reads the preview URL out of
 `wrangler versions upload`.
 
+This is the job that publishes a preview per pull request, and reads the URL back out of
+wrangler's output:
+
+{{gist:ci-cd.yml#preview}}
+
 A dashboard-created Worker has both on by default. Writing a config turns them off. Say so
-explicitly:
+explicitly — this is the whole config this site runs on:
 
-```jsonc
-{
-  "name": "my-site",
-  "compatibility_date": "2026-08-26",
-
-  "workers_dev": true,
-  "preview_urls": true,
-
-  "assets": {
-    "directory": "./dist",
-    "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
-  },
-
-  "routes": [
-    { "pattern": "www.example.com", "custom_domain": true },
-    { "pattern": "example.com", "custom_domain": true }
-  ]
-}
-```
+{{gist:wrangler.jsonc}}
 
 `not_found_handling: "404-page"` serves your `404.html` with a real 404 status.
 `auto-trailing-slash` makes `/about/` resolve to `about/index.html`.
