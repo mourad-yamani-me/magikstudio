@@ -108,9 +108,9 @@ function enhanceImages(html){
 
 /* ───────── game data ───────── */
 const GAMES = [
-  { key:'word-slot',    slug:'word-slot',                 legacy:'privacy-policy-for-word-slot', offline:false,
+  { key:'word-slot',    slug:'word-slot',                 legacy:'privacy-policy-for-word-slot',
     blurb:'A crossword cut into blocks and scattered across the board. Slot every piece back until each row and column reads as a real word \u2014 and nothing on screen tells you when you are right. Working that out is the game.',
-    feats:['392 hand-built stages','No timer, no fail state','Weekly leaderboards','Cloud save & dark mode'] },
+    feats:['392 hand-built stages','No timer, no fail state','Cloud save','Plays offline'] },
   { key:'soda-jam',     slug:'soda-jam-color-sort',       legacy:'privacy-policy-for-soda-jam-color-sort',
     blurb:'Pour, sort and clear the bottles until every colour finds its place. It starts gentle and turns genuinely mean — in the best way.',
     feats:['Hundreds of levels','No timer pressure','Undo & hints','Plays offline'] },
