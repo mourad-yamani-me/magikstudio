@@ -11,5 +11,14 @@
     "html_handling": "auto-trailing-slash",
     // unknown paths get dist/404.html with a real 404 status
     "not_found_handling": "404-page"
-  }
+  },
+
+  // Attaching the domains here rather than in the dashboard: `wrangler deploy`
+  // creates the custom domains and their DNS records, and re-asserts them on
+  // every deploy. custom_domain:true means Cloudflare manages the record and
+  // the TLS certificate for each hostname.
+  "routes": [
+    { "pattern": "www.indiecore.net", "custom_domain": true },
+    { "pattern": "indiecore.net", "custom_domain": true }
+  ]
 }
