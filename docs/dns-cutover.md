@@ -131,80 +131,221 @@ npx wrangler deploy
 
 # Part 2 — Create an API token
 
-This is the credential GitHub uses to deploy. Scope it tightly so that if it ever leaked it
-could not touch your DNS or your email.
+**What this is:** a password GitHub uses to upload your site to Cloudflare. You are going to
+scope it so it can deploy Workers and nothing else — it will not be able to touch your DNS or
+your Zoho email.
 
-1. Click your **profile icon**, top right → **My Profile**.
-2. Left sidebar → **API Tokens** → **Create Token**.
-3. You'll see a list of **templates**. Find **“Edit Cloudflare Workers”** and click **Use
-   template**.
+## 2.1 — Open the token page
 
-   > Use this template rather than building a custom token. Deploying a Worker needs several
-   > permissions together (Workers Scripts, plus read access to account and user details);
-   > the template selects exactly the right set. A hand-made token missing one of them fails
-   > with a confusing authentication error.
-   >
-   > ⚠️ If you followed an earlier draft of this guide and made a **Cloudflare Pages · Edit**
-   > token — that one will **not** work for a Worker. Make this one instead.
+1. Go to **https://dash.cloudflare.com**.
+2. Click your **profile icon** in the very top-right corner.
+3. Choose **My Profile**.
+4. In the left sidebar of that page, click **API Tokens**.
 
-4. Scroll to **Account Resources**: choose **Include** → your account.
-5. **Zone Resources**: choose **Include** → **Specific zone** → `indiecore.net`.
-6. **TTL**: set an expiry a year out and put a renewal reminder in your calendar.
-7. **Continue to summary** → **Create Token**.
-8. **Copy the token now** — it is shown exactly once.
+Direct link if you prefer: **https://dash.cloudflare.com/profile/api-tokens**
 
-> ⚠️ Never use the **Global API Key** Cloudflare also offers. It has complete control of your
-> account, including deleting your Zoho email records, and cannot be restricted.
+## 2.2 — Use the Workers template
 
-### Also grab your Account ID
+1. Click the blue **Create Token** button.
+2. You now see a list of **templates**, each with a **Use template** button on the right.
+3. Find the one called **“Edit Cloudflare Workers”** and click **Use template**.
 
-Go back to **Workers & Pages**. On the right-hand side you'll see **Account ID** with a copy
-button. Copy it.
+> **Use the template. Do not build a custom token.** Deploying a Worker needs several
+> permissions working together — Workers Scripts, plus read access to your account and user
+> details. The template ticks exactly the right boxes. A hand-made token that is missing one
+> of them fails later with an unhelpful "Authentication error", and it is genuinely hard to
+> work out which one is absent.
+
+> ⚠️ **If you already made a `Cloudflare Pages · Edit` token** following my earlier draft —
+> it cannot deploy a Worker. Delete it and make this one instead.
+
+## 2.3 — Fill in the form
+
+The template has pre-filled the **Permissions** section. Leave it exactly as it is. Scroll to
+the two sections below it:
+
+**Account Resources**
+
+| Dropdown 1 | Dropdown 2 |
+| --- | --- |
+| `Include` | your account |
+
+**Zone Resources**
+
+| Dropdown 1 | Dropdown 2 | Dropdown 3 |
+| --- | --- | --- |
+| `Include` | `Specific zone` | `indiecore.net` |
+
+**Client IP Address Filtering** — leave empty. GitHub's runners have changing IPs.
+
+**TTL** — click the date field and pick roughly a year from now. Add a calendar reminder to
+renew it; deploys stop working silently on the day it expires.
+
+## 2.4 — Create and copy it
+
+1. **Continue to summary**. Read the one-line summary it shows you.
+2. **Create Token**.
+3. You now see the token — a long random string.
+
+> 🔴 **Copy it now.** Cloudflare shows it exactly once and can never show it again. If you
+> lose it you have to delete the token and make a new one.
+
+Paste it somewhere temporary (a scratch note). You will paste it into GitHub in Part 3, then
+delete your copy.
+
+## 2.5 — Find your Account ID
+
+1. Click **Cloudflare** logo top-left to go back, then **Workers & Pages** in the sidebar.
+2. On the **right-hand side** of that page you'll see **Account ID** with a copy icon.
+3. Copy it. It looks like `a1b2c3d4e5f6...` (32 hex characters).
+
+## 2.6 — Test the token before going further ✅
+
+This catches a wrong token in ten seconds instead of after a failed deploy.
+
+```bash
+cd ~/codes/Apps/indie-core-dev
+export CLOUDFLARE_API_TOKEN=paste_your_token_here
+npx wrangler whoami
+```
+
+**Good output** — it names your account and lists permissions including
+`workers_scripts (edit)`:
+
+```
+Associated email: ...
+Account Name: ...  Account ID: ...
+Token Permissions: ... workers_scripts:edit ...
+```
+
+**Bad output** — `Authentication error` or `Unable to authenticate`: the token is wrong or
+scoped incorrectly. Go back to 2.2 and make sure you used the **Edit Cloudflare Workers**
+template.
+
+While you're here, confirm it can actually deploy:
+
+```bash
+npm run build
+npx wrangler deploy
+```
+
+If that succeeds, your token works and your site is republished. Now unset it so it does not
+linger in your shell:
+
+```bash
+unset CLOUDFLARE_API_TOKEN
+```
 
 ---
 
-# Part 3 — Give GitHub the token
+# Part 3 — Give the token to GitHub
 
-1. Open your repo: **https://github.com/oettaib/indie-core-dev**
-2. **Settings** (top row of the repo, far right) → left sidebar **Secrets and variables** →
-   **Actions**.
-3. Click **New repository secret**, twice:
+## 3.1 — Add the two secrets
 
-   | Name | Secret |
-   | --- | --- |
-   | `CLOUDFLARE_API_TOKEN` | the token from Part 2 |
-   | `CLOUDFLARE_ACCOUNT_ID` | your Account ID |
+1. Open **https://github.com/oettaib/indie-core-dev**
+2. Click **Settings** — top row of the repository, on the right. (If you don't see it, you're
+   not looking at the repo's own settings; make sure you're on the repository page, not your
+   profile.)
+3. In the left sidebar: **Secrets and variables** → click it → choose **Actions**.
+4. Click the green **New repository secret**.
+5. First secret:
+   - **Name:** `CLOUDFLARE_API_TOKEN`
+   - **Secret:** the token from Part 2
+   - **Add secret**
+6. **New repository secret** again. Second secret:
+   - **Name:** `CLOUDFLARE_ACCOUNT_ID`
+   - **Secret:** the Account ID from step 2.5
+   - **Add secret**
 
-   Names must match exactly, capitals included.
+> Names must match **exactly**, capitals and underscores included. The workflow reads
+> `secrets.CLOUDFLARE_API_TOKEN` — a lowercase or misspelled name silently becomes empty and
+> the deploy fails with an authentication error.
 
-4. Still in **Settings**, left sidebar → **Environments** → **New environment** → name it
-   `production` → **Configure environment**.
-   - Under **Deployment branches and tags**, choose **Selected branches and tags**, click
-     **Add rule**, type `main`. This means only `main` can deploy to production.
-5. **New environment** again → name it `preview` → save. No settings needed.
+You should now see both listed. GitHub never shows their values again — that is expected, and
+it is why you kept a temporary copy.
+
+Once both are saved, **delete your scratch note with the token in it.**
+
+## 3.2 — Create the two environments
+
+Environments let you require approval before production deploys and restrict which branch may
+deploy.
+
+1. Still in **Settings**, left sidebar → **Environments**.
+2. **New environment** → name it exactly `production` → **Configure environment**.
+3. Find **Deployment branches and tags**. Change the dropdown from *All branches* to
+   **Selected branches and tags**.
+4. Click **Add deployment branch or tag rule** → type `main` → **Add rule**.
+
+   Now only `main` can ever deploy to production.
+
+5. *(Optional)* Tick **Required reviewers** and add yourself. Every production deploy then
+   waits for you to click Approve. Useful if you want a final gate; skip it if you want
+   pushes to `main` to just ship.
+
+6. Go back to **Environments** → **New environment** → name it `preview` → **Configure
+   environment** → no settings needed, just leave it.
 
 ---
 
-# Part 4 — First deploy
+# Part 4 — First automated deploy
 
-In your terminal:
+Everything is wired. Push the code.
 
 ```bash
 cd ~/codes/Apps/indie-core-dev
 git push -u origin main
 ```
 
-Then open the **Actions** tab on GitHub. You'll see a run appear. Click it. Four boxes run in
-order:
+## 4.1 — Watch it run
+
+1. Open **https://github.com/oettaib/indie-core-dev/actions**
+2. A run named after your commit appears, with a yellow dot (in progress).
+3. Click it. You'll see four boxes connected in sequence:
 
 ```
 Build & verify  →  Lighthouse budget  →  Deploy production
 ```
 
-Green ticks all the way = success. It takes about 3–5 minutes (Lighthouse is the slow one).
+Click any box to watch its live log.
 
-**If it fails**, click the failed box to read the log. The most common cause is a typo in a
-secret name.
+**Timing:** Build & verify ~1 minute. Lighthouse budget ~3–5 minutes (it audits three pages).
+Deploy ~30 seconds.
+
+If you enabled required reviewers in 3.2, the run pauses before *Deploy production* with a
+**Review deployments** button. Click it → tick `production` → **Approve and deploy**.
+
+## 4.2 — What each box is doing
+
+| Box | What it checks |
+| --- | --- |
+| **Build & verify** | Generates the site, then fails on dead links, missing images, bad page metadata, broken redirects, or leftover placeholder text |
+| **Lighthouse budget** | Fails if performance drops below 95, or accessibility / best-practices / SEO below 100 |
+| **Deploy production** | Uploads `dist` to your Worker |
+
+The deploy job **needs** both gates. A failing check means nothing ships.
+
+## 4.3 — Confirm it worked
+
+Green ticks on all boxes. Then check the site updated:
+
+```bash
+curl -sI https://indie-core-dev.indiecode25.workers.dev/ | head -1
+```
+
+Expect `HTTP/2 200`.
+
+## 4.4 — If it fails
+
+Click the red box and read the log; the failing step is expanded automatically.
+
+| Message | Cause |
+| --- | --- |
+| `Authentication error` / `Unable to authenticate` | Token wrong, expired, or built without the Workers template. Redo Part 2. |
+| `workers.api.error.script_not_found` | The Worker name in `wrangler.jsonc` doesn't match the one in your dashboard. |
+| `ERROR dead internal link → /...` | A real broken link in the site. Fix it and push again. |
+| `FAILED: /... performance 91 < 95` | A change made the site slower. |
+| Lighthouse step times out | Occasionally flaky on shared runners — click **Re-run failed jobs**. |
 
 ---
 
