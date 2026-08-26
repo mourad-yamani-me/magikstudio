@@ -1,7 +1,7 @@
 # Cloudflare setup, step by step
 
 Written for someone who has not used Cloudflare before. Moving `indiecore.net` from Blogger
-to Cloudflare Pages **without interrupting your Zoho email**.
+to Cloudflare Workers **without interrupting your Zoho email**.
 
 Total time: about an hour, most of it waiting and checking.
 
@@ -87,186 +87,74 @@ inert and are being ignored. Harmless. You can delete them later; not part of th
 
 ---
 
-# Part 1 — Create the Pages project
+# Part 1 — Create the Worker  ✅ (already done)
 
-**What this is:** Cloudflare Pages is free hosting for static websites. You are creating an
-empty "project" — a named box that your site gets uploaded into. Right now you just need the
-box to exist, so GitHub has somewhere to deliver to.
+**Terminology, because the dashboard is confusing here.** Cloudflare has two products that
+host static sites: **Pages** (older) and **Workers** (current, more capable). Their new
+dashboard puts the **Upload assets** button under **Workers**, so that is what you get.
 
-**This does not affect your live site.** Your domain still points at Blogger for the whole of
-Part 1. Nothing your visitors see changes.
+You uploaded and got:
 
-## 1.1 — Prepare the folder you'll upload
+```
+https://indie-core-dev.indiecode25.workers.dev
+```
 
-The built website lives in the `dist` folder. Make sure it is up to date:
+That is a **Worker**, and it is correct — keep it. `indie-core-dev.pages.dev` returned
+`DNS_PROBE_FINISHED_NXDOMAIN` simply because no Pages project by that name exists; you never
+made one. Nothing is broken.
+
+Workers supports everything this site needs, verified live on your deployment:
+
+| Feature | Status |
+| --- | --- |
+| All pages serve | ✅ 200 |
+| `_redirects` (the Play Console privacy URLs) | ✅ 301 |
+| `_headers` (cache + security headers) | ✅ applied |
+| Custom 404 page | ✅ 404 |
+| Custom domains | ✅ supported (requires Cloudflare-managed nameservers — yours are) |
+
+The repo now contains `wrangler.jsonc` describing this Worker, so CI deploys to the exact
+project you already created.
+
+### If you ever need to recreate it
+
+Dashboard → **Workers & Pages** → **Create** → **Workers** → **Upload assets**, name it
+`indie-core-dev`, drag the `dist` folder, **Deploy**.
+
+Or from the terminal, once you have the token from Part 2:
 
 ```bash
 cd ~/codes/Apps/indie-core-dev
 npm run build
+npx wrangler deploy
 ```
-
-You should see `built 14 pages → dist/`. Now open that folder in Finder so it's ready to drag:
-
-```bash
-open ~/codes/Apps/indie-core-dev
-```
-
-A Finder window opens. You will see a folder called **`dist`**. Leave this window open —
-you'll drag this folder into the browser shortly.
-
-> Inside `dist` you should see `index.html`, `about`, `games`, `privacy`, `assets` and a few
-> others. That's the whole website: 118 files, about 5 MB.
-
-## 1.2 — Log in to Cloudflare
-
-Go to **https://dash.cloudflare.com** and log in.
-
-The first screen is your **Account Home**. You'll see `indiecore.net` listed as one of your
-websites. **Don't click it** — that page is for DNS. Pages lives somewhere else.
-
-## 1.3 — Open the Pages section
-
-In the **left sidebar**, look for **Workers & Pages**.
-
-> Cloudflare reorganises this menu periodically. Depending on when you read this it may be
-> called **Compute (Workers)**, or Pages may sit under a **Workers & Pages** heading. If you
-> cannot find it, use the **search box at the very top** of the dashboard and type `Pages`.
-
-Click it. You land on a list of projects, which is currently empty.
-
-## 1.4 — Start creating the project
-
-Click the blue **Create** button (top right of the project list).
-
-You'll get a screen with tabs across the top — something like **Workers** | **Pages**.
-Click the **Pages** tab.
-
-Under Pages you'll see two choices:
-
-| Option | Use it? |
-| --- | --- |
-| **Connect to Git** | ❌ **No** |
-| **Upload assets** | ✅ **Yes — click this** |
-
-> **Why not "Connect to Git"?** That option makes Cloudflare fetch your code and build it
-> itself. It would completely bypass the checks we built — the link checker, the metadata
-> validation, the Lighthouse budget. We want GitHub to build the site, run every check, and
-> only upload if all of them pass. So Cloudflare must be a plain receiver of finished files.
->
-> Picking the wrong one here is the single most likely mistake in this whole guide.
-
-**Shortcut if you get lost:** this link goes straight to the right screen —
-`https://dash.cloudflare.com/?to=/:account/pages/new/upload`
-
-## 1.5 — Name the project
-
-There is one text box: **Project name**. Type exactly:
-
-```
-indie-core-dev
-```
-
-All lowercase, two hyphens, no spaces.
-
-> ⚠️ This must match **exactly**. The GitHub workflow deploys to a project of this name
-> (`CF_PROJECT: indie-core-dev` in `.github/workflows/ci-cd.yml`). A typo here means the
-> deploy fails later with "project not found".
-
-Cloudflare shows you the address it will get: `indie-core-dev.pages.dev`. Click **Create
-project**.
-
-## 1.6 — Upload the site
-
-You now get a large dashed upload box saying something like *"Drag and drop your site"* with a
-**Select from computer** button.
-
-**Drag the `dist` folder** from the Finder window you opened in step 1.1 into that dashed box.
-
-- Drag the **folder itself**, not the files inside it
-- If dragging doesn't work, click **Select from computer** → **Upload folder**, then choose
-  `dist`. macOS will ask *"Do you want to upload 118 files?"* → click **Upload**
-
-Wait for the progress indicator to finish. 118 files at ~5 MB takes a few seconds.
-
-> If it complains about file count or size: you're fine — the limits are 20,000 files and
-> 25 MB per file, and your largest file is 232 KB.
-
-## 1.7 — Deploy
-
-Click **Deploy site**.
-
-It takes 10–30 seconds, then shows **Success!** with a link. Click **Continue to project**.
-
-## 1.8 — Check it worked
-
-You're now on the project page. Open the address it shows:
-
-```
-https://indie-core-dev.pages.dev
-```
-
-Your new site should load — dark purple, gold headline, floating phones.
-
-> If you get a 404, the upload probably included the wrong folder level. Check the project's
-> **Deployments** tab → click the deployment → the file list should start with `index.html`
-> at the top level, **not** `dist/index.html`. If it's wrong, redeploy and drag the *contents*
-> of `dist` instead of the folder.
-
-**Do not add your custom domain yet.** That's Part 6, after the checks in Part 5.
-
-## Alternative: create the project from the terminal
-
-If the dashboard is being awkward, you can do Parts 1.3–1.7 with one command instead — but do
-**Part 2 first** so you have an API token:
-
-```bash
-cd ~/codes/Apps/indie-core-dev
-export CLOUDFLARE_API_TOKEN=<the token from Part 2>
-export CLOUDFLARE_ACCOUNT_ID=<your account ID>
-
-npx wrangler pages project create indie-core-dev --production-branch=main
-npx wrangler pages deploy dist --project-name=indie-core-dev
-```
-
-Same result, no dragging.
 
 # Part 2 — Create an API token
 
-This is the password GitHub uses to upload your site. We give it permission to do **one thing
-only**, so that if it ever leaked, it could not touch your DNS or email.
+This is the credential GitHub uses to deploy. Scope it tightly so that if it ever leaked it
+could not touch your DNS or your email.
 
 1. Click your **profile icon**, top right → **My Profile**.
-2. Left sidebar → **API Tokens**.
-3. Click **Create Token**.
-4. Scroll to the bottom → **Create Custom Token** → **Get started**.
-5. Fill it in:
+2. Left sidebar → **API Tokens** → **Create Token**.
+3. You'll see a list of **templates**. Find **“Edit Cloudflare Workers”** and click **Use
+   template**.
 
-   **Token name:**
-   ```
-   github-actions-pages-deploy
-   ```
+   > Use this template rather than building a custom token. Deploying a Worker needs several
+   > permissions together (Workers Scripts, plus read access to account and user details);
+   > the template selects exactly the right set. A hand-made token missing one of them fails
+   > with a confusing authentication error.
+   >
+   > ⚠️ If you followed an earlier draft of this guide and made a **Cloudflare Pages · Edit**
+   > token — that one will **not** work for a Worker. Make this one instead.
 
-   **Permissions** — three dropdowns side by side. Set them to:
+4. Scroll to **Account Resources**: choose **Include** → your account.
+5. **Zone Resources**: choose **Include** → **Specific zone** → `indiecore.net`.
+6. **TTL**: set an expiry a year out and put a renewal reminder in your calendar.
+7. **Continue to summary** → **Create Token**.
+8. **Copy the token now** — it is shown exactly once.
 
-   | Dropdown 1 | Dropdown 2 | Dropdown 3 |
-   | --- | --- | --- |
-   | `Account` | `Cloudflare Pages` | `Edit` |
-
-   Add nothing else. One row is all it needs.
-
-   **Account Resources:**
-
-   | | |
-   | --- | --- |
-   | `Include` | your account |
-
-   **TTL** (expiry): pick a year out. Put a reminder in your calendar to renew it.
-
-6. **Continue to summary** → **Create Token**.
-7. **Copy the token now.** It is shown once and never again. Paste it somewhere temporary.
-
-> ⚠️ Do **not** use the "Global API Key" that Cloudflare also offers. That one can do anything
-> on your account — including deleting your email records — and cannot be limited.
+> ⚠️ Never use the **Global API Key** Cloudflare also offers. It has complete control of your
+> account, including deleting your Zoho email records, and cannot be restricted.
 
 ### Also grab your Account ID
 
@@ -325,7 +213,7 @@ secret name.
 **This is the step that makes everything else safe.** Your domain still points at Blogger, so
 you can test the new site with zero risk.
 
-Open **https://indie-core-dev.pages.dev** and check:
+Open **https://indie-core-dev.indiecode25.workers.dev** and check:
 
 - [ ] Home page loads; the phones float and the aurora moves
 - [ ] Scrolling down reveals sections; screenshots rotate
@@ -333,7 +221,7 @@ Open **https://indie-core-dev.pages.dev** and check:
 - [ ] All 5 privacy policies load and read correctly
 - [ ] "Play free" buttons open the correct Google Play listings
 - [ ] Open it on your phone — check the menu button works
-- [ ] Visit `https://indie-core-dev.pages.dev/nonsense` → you get the 404 page
+- [ ] Visit `https://indie-core-dev.indiecode25.workers.dev/nonsense` → you get the 404 page
 
 **Do not go further until every box is ticked.** Fix anything wrong now, while the live site
 is untouched.
@@ -342,33 +230,30 @@ is untouched.
 
 # Part 6 — Point the domain at the new site
 
-Now we change those five website records. Cloudflare does it for you.
+Now the five website records change. Cloudflare does it for you.
 
-1. **Workers & Pages** → click **indie-core-dev** → **Custom domains** tab.
-2. Click **Set up a custom domain**.
-3. Type:
+1. **Workers & Pages** → click **indie-core-dev**.
+2. **Settings** tab → **Domains & Routes**.
+3. Click **Add** → **Custom Domain**.
+4. Enter:
    ```
    www.indiecore.net
    ```
-4. **Continue**. Cloudflare sees the domain is in your account and shows you the DNS change it
-   wants to make — replacing the `www` record with one pointing at Pages.
-5. Click **Activate domain**.
-6. Repeat steps 2–5 for the bare domain:
+5. Click **Add domain**. Cloudflare updates DNS itself and issues the TLS certificate.
+6. Repeat steps 3–5 for the bare domain:
    ```
    indiecore.net
    ```
 
-**If it says a record conflicts**, it will name the record. Delete only that one:
-- for `www` → the `CNAME www → ghs.google.com`
-- for the bare domain → the four `A` records with IPs starting `216.239.`
+**If it reports a conflicting record**, it names the offender. Delete only that one:
+- for `www` → `CNAME www → ghs.google.com`
+- for the bare domain → the four `A` records starting `216.239.`
 
-> 🔴 If a screen ever offers to delete `MX` records or `TXT` records — **stop and say no.**
-> Nothing in this process needs that.
+> 🔴 If any screen offers to remove `MX` or `TXT` records — **say no**. Nothing here needs
+> that. Those are your Zoho email.
 
-Both entries should show **Active** within about 5 minutes. Occasionally it takes longer;
-refresh the page.
-
----
+Both entries show **Active** within a few minutes. The certificate can take up to 15 minutes;
+until then you may briefly see a TLS warning. That is normal.
 
 # Part 7 — Check your email still works 🔴
 
@@ -508,7 +393,7 @@ for the index to fully update.
 
 Getting Blogger back takes about five minutes.
 
-1. **DNS → Records**, delete the `www` and bare-domain records pointing at `pages.dev`.
+1. **DNS → Records**, delete the `www` and bare-domain records pointing at `workers.dev`.
 2. **Add record** five times, exactly:
 
    | Type | Name | Value |

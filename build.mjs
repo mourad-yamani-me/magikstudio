@@ -647,10 +647,15 @@ fs.writeFileSync(path.join(OUT,'sitemap.xml'),
   urls.map(([u,pr])=>`  <url><loc>${SITE}${u}</loc><lastmod>${today}</lastmod><priority>${pr}</priority></url>`).join('\n')}\n</urlset>\n`);
 
 /* long-lived caching for fingerprint-free static assets */
+// Rules must not overlap: every matching rule is applied and the values are
+// concatenated, so a broad /assets/* alongside /assets/games/* produces a
+// malformed Cache-Control with two max-age values.
 fs.writeFileSync(path.join(OUT,'_headers'),
 `/assets/games/*\n  Cache-Control: public, max-age=31536000, immutable\n
+/assets/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n
 /assets/og/*\n  Cache-Control: public, max-age=604800\n
-/assets/*\n  Cache-Control: public, max-age=86400\n
+/assets/styles.css\n  Cache-Control: public, max-age=86400\n
+/assets/app.js\n  Cache-Control: public, max-age=86400\n
 /*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n`);
 fs.writeFileSync(path.join(OUT,'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 

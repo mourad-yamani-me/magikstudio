@@ -4,7 +4,9 @@
   "private": true,
   "description": "Marketing site for Indie Core Dev — static generator, deploys to Cloudflare Pages.",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "build": "node build.mjs",
     "verify": "node scripts/verify.mjs",
@@ -16,6 +18,7 @@
     "assets:fonts": "node fonts.mjs"
   },
   "devDependencies": {
-    "lighthouse": "13.0.1"
+    "lighthouse": "13.0.1",
+    "wrangler": "^4.126.0"
   }
 }
