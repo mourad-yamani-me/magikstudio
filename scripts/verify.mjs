@@ -121,8 +121,28 @@ else {
 }
 
 // ---- required files ----
-for (const f of ['robots.txt', '_headers', '404.html', 'favicon.svg']) {
+for (const f of ['robots.txt', 'app-ads.txt', '_headers', '404.html', 'favicon.svg']) {
   if (!fs.existsSync(path.join(DIST, f))) fail('dist', `missing ${f}`);
+}
+
+// ---- app-ads.txt (IAB Tech Lab spec) ----
+{
+  const p = path.join(DIST, "app-ads.txt");
+  if (fs.existsSync(p)) {
+    const lines = fs.readFileSync(p, "utf8").split(/\r?\n/)
+      .map(l => l.split("#")[0].trim()).filter(Boolean);
+    if (!lines.length) fail("app-ads.txt", "no records");
+    for (const line of lines) {
+      if (/^[A-Z]+=/i.test(line)) continue;           // variable record, e.g. OWNERDOMAIN=
+      const f = line.split(",").map(x => x.trim());
+      if (f.length < 3 || f.length > 4)
+        fail("app-ads.txt", `expected 3-4 fields: ${line}`);
+      else if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(f[0]))
+        fail("app-ads.txt", `field 1 is not an ad-system domain: ${line}`);
+      else if (!/^(DIRECT|RESELLER)$/i.test(f[2]))
+        fail("app-ads.txt", `field 3 must be DIRECT or RESELLER: ${line}`);
+    }
+  }
 }
 
 // ---- report ----

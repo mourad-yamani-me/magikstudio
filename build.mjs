@@ -930,6 +930,11 @@ fs.writeFileSync(path.join(OUT,'version.json'),
   JSON.stringify({ ...BUILD, builtAt: new Date().toISOString() }, null, 2) + '\n');
 fs.writeFileSync(path.join(OUT,'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 
+/* app-ads.txt — IAB Tech Lab authorised sellers, crawled by AdMob from the
+   developer website listed on the Play Store. Must stay at the site root. */
+fs.writeFileSync(path.join(OUT,"app-ads.txt"),
+  "google.com, pub-1528760351282017, DIRECT, f08c47fec0942fa0\n");
+
 console.log(`v${BUILD.version} (${BUILD.sha}) — built ${urls.length} pages → dist/  (${webp} webp, ${(saved/1024/1024).toFixed(2)} MB saved)`);
 console.log(`  blog: ${POSTS.length} post(s)`);
 for (const g of ALL) console.log(`  /games/${g.slug}/  ·  /privacy/${g.slug}/  (${g.shots.length} shots)`);
