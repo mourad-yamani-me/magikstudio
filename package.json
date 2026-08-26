@@ -1,0 +1,21 @@
+{
+  "name": "indie-core-dev-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marketing site for Indie Core Dev — static generator, deploys to Cloudflare Pages.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node build.mjs",
+    "verify": "node scripts/verify.mjs",
+    "serve": "node scripts/serve.mjs",
+    "dev": "npm run build && npm run serve",
+    "check": "npm run build && npm run verify",
+    "lighthouse": "node scripts/lighthouse-check.mjs",
+    "assets:og": "node og.mjs",
+    "assets:fonts": "node fonts.mjs"
+  },
+  "devDependencies": {
+    "lighthouse": "13.0.1"
+  }
+}
