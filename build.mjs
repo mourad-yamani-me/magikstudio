@@ -889,11 +889,21 @@ write('404.html', layout({
   <div class="cta-row" style="justify-content:center"><a class="btn btn-primary" href="/#games">Browse the games</a><a class="btn btn-ghost" href="/">Home</a></div>
 </div></section>`}));
 
-/* legacy Blogger URLs → new routes (Cloudflare Pages _redirects) */
+/* legacy Blogger URLs → new routes (Cloudflare _redirects)
+   The old blog (indie-core-dev.blogspot.com, blogId 6513805563288303374) had
+   seven static pages and exactly one post — confirmed against its Blogger
+   feeds before Blogger was disconnected. All eight are mapped here. */
 const redirects = [
   ...ALL.map(g => `/p/${g.legacy}.html            /privacy/${g.slug}/   301`),
   `/p/about.html                                  /about/               301`,
   `/p/contact.html                                /contact/             301`,
+  // the single blog post: "PerfectMatch: Numbers"
+  `/2025/05/perfectmatch-numbers.html             /games/number-match-merge-puzzle/  301`,
+  // Blogger's feed endpoints, for anything still subscribed
+  `/feeds/posts/default                           /blog/feed.xml        301`,
+  `/feeds/posts/default/*                         /blog/feed.xml        301`,
+  `/atom.xml                                      /blog/feed.xml        301`,
+  `/rss.xml                                       /blog/feed.xml        301`,
 ].join('\n') + '\n';
 fs.writeFileSync(path.join(OUT,'_redirects'), redirects);
 
