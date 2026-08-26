@@ -94,10 +94,14 @@ jobs:
   preview:
     name: Deploy preview
     needs: [build, lighthouse]
-    # Fork PRs cannot read secrets — skip rather than fail.
+    # Skip where secrets are unavailable rather than failing:
+    #  - fork PRs never receive them
+    #  - Dependabot runs use a separate secret store, so repository secrets are
+    #    empty even though the branch lives in this repo
     if: >-
       github.event_name == 'pull_request' &&
-      github.event.pull_request.head.repo.full_name == github.repository
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
