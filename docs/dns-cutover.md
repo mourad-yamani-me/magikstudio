@@ -89,37 +89,146 @@ inert and are being ignored. Harmless. You can delete them later; not part of th
 
 # Part 1 — Create the Pages project
 
-**Pages** is Cloudflare's free static website hosting. You need an empty project for GitHub to
-deploy into.
+**What this is:** Cloudflare Pages is free hosting for static websites. You are creating an
+empty "project" — a named box that your site gets uploaded into. Right now you just need the
+box to exist, so GitHub has somewhere to deliver to.
 
-1. Go to **https://dash.cloudflare.com** and log in.
-2. In the **left sidebar**, click **Workers & Pages**.
-   *(Cloudflare renames this occasionally — in some accounts it sits under **Compute**. If you
-   can't see it, use the dashboard search box at the top and type "Pages".)*
-3. Click the blue **Create** button.
-4. You'll see tabs at the top: **Workers** | **Pages**. Click **Pages**.
-5. Look for **Upload assets** (*not* "Connect to Git"). Click it.
+**This does not affect your live site.** Your domain still points at Blogger for the whole of
+Part 1. Nothing your visitors see changes.
 
-   > **Why not "Connect to Git"?** That would let Cloudflare build the site itself, skipping
-   > the checks we built. We want GitHub Actions to build, verify, and run the Lighthouse
-   > budget *first*, and only then upload. So Cloudflare just receives finished files.
+## 1.1 — Prepare the folder you'll upload
 
-6. **Project name** — type exactly:
+The built website lives in the `dist` folder. Make sure it is up to date:
 
-   ```
-   indie-core-dev
-   ```
+```bash
+cd ~/codes/Apps/indie-core-dev
+npm run build
+```
 
-   This must match exactly; the GitHub workflow refers to it by name.
+You should see `built 14 pages → dist/`. Now open that folder in Finder so it's ready to drag:
 
-7. It asks for files. On your Mac, open the project folder and drag the **`dist`** folder in.
-   (If `dist` doesn't exist, run `npm run build` first.)
-8. Click **Deploy site**, then **Continue to project**.
+```bash
+open ~/codes/Apps/indie-core-dev
+```
 
-You now have a live site at `https://indie-core-dev.pages.dev`. Your real domain is still on
-Blogger — nothing has changed for visitors.
+A Finder window opens. You will see a folder called **`dist`**. Leave this window open —
+you'll drag this folder into the browser shortly.
 
----
+> Inside `dist` you should see `index.html`, `about`, `games`, `privacy`, `assets` and a few
+> others. That's the whole website: 118 files, about 5 MB.
+
+## 1.2 — Log in to Cloudflare
+
+Go to **https://dash.cloudflare.com** and log in.
+
+The first screen is your **Account Home**. You'll see `indiecore.net` listed as one of your
+websites. **Don't click it** — that page is for DNS. Pages lives somewhere else.
+
+## 1.3 — Open the Pages section
+
+In the **left sidebar**, look for **Workers & Pages**.
+
+> Cloudflare reorganises this menu periodically. Depending on when you read this it may be
+> called **Compute (Workers)**, or Pages may sit under a **Workers & Pages** heading. If you
+> cannot find it, use the **search box at the very top** of the dashboard and type `Pages`.
+
+Click it. You land on a list of projects, which is currently empty.
+
+## 1.4 — Start creating the project
+
+Click the blue **Create** button (top right of the project list).
+
+You'll get a screen with tabs across the top — something like **Workers** | **Pages**.
+Click the **Pages** tab.
+
+Under Pages you'll see two choices:
+
+| Option | Use it? |
+| --- | --- |
+| **Connect to Git** | ❌ **No** |
+| **Upload assets** | ✅ **Yes — click this** |
+
+> **Why not "Connect to Git"?** That option makes Cloudflare fetch your code and build it
+> itself. It would completely bypass the checks we built — the link checker, the metadata
+> validation, the Lighthouse budget. We want GitHub to build the site, run every check, and
+> only upload if all of them pass. So Cloudflare must be a plain receiver of finished files.
+>
+> Picking the wrong one here is the single most likely mistake in this whole guide.
+
+**Shortcut if you get lost:** this link goes straight to the right screen —
+`https://dash.cloudflare.com/?to=/:account/pages/new/upload`
+
+## 1.5 — Name the project
+
+There is one text box: **Project name**. Type exactly:
+
+```
+indie-core-dev
+```
+
+All lowercase, two hyphens, no spaces.
+
+> ⚠️ This must match **exactly**. The GitHub workflow deploys to a project of this name
+> (`CF_PROJECT: indie-core-dev` in `.github/workflows/ci-cd.yml`). A typo here means the
+> deploy fails later with "project not found".
+
+Cloudflare shows you the address it will get: `indie-core-dev.pages.dev`. Click **Create
+project**.
+
+## 1.6 — Upload the site
+
+You now get a large dashed upload box saying something like *"Drag and drop your site"* with a
+**Select from computer** button.
+
+**Drag the `dist` folder** from the Finder window you opened in step 1.1 into that dashed box.
+
+- Drag the **folder itself**, not the files inside it
+- If dragging doesn't work, click **Select from computer** → **Upload folder**, then choose
+  `dist`. macOS will ask *"Do you want to upload 118 files?"* → click **Upload**
+
+Wait for the progress indicator to finish. 118 files at ~5 MB takes a few seconds.
+
+> If it complains about file count or size: you're fine — the limits are 20,000 files and
+> 25 MB per file, and your largest file is 232 KB.
+
+## 1.7 — Deploy
+
+Click **Deploy site**.
+
+It takes 10–30 seconds, then shows **Success!** with a link. Click **Continue to project**.
+
+## 1.8 — Check it worked
+
+You're now on the project page. Open the address it shows:
+
+```
+https://indie-core-dev.pages.dev
+```
+
+Your new site should load — dark purple, gold headline, floating phones.
+
+> If you get a 404, the upload probably included the wrong folder level. Check the project's
+> **Deployments** tab → click the deployment → the file list should start with `index.html`
+> at the top level, **not** `dist/index.html`. If it's wrong, redeploy and drag the *contents*
+> of `dist` instead of the folder.
+
+**Do not add your custom domain yet.** That's Part 6, after the checks in Part 5.
+
+## Alternative: create the project from the terminal
+
+If the dashboard is being awkward, you can do Parts 1.3–1.7 with one command instead — but do
+**Part 2 first** so you have an API token:
+
+```bash
+cd ~/codes/Apps/indie-core-dev
+export CLOUDFLARE_API_TOKEN=<the token from Part 2>
+export CLOUDFLARE_ACCOUNT_ID=<your account ID>
+
+npx wrangler pages project create indie-core-dev --production-branch=main
+npx wrangler pages deploy dist --project-name=indie-core-dev
+```
+
+Same result, no dragging.
 
 # Part 2 — Create an API token
 
