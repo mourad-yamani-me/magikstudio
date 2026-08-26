@@ -1,12 +1,44 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import { Marked } from 'marked';
+import { markedHighlight } from 'marked-highlight';
+import hljs from 'highlight.js';
+
+/* Syntax highlighting happens at build time — no runtime JS, no CDN. */
+const marked = new Marked(markedHighlight({
+  emptyLangClass: 'hljs',
+  langPrefix: 'hljs language-',
+  highlight(code, lang) {
+    const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+    return hljs.highlight(code, { language }).value;
+  },
+}));
 
 const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const OUT  = path.join(ROOT, 'dist');
 const SITE = 'https://www.indiecore.net';
 const EMAIL = 'contact@indiecore.net';
 const play = JSON.parse(fs.readFileSync(path.join(ROOT, '_source/play-data.json'), 'utf8'));
+const pkg  = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+
+/* Version: major.minor come from package.json (bumped by hand for real
+   releases); the patch is the git commit count, so it increments on its own
+   with every commit. No commit-back to the repo, and always monotonic. */
+function buildVersion() {
+  const git = a => { try { return execFileSync('git', a, {cwd: ROOT}).toString().trim(); } catch { return ''; } };
+  const [major = '1', minor = '0'] = String(pkg.version).split('.');
+  const count = git(['rev-list', '--count', 'HEAD']);
+  const sha   = git(['rev-parse', '--short=7', 'HEAD']);
+  const shallow = git(['rev-parse', '--is-shallow-repository']) === 'true';
+  if (!count || shallow) {
+    // CI must checkout with fetch-depth: 0 for an accurate count.
+    if (shallow) console.warn('! shallow clone — commit count unreliable, falling back to package.json version');
+    return { version: pkg.version, sha: sha || 'unknown', date: new Date().toISOString().slice(0, 10) };
+  }
+  return { version: `${major}.${minor}.${count}`, sha, date: new Date().toISOString().slice(0, 10) };
+}
+const BUILD = buildVersion();
 
 /* ───────── helpers ───────── */
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -173,6 +205,55 @@ const FONT_CSS = fs.readFileSync(path.join(ROOT,'public/assets/fonts/fonts.css')
 const SITE_CSS = fs.readFileSync(path.join(ROOT,'src/styles.css'),'utf8')
   .replace(/\/\*[\s\S]*?\*\//g,'').replace(/\s*([{}:;,>])\s*/g,'$1').replace(/;}/g,'}').replace(/\s+/g,' ').trim();
 
+/* ───────── blog ───────── */
+const BLOG_DIR = path.join(ROOT, 'content/blog');
+
+/** minimal frontmatter: `key: value` lines, plus `tags: [a, b]` */
+function frontmatter(raw){
+  const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+  if (!m) return { meta: {}, body: raw };
+  const meta = {};
+  for (const line of m[1].split(/\r?\n/)) {
+    const kv = line.match(/^([A-Za-z_][\w-]*):\s*(.*)$/);
+    if (!kv) continue;
+    let [, k, v] = kv;
+    v = v.trim();
+    if (/^\[.*\]$/.test(v)) meta[k] = v.slice(1, -1).split(',').map(x => x.trim()).filter(Boolean);
+    else if (v === 'true' || v === 'false') meta[k] = v === 'true';
+    else meta[k] = v.replace(/^["']|["']$/g, '');
+  }
+  return { meta, body: m[2] };
+}
+
+const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
+  // files starting with _ are scaffolding, not posts (templates, notes, README)
+  .filter(f => f.endsWith('.md') && !f.startsWith('_') && f.toLowerCase() !== 'readme.md')
+  .map(f => {
+    const { meta, body } = frontmatter(fs.readFileSync(path.join(BLOG_DIR, f), 'utf8'));
+    const words = body.split(/\s+/).filter(Boolean).length;
+    if (!meta.title) throw new Error(`content/blog/${f}: missing "title" in frontmatter`);
+    if (!meta.date)  throw new Error(`content/blog/${f}: missing "date" in frontmatter`);
+    return {
+      slug: f.replace(/\.md$/, ''),
+      title: meta.title,
+      date: meta.date,
+      description: meta.description || '',
+      tags: meta.tags || [],
+      draft: meta.draft === true,
+      // `code:` takes a GitHub URL — a gist for a snippet, a repo for a project.
+      // `repo:` is kept as an alias. The kind is detected from the URL.
+      code: meta.code || meta.repo || meta.gist || '',
+      codeLabel: meta.codeLabel || meta.repoLabel || '',
+      minutes: Math.max(1, Math.round(words / 200)),
+      html: marked.parse(body, { mangle: false, headerIds: false }),
+    };
+  })
+  .filter(p => !p.draft)
+  .sort((a, b) => b.date.localeCompare(a.date));
+
+const humanDate = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB',
+  { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+
 /* ───────── shared chrome ───────── */
 const LOGO = (s=30) => `<svg width="${s}" height="${s}" viewBox="0 0 48 48" fill="none" aria-hidden="true">
 <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC53D"/><stop offset="1" stop-color="#FF2D8E"/></linearGradient></defs>
@@ -186,6 +267,7 @@ const NAV = cur => `
   <a href="/" class="brand">${LOGO(30)} Indie Core Dev</a>
   <nav class="nav-links">
     <a href="/#games"${cur==='games'?' aria-current="page"':''}>Games</a>
+    <a href="/blog/"${cur==='blog'?' aria-current="page"':''}>Blog</a>
     <a href="/about/"${cur==='about'?' aria-current="page"':''}>About</a>
     <a href="/privacy/"${cur==='privacy'?' aria-current="page"':''}>Privacy</a>
     <a href="/contact/"${cur==='contact'?' aria-current="page"':''}>Contact</a>
@@ -194,7 +276,7 @@ const NAV = cur => `
   <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobmenu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFF6E9" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </div>
 <div class="mobmenu" id="mobmenu">
-  <a href="/#games">Games</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a>
+  <a href="/#games">Games</a><a href="/blog/">Blog</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a>
 </div></header>`;
 
 const FOOT = `
@@ -211,14 +293,16 @@ const FOOT = `
       ${ALL.map(g=>`<li><a href="/privacy/${g.slug}/">${esc(g.name)}</a></li>`).join('')}
     </ul></div>
     <div><h2 class="foot-h">Studio</h2><ul>
+      <li><a href="/blog/">Blog</a></li>
       <li><a href="/about/">About</a></li>
       <li><a href="/contact/">Contact</a></li>
+      <li><a href="https://github.com/IndieCoreDev" target="_blank" rel="noopener">GitHub</a></li>
       <li><a href="mailto:${EMAIL}">${EMAIL}</a></li>
     </ul></div>
   </div>
   <div class="foot-bot">
     <span>SIREN 943 647 503 · APE 6201Z · 4 rue de Bretagne, 94000 Créteil, France</span>
-    <span>© 2026 Othmane Ettaib — Indie Core Dev</span>
+    <span>© 2026 Othmane Ettaib — Indie Core Dev <span class="ver" title="Build ${BUILD.sha} · ${BUILD.date}">v${BUILD.version}</span></span>
   </div>
 </div></footer>
 <script src="/assets/app.js" defer></script>`;
@@ -247,7 +331,7 @@ function layout({title, desc, canonical, body, cur, jsonld, ogimg}){
 <meta name="twitter:description" content="${esc(desc)}">
 <meta name="twitter:image" content="${og}">
 <meta name="theme-color" content="#0B0616">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n<link rel="alternate" type="application/rss+xml" title="Indie Core Dev — Blog" href="/blog/feed.xml">
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/${FONT_BODY}" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/${FONT_DISPLAY}" crossorigin>
 <style>${FONT_CSS}</style>
@@ -504,6 +588,93 @@ function pagePrivacy(g){
   });
 }
 
+/* ───────── page: blog ───────── */
+function postCard(p){
+  return `<a class="pcard rv" href="/blog/${p.slug}/">
+    <div class="pmeta"><time datetime="${p.date}">${humanDate(p.date)}</time><span>·</span><span>${p.minutes} min read</span></div>
+    <h2>${esc(p.title)}</h2>
+    ${p.description ? `<p>${esc(p.description)}</p>` : ''}
+    ${p.tags.length || p.code ? `<div class="ptags">${p.tags.map(t=>`<span>${esc(t)}</span>`).join('')}${p.code ? `<span class="tcode">${/gist\.github\.com/.test(p.code) ? 'gist' : 'code'}</span>` : ''}</div>` : ''}
+    <span class="plink">Read<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+  </a>`;
+}
+
+function pageBlogIndex(){
+  const body = `
+<section class="hero" style="padding-bottom:32px"><div class="shell narrow">
+  <span class="eyebrow">Blog</span>
+  <h1 style="font-size:clamp(38px,5.6vw,68px)">Notes from<br><span class="grad">the studio.</span></h1>
+  <p class="lede">Game updates, what goes on behind them, and the occasional technical write-up — from the person building them.</p>
+  <p style="margin-top:18px"><a class="rsslink" href="/blog/feed.xml">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="6.2" cy="17.8" r="2.2"/><path d="M4 10.5v3a6.5 6.5 0 0 1 6.5 6.5h3A9.5 9.5 0 0 0 4 10.5Z"/><path d="M4 4v3a13 13 0 0 1 13 13h3A16 16 0 0 0 4 4Z"/></svg>
+    RSS feed</a></p>
+</div></section>
+<section class="sec-tight"><div class="shell narrow">
+  ${POSTS.length
+    ? `<div class="plist">${POSTS.map(postCard).join('')}</div>`
+    : `<p class="lede">No posts yet — the first one is being written.</p>`}
+</div></section>`;
+  return layout({
+    title: 'Blog — Indie Core Dev',
+    desc: 'Game updates, behind-the-scenes notes and technical write-ups from Indie Core Dev, a one-person mobile game studio in France.',
+    canonical: '/blog/', cur: 'blog', body,
+    jsonld: [crumbLD([['Home','/'],['Blog','/blog/']])],
+  });
+}
+
+function pagePost(p, i){
+  const prev = POSTS[i + 1], next = POSTS[i - 1];
+  const body = `
+<article class="post"><div class="shell narrow">
+  <nav class="crumb"><a href="/">Home</a> <span>/</span> <a href="/blog/">Blog</a> <span>/</span> <span style="color:var(--text)">${esc(p.title)}</span></nav>
+  <div class="pmeta" style="margin-top:26px"><time datetime="${p.date}">${humanDate(p.date)}</time><span>·</span><span>${p.minutes} min read</span></div>
+  <h1>${esc(p.title)}</h1>
+  ${p.description ? `<p class="lede" style="margin-top:20px">${esc(p.description)}</p>` : ''}
+  ${p.tags.length ? `<div class="ptags" style="margin-top:22px">${p.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>` : ''}
+  ${p.code ? (() => {
+    const isGist = /gist\.github\.com/.test(p.code);
+    const handle = p.code.replace(/^https?:\/\/(www\.)?(gist\.)?github\.com\//, '');
+    const label  = p.codeLabel || (isGist ? 'Code snippet on GitHub Gist' : 'Source on GitHub');
+    const kind   = isGist ? 'Gist' : 'Repository';
+    return `<a class="repocard" href="${esc(p.code)}" target="_blank" rel="noopener">
+    <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+    <span><strong>${esc(label)}</strong><em>${esc(kind)} &middot; ${esc(handle)}</em></span>
+    <svg class="ext" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+  </a>`;
+  })() : ''}
+  <hr class="prule">
+  <div class="article">${p.html}</div>
+  <div class="pnav">
+    ${prev ? `<a href="/blog/${prev.slug}/"><span>← Previous</span><strong>${esc(prev.title)}</strong></a>` : '<span></span>'}
+    ${next ? `<a href="/blog/${next.slug}/" class="r"><span>Next →</span><strong>${esc(next.title)}</strong></a>` : '<span></span>'}
+  </div>
+</div></article>
+<section class="sec-tight"><div class="shell narrow">
+  <div class="band">
+    <h2 style="font-size:clamp(26px,3.4vw,38px)">More posts</h2>
+    <p>New writing when there is something worth saying. Subscribe by RSS, or get in touch.</p>
+    <div class="cta-row" style="justify-content:center">
+      <a class="btn btn-primary" href="/blog/feed.xml">Subscribe by RSS</a>
+      <a class="btn btn-ghost" href="mailto:${EMAIL}">Email me</a>
+    </div>
+  </div>
+</div></section>`;
+  return layout({
+    title: `${p.title} — Indie Core Dev`,
+    desc: p.description || `${p.title} — notes from Indie Core Dev.`,
+    canonical: `/blog/${p.slug}/`, cur: 'blog', body,
+    jsonld: [{
+      '@context':'https://schema.org','@type':'BlogPosting',
+      headline: p.title, datePublished: p.date, dateModified: p.date,
+      description: p.description, url: SITE + `/blog/${p.slug}/`,
+      keywords: p.tags.join(', ') || undefined,
+      author: { '@type':'Person', name:'Othmane Ettaib' },
+      publisher: { '@type':'Organization', name:'Indie Core Dev', url: SITE },
+      mainEntityOfPage: { '@type':'WebPage', '@id': SITE + `/blog/${p.slug}/` },
+    }, crumbLD([['Home','/'],['Blog','/blog/'],[p.title, `/blog/${p.slug}/`]])],
+  });
+}
+
 /* ───────── page: privacy index / about / contact ───────── */
 function pagePrivacyIndex(){
   const body = `
@@ -582,6 +753,8 @@ for (const g of ALL) {
   write(`privacy/${g.slug}/index.html`, pagePrivacy(g));
 }
 write('privacy/index.html', pagePrivacyIndex());
+write('blog/index.html', pageBlogIndex());
+POSTS.forEach((p, i) => write(`blog/${p.slug}/index.html`, pagePost(p, i)));
 write('about/index.html', pageAbout());
 write('contact/index.html', pageContact());
 
@@ -615,6 +788,27 @@ for (const f of fs.readdirSync(path.join(OUT,'assets/games'))) {
 fs.writeFileSync(path.join(OUT,'favicon.svg'),
 `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC53D"/><stop offset="1" stop-color="#FF2D8E"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#g)"/><path d="M17 32V16h5.6c4.6 0 7.4 3 7.4 8s-2.8 8-7.4 8H17Zm4.6-3.6h.9c2.3 0 3.7-1.6 3.7-4.4s-1.4-4.4-3.7-4.4h-.9v8.8Z" fill="#20100A"/></svg>`);
 
+/* RSS — a real feed helps the blog get picked up and shared */
+const rssItems = POSTS.map(p => `  <item>
+    <title>${esc(p.title)}</title>
+    <link>${SITE}/blog/${p.slug}/</link>
+    <guid isPermaLink="true">${SITE}/blog/${p.slug}/</guid>
+    <pubDate>${new Date(p.date + 'T09:00:00Z').toUTCString()}</pubDate>
+    <description>${esc(p.description)}</description>
+  </item>`).join('\n');
+write('blog/feed.xml', `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Indie Core Dev — Blog</title>
+  <link>${SITE}/blog/</link>
+  <atom:link href="${SITE}/blog/feed.xml" rel="self" type="application/rss+xml"/>
+  <description>Notes from a one-person game studio in France.</description>
+  <language>en</language>
+${rssItems}
+</channel>
+</rss>
+`);
+
 /* 404 */
 write('404.html', layout({
   title:'Page not found — Indie Core Dev',
@@ -639,6 +833,7 @@ fs.writeFileSync(path.join(OUT,'_redirects'), redirects);
 const today = new Date().toISOString().slice(0,10);
 const urls = [
   ['/', '1.0'], ...ALL.map(g=>[`/games/${g.slug}/`, '0.9']),
+  ['/blog/','0.8'], ...POSTS.map(p=>[`/blog/${p.slug}/`, '0.7']),
   ['/about/','0.6'], ['/contact/','0.5'], ['/privacy/','0.4'],
   ...ALL.map(g=>[`/privacy/${g.slug}/`, '0.3']),
 ];
@@ -657,7 +852,10 @@ fs.writeFileSync(path.join(OUT,'_headers'),
 /assets/styles.css\n  Cache-Control: public, max-age=86400\n
 /assets/app.js\n  Cache-Control: public, max-age=86400\n
 /*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n`);
+fs.writeFileSync(path.join(OUT,'version.json'),
+  JSON.stringify({ ...BUILD, builtAt: new Date().toISOString() }, null, 2) + '\n');
 fs.writeFileSync(path.join(OUT,'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 
-console.log(`built ${urls.length} pages → dist/  (${webp} webp, ${(saved/1024/1024).toFixed(2)} MB saved)`);
+console.log(`v${BUILD.version} (${BUILD.sha}) — built ${urls.length} pages → dist/  (${webp} webp, ${(saved/1024/1024).toFixed(2)} MB saved)`);
+console.log(`  blog: ${POSTS.length} post(s)`);
 for (const g of ALL) console.log(`  /games/${g.slug}/  ·  /privacy/${g.slug}/  (${g.shots.length} shots)`);

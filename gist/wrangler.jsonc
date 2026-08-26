@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "my-site",
+  "compatibility_date": "2026-08-26",
+
+  // Keep the *.workers.dev URL alive as a staging target, and keep per-version
+  // Preview URLs on — the CI preview job publishes with `wrangler versions
+  // upload` and reads the preview URL from its output. Wrangler disables both
+  // by default when they are absent from this file.
+  "workers_dev": true,
+  "preview_urls": true,
+
+  // Static-assets-only Worker: no server code, Cloudflare serves dist/ directly.
+  // _headers and _redirects inside dist/ are honoured natively.
+  "assets": {
+    "directory": "./dist",
+    // /about/ -> about/index.html, and strip .html from URLs
+    "html_handling": "auto-trailing-slash",
+    // unknown paths get dist/404.html with a real 404 status
+    "not_found_handling": "404-page"
+  },
+
+  // Attaching the domains here rather than in the dashboard: `wrangler deploy`
+  // creates the custom domains and their DNS records, and re-asserts them on
+  // every deploy. custom_domain:true means Cloudflare manages the record and
+  // the TLS certificate for each hostname.
+  "routes": [
+    { "pattern": "www.example.com", "custom_domain": true },
+    { "pattern": "example.com", "custom_domain": true }
+  ]
+}

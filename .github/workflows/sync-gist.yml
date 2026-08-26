@@ -1,0 +1,94 @@
+name: Sync gist
+
+# Publishes gist/ to a public gist owned by the IndieCoreDev account, so the
+# snippet linked from the blog post never drifts from the real configuration.
+#
+# Deliberately separate from ci-cd.yml: deploying the site must not depend on
+# the GitHub gist API, and this only needs to run when the source files change.
+#
+# The gist is found by its description marker rather than a stored ID, so the
+# first run creates it and every later run updates the same one.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'wrangler.jsonc'
+      - '.github/workflows/ci-cd.yml'
+      - 'scripts/build-gist.mjs'
+      - 'gist/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-gist
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Publish to gist
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Regenerate gist files from the live config
+        run: node scripts/build-gist.mjs
+
+      - name: Create or update the gist
+        env:
+          # A classic PAT on the IndieCoreDev account, `gist` scope only.
+          # The gist is owned by whichever account this token belongs to.
+          GH_TOKEN: ${{ secrets.GIST_TOKEN }}
+          MARKER: 'Static site → Cloudflare Workers with gated GitHub Actions deploys'
+        run: |
+          set -euo pipefail
+
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::GIST_TOKEN is not set — add it as a repository secret."
+            exit 1
+          fi
+
+          echo "acting as: $(gh api user --jq .login)"
+
+          # Build the API payload from gist/ without shelling out per file.
+          node -e '
+            const fs = require("fs");
+            const files = Object.fromEntries(
+              fs.readdirSync("gist").map(f => [f, { content: fs.readFileSync("gist/" + f, "utf8") }])
+            );
+            fs.writeFileSync("payload.json", JSON.stringify({
+              description: process.env.MARKER, public: true, files,
+            }));
+          '
+
+          # Find an existing gist by its description, so no ID has to be stored.
+          id=$(gh api /gists --paginate \
+                 --jq "map(select(.description == \"$MARKER\")) | .[0].id // empty")
+
+          if [ -n "$id" ]; then
+            echo "updating existing gist $id"
+            url=$(gh api -X PATCH "/gists/$id" --input payload.json --jq .html_url)
+          else
+            echo "no existing gist found — creating"
+            url=$(gh api -X POST /gists --input payload.json --jq .html_url)
+          fi
+
+          echo "GIST_URL=$url" >> "$GITHUB_ENV"
+          {
+            echo "### Gist published"
+            echo ""
+            echo "$url"
+            echo ""
+            echo "Put this in a post's \`code:\` frontmatter field to render a link card."
+          } >> "$GITHUB_STEP_SUMMARY"
