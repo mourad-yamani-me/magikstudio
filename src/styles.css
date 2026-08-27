@@ -308,14 +308,14 @@ main,header,footer{position:relative;z-index:2}
 .article pre{padding:22px 24px;border-radius:16px;background:#120827;border:1px solid var(--line);overflow-x:auto}
 .article pre code{padding:0;background:none;font-size:14px;line-height:1.7;color:#D6CCEA}
 /* syntax theme, tuned to the site palette rather than a stock hljs theme */
-.hljs-comment,.hljs-quote{color:#7A6B96;font-style:italic}
+.hljs-comment,.hljs-quote{color:#8B7BA8;font-style:italic}
 .hljs-keyword,.hljs-selector-tag,.hljs-literal,.hljs-type{color:#FF6FB5}
 .hljs-string,.hljs-regexp,.hljs-addition{color:#8BEF4A}
 .hljs-number,.hljs-symbol,.hljs-bullet{color:#FFC53D}
 .hljs-title,.hljs-section,.hljs-name,.hljs-selector-id,.hljs-selector-class{color:#5CD9F5}
 .hljs-attr,.hljs-attribute,.hljs-variable,.hljs-template-variable{color:#C6B6E0}
 .hljs-built_in,.hljs-class .hljs-title{color:#FFAA5C}
-.hljs-meta{color:#7A6B96}
+.hljs-meta{color:#8B7BA8}
 .hljs-deletion{color:#FF6B6B}
 .hljs-emphasis{font-style:italic}
 .hljs-strong{font-weight:700}

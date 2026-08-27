@@ -34,6 +34,9 @@ const TARGETS = process.env.LH_TARGETS
       ['home',    '/'],
       ['game',    '/games/soda-jam-color-sort/'],
       ['privacy', '/privacy/word-slot/'],
+      // the blog post template is the only one with code blocks and gist
+      // embeds; leaving it untested let a contrast failure ship
+      ['post',    '/blog/static-site-cloudflare-workers/'],
     ];
 
 const run = promisify(execFile);

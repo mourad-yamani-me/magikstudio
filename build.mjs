@@ -19,6 +19,10 @@ const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const OUT  = path.join(ROOT, 'dist');
 const SITE = 'https://www.indiecore.net';
 const EMAIL = 'contact@indiecore.net';
+/* IndexNow ownership key. Public by design — it only authorises submissions
+   while it is readable at https://www.indiecore.net/<key>.txt, which is why
+   the same file feeds both the build and scripts/seo-ping.mjs. */
+const INDEXNOW_KEY = fs.readFileSync(path.join(ROOT, '_source/indexnow-key.txt'), 'utf8').trim();
 const play = JSON.parse(fs.readFileSync(path.join(ROOT, '_source/play-data.json'), 'utf8'));
 const pkg  = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 
@@ -933,6 +937,10 @@ fs.writeFileSync(path.join(OUT,'_headers'),
 fs.writeFileSync(path.join(OUT,'version.json'),
   JSON.stringify({ ...BUILD, builtAt: new Date().toISOString() }, null, 2) + '\n');
 fs.writeFileSync(path.join(OUT,'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
+
+/* IndexNow key file — the crawlers fetch this to confirm we own the host
+   before accepting a URL submission. Must sit at the site root. */
+fs.writeFileSync(path.join(OUT, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY + '\n');
 
 /* app-ads.txt — IAB Tech Lab authorised sellers, crawled by AdMob from the
    developer website listed on the Play Store. Must stay at the site root. */

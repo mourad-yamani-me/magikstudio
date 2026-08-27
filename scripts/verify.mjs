@@ -125,6 +125,17 @@ for (const f of ['robots.txt', 'app-ads.txt', '_headers', '404.html', 'favicon.s
   if (!fs.existsSync(path.join(DIST, f))) fail('dist', `missing ${f}`);
 }
 
+// ---- IndexNow key file ----
+// scripts/seo-ping.mjs submits URLs under this key; the crawlers reject the
+// submission unless the matching file is live at the site root.
+{
+  const key = fs.readFileSync(path.join(import.meta.dirname, '..', '_source/indexnow-key.txt'), 'utf8').trim();
+  const p = path.join(DIST, `${key}.txt`);
+  if (!/^[a-f0-9]{8,128}$/.test(key)) fail('indexnow', `key is not 8-128 hex chars: "${key}"`);
+  else if (!fs.existsSync(p)) fail('indexnow', `missing key file /${key}.txt`);
+  else if (fs.readFileSync(p, 'utf8').trim() !== key) fail('indexnow', 'key file contents do not match the key');
+}
+
 // ---- app-ads.txt (IAB Tech Lab spec) ----
 {
   const p = path.join(DIST, "app-ads.txt");
