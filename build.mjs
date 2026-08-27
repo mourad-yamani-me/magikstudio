@@ -101,7 +101,10 @@ function enhanceImages(html){
     const base = file.replace(/\.jpg$/,'');
     const isShot = /-\d+$/.test(base);
     const isHero = /\bdata-hero\b/.test(pre + post);
-    const srcset = isHero
+    const isFeature = /-feature$/.test(base);
+    const srcset = isFeature
+      ? `srcset="/assets/games/${base}-640.webp 640w, /assets/games/${base}.webp 1024w" sizes="(max-width:980px) 100vw, 1100px"`
+      : isHero
       ? `srcset="/assets/games/${base}-200.webp 200w, /assets/games/${base}-320.webp 320w" sizes="(max-width:700px) 190px, 270px"`
       : isShot
       ? `srcset="/assets/games/${base}-200.webp 200w, /assets/games/${base}-320.webp 320w, /assets/games/${base}.webp ${d ? d.w : 506}w" sizes="(max-width:700px) 50vw, 280px"`
@@ -119,6 +122,7 @@ const GAMES = [
     blurb:'Pour, sort and clear the bottles until every colour finds its place. It starts gentle and turns genuinely mean — in the best way.',
     feats:['Hundreds of levels','No timer pressure','Undo & hints','Plays offline'] },
   { key:'gridsmash',    slug:'color-block-puzzle-master', legacy:'privacy-policy-for-gridsmash-block',
+    video:'eOv0iC1BGfg',   // official gameplay trailer, the one listing that has one
     blurb:'Drop blocks, clear lines, chain the combo. One more go turns into an hour, and the grid never blinks first.',
     feats:['Combo scoring','Play Games leaderboards','Achievements','Plays offline'] },
   { key:'logo-quiz',    slug:'logo-quiz-guess-brand',     legacy:'privacy-policy-for-logo-quiz-guess-brand',
@@ -130,7 +134,8 @@ const GAMES = [
 ].map(g => {
   const p = play[g.key];
   return { ...p, ...g, name:p.title, tagline:p.short, playUrl:`https://play.google.com/store/apps/details?id=${p.pkg}`,
-           shots:shotsFor(g.key), icon:`${g.key}-icon.jpg`, live:true };
+           shots:shotsFor(g.key), icon:`${g.key}-icon.jpg`,
+           feature:`${g.key}-feature.jpg`, live:true };
 });
 
 const ALL = GAMES;
@@ -574,6 +579,10 @@ function pageGame(g){
   </div>
 </div></section>
 
+${g.feature ? `<section class="sec-keyart"><div class="shell">
+  <div class="keyart rv"><img src="/assets/games/${g.feature}" alt="${esc(g.name)} key art" loading="lazy" decoding="async"></div>
+</div></section>` : ''}
+
 ${g.shots.length > 1 ? `<section class="sec-shots"><div class="shell">
   <div class="sec-head rv" style="margin-bottom:34px">
     <span class="eyebrow">Screenshots</span>
@@ -585,6 +594,15 @@ ${g.shots.length > 1 ? `<section class="sec-shots"><div class="shell">
       <span class="zoom"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8.5v5M8.5 11h5"/></svg></span>
     </button>`).join('')}
   </div>
+</div></section>` : ''}
+
+${g.video ? `<section class="sec-tight"><div class="shell">
+  <div class="sec-head rv" style="margin-bottom:30px"><span class="eyebrow">Trailer</span><h2>See it in motion</h2></div>
+  <button class="trailer rv" type="button" data-trailer="${g.video}" aria-label="Play the ${esc(g.name)} gameplay trailer">
+    <img src="/assets/games/${g.feature}" alt="" loading="lazy" decoding="async">
+    <span class="tplay"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg></span>
+    <span class="tnote">Watch on YouTube &middot; loads only when you press play</span>
+  </button>
 </div></section>` : ''}
 
 <section class="sec-tight"><div class="shell">
@@ -848,6 +866,10 @@ for (const f of fs.readdirSync(path.join(OUT,'assets/games'))) {
   try {
     execFileSync('cwebp', ['-q', /-\d+\.jpg$/.test(f) ? '60' : '80', '-quiet', src, '-o', dst], {stdio:'ignore'});
     webp++; saved += fs.statSync(src).size - fs.statSync(dst).size;
+    if (/-feature\.jpg$/.test(f)) {
+      execFileSync('cwebp', ['-q','72','-resize','640','0','-quiet', src, '-o',
+        src.replace(/\.jpg$/,'-640.webp')], {stdio:'ignore'});
+    }
     if (/-\d+\.jpg$/.test(f)) {
       for (const w of [200, 320]) {
         execFileSync('cwebp', ['-q','70','-resize',String(w),'0','-quiet', src, '-o',

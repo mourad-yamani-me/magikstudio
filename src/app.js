@@ -138,4 +138,22 @@
     });
   }
 
+  /* trailer facade — the YouTube player is only created on click, so the page
+     makes no third-party request unless someone actually wants the video */
+  document.querySelectorAll('[data-trailer]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var id = b.getAttribute('data-trailer');
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+      f.title = b.getAttribute('aria-label') || 'Gameplay trailer';
+      f.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+      f.allowFullscreen = true;
+      var wrap = document.createElement('div');
+      wrap.className = 'trailer';
+      wrap.appendChild(f);
+      b.replaceWith(wrap);
+      f.focus();
+    });
+  });
+
 })();
