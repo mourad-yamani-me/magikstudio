@@ -35,6 +35,7 @@ Merge with **squash** once checks are green. Production deploys automatically fr
 | `npm run serve` | Serve `dist/` at :4321 with brotli, cache headers and redirects |
 | `npm run dev` | `build` + `serve` |
 | `npm run lighthouse` | Run the performance/a11y/SEO budget |
+| `npm run style` | Flag prose that reads as machine-written (advisory) |
 
 ## Content changes
 

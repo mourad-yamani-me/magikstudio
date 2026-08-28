@@ -14,6 +14,7 @@
     "dev": "npm run build && npm run serve",
     "check": "npm run build && npm run verify",
     "lighthouse": "node scripts/lighthouse-check.mjs",
+    "style": "node scripts/style-check.mjs",
     "assets:og": "node og.mjs",
     "assets:fonts": "node fonts.mjs",
     "gist": "node scripts/build-gist.mjs"

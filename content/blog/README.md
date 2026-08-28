@@ -123,6 +123,34 @@ the reasoning.
 Put them in `public/assets/blog/` and reference them as `/assets/blog/name.jpg`.
 Resize to about 1200px wide first — the build does not process post images.
 
+## Style check
+
+```bash
+npm run style      # advisory; `npm run style -- --strict` exits non-zero
+```
+
+Flags the patterns that make a post read as machine-written. It deliberately does *not*
+flag em dashes: this site runs about ten per thousand words and always has, so scoring them
+the way a generic AI-detector would just tells you to stop sounding like yourself.
+
+What it measures instead is **formula** — the same rhetorical move landing at a regular
+interval:
+
+| Signal | Why it's there |
+| --- | --- |
+| `"not X, it's Y"` density | the most recognisable LLM cadence; one per post is fine, four is a tic |
+| bolded claim in most sections | emphasis on a schedule stops being emphasis |
+| sentence-length stdev | uniform rhythm; below ~4 is what detectors key on |
+| filler formulas | "that's the point", "which is why", "at the end of the day" |
+| AI-flavoured vocabulary | delve, leverage, crucial, ecosystem, underscores |
+
+Thresholds are calibrated against the posts already published here, so a passing score means
+"sounds like the rest of the site", not "sounds like nobody". Drafts are skipped.
+
+Worth saying plainly: Google does not penalise a post for being AI-assisted — its spam
+policy targets low-value content produced at scale, whatever wrote it. The reason to run this
+is that readers can tell, and stop trusting the writing when they do.
+
 ## Want help writing one?
 
 Give me the rough facts — the error, the versions, what you tried, what fixed it — and I'll
