@@ -89,6 +89,23 @@ for (const file of pages) {
   }
 }
 
+// ---- third-party embed consent ----
+// The trailer is the only thing on this site that hands a visitor to a third
+// party, so it is the only place consent is in play. The click-to-load facade
+// is the mechanism; this checks the other half — that the visitor is told what
+// pressing play sends, and to whom, before they press it.
+for (const file of pages) {
+  const html = fs.readFileSync(file, 'utf8');
+  if (!html.includes('data-trailer')) continue;
+  const where = rel(file);
+  if (!/youtube-nocookie\.com/.test(html))
+    fail(where, 'trailer without the embed host named in the notice');
+  if (!/sends your IP/.test(html))
+    fail(where, 'trailer without a notice saying what pressing play transmits');
+  if (!/href="\/privacy\/"/.test(html))
+    fail(where, 'trailer notice does not link the privacy policy');
+}
+
 // ---- redirects ----
 const redirectsFile = path.join(DIST, '_redirects');
 if (!fs.existsSync(redirectsFile)) fail('_redirects', 'missing');
@@ -117,6 +134,52 @@ else {
     const url = rel(p).replace(/index\.html$/, '');
     if (url === '/404.html') continue;
     if (!listed.has(url)) warn('sitemap.xml', `page not listed: ${url}`);
+  }
+}
+
+// ---- legal pages ----
+// /privacy/ is a legal document, not marketing copy. These are the parts the
+// GDPR actually requires: an identified controller, a named legal basis, the
+// data-subject rights, and the supervisory authority a complaint goes to.
+// Losing any of them to an edit would be silent, so it fails the build.
+{
+  const p = path.join(DIST, 'privacy/index.html');
+  if (!fs.existsSync(p)) fail('privacy', 'missing /privacy/index.html');
+  else {
+    const html = fs.readFileSync(p, 'utf8');
+    const required = {
+      'controller identity (SIREN)': /943\s*647\s*503/,
+      'GDPR named':                  /GDPR|RGPD/,
+      'a legal basis cited':         /Article 6\(1\)/,
+      'data-subject rights':         /Articles 15 to 22|Article 15/,
+      'supervisory authority':       /CNIL/,
+      'contact address':             /mailto:/,
+    };
+    for (const [what, re] of Object.entries(required)) {
+      if (!re.test(html)) fail('/privacy/', `legal page is missing ${what}`);
+    }
+  }
+}
+
+// ---- legal notice (LCEN art. 6 III) ----
+// A French site must publish who runs it and who hosts it. Same reasoning as
+// the privacy check: losing one of these to an edit would be invisible.
+{
+  const p = path.join(DIST, 'legal/index.html');
+  if (!fs.existsSync(p)) fail('legal', 'missing /legal/index.html');
+  else {
+    const html = fs.readFileSync(p, 'utf8');
+    const required = {
+      'publisher name':          /Othmane Ettaib/,
+      'registered address':      /94000/,
+      'SIREN':                   /943\s*647\s*503/,
+      'director of publication': /director of publication/i,
+      'host name and address':   /Cloudflare, Inc\.[\s\S]{0,400}San Francisco/,
+      'contact address':         /mailto:/,
+    };
+    for (const [what, re] of Object.entries(required)) {
+      if (!re.test(html)) fail('/legal/', `legal notice is missing ${what}`);
+    }
   }
 }
 

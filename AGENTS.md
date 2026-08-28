@@ -22,6 +22,7 @@ Optional, and worth it when the change is prose or performance:
 npm run style      # flags writing that reads as machine-written (advisory)
 npm run lighthouse # the performance/a11y/SEO budget
 npm run gist       # regenerate gist/ from the live files
+npm run seo        # submit new URLs, then report index status and search performance
 ```
 
 ## Never break these
@@ -35,6 +36,10 @@ npm run gist       # regenerate gist/ from the live files
   the same site race, and the one without checks can win.
 - **Never touch `MX` or `TXT` DNS records.** The domain carries email. `A`/`CNAME` changes
   cannot affect mail; deleting an `MX` or SPF `TXT` breaks it silently, days later.
+- **`/privacy/` is a legal document, not marketing copy.** It names the data controller, the
+  legal basis for each processing, the Article 15–22 rights and the CNIL as supervisory
+  authority. `scripts/verify.mjs` fails the build if any of those disappear. Rewriting it for
+  tone is fine; dropping a required part is not.
 - **Never commit to `main`.** Branch (`feat/`, `fix/`, `content/`, `chore/`), open a PR, let
   the preview URL build, squash-merge. `main` deploys to production on merge.
 

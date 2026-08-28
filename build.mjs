@@ -19,6 +19,24 @@ const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const OUT  = path.join(ROOT, 'dist');
 const SITE = 'https://www.indiecore.net';
 const EMAIL = 'contact@indiecore.net';
+
+/* Identity published in the footer, the Organization schema, /about/, /contact/
+   and /legal/. One source so the five cannot disagree — LCEN requires the
+   legal notice to be accurate, and a stale copy in a footer is still a copy. */
+const LEGAL = {
+  name:      'Othmane Ettaib',
+  trading:   'Indie Core Dev',
+  form:      'Entreprise individuelle (sole proprietorship)',
+  street:    '4 rue de Bretagne',
+  postalCode:'94000',
+  city:      'Créteil',
+  country:   'France',
+  siren:     '943 647 503',
+  ape:       '6201Z — Computer programming',
+  founded:   'April 2025',
+  updated:   '28 August 2026',
+};
+LEGAL.address = `${LEGAL.street}, ${LEGAL.postalCode} ${LEGAL.city}, ${LEGAL.country}`;
 /* IndexNow ownership key. Public by design — it only authorises submissions
    while it is readable at https://www.indiecore.net/<key>.txt, which is why
    the same file feeds both the build and scripts/seo-ping.mjs. */
@@ -390,7 +408,7 @@ const NAV = cur => `
   <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobmenu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFF6E9" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </div>
 <div class="mobmenu" id="mobmenu">
-  <a href="/#games">Games</a><a href="/blog/">Blog</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a>
+  <a href="/#games">Games</a><a href="/blog/">Blog</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a><a href="/legal/">Legal</a>
 </div></header>`;
 
 const FOOT = `
@@ -415,7 +433,7 @@ const FOOT = `
     </ul></div>
   </div>
   <div class="foot-bot">
-    <span>SIREN 943 647 503 · APE 6201Z · 4 rue de Bretagne, 94000 Créteil, France</span>
+    <span>SIREN ${LEGAL.siren} · APE 6201Z · ${LEGAL.address}</span>
     <span>© 2026 Othmane Ettaib — Indie Core Dev <span class="ver" title="Build ${BUILD.sha} · ${BUILD.date}">v${BUILD.version}</span></span>
   </div>
 </div></footer>
@@ -573,7 +591,7 @@ function pageHome(){
     jsonld:[{'@context':'https://schema.org','@type':'Organization',name:'Indie Core Dev',url:SITE,email:EMAIL,
       logo:SITE+'/favicon.svg',
       founder:{'@type':'Person',name:'Othmane Ettaib'},foundingDate:'2025-04',
-      address:{'@type':'PostalAddress',streetAddress:'4 rue de Bretagne',postalCode:'94000',addressLocality:'Créteil',addressCountry:'FR'}},
+      address:{'@type':'PostalAddress',streetAddress:LEGAL.street,postalCode:LEGAL.postalCode,addressLocality:LEGAL.city,addressCountry:'FR'}},
      {'@context':'https://schema.org','@type':'WebSite',name:'Indie Core Dev',url:SITE},
      {'@context':'https://schema.org','@type':'ItemList',name:'Games by Indie Core Dev',
       itemListElement: ALL.map((g,i)=>({'@type':'ListItem',position:i+1,name:g.name,url:SITE+'/games/'+g.slug+'/'}))}],
@@ -638,8 +656,11 @@ ${g.video ? `<section class="sec-tight"><div class="shell">
   <button class="trailer rv" type="button" data-trailer="${g.video}" aria-label="Play the ${esc(g.name)} gameplay trailer">
     <img src="/assets/games/${g.feature}" alt="" loading="lazy" decoding="async">
     <span class="tplay"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg></span>
-    <span class="tnote">Watch on YouTube &middot; loads only when you press play</span>
+    <span class="tnote">Watch on YouTube &middot; nothing loads until you press play</span>
   </button>
+  <p class="tconsent rv">Pressing play loads the video from <b>youtube-nocookie.com</b> and sends your IP
+  address and device information to Google, who become responsible for it. Nothing else on this page
+  depends on the video. <a href="/privacy/">What this site does with data</a></p>
 </div></section>` : ''}
 
 <section class="sec-tight"><div class="shell">
@@ -802,23 +823,299 @@ function pagePost(p, i){
   });
 }
 
-/* ───────── page: privacy index / about / contact ───────── */
-function pagePrivacyIndex(){
+/* ───────── page: legal notice / mentions légales ───────── */
+/* Required of any French site by LCEN art. 6 III. The identity details are the
+   same ones published on /about/ and /contact/ — kept in one constant so the
+   three pages cannot drift apart. */
+const LEGAL_SECTIONS = [
+  ['Site publisher', `
+    <p>This website is published by:</p>
+    <dl class="meta meta-2" style="margin:18px 0">
+      <div><dt>Legal name</dt><dd>${esc(LEGAL.name)}</dd></div>
+      <div><dt>Trading as</dt><dd>${esc(LEGAL.trading)}</dd></div>
+      <div><dt>Legal form</dt><dd>${esc(LEGAL.form)}</dd></div>
+      <div><dt>Registered address</dt><dd>${esc(LEGAL.address)}</dd></div>
+      <div><dt>SIREN</dt><dd>${esc(LEGAL.siren)}</dd></div>
+      <div><dt>APE code</dt><dd>${esc(LEGAL.ape)}</dd></div>
+      <div><dt>Established</dt><dd>${esc(LEGAL.founded)}</dd></div>
+      <div><dt>Email</dt><dd><a href="mailto:${EMAIL}">${EMAIL}</a></dd></div>
+    </dl>
+    <p>The business operates in France under self-employed status and is registered with the
+    Répertoire National des Entreprises under the SIREN above.</p>`],
+
+  ['Director of publication', `
+    <p>${esc(LEGAL.name)}, in his capacity as owner of the business, is the director of
+    publication (<i>directeur de la publication</i>) within the meaning of Article 6 III of
+    the Law of 21 June 2004 for confidence in the digital economy (LCEN).</p>
+    <p>Reach him at <a href="mailto:${EMAIL}">${EMAIL}</a>.</p>`],
+
+  ['Hosting', `
+    <p>The site is hosted and delivered by:</p>
+    <dl class="meta meta-2" style="margin:18px 0">
+      <div><dt>Host</dt><dd>Cloudflare, Inc.</dd></div>
+      <div><dt>Address</dt><dd>101 Townsend Street, San Francisco, CA 94107, United States</dd></div>
+      <div><dt>Website</dt><dd><a href="https://www.cloudflare.com" target="_blank" rel="noopener">www.cloudflare.com</a></dd></div>
+    </dl>
+    <p>The pages are static files served from Cloudflare's network. What that means for your
+    data is set out in the <a href="/privacy/">privacy policy</a>.</p>`],
+
+  ['Intellectual property', `
+    <p>The source code, text, layout, game artwork, screenshots, trailers, logos and names
+    on this site are the property of ${esc(LEGAL.name)} — ${esc(LEGAL.trading)}, unless
+    stated otherwise. They may not be reproduced or reused commercially without written
+    permission.</p>
+    <p>Two deliberate exceptions: code published from
+    <a href="https://github.com/IndieCoreDev" target="_blank" rel="noopener">github.com/IndieCoreDev</a>
+    is there to be copied and adapted, under the licence stated with it; and quoting a blog
+    post with a link back is welcome and needs no permission.</p>
+    <p>Google Play and the Google Play logo are trademarks of Google LLC.</p>`],
+
+  ['Personal data', `
+    <p>What this website processes, why, on what legal basis, and how to exercise your rights
+    under the GDPR is set out in full in the <a href="/privacy/">privacy policy</a>. The short
+    version: no cookies, no analytics, no accounts, and no banner because there is nothing to
+    consent to.</p>
+    <p>Each game has its own policy, listed at the end of that page.</p>`],
+
+  ['Nothing is sold here', `
+    <p>No goods or services are sold through this website. The games are distributed free of
+    charge through Google Play, contain no in-app purchases, and any transaction relating to
+    them is between you and Google under Google's own terms.</p>
+    <p>There is therefore no online contract to conclude on this site, no right of withdrawal
+    to exercise against it, and no consumer mediation scheme attached to it.</p>`],
+
+  ['Applicable law', `
+    <p>This notice, and use of this website, are governed by French law. In the absence of an
+    amicable resolution, any dispute falls to the competent French courts.</p>
+    <p>If something here is wrong, out of date, or a link is broken, the fastest fix is to
+    email <a href="mailto:${EMAIL}">${EMAIL}</a>.</p>`],
+];
+
+function pageLegal(){
   const body = `
-<section class="hero" style="padding-bottom:40px"><div class="shell narrow">
-  <span class="eyebrow rv">Legal</span>
-  <h1 class="rv" style="font-size:clamp(36px,5.4vw,62px)">Privacy policies</h1>
-  <p class="lede rv">One policy per game, in plain English. These pages are permanent — safe to link from a store listing.</p>
-</div></section>
-<section class="sec-tight"><div class="shell narrow">
-  <div class="grid4 grid-2">
-    ${ALL.map(g=>`<a class="mini rv" href="/privacy/${g.slug}/">
-      ${g.icon?`<img src="/assets/games/${g.icon}" alt="" width="60" height="60">`:'<div style="width:60px;height:60px;border-radius:16px;margin-bottom:16px;border:1px dashed rgba(255,255,255,.26)"></div>'}
-      <h2 class="mini-h">${esc(g.name)}</h2><span>${esc(g.pkg)}</span></a>`).join('')}
+<div class="shell doc">
+  <aside class="toc">
+    <div class="toc-h">Contents</div>
+    <ol>${LEGAL_SECTIONS.map(([head], i)=>{
+      const n = String(i + 1);
+      return `<li><a href="#s${n}"><i>${n.padStart(2,'0')}</i><span>${esc(head)}</span></a></li>`;
+    }).join('')}</ol>
+  </aside>
+  <div>
+    <div class="doc-head">
+      <nav class="crumb"><a href="/">Home</a> <span>/</span> <span style="color:var(--text)">Legal notice</span></nav>
+      <span class="eyebrow">Mentions légales</span>
+      <h1>Legal notice</h1>
+      <div class="doc-meta">
+        <span>Applies to: www.indiecore.net</span>
+        <span>Updated: ${LEGAL.updated}</span>
+        <span>Contact: <a href="mailto:${EMAIL}" style="color:var(--accent)">${EMAIL}</a></span>
+      </div>
+    </div>
+    <div class="doc-body">
+      ${LEGAL_SECTIONS.map(([head, html], i)=>{
+        const n = String(i + 1);
+        return `<section id="s${n}"><h2><i>${n.padStart(2,'0')}</i>${esc(head)}</h2>${html}</section>`;
+      }).join('')}
+    </div>
+    <div class="cta-row" style="margin-top:48px">
+      <a class="btn btn-ghost" href="/privacy/">Privacy policy</a>
+      <a class="btn btn-ghost" href="/contact/">Contact</a>
+    </div>
   </div>
-</div></section>`;
-  return layout({title:'Privacy policies — Indie Core Dev',
-    desc:'Privacy policy for every Indie Core Dev game, in plain English. Permanent links, safe to reference from a Google Play store listing.',
+</div>`;
+  return layout({title:'Legal notice — Indie Core Dev',
+    desc:'Mentions légales for www.indiecore.net: publisher, director of publication, SIREN, hosting provider, intellectual property and applicable law.',
+    canonical:'/legal/', cur:'legal', body,
+    jsonld:[crumbLD([['Home','/'],['Legal notice','/legal/']])]});
+}
+
+/* ───────── page: site privacy policy ───────── */
+/* The website's own policy, distinct from the per-game ones. Kept at /privacy/
+   because that URL is already in the nav and linked from the game pages; the
+   five /privacy/<game>/ URLs are referenced from Play Console listings and are
+   linked from the last section rather than moved. */
+const SITE_PRIVACY_UPDATED = '28 August 2026';
+const SITE_PRIVACY = [
+  ['The short version', `
+    <p>This website sets no cookies, runs no tracking script of any kind, and has no
+    accounts, comments or forms. Nothing is stored on your device and no profile of you is
+    built, so there is nothing to accept, decline or opt out of &mdash; which is why you were
+    not shown a banner.</p>
+    <p>Two things are unavoidable and worth being explicit about: the server that delivers
+    these pages sees your IP address, and clicking a gameplay trailer loads a video from
+    YouTube. Both are covered below.</p>
+    <p>The games are a separate matter with their own policies. Those are linked at the
+    bottom of this page.</p>`],
+
+  ['Who is responsible', `
+    <p>The data controller for this website, within the meaning of the General Data
+    Protection Regulation (Regulation (EU) 2016/679, &ldquo;GDPR&rdquo; / RGPD), is:</p>
+    <ul>
+      <li>${LEGAL.name}, trading as ${LEGAL.trading} &mdash; a sole proprietorship
+      (<i>entreprise individuelle</i>) established in France in April 2025</li>
+      <li>SIREN ${LEGAL.siren} &mdash; APE 6201Z, computer programming</li>
+      <li>Contact: <a href="mailto:${EMAIL}">${EMAIL}</a></li>
+    </ul>
+    <p>The studio is not required to appoint a Data Protection Officer, and has not
+    appointed one. Write to the address above for anything on this page.</p>`],
+
+  ['What happens when you visit', `
+    <p>The site is static. There is no application server, no database and no user
+    profile &mdash; every page was generated in advance and is served as a file.</p>
+    <p>Delivery is handled by Cloudflare. Like any web server, it processes the request
+    in order to answer it, which necessarily involves:</p>
+    <ul>
+      <li>your IP address</li>
+      <li>the date and time of the request, and the page requested</li>
+      <li>the browser and operating system your browser reports</li>
+      <li>the referring page, if your browser sent one</li>
+    </ul>
+    <p><strong>Purpose:</strong> delivering the page you asked for, and protecting the
+    site against attack and abuse. <strong>Legal basis:</strong> legitimate interest
+    (Article 6(1)(f) GDPR) in operating a functioning, secure website.</p>
+    <p>These records are held by Cloudflare acting as a processor, under its own
+    retention schedule, and are not exported, enriched, joined to anything else or used
+    to build a profile. No log is consulted to identify an individual visitor.</p>`],
+
+  ['Cookies and tracking', `
+    <p><strong>This site sets no cookies.</strong> It uses no local storage, no session
+    storage, no tracking pixels, no fingerprinting and no advertising tags. There is no
+    Google Analytics, no Plausible, no Matomo &mdash; no analytics script of any kind runs
+    in your browser. You can verify this in your browser's developer tools: the storage
+    panel stays empty, and no request leaves this domain unless you start a trailer
+    (section 5).</p>
+    <p>Fonts are served from this domain rather than from a font CDN, so loading a page
+    sends your IP address to no one but the host of this site.</p>
+    <p>Because nothing is read from or written to your device, no consent is required under
+    Article 82 of the French Data Protection Act, and no cookie banner is shown.</p>
+    <p><strong>Do I measure anything?</strong> Yes, in two ways, and neither involves you
+    individually:</p>
+    <ul>
+      <li><strong>Aggregate traffic counts</strong> produced by the host from the server logs
+      already described above &mdash; how many times a page was served, from which countries,
+      from which referring sites. This is a summary of records that exist anyway; nothing
+      extra is collected in order to produce it, and it cannot be resolved back to a person.</li>
+      <li><strong>Search performance</strong> from Google Search Console: which search terms
+      show this site in Google's results, and how often those results are clicked. That is
+      Google reporting on its own search engine, aggregated and anonymised before it reaches
+      me. It is not a measurement of you browsing here, and it happens whether or not you
+      ever visit.</li>
+    </ul>
+    <p>Neither produces a profile, follows you between sites, or tells me who you are.</p>`],
+
+  ['Gameplay trailers', `
+    <p>Some game pages offer a trailer. The video is <em>not</em> loaded with the page.
+    What you see before clicking is a still image served from this domain, and no request
+    reaches Google until you press play.</p>
+    <p>If you do press play, an embedded player is created on
+    <code>youtube-nocookie.com</code>, YouTube's privacy-enhanced mode. At that point
+    Google receives your IP address, information about your device, and the fact that you
+    watched that video, and it becomes the controller for what it does with them.</p>
+    <p><strong>Legal basis:</strong> consent (Article 6(1)(a) GDPR), given by the
+    deliberate act of starting the video. Do not press play if you would rather Google
+    were not involved; nothing else on the page depends on it. Google's handling is
+    described in the
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google
+    Privacy Policy</a>.</p>`],
+
+  ['Links to other sites', `
+    <p>Pages here link out to Google Play, to GitHub and occasionally elsewhere. Those
+    are ordinary links: nothing is sent anywhere until you click one, and no tracking
+    parameters are attached.</p>
+    <p>Once you follow a link you are on someone else's site, under their privacy policy
+    rather than this one.</p>`],
+
+  ['If you email me', `
+    <p>The contact page publishes an email address. There is no contact form, so nothing
+    is collected unless you choose to write.</p>
+    <p>If you do, your message and address are used to answer you and for nothing else.
+    <strong>Legal basis:</strong> legitimate interest (Article 6(1)(f)) in replying to
+    correspondence, or steps taken at your request before entering a contract
+    (Article 6(1)(b)) where that applies. Messages are kept while the exchange is live
+    and for as long as needed afterwards to make sense of any follow-up, then deleted.
+    They are never added to a mailing list &mdash; there is no mailing list.</p>`],
+
+  ['Where the data goes', `
+    <p>Nothing is sold, rented or shared for advertising. There are no data brokers and
+    no advertising partners involved in this website.</p>
+    <p>Two providers necessarily process data as described above, and both are based in
+    the United States:</p>
+    <ul>
+      <li><strong>Cloudflare, Inc.</strong> &mdash; hosting and delivery of this site</li>
+      <li><strong>Google Ireland Ltd / Google LLC</strong> &mdash; only if you start a
+      trailer</li>
+    </ul>
+    <p>Transfers outside the European Economic Area rely on the European Commission's
+    Standard Contractual Clauses and, where the provider is certified, the EU&ndash;US
+    Data Privacy Framework.</p>`],
+
+  ['Your rights', `
+    <p>Under the GDPR you have the right to request access to your personal data, to have
+    it corrected or erased, to have its processing restricted, to receive it in a portable
+    form, and to object to processing carried out on the basis of legitimate interest
+    (Articles 15 to 22).</p>
+    <p>Exercise any of them by writing to
+    <a href="mailto:${EMAIL}">${EMAIL}</a>. You will get an answer within one month.
+    Be aware of a practical limit: this site keeps no identifier for you, so for ordinary
+    browsing there is generally no record that could be located and connected to you. If
+    you have emailed me, that correspondence can be found and deleted.</p>
+    <p>If you believe your data has been mishandled you may lodge a complaint with the
+    French supervisory authority (Article 77):</p>
+    <ul>
+      <li>Commission Nationale de l'Informatique et des Libert&eacute;s (CNIL),
+      3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, France &mdash;
+      <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a></li>
+    </ul>`],
+
+  ['Changes to this policy', `
+    <p>If this changes, the date at the top of the page changes with it and the previous
+    wording stays in the site's public Git history. There is no mailing list to notify,
+    so the date is the honest signal.</p>`],
+];
+
+function pagePrivacyIndex(){
+  const sections = SITE_PRIVACY.map(([head], i) => ({ num: String(i + 1), head }));
+  const last = String(SITE_PRIVACY.length + 1);
+  const body = `
+<div class="shell doc">
+  <aside class="toc">
+    <div class="toc-h">Contents</div>
+    <ol>${sections.map(s=>`<li><a href="#s${s.num}"><i>${String(s.num).padStart(2,'0')}</i><span>${esc(s.head)}</span></a></li>`).join('')
+      }<li><a href="#s${last}"><i>${last.padStart(2,'0')}</i><span>Privacy policies for the games</span></a></li></ol>
+  </aside>
+  <div>
+    <div class="doc-head">
+      <nav class="crumb"><a href="/">Home</a> <span>/</span> <span style="color:var(--text)">Privacy</span></nav>
+      <span class="eyebrow">Privacy policy</span>
+      <h1>This website</h1>
+      <div class="doc-meta">
+        <span>Applies to: www.indiecore.net</span>
+        <span>Updated: ${SITE_PRIVACY_UPDATED}</span>
+        <span>Contact: <a href="mailto:${EMAIL}" style="color:var(--accent)">${EMAIL}</a></span>
+      </div>
+    </div>
+    <div class="doc-body">
+      ${SITE_PRIVACY.map(([head, html], i)=>{
+        const n = String(i + 1);
+        return `<section id="s${n}"><h2><i>${n.padStart(2,'0')}</i>${esc(head)}</h2>${html}</section>`;
+      }).join('')}
+      <section id="s${last}">
+        <h2><i>${last.padStart(2,'0')}</i>Privacy policies for the games</h2>
+        <p>The games are software you install on a device, and each has its own policy
+        describing what that game does. Those pages are permanent &mdash; they are
+        referenced from Google Play store listings, so their addresses do not change.</p>
+      </section>
+      <div class="grid4 grid-2" style="margin-top:28px">
+        ${ALL.map(g=>`<a class="mini" href="/privacy/${g.slug}/">
+          ${g.icon?`<img src="/assets/games/${g.icon}" alt="" width="60" height="60">`:'<div style="width:60px;height:60px;border-radius:16px;margin-bottom:16px;border:1px dashed rgba(255,255,255,.26)"></div>'}
+          <h3 class="mini-h">${esc(g.name)}</h3><span>${esc(g.pkg)}</span></a>`).join('')}
+      </div>
+    </div>
+  </div>
+</div>`;
+  return layout({title:'Privacy policy — Indie Core Dev',
+    desc:'No cookies, no tracking scripts, no accounts. What this website processes, why, and how to exercise your rights under the GDPR. Links to every game privacy policy.',
     canonical:'/privacy/', cur:'privacy', body,
     jsonld:[crumbLD([['Home','/'],['Privacy','/privacy/']])]});
 }
@@ -836,7 +1133,7 @@ function pageAbout(){
   <dl class="meta meta-3 rv">
     <div><dt>Legal name</dt><dd>Othmane Ettaib</dd></div>
     <div><dt>Business name</dt><dd>Indie Core Dev</dd></div>
-    <div><dt>SIREN</dt><dd>943 647 503</dd></div>
+    <div><dt>SIREN</dt><dd>${esc(LEGAL.siren)}</dd></div>
     <div><dt>APE code</dt><dd>6201Z</dd></div>
     <div><dt>Activity</dt><dd>Computer programming</dd></div>
     <div><dt>Established</dt><dd>April 2025</dd></div>
@@ -860,8 +1157,8 @@ function pageContact(){
   <dl class="meta meta-2 rv">
     <div><dt>Email</dt><dd><a href="mailto:${EMAIL}" style="color:var(--accent)">${EMAIL}</a></dd></div>
     <div><dt>Response time</dt><dd>Within 48 hours</dd></div>
-    <div><dt>Registered address</dt><dd>4 rue de Bretagne, 94000 Créteil, France</dd></div>
-    <div><dt>Business</dt><dd>Indie Core Dev · SIREN 943 647 503</dd></div>
+    <div><dt>Registered address</dt><dd>${esc(LEGAL.address)}</dd></div>
+    <div><dt>Business</dt><dd>${esc(LEGAL.trading)} · SIREN ${esc(LEGAL.siren)}</dd></div>
   </dl>
 </div></section>`;
   return layout({title:'Contact — Indie Core Dev',
@@ -880,6 +1177,7 @@ for (const g of ALL) {
   write(`privacy/${g.slug}/index.html`, pagePrivacy(g));
 }
 write('privacy/index.html', pagePrivacyIndex());
+write('legal/index.html', pageLegal());
 write('blog/index.html', pageBlogIndex());
 POSTS.forEach((p, i) => write(`blog/${p.slug}/index.html`, pagePost(p, i)));
 write('about/index.html', pageAbout());
@@ -975,7 +1273,7 @@ const today = new Date().toISOString().slice(0,10);
 const urls = [
   ['/', '1.0'], ...ALL.map(g=>[`/games/${g.slug}/`, '0.9']),
   ['/blog/','0.8'], ...POSTS.map(p=>[`/blog/${p.slug}/`, '0.7']),
-  ['/about/','0.6'], ['/contact/','0.5'], ['/privacy/','0.4'],
+  ['/about/','0.6'], ['/contact/','0.5'], ['/privacy/','0.4'], ['/legal/','0.3'],
   ...ALL.map(g=>[`/privacy/${g.slug}/`, '0.3']),
 ];
 fs.writeFileSync(path.join(OUT,'sitemap.xml'),
@@ -992,7 +1290,7 @@ fs.writeFileSync(path.join(OUT,'_headers'),
 /assets/og/*\n  Cache-Control: public, max-age=604800\n
 /assets/styles.css\n  Cache-Control: public, max-age=86400\n
 /assets/app.js\n  Cache-Control: public, max-age=86400\n
-/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n`);
+/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Strict-Transport-Security: max-age=31536000; includeSubDomains\n  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=()\n  Cross-Origin-Opener-Policy: same-origin\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests\n`);
 fs.writeFileSync(path.join(OUT,'version.json'),
   JSON.stringify({ ...BUILD, builtAt: new Date().toISOString() }, null, 2) + '\n');
 fs.writeFileSync(path.join(OUT,'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);

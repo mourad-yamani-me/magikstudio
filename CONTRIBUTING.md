@@ -39,6 +39,7 @@ Merge with **squash** once checks are green. Production deploys automatically fr
 | `npm run dev` | `build` + `serve` |
 | `npm run lighthouse` | Run the performance/a11y/SEO budget |
 | `npm run style` | Flag prose that reads as machine-written (advisory) |
+| `npm run seo` | Ping the crawlers, then report index status and search performance |
 
 ## Content changes
 

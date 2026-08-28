@@ -421,5 +421,8 @@ main,header,footer{position:relative;z-index:2}
 .trailer:hover .tplay,.trailer:focus-visible .tplay{transform:scale(1.08)}
 .tnote{position:absolute;left:0;right:0;bottom:0;padding:12px 16px;font-size:13px;font-weight:600;
   color:#E8DCF5;background:linear-gradient(to top,rgba(10,5,22,.86),transparent)}
+.tconsent{margin:14px auto 0;max-width:760px;font-size:13.5px;line-height:1.6;color:var(--muted)}
+.tconsent b{color:var(--text);font-weight:700}
+.tconsent a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 .trailer iframe{display:block;width:100%;aspect-ratio:16/9;border:0}
 @media (max-width:600px){.tplay{width:60px;height:60px}.tnote{font-size:12px}}

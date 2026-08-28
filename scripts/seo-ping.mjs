@@ -11,6 +11,11 @@
  *   2. Sitemap submit — Search Console API. Google removed the old public
  *                      /ping?sitemap= endpoint in June 2023, so this is the
  *                      only supported way left to nudge it.
+ *   4. Search performance — Search Console API. What each page and query
+ *                      actually earns: clicks, impressions, CTR, position.
+ *                      Google's data about its own results, not a tracker on
+ *                      this site — nothing runs in anyone's browser.
+ *
  *   3. URL inspection — Search Console API. Reports, per URL, whether Google
  *                      has it indexed. This is the part worth reading: it
  *                      separates "Google hasn't found it" from "Google found
@@ -30,6 +35,7 @@
  *
  * Flags:
  *   --dry-run    resolve everything, send nothing.
+ *   --days=N     search-performance window (default 28).
  *   --no-google  skip steps 2 and 3 even when credentials are present.
  */
 import fs from 'node:fs';
@@ -192,6 +198,90 @@ async function inspect(token, urls) {
 }
 
 /* ------------------------------------------------------------------ */
+/* 4. search performance — what the pages actually earn                 */
+/*                                                                      */
+/* Search Console reports on Google's own search results, not on people */
+/* browsing this site: no script runs on the pages, nothing is stored on */
+/* anyone's device, and the rows come back aggregated and anonymised by  */
+/* Google. That is the whole reason this site can measure its reach and  */
+/* still say, truthfully, that it runs no analytics on its visitors.     */
+
+const ymd = d => d.toISOString().slice(0, 10);
+
+async function searchPerformance(token) {
+  const days = Number((process.argv.find(a => a.startsWith('--days=')) || '').split('=')[1]) || 28;
+  const end   = new Date(Date.now() - 2 * 864e5);   // Search Console lags ~2 days
+  const start = new Date(end.getTime() - (days - 1) * 864e5);
+
+  if (DRY) { say(`- **Search performance** — dry run, would query the last ${days} days`); return; }
+
+  const query = async (dimension, rowLimit) => {
+    const url = `https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(SITE_URL)}/searchAnalytics/query`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
+      body: JSON.stringify({ startDate: ymd(start), endDate: ymd(end), dimensions: [dimension], rowLimit }),
+    });
+    if (!res.ok) {
+      const detail = (await res.text()).slice(0, 300);
+      say(`- **Search performance** — FAILED (${dimension}): HTTP ${res.status} ${detail}`);
+      if (res.status === 403) say(`  - the service account is not a user on \`${SITE_URL}\``);
+      process.exitCode = 1;
+      return null;
+    }
+    return (await res.json()).rows ?? [];
+  };
+
+  const [queries, pages] = await Promise.all([query('query', 20), query('page', 20)]);
+  if (!queries || !pages) return;
+
+  const total = pages.reduce((a, r) => ({
+    clicks: a.clicks + r.clicks, impressions: a.impressions + r.impressions,
+  }), { clicks: 0, impressions: 0 });
+
+  say('');
+  say(`### Search performance — ${ymd(start)} to ${ymd(end)}`);
+  say('');
+
+  if (!total.impressions) {
+    say('_No impressions in this window. For a page Google has only just indexed that is '
+      + 'normal — it means nobody has searched anything it ranks for yet, which is a demand '
+      + 'problem rather than a technical one._');
+    return;
+  }
+
+  const ctr = total.impressions ? (total.clicks / total.impressions * 100).toFixed(1) : '0.0';
+  say(`**${total.clicks} clicks** from **${total.impressions} impressions** (${ctr}% CTR)`);
+
+  const table = (title, rows, label) => {
+    if (!rows.length) return;
+    say('');
+    say(`**${title}**`);
+    say('');
+    say(`| ${label} | Clicks | Impressions | CTR | Position |`);
+    say('|---|--:|--:|--:|--:|');
+    for (const r of rows.slice(0, 10)) {
+      const key = String(r.keys[0]).replace(SITE, '') || '/';
+      say(`| \`${key}\` | ${r.clicks} | ${r.impressions} | `
+        + `${(r.ctr * 100).toFixed(1)}% | ${r.position.toFixed(1)} |`);
+    }
+  };
+
+  table('Top queries', queries.sort((a, b) => b.impressions - a.impressions), 'Query');
+  table('Top pages',   pages.sort((a, b) => b.impressions - a.impressions), 'Page');
+
+  /* The rows worth acting on: seen often, rarely clicked, and close enough to
+     page one that a better title or description can move them. */
+  const nearMiss = queries.filter(r => r.position > 5 && r.position < 21 && r.impressions >= 20);
+  if (nearMiss.length) {
+    say('');
+    say(`_${nearMiss.length} quer${nearMiss.length === 1 ? 'y is' : 'ies are'} ranking between `
+      + '5 and 20 with real impressions — those are the ones where a sharper title or '
+      + 'description changes the number, rather than more writing._');
+  }
+}
+
+/* ------------------------------------------------------------------ */
 
 const urls = await liveUrls();
 say(`### SEO ping${DRY ? ' (dry run)' : ''}`);
@@ -211,6 +301,7 @@ if (SKIP_GOOGLE) {
   const token = await googleToken(sa);
   await submitSitemap(token);
   await inspect(token, urls);
+  await searchPerformance(token);
 }
 
 if (process.env.GITHUB_STEP_SUMMARY) {
