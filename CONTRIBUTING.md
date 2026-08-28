@@ -1,5 +1,8 @@
 # Working on this site
 
+Conventions and the constraints that must not break are in [AGENTS.md](AGENTS.md). This file
+is the mechanics: branching, commands, where content lives.
+
 ## Branching
 
 `main` is always deployable and is what production serves. Never commit to it directly.
