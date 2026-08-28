@@ -229,12 +229,31 @@ const GIST_DIR = path.join(ROOT, 'gist');
 const gistAnchor = name => 'file-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 const LANG = { '.jsonc': 'json', '.json': 'json', '.yml': 'yaml', '.yaml': 'yaml', '.md': 'markdown', '.mjs': 'javascript', '.js': 'javascript' };
 
+/* gist/ holds one subdirectory per published gist. An embed may name the file
+   alone — `verify.mjs` — and it is found wherever it lives, so posts don't
+   have to know which gist a file ended up in. A `dir/file` path also works.
+   Ambiguity is an error rather than a coin toss. */
+function resolveGistFile(name, postFile) {
+  const direct = path.join(GIST_DIR, name);
+  if (fs.existsSync(direct) && fs.statSync(direct).isFile()) return direct;
+
+  const hits = fs.readdirSync(GIST_DIR, { withFileTypes: true })
+    .filter(e => e.isDirectory())
+    .map(e => path.join(GIST_DIR, e.name, name))
+    .filter(f => fs.existsSync(f));
+
+  if (hits.length === 1) return hits[0];
+  if (hits.length > 1) {
+    const where = hits.map(h => path.relative(GIST_DIR, h)).join(', ');
+    throw new Error(`${postFile}: {{gist:${name}}} — ambiguous, matches ${where}. Qualify it with the directory.`);
+  }
+  throw new Error(`${postFile}: {{gist:${name}}} — no such file under gist/`);
+}
+
 function embedGists(body, gistUrl, postFile) {
   return body.replace(/\{\{gist:([^:#}]+)(?:#([\w-]+))?(?::(\d+)-(\d+))?\}\}/g, (_, name, anchor, from, to) => {
-    const file = path.join(GIST_DIR, name.trim());
-    if (!fs.existsSync(file)) {
-      throw new Error(`${postFile}: {{gist:${name}}} — gist/${name.trim()} does not exist`);
-    }
+    const file = resolveGistFile(name.trim(), postFile);
+    const base = path.basename(name.trim());
     let content = fs.readFileSync(file, 'utf8').replace(/\s+$/, '');
     let note = '';
 
@@ -248,7 +267,7 @@ function embedGists(body, gistUrl, postFile) {
       } else {
         // find `  <anchor>:` and take everything until the next key at that indent
         const start = lines.findIndex(l => new RegExp(`^(\\s+)${anchor}:\\s*$`).test(l));
-        if (start < 0) throw new Error(`${postFile}: {{gist:${name}#${anchor}}} — no "${anchor}:" key in gist/${name.trim()}`);
+        if (start < 0) throw new Error(`${postFile}: {{gist:${name}#${anchor}}} — no "${anchor}:" key in ${path.relative(ROOT, file)}`);
         const indent = lines[start].match(/^\s*/)[0].length;
         let end = lines.length;
         for (let i = start + 1; i < lines.length; i++) {
@@ -266,12 +285,12 @@ function embedGists(body, gistUrl, postFile) {
       content = lines.slice(+from - 1, +to).join('\n');
       note = ` lines ${from}–${to}`;
     }
-    const lang = LANG[path.extname(name.trim())] || '';
-    const href = gistUrl ? `${gistUrl}#${gistAnchor(name.trim())}` : '';
+    const lang = LANG[path.extname(base)] || '';
+    const href = gistUrl ? `${gistUrl}#${gistAnchor(base)}` : '';
     // marked renders the fence; the surrounding markup is passed through as HTML
     return [
       `<figure class="gembed">`,
-      `<figcaption><span class="gfile">${esc(name.trim())}${note}</span>`,
+      `<figcaption><span class="gfile">${esc(base)}${note}</span>`,
       href ? `<a href="${href}" target="_blank" rel="noopener">Open in gist<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>` : '',
       `</figcaption>`,
       '',
@@ -327,6 +346,24 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
   })
   .filter(p => !p.draft)
   .sort((a, b) => b.date.localeCompare(a.date));
+
+/* Every gist declares the post it links back to (scripts/build-gist.mjs). That
+   post should carry a `code:` card pointing the other way, or the gist is
+   published and nothing on the site sends anyone to it. A warning rather than
+   an error, because there is a real window — between merging the post and the
+   sync workflow creating the gist — where the URL does not exist yet. */
+{
+  const manifest = path.join(GIST_DIR, 'gists.json');
+  if (fs.existsSync(manifest)) {
+    for (const g of JSON.parse(fs.readFileSync(manifest, 'utf8'))) {
+      const post = POSTS.find(p => p.slug === g.post);
+      if (!post) continue;                       // draft or renamed; build-gist.mjs guards that
+      if (!post.code) console.warn(
+        `  warn  gist/${g.dir}/ links to /blog/${g.post}/, but that post has no \`code:\` field ` +
+        `— add the gist URL so readers can find it.`);
+    }
+  }
+}
 
 const humanDate = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB',
   { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });

@@ -47,7 +47,7 @@ preview URL posted as a comment; merges to `main` go to production.
 ## Not included
 
 `scripts/verify.mjs` and `scripts/lighthouse-check.mjs` are referenced by the workflow but
-are specific to each site. Swap them for your own checks, or drop those steps.
+are specific to each site. There is a companion gist for those — linked from the post below.
 
 ---
 

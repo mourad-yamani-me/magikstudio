@@ -1,0 +1,12 @@
+[
+  {
+    "dir": "cloudflare-workers",
+    "marker": "Static site → Cloudflare Workers with gated GitHub Actions deploys",
+    "post": "static-site-cloudflare-workers"
+  },
+  {
+    "dir": "build-gates",
+    "marker": "Build gates for a static site — output verification and a Lighthouse budget",
+    "post": "build-reviews-ai-code"
+  }
+]

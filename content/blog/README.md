@@ -118,6 +118,69 @@ of code.
 Keep inline snippets under ~30 lines. Anything longer goes in `code:` so the post stays about
 the reasoning.
 
+## Publishing a gist for a post
+
+**Do this while writing the post, not after.** A post that explains a script and doesn't link
+it makes the reader retype what you already have in a file.
+
+Gists are generated from the real files, never hand-copied, so they cannot drift. One
+subdirectory per gist:
+
+```
+gist/
+  gists.json              written by build-gist.mjs — dir → gist description
+  cloudflare-workers/     0-README.md, wrangler.jsonc, ci-cd.yml
+  build-gates/            0-README.md, verify.mjs, lighthouse-check.mjs
+```
+
+To add one, append an entry to `GISTS` in `scripts/build-gist.mjs`:
+
+```js
+{
+  dir: 'build-gates',
+  marker: 'Build gates for a static site — output verification and a Lighthouse budget',
+  post: 'build-reviews-ai-code',          // the post it links back to
+  files: () => ({ 'verify.mjs': sanitize(read('scripts/verify.mjs')) }),
+  readme: url => `# …`,                   // 0-README.md, ending with the backlink
+}
+```
+
+Then `node scripts/build-gist.mjs` and commit `gist/`.
+
+- **`marker` is the identity.** The workflow finds the gist by that description string, so
+  changing it later creates a *second* gist instead of updating the first.
+- **`post` is checked.** The build refuses to run if that post is missing or still a draft, so
+  a gist can never advertise a URL that 404s.
+- **`sanitize()` and the leak guard** strip the project name, domain and account handles.
+  Anything identifying that slips through fails the build rather than getting published.
+
+### The two-step, and why the build nags you
+
+The gist doesn't exist until `sync-gist.yml` runs on `main`, so its URL isn't knowable while
+you're writing. Merge the post first, read the URL out of the workflow summary, then add it:
+
+```yaml
+code: https://gist.github.com/IndieCoreDev/<id>
+codeLabel: Both scripts, ready to drop in
+```
+
+Until you do, every build prints:
+
+```
+warn  gist/build-gates/ links to /blog/build-reviews-ai-code/, but that post has
+      no `code:` field — add the gist URL so readers can find it.
+```
+
+That warning is the only thing standing between "I'll add the link later" and a gist nobody
+ever finds. It is deliberately not an error — there's a legitimate window where the URL
+genuinely doesn't exist yet.
+
+### Embedding files inline
+
+`{{gist:verify.mjs}}` finds the file in whichever gist directory holds it, so posts don't
+need to know the layout. Use `{{gist:build-gates/verify.mjs}}` if the same filename ever
+appears in two gists; ambiguity fails the build rather than picking one.
+
 ## Images
 
 Put them in `public/assets/blog/` and reference them as `/assets/blog/name.jpg`.

@@ -1,13 +1,15 @@
 name: Sync gist
 
-# Publishes gist/ to a public gist owned by the IndieCoreDev account, so the
-# snippet linked from the blog post never drifts from the real configuration.
+# Publishes each gist/<dir>/ to its own public gist owned by the IndieCoreDev
+# account, so a snippet linked from a blog post never drifts from the real
+# configuration it was taken from.
 #
 # Deliberately separate from ci-cd.yml: deploying the site must not depend on
 # the GitHub gist API, and this only needs to run when the source files change.
 #
-# The gist is found by its description marker rather than a stored ID, so the
-# first run creates it and every later run updates the same one.
+# Each gist is found by its description marker rather than a stored ID, so the
+# first run creates it and every later run updates the same one. The markers
+# and directories come from gist/gists.json, written by build-gist.mjs.
 
 on:
   push:
@@ -16,6 +18,8 @@ on:
       - 'wrangler.jsonc'
       - '.github/workflows/ci-cd.yml'
       - 'scripts/build-gist.mjs'
+      - 'scripts/verify.mjs'
+      - 'scripts/lighthouse-check.mjs'
       - 'gist/**'
   workflow_dispatch:
 
@@ -45,12 +49,11 @@ jobs:
       - name: Regenerate gist files from the live config
         run: node scripts/build-gist.mjs
 
-      - name: Create or update the gist
+      - name: Create or update each gist
         env:
           # A classic PAT on the IndieCoreDev account, `gist` scope only.
-          # The gist is owned by whichever account this token belongs to.
+          # The gists are owned by whichever account this token belongs to.
           GH_TOKEN: ${{ secrets.GIST_TOKEN }}
-          MARKER: 'Static site → Cloudflare Workers with gated GitHub Actions deploys'
         run: |
           set -euo pipefail
 
@@ -60,35 +63,44 @@ jobs:
           fi
 
           echo "acting as: $(gh api user --jq .login)"
+          echo "### Gists published" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
 
-          # Build the API payload from gist/ without shelling out per file.
+          # dir<TAB>marker, one line per gist
           node -e '
-            const fs = require("fs");
-            const files = Object.fromEntries(
-              fs.readdirSync("gist").map(f => [f, { content: fs.readFileSync("gist/" + f, "utf8") }])
-            );
-            fs.writeFileSync("payload.json", JSON.stringify({
-              description: process.env.MARKER, public: true, files,
-            }));
-          '
+            const m = require("./gist/gists.json");
+            process.stdout.write(m.map(g => `${g.dir}\t${g.marker}`).join("\n") + "\n");
+          ' | while IFS=$'\t' read -r dir marker; do
+            [ -n "$dir" ] || continue
+            echo "── $dir"
 
-          # Find an existing gist by its description, so no ID has to be stored.
-          id=$(gh api /gists --paginate \
-                 --jq "map(select(.description == \"$MARKER\")) | .[0].id // empty")
+            # Build the API payload from gist/<dir>/ without shelling out per file.
+            DIR="$dir" MARKER="$marker" node -e '
+              const fs = require("fs");
+              const dir = "gist/" + process.env.DIR;
+              const files = Object.fromEntries(
+                fs.readdirSync(dir).map(f => [f, { content: fs.readFileSync(dir + "/" + f, "utf8") }])
+              );
+              fs.writeFileSync("payload.json", JSON.stringify({
+                description: process.env.MARKER, public: true, files,
+              }));
+            '
 
-          if [ -n "$id" ]; then
-            echo "updating existing gist $id"
-            url=$(gh api -X PATCH "/gists/$id" --input payload.json --jq .html_url)
-          else
-            echo "no existing gist found — creating"
-            url=$(gh api -X POST /gists --input payload.json --jq .html_url)
-          fi
+            # Find an existing gist by its description, so no ID has to be stored.
+            id=$(gh api /gists --paginate \
+                   --jq "map(select(.description == \"$marker\")) | .[0].id // empty")
 
-          echo "GIST_URL=$url" >> "$GITHUB_ENV"
-          {
-            echo "### Gist published"
-            echo ""
-            echo "$url"
-            echo ""
-            echo "Put this in a post's \`code:\` frontmatter field to render a link card."
-          } >> "$GITHUB_STEP_SUMMARY"
+            if [ -n "$id" ]; then
+              echo "   updating existing gist $id"
+              url=$(gh api -X PATCH "/gists/$id" --input payload.json --jq .html_url)
+            else
+              echo "   no existing gist found — creating"
+              url=$(gh api -X POST /gists --input payload.json --jq .html_url)
+            fi
+
+            echo "   $url"
+            echo "- \`$dir\` → $url" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Put a gist URL in its post's \`code:\` frontmatter to render a link card." >> "$GITHUB_STEP_SUMMARY"
