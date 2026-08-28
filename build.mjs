@@ -162,7 +162,13 @@ const ALL = GAMES;
    Console asks for the URL while the listing is still a draft, and the URL has
    to resolve the moment it is entered. These get /privacy/<slug>/ and nothing
    else — no store page, no icon, no screenshots. Move the entry into GAMES once
-   the game is live and its assets exist. */
+   the game is live and its assets exist.
+
+   The policy itself is treated exactly like any other: same template, same
+   listing on the privacy index, same entry in the footer and the sitemap. A
+   privacy policy is a legal document and carries no release status. The only
+   differences are forced by files that do not exist yet — no per-game OG card,
+   and no store page to link back to. Both resolve themselves on launch. */
 const PRIVACY_ONLY = [
   { key:'mot-malin', slug:'mot-malin', legacy:'privacy-policy-for-mot-malin',
     name:'Mot Malin', pkg:'com.motmalin.fillincrossword', policyOnly:true },
