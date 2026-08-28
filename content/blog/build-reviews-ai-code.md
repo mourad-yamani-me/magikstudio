@@ -3,6 +3,8 @@ title: I don't review AI code. My build does.
 date: 2026-08-28
 description: Reading every diff at generation speed isn't review, it's skimming. Here is the 169-line verifier that gates this site, and the bug behind every check in it.
 tags: [ai, claude-code, ci-cd, workflow]
+code: https://gist.github.com/IndieCoreDev/6c707bf89e5d215225f3bdac6e4a4b25
+codeLabel: Both scripts, ready to drop in
 draft: false
 ---
 
