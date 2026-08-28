@@ -158,6 +158,17 @@ const GAMES = [
 
 const ALL = GAMES;
 
+/* A game can need a published privacy policy before it has a page here: Play
+   Console asks for the URL while the listing is still a draft, and the URL has
+   to resolve the moment it is entered. These get /privacy/<slug>/ and nothing
+   else — no store page, no icon, no screenshots. Move the entry into GAMES once
+   the game is live and its assets exist. */
+const PRIVACY_ONLY = [
+  { key:'mot-malin', slug:'mot-malin', legacy:'privacy-policy-for-mot-malin',
+    name:'Mot Malin', pkg:'com.motmalin.fillincrossword', policyOnly:true },
+];
+const ALL_PRIVACY = [...ALL, ...PRIVACY_ONLY];
+
 /* ───────── privacy policy parsing ───────── */
 function parsePolicy(legacySlug){
   let t = fs.readFileSync(path.join(ROOT, `_source/legacy/txt_${legacySlug}.txt`), 'utf8');
@@ -422,7 +433,7 @@ const FOOT = `
       ${ALL.map(g=>`<li><a href="/games/${g.slug}/">${esc(g.name)}${g.live?'':' — soon'}</a></li>`).join('')}
     </ul></div>
     <div><h2 class="foot-h">Privacy policies</h2><ul>
-      ${ALL.map(g=>`<li><a href="/privacy/${g.slug}/">${esc(g.name)}</a></li>`).join('')}
+      ${ALL_PRIVACY.map(g=>`<li><a href="/privacy/${g.slug}/">${esc(g.name)}</a></li>`).join('')}
     </ul></div>
     <div><h2 class="foot-h">Studio</h2><ul>
       <li><a href="/blog/">Blog</a></li>
@@ -722,7 +733,7 @@ function pagePrivacy(g){
       ${sections.map(s=>`<section id="s${s.num}"><h2><i>${String(s.num).padStart(2,'0')}</i>${esc(s.head)}</h2>${renderBlocks(s.blocks)}</section>`).join('')}
     </div>
     <div class="cta-row" style="margin-top:48px">
-      <a class="btn btn-ghost" href="/games/${g.slug}/">Back to ${esc(g.name)}</a>
+      ${g.policyOnly ? '' : `<a class="btn btn-ghost" href="/games/${g.slug}/">Back to ${esc(g.name)}</a>`}
       <a class="btn btn-ghost" href="/privacy/">All privacy policies</a>
     </div>
   </div>
@@ -731,7 +742,8 @@ function pagePrivacy(g){
     title:`Privacy Policy — ${g.name} — Indie Core Dev`,
     desc:`Privacy policy for ${g.name}: what the game collects, what it never collects, and how to delete your data.`,
     canonical:`/privacy/${g.slug}/`, cur:'privacy', body,
-    ogimg:`/assets/og/${g.key}.jpg`,
+    ogimg:fs.existsSync(path.join(ROOT, `public/assets/og/${g.key}.jpg`))
+      ? `/assets/og/${g.key}.jpg` : '/assets/og/default.jpg',
     jsonld:[crumbLD([['Home','/'],['Privacy','/privacy/'],[g.name,`/privacy/${g.slug}/`]])],
   });
 }
@@ -1107,7 +1119,7 @@ function pagePrivacyIndex(){
         referenced from Google Play store listings, so their addresses do not change.</p>
       </section>
       <div class="grid4 grid-2" style="margin-top:28px">
-        ${ALL.map(g=>`<a class="mini" href="/privacy/${g.slug}/">
+        ${ALL_PRIVACY.map(g=>`<a class="mini" href="/privacy/${g.slug}/">
           ${g.icon?`<img src="/assets/games/${g.icon}" alt="" width="60" height="60">`:'<div style="width:60px;height:60px;border-radius:16px;margin-bottom:16px;border:1px dashed rgba(255,255,255,.26)"></div>'}
           <h3 class="mini-h">${esc(g.name)}</h3><span>${esc(g.pkg)}</span></a>`).join('')}
       </div>
@@ -1174,6 +1186,8 @@ fs.mkdirSync(OUT, {recursive:true});
 write('index.html', pageHome());
 for (const g of ALL) {
   write(`games/${g.slug}/index.html`, pageGame(g));
+}
+for (const g of ALL_PRIVACY) {
   write(`privacy/${g.slug}/index.html`, pagePrivacy(g));
 }
 write('privacy/index.html', pagePrivacyIndex());
@@ -1274,7 +1288,7 @@ const urls = [
   ['/', '1.0'], ...ALL.map(g=>[`/games/${g.slug}/`, '0.9']),
   ['/blog/','0.8'], ...POSTS.map(p=>[`/blog/${p.slug}/`, '0.7']),
   ['/about/','0.6'], ['/contact/','0.5'], ['/privacy/','0.4'], ['/legal/','0.3'],
-  ...ALL.map(g=>[`/privacy/${g.slug}/`, '0.3']),
+  ...ALL_PRIVACY.map(g=>[`/privacy/${g.slug}/`, '0.3']),
 ];
 fs.writeFileSync(path.join(OUT,'sitemap.xml'),
 `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${
@@ -1307,3 +1321,4 @@ fs.writeFileSync(path.join(OUT,"app-ads.txt"),
 console.log(`v${BUILD.version} (${BUILD.sha}) — built ${urls.length} pages → dist/  (${webp} webp, ${(saved/1024/1024).toFixed(2)} MB saved)`);
 console.log(`  blog: ${POSTS.length} post(s)`);
 for (const g of ALL) console.log(`  /games/${g.slug}/  ·  /privacy/${g.slug}/  (${g.shots.length} shots)`);
+for (const g of PRIVACY_ONLY) console.log(`  /privacy/${g.slug}/  (policy only — no store page yet)`);
