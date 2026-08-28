@@ -44,7 +44,14 @@ const sanitize = str => str
   .replace(/www\.indiecore\.net/g, 'www.example.com')
   .replace(/"indiecore\.net"/g, '"example.com"')
   .replace(/https:\/\/www\.indiecore\.net/g, 'https://www.example.com')
-  .replace(/github\.com\/oettaib/g, 'github.com/YOUR-USERNAME');
+  .replace(/github\.com\/oettaib/g, 'github.com/YOUR-USERNAME')
+  // verify.mjs asserts that the legal pages still carry the real identity, so the
+  // published copy has to carry placeholders instead. Without these the leak guard
+  // below refuses the whole build — which is how this was noticed.
+  .replace(/Othmane Ettaib/g, 'Your Name')
+  .replace(/943\\s\*647\\s\*503/g, '000\\s*000\\s*000')
+  .replace(/943 647 503/g, '000 000 000')
+  .replace(/\b94000\b/g, '00000');
 
 /* ─────────────────────────── the gists ─────────────────────────── */
 
