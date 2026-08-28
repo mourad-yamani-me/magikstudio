@@ -149,31 +149,29 @@ const GAMES = [
   { key:'perfectmatch', slug:'number-match-merge-puzzle', legacy:'privacy-policy-for-perfectmatch-numbers',
     blurb:'Match the pairs, merge the numbers, clear the board before it fills. The first game we shipped, and still the purest loop we’ve made.',
     feats:['Classic & endless','Quick sessions','No timer','Plays offline'] },
+
+  /* Not on Play yet, so there is no listing to read metadata from and no
+     artwork to build a gallery out of. Everything it needs is here; the !live
+     branches render a placeholder and a "Coming soon" pill instead. Delete
+     these fields and add the assets when it ships. */
+  { key:'mot-malin',    slug:'mot-malin',                 legacy:'privacy-policy-for-mot-malin',
+    live:false, name:'Mot Malin', pkg:'com.motmalin.fillincrossword', category:'Word',
+    tagline:'Word Slot in French — the same fill-in crossword, built around French words.',
+    blurb:'The French edition of Word Slot. A crossword cut into blocks and scattered across the board; slot every piece back until each row and column reads as a real French word.',
+    feats:['French word list','No timer, no fail state','Cloud save','Plays offline'] },
 ].map(g => {
-  const p = play[g.key];
-  return { ...p, ...g, name:p.title, tagline:p.short, playUrl:`https://play.google.com/store/apps/details?id=${p.pkg}`,
-           shots:shotsFor(g.key), icon:`${g.key}-icon.jpg`,
-           feature:`${g.key}-feature.jpg`, live:true };
+  const p = play[g.key] || {};                       // no Play listing yet -> entry carries its own
+  const art = f => fs.existsSync(path.join(ROOT, 'public/assets/games', f)) ? f : '';
+  return { live:true, ...p, ...g,
+           name: g.name || p.title, tagline: g.tagline || p.short,
+           pkg: g.pkg || p.pkg,
+           playUrl:`https://play.google.com/store/apps/details?id=${g.pkg || p.pkg}`,
+           shots:shotsFor(g.key),
+           icon:art(`${g.key}-icon.jpg`), feature:art(`${g.key}-feature.jpg`) };
 });
 
 const ALL = GAMES;
 
-/* A game can need a published privacy policy before it has a page here: Play
-   Console asks for the URL while the listing is still a draft, and the URL has
-   to resolve the moment it is entered. These get /privacy/<slug>/ and nothing
-   else — no store page, no icon, no screenshots. Move the entry into GAMES once
-   the game is live and its assets exist.
-
-   The policy itself is treated exactly like any other: same template, same
-   listing on the privacy index, same entry in the footer and the sitemap. A
-   privacy policy is a legal document and carries no release status. The only
-   differences are forced by files that do not exist yet — no per-game OG card,
-   and no store page to link back to. Both resolve themselves on launch. */
-const PRIVACY_ONLY = [
-  { key:'mot-malin', slug:'mot-malin', legacy:'privacy-policy-for-mot-malin',
-    name:'Mot Malin', pkg:'com.motmalin.fillincrossword', policyOnly:true },
-];
-const ALL_PRIVACY = [...ALL, ...PRIVACY_ONLY];
 
 /* ───────── privacy policy parsing ───────── */
 function parsePolicy(legacySlug){
@@ -439,7 +437,7 @@ const FOOT = `
       ${ALL.map(g=>`<li><a href="/games/${g.slug}/">${esc(g.name)}${g.live?'':' — soon'}</a></li>`).join('')}
     </ul></div>
     <div><h2 class="foot-h">Privacy policies</h2><ul>
-      ${ALL_PRIVACY.map(g=>`<li><a href="/privacy/${g.slug}/">${esc(g.name)}</a></li>`).join('')}
+      ${ALL.map(g=>`<li><a href="/privacy/${g.slug}/">${esc(g.name)}</a></li>`).join('')}
     </ul></div>
     <div><h2 class="foot-h">Studio</h2><ul>
       <li><a href="/blog/">Blog</a></li>
@@ -592,7 +590,7 @@ function pageHome(){
     <h2>Made by one person.<br>Played all over the world.</h2>
     <p>Indie Core Dev is the studio of Othmane Ettaib, founded in France in April 2025. Every line of code, every level and every pixel is made here.</p>
     <div class="band-icons">
-      ${GAMES.map(g=>`<a href="/games/${g.slug}/" title="${esc(g.name)}"><img src="/assets/games/${g.icon}" alt="${esc(g.name)}" width="74" height="74"></a>`).join('')}
+      ${GAMES.filter(g=>g.icon).map(g=>`<a href="/games/${g.slug}/" title="${esc(g.name)}"><img src="/assets/games/${g.icon}" alt="${esc(g.name)}" width="74" height="74"></a>`).join('')}
     </div>
     <div class="cta-row" style="justify-content:center">
       <a class="btn btn-primary" href="/about/">About the studio</a>
@@ -623,7 +621,7 @@ function pageGame(g){
     ['Content rating', g.contentRating],
     ['Updated', g.updated],
     ['In-app purchases', 'None'],
-  ];
+  ].filter(([, v]) => v);            // a game with no listing has no rating or update date
   const body = `
 <section class="ghero"><div class="shell ghero-grid">
   <div>
@@ -682,7 +680,7 @@ ${g.video ? `<section class="sec-tight"><div class="shell">
 
 <section class="sec-tight"><div class="shell">
   <div class="sec-head rv" style="margin-bottom:32px"><span class="eyebrow">About this game</span><h2>What you&rsquo;re getting into</h2></div>
-  <div class="prose rv">${renderDesc(g.desc)}</div>
+  <div class="prose rv">${g.desc ? renderDesc(g.desc) : `<p>${esc(g.blurb)}</p>`}</div>
   <ul class="feats rv" style="margin-top:26px">${g.feats.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
   ${g.live?`<div class="cta-row rv"><a class="btn btn-primary" href="${g.playUrl}" target="_blank" rel="noopener">${PLAY_ICON} Play ${esc(g.name)} free</a></div>`:''}
 </div></section>
@@ -699,7 +697,8 @@ ${g.video ? `<section class="sec-tight"><div class="shell">
     title:`${g.name} — free ${String(g.category).toLowerCase()} game for Android`,
     desc:`${g.tagline} Free on Google Play — no in-app purchases, no sign-up, plays offline.`,
     canonical:`/games/${g.slug}/`, cur:'games', body,
-    ogimg:`/assets/og/${g.key}.jpg`,
+    ogimg:fs.existsSync(path.join(ROOT, `public/assets/og/${g.key}.jpg`))
+      ? `/assets/og/${g.key}.jpg` : '/assets/og/default.jpg',
     jsonld:[{'@context':'https://schema.org','@type':'VideoGame',name:g.name,
       applicationCategory:'GameApplication',operatingSystem:'Android',
       description:g.tagline, genre:g.category, url:SITE+`/games/${g.slug}/`,
@@ -1125,7 +1124,7 @@ function pagePrivacyIndex(){
         referenced from Google Play store listings, so their addresses do not change.</p>
       </section>
       <div class="grid4 grid-2" style="margin-top:28px">
-        ${ALL_PRIVACY.map(g=>`<a class="mini" href="/privacy/${g.slug}/">
+        ${ALL.map(g=>`<a class="mini" href="/privacy/${g.slug}/">
           ${g.icon?`<img src="/assets/games/${g.icon}" alt="" width="60" height="60">`:'<div style="width:60px;height:60px;border-radius:16px;margin-bottom:16px;border:1px dashed rgba(255,255,255,.26)"></div>'}
           <h3 class="mini-h">${esc(g.name)}</h3><span>${esc(g.pkg)}</span></a>`).join('')}
       </div>
@@ -1192,8 +1191,6 @@ fs.mkdirSync(OUT, {recursive:true});
 write('index.html', pageHome());
 for (const g of ALL) {
   write(`games/${g.slug}/index.html`, pageGame(g));
-}
-for (const g of ALL_PRIVACY) {
   write(`privacy/${g.slug}/index.html`, pagePrivacy(g));
 }
 write('privacy/index.html', pagePrivacyIndex());
@@ -1294,7 +1291,7 @@ const urls = [
   ['/', '1.0'], ...ALL.map(g=>[`/games/${g.slug}/`, '0.9']),
   ['/blog/','0.8'], ...POSTS.map(p=>[`/blog/${p.slug}/`, '0.7']),
   ['/about/','0.6'], ['/contact/','0.5'], ['/privacy/','0.4'], ['/legal/','0.3'],
-  ...ALL_PRIVACY.map(g=>[`/privacy/${g.slug}/`, '0.3']),
+  ...ALL.map(g=>[`/privacy/${g.slug}/`, '0.3']),
 ];
 fs.writeFileSync(path.join(OUT,'sitemap.xml'),
 `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${
@@ -1327,4 +1324,3 @@ fs.writeFileSync(path.join(OUT,"app-ads.txt"),
 console.log(`v${BUILD.version} (${BUILD.sha}) — built ${urls.length} pages → dist/  (${webp} webp, ${(saved/1024/1024).toFixed(2)} MB saved)`);
 console.log(`  blog: ${POSTS.length} post(s)`);
 for (const g of ALL) console.log(`  /games/${g.slug}/  ·  /privacy/${g.slug}/  (${g.shots.length} shots)`);
-for (const g of PRIVACY_ONLY) console.log(`  /privacy/${g.slug}/  (policy only — no store page yet)`);
