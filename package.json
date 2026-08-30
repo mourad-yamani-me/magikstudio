@@ -2,7 +2,7 @@
   "name": "indie-core-dev-site",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing site for Indie Core Dev \u2014 static generator, deploys to Cloudflare Pages.",
+  "description": "Marketing site for Indie Core Dev — static generator, deploys to Cloudflare Pages.",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -16,6 +16,7 @@
     "lighthouse": "node scripts/lighthouse-check.mjs",
     "style": "node scripts/style-check.mjs",
     "seo": "node scripts/seo-ping.mjs",
+    "topics": "node scripts/topics.mjs",
     "assets:og": "node og.mjs",
     "assets:fonts": "node fonts.mjs",
     "gist": "node scripts/build-gist.mjs"

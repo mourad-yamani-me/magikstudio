@@ -23,6 +23,7 @@ npm run style      # flags writing that reads as machine-written (advisory)
 npm run lighthouse # the performance/a11y/SEO budget
 npm run gist       # regenerate gist/ from the live files
 npm run seo        # submit new URLs, then report index status and search performance
+npm run topics     # what to write next, and the success condition for each subject
 ```
 
 ## Never break these
@@ -58,6 +59,7 @@ git add -A                                            # no
 | Doing this | Read |
 | --- | --- |
 | Writing a blog post | [`content/blog/README.md`](content/blog/README.md) — frontmatter, post shapes, gists, style check |
+| Choosing what to write | [`content/blog/README.md`](content/blog/README.md#choosing-what-to-write) — `npm run topics`, and the success condition every subject carries |
 | Branching, local commands | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Stack, deploy setup, secrets | [`README.md`](README.md) |
 | Changing game copy or routes | the `GAMES` array in `build.mjs`; store metadata in `_source/play-data.json` |

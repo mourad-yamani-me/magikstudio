@@ -1,0 +1,1150 @@
+[
+  {
+    "id": "unity-gradle-build-failed-see-the-console-for-details",
+    "query": "unity gradle build failed see the console for details",
+    "shape": "problem",
+    "score": 102,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity gradle build failed",
+        "how to unity gradle build failed",
+        "why unity gradle build failed"
+      ]
+    },
+    "variants": [
+      "how to fix gradle build failed in unity",
+      "unity gradle build failed",
+      "unity error gradle build failed",
+      "unity android build failed gradle",
+      "unity commandinvokationfailure gradle build failed",
+      "unity 6 gradle build failed",
+      "unity android gradle build failed",
+      "unity firebase gradle build failed",
+      "unity 2022 gradle build failed"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 10,
+        "annualViews": 7460,
+        "totalViews": 48594,
+        "stale": 8,
+        "unanswered": 7,
+        "rotted": 10,
+        "top": {
+          "title": "Unity Gradle Build failed while trying to build project as an APK (2019)",
+          "views": 29728,
+          "answered": true
+        },
+        "quota": 283,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "8 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "unity-android-build-error-gradle",
+    "query": "unity android build error gradle",
+    "shape": "problem",
+    "score": 88,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity android build error",
+        "how to unity android build error",
+        "why unity android build error"
+      ]
+    },
+    "variants": [
+      "unity android build error",
+      "unity error commandinvokationfailure gradle build failed",
+      "unity 6 android build error",
+      "unity android build failed",
+      "unity gradle build error"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 10,
+        "annualViews": 5801,
+        "totalViews": 31492,
+        "stale": 8,
+        "unanswered": 7,
+        "rotted": 10,
+        "top": {
+          "title": "Unity Android Build Error Duplicate classes",
+          "views": 12947,
+          "answered": true
+        },
+        "quota": 282,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "8 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "google-play-data-safety-form",
+    "query": "google play data safety form",
+    "shape": "store",
+    "score": 79,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play data safety form",
+        "how to google play data safety form",
+        "why google play data safety form"
+      ]
+    },
+    "variants": [
+      "invalid data safety form google play console",
+      "google play console data safety form",
+      "google play store data safety form",
+      "data safety form google play app",
+      "invalid data safety form google play",
+      "update data safety form google play",
+      "what is google play store data"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 10,
+        "annualViews": 8400,
+        "totalViews": 34480,
+        "stale": 8,
+        "unanswered": 3,
+        "rotted": 9,
+        "top": {
+          "title": "How to fill data safety?",
+          "views": 8970,
+          "answered": true
+        },
+        "quota": 282,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 93,
+        "why": "8 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "google-play-privacy-policy-url",
+    "query": "google play privacy policy url",
+    "shape": "store",
+    "score": 79,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play privacy policy url",
+        "how to google play privacy policy url",
+        "why google play privacy policy url"
+      ]
+    },
+    "variants": [
+      "google play console change privacy policy url",
+      "google play console update privacy policy url",
+      "google play console change privacy policy link",
+      "how to change privacy policy url in google play console",
+      "google play privacy policy link",
+      "google play console privacy policy url",
+      "google play change privacy policy url",
+      "google play store privacy policy url",
+      "google play update privacy policy url",
+      "google play console privacy policy link"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 10,
+        "annualViews": 20142,
+        "totalViews": 140233,
+        "stale": 10,
+        "unanswered": 2,
+        "rotted": 10,
+        "top": {
+          "title": "Android app update rejected by Google Play while trying to publish it. What should I do next?",
+          "views": 100235,
+          "answered": true
+        },
+        "quota": 280,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "claude-code-agents-md-best-practices",
+    "query": "claude code agents md best practices",
+    "shape": "other",
+    "score": 78,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md",
+        "how to claude code agents md",
+        "why claude code agents md",
+        "best claude code agents md"
+      ]
+    },
+    "variants": [
+      "claude code agents md example",
+      "claude code agents md support",
+      "claude code agents md file",
+      "claude code agents md github",
+      "claude code agents md location",
+      "claude code agents.md symlink",
+      "how to make claude code use agents md",
+      "how to make claude code read agents md",
+      "claude code agents md",
+      "claude code agents md plugin"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 280,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "lighthouse-error-failed-to-find-the-largest-contentful-paint",
+    "query": "lighthouse error failed to find the largest contentful paint",
+    "shape": "problem",
+    "score": 72,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "lighthouse largest contentful paint",
+        "lighthouse largest contentful paint error"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 1,
+        "annualViews": 206,
+        "totalViews": 994,
+        "stale": 1,
+        "unanswered": 1,
+        "rotted": 1,
+        "top": {
+          "title": "Flutter Web showing Blank white screen for few seconds then showing Output",
+          "views": 994,
+          "answered": false
+        },
+        "quota": 280,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "1 of 1 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Lighthouse run",
+        "ok": true,
+        "what": "lighthouse is a devDependency — measurable against a local build"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "logo-quiz-guess-brand-trivia-answers",
+    "query": "logo quiz guess brand trivia answers",
+    "shape": "other",
+    "score": 72,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand",
+        "how to Logo Quiz: Guess Brand",
+        "why Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess brand answers",
+      "logo quiz guess brand trivia",
+      "logo quiz guess brand game",
+      "logo quiz guess brand trivia solution",
+      "logo quiz guess the brand answers level 1",
+      "logo quiz guess the brand answers level 2",
+      "logo quiz guess the brand answers level 3",
+      "logo quiz guess brand",
+      "logo quiz guess the brand level 1",
+      "logo quiz guess the brand level 2"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 277,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "unity-ads-vs-admob-revenue",
+    "query": "unity ads vs admob revenue",
+    "shape": "store",
+    "score": 68,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity tutorial",
+        "how to admob unity"
+      ]
+    },
+    "variants": [
+      "how to add admob ads in unity game",
+      "admob vs unity ads revenue",
+      "admob vs unity ads reddit",
+      "google admob vs unity ads",
+      "admob unity ads",
+      "admob vs unity ads",
+      "admob or unity ads",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 277,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "unity-6-2-gradle-build-failed",
+    "query": "unity 6.2 gradle build failed",
+    "shape": "problem",
+    "score": 61,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity gradle build failed"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 1,
+        "annualViews": 113,
+        "totalViews": 327,
+        "stale": 1,
+        "unanswered": 1,
+        "rotted": 1,
+        "top": {
+          "title": "Gradle build failed, unity bundle build",
+          "views": 327,
+          "answered": false
+        },
+        "quota": 277,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "1 of 1 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "unity-build-not-working",
+    "query": "unity build not working",
+    "shape": "problem",
+    "score": 58,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity android build error",
+        "unity gradle build failed error",
+        "fix unity gradle build failed"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 10,
+        "annualViews": 2880,
+        "totalViews": 18011,
+        "stale": 10,
+        "unanswered": 4,
+        "rotted": 10,
+        "top": {
+          "title": "Unity build not working on Android 12 due to write permissions",
+          "views": 4159,
+          "answered": true
+        },
+        "quota": 274,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "how-to-play-number-match-merge-puzzle",
+    "query": "how to play number match merge puzzle",
+    "shape": "store",
+    "score": 57,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Number Match & Merge Puzzle",
+        "how to Number Match & Merge Puzzle"
+      ]
+    },
+    "variants": [
+      "number match merge puzzle",
+      "number match merge puzzle ポイ 活"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 274,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "cloudflare-workers-vs-pages-reddit",
+    "query": "cloudflare workers vs pages reddit",
+    "shape": "other",
+    "score": 54,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "cloudflare workers vs pages",
+        "how to cloudflare workers vs pages",
+        "why cloudflare workers vs pages"
+      ]
+    },
+    "variants": [
+      "cloudflare workers vs pages pricing",
+      "cloudflare workers vs pages functions",
+      "cloudflare workers dev vs pages dev",
+      "cloudflare pages vs workers nextjs"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 274,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this site",
+        "ok": true,
+        "what": "reproducible against this repo and its live deploy"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "admob-unity-plugin",
+    "query": "admob unity plugin",
+    "shape": "store",
+    "score": 53,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [
+      "admob unity package",
+      "admob unity github",
+      "admob unity integration",
+      "admob unity guide",
+      "how to integrate admob in unity"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 10,
+        "annualViews": 649,
+        "totalViews": 6411,
+        "stale": 10,
+        "unanswered": 6,
+        "rotted": 10,
+        "top": {
+          "title": "Unity Admob and Google Play Game Services Build Error",
+          "views": 1565,
+          "answered": true
+        },
+        "quota": 271,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "is-it-safe-to-delete-google-play-store-data",
+    "query": "is it safe to delete google play store data",
+    "shape": "store",
+    "score": 48,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "why google play data safety form"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-08-30",
+      "demand": {
+        "questions": 2,
+        "annualViews": 646,
+        "totalViews": 1626,
+        "stale": 1,
+        "unanswered": 1,
+        "rotted": 2,
+        "top": {
+          "title": "Timers cannot be stopped from another thread (short example with nidaqmx-python and callbacks)",
+          "views": 1225,
+          "answered": true
+        },
+        "quota": 271,
+        "checked": "2026-08-30"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "1 of 2 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "how-to-fix-gradle-build-failed-in-unity",
+    "query": "how to fix gradle build failed in unity",
+    "shape": "problem",
+    "score": 92,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to unity gradle build failed",
+        "why unity gradle build failed",
+        "fix unity gradle build failed"
+      ]
+    },
+    "variants": [
+      "unity gradle build failed",
+      "unity error gradle build failed",
+      "unity error commandinvokationfailure gradle build failed",
+      "unity android build failed gradle",
+      "unity commandinvokationfailure gradle build failed",
+      "unity 6 gradle build failed",
+      "unity android gradle build failed",
+      "unity firebase gradle build failed",
+      "unity 2022 gradle build failed",
+      "unity android build failed"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "google-play-console-change-privacy-policy-url",
+    "query": "google play console change privacy policy url",
+    "shape": "store",
+    "score": 77,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play privacy policy url"
+      ]
+    },
+    "variants": [
+      "google play console update privacy policy url",
+      "google play console change privacy policy link",
+      "how to change privacy policy url in google play console",
+      "google play privacy policy link",
+      "google play console privacy policy url",
+      "google play change privacy policy url",
+      "google play store privacy policy url",
+      "google play update privacy policy url",
+      "google play console privacy policy link",
+      "how to add privacy policy in google play console"
+    ],
+    "proposed": "2026-08-30",
+    "status": "published",
+    "slug": "change-privacy-policy-url-google-play",
+    "published": "2026-08-30",
+    "target": {
+      "indexDays": 14,
+      "impressionsDays": 60,
+      "impressions": 50,
+      "positionDays": 90,
+      "position": 20,
+      "clicksDays": 90,
+      "clicks": 5,
+      "basis": "provisional"
+    },
+    "history": []
+  },
+  {
+    "id": "invalid-data-safety-form-google-play-console",
+    "query": "invalid data safety form google play console",
+    "shape": "store",
+    "score": 73,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play data safety form"
+      ]
+    },
+    "variants": [
+      "google play console data safety form",
+      "google play store data safety form",
+      "data safety form google play app",
+      "invalid data safety form google play",
+      "update data safety form google play"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-android-build-error",
+    "query": "unity android build error",
+    "shape": "problem",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity android build error",
+        "how to unity android build error",
+        "why unity android build error"
+      ]
+    },
+    "variants": [
+      "unity 6 android build error"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "how-to-add-admob-ads-in-unity-game",
+    "query": "how to add admob ads in unity game",
+    "shape": "store",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to admob unity"
+      ]
+    },
+    "variants": [
+      "admob vs unity ads revenue",
+      "admob vs unity ads reddit",
+      "google admob vs unity ads",
+      "admob unity ads",
+      "admob vs unity ads",
+      "admob or unity ads"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "claude-code-agents-md-example",
+    "query": "claude code agents md example",
+    "shape": "other",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md",
+        "how to claude code agents md",
+        "why claude code agents md"
+      ]
+    },
+    "variants": [
+      "claude code agents md support",
+      "claude code agents md file",
+      "claude code agents md github",
+      "claude code agents md location",
+      "claude code agents.md symlink",
+      "how to make claude code use agents md",
+      "how to make claude code read agents md",
+      "claude code agents md",
+      "claude code agents md plugin",
+      "claude code agents md vs claude md"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "logo-quiz-guess-brand-answers",
+    "query": "logo quiz guess brand answers",
+    "shape": "other",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand",
+        "how to Logo Quiz: Guess Brand",
+        "why Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess brand trivia",
+      "logo quiz guess brand game",
+      "logo quiz guess brand trivia solution",
+      "logo quiz guess the brand answers level 1",
+      "logo quiz guess the brand answers level 2",
+      "logo quiz guess the brand answers level 3",
+      "logo quiz guess brand",
+      "logo quiz guess the brand level 1",
+      "logo quiz guess the brand level 2"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-unity-sdk-download",
+    "query": "admob unity sdk download",
+    "shape": "store",
+    "score": 50,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [
+      "admob unity sdk",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "cloudflare-workers-vs-pages-pricing",
+    "query": "cloudflare workers vs pages pricing",
+    "shape": "other",
+    "score": 50,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "cloudflare workers vs pages",
+        "how to cloudflare workers vs pages",
+        "why cloudflare workers vs pages"
+      ]
+    },
+    "variants": [
+      "cloudflare workers vs pages functions",
+      "cloudflare workers dev vs pages dev",
+      "cloudflare pages vs workers nextjs"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-unity-package",
+    "query": "admob unity package",
+    "shape": "store",
+    "score": 49,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [
+      "admob unity github",
+      "admob unity integration",
+      "admob unity guide",
+      "how to integrate admob in unity"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-android-il2cpp-or-mono",
+    "query": "unity android il2cpp or mono",
+    "shape": "other",
+    "score": 48,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity il2cpp android",
+        "unity il2cpp android vs"
+      ]
+    },
+    "variants": [
+      "bepinex unity il2cpp android",
+      "unity android mono vs il2cpp",
+      "unity il2cpp android",
+      "unity il2cpp vs mono"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-admob-mediation-tutorial",
+    "query": "unity admob mediation tutorial",
+    "shape": "store",
+    "score": 46,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity tutorial"
+      ]
+    },
+    "variants": [
+      "admob unity mediation",
+      "admob unity tutorial"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "what-is-google-play-store-data",
+    "query": "what is google play store data",
+    "shape": "store",
+    "score": 42,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play data safety form"
+      ]
+    },
+    "variants": [
+      "what is the url for google play store"
+    ],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "is-google-play-services-safe",
+    "query": "is google play services safe",
+    "shape": "store",
+    "score": 38,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "why google play data safety form"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-unity-test-ids",
+    "query": "admob unity test ids",
+    "shape": "store",
+    "score": 38,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-30",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  }
+]

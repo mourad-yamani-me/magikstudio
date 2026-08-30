@@ -24,6 +24,80 @@ built.
 | `codeLabel` | no | Overrides the card's title. |
 | `draft` | no | `true` keeps it out of the site, sitemap and RSS entirely. |
 
+## Choosing what to write
+
+```bash
+npm run topics                                  # rank subjects, merge into topics.json
+npm run topics -- --validate                    # gate them BEFORE writing anything
+npm run topics -- --claim=<id>=<post-slug>      # this one became a post: stamp its target
+npm run topics -- --score                       # did the published ones work?
+```
+
+Write nothing that has not passed `--validate`. It answers four questions per subject, and a
+subject that fails any of the first three is a day of work spent on a page nobody will reach:
+
+| Gate | Measured by | Fails when |
+| --- | --- | --- |
+| Demand | Stack Overflow view counts, annualised | under ~2000 readers a year |
+| Winnable | share of those answers stale or unanswered | a current, maintained answer already exists |
+| Indexable | robots, sitemap, slug collision, linking parent | the page would be blocked or orphaned |
+| Reproducible | probes this machine for the toolchain | it needs your Play Console, not this laptop |
+
+**Stack Overflow views are not keyword volume, and the script never pretends otherwise.**
+They count people who reached one page about the exact problem, so they are a *floor* under
+the searching population — most people who search never open Stack Overflow. A floor is
+enough to separate "thousands hit this" from "nobody does", which is the only distinction
+that changes what to write.
+
+Its blind spot is reported rather than hidden: zero questions comes back as `UNMEASURED`, not
+`NO-GO`. Stack Overflow covers programming problems and has nothing to say about a Play
+Console policy screen, a tool released last year, or a player hunting level answers. Those
+subjects can only be judged by publishing one and reading `--score`.
+
+The fourth gate is the one that decides how the post gets written. `reproducible: yes` means
+the error can be produced on this machine, so the post can carry the real console output, the
+real version numbers and the false leads that actually cost time — the things a post assembled
+from research cannot have, and the reason shape 1 below ranks at all.
+
+Everything that survives gets a **success condition** stamped at publish time — four more
+gates, with dates, counted from the publish date:
+
+| Gate | Default | Why that one |
+| --- | --- | --- |
+| Indexed | 14 days | separates "Google never found it" from "Google found it and nobody cares" |
+| Impressions | ≥ 50 by day 60 | the only proof the subject had demand |
+| Position | ≤ 20 by day 90 | below that nobody sees it, whatever it says |
+| Clicks | ≥ 5 by day 90 | position without clicks is a title problem |
+
+Those numbers are provisional and say so — a site this young has no baseline. Every `--score`
+run appends a snapshot to the entry's `history`, and once three posts have been measured at a
+comparable age the targets become the median of what this site actually achieves.
+
+Evidence comes from two places, worth very different amounts:
+
+- **Search Console** — queries the site is already shown for. Real demand, and it splits three
+  ways: `stranded` (impressions, position > 20 — *that* is a post), `near-miss` (position
+  5–20 — fix the page that ranks, a second post competes with the first) and `unclicked`
+  (ranks well, nobody clicks — rewrite the title). Needs `GOOGLE_SERVICE_ACCOUNT_JSON`, same
+  credential as `npm run seo`.
+- **Google autocomplete** — expanded from seeds in the script. Proves a *phrasing* is real,
+  says nothing about volume. It is the bootstrap source, and all there is until the site has
+  history.
+
+Autocomplete returns seventeen spellings of one article, so they are clustered: one row per
+subject, with the variants listed under it. **Those variants are the deliverable** — the post
+should contain each string verbatim, because that is what somebody pastes into Google.
+
+Candidates are filtered against what this studio has actually done (the `SEEDS` and
+`CAPABILITY` lists in the script). A perfect keyword you have not lived produces a post you
+have to invent, and shape 1 below — the one that ranks — needs the real error string, the
+real versions and the real false leads.
+
+`content/blog/topics.json` is the ledger and is committed. The point is the record of what
+was predicted, not a snapshot of what is trending: a subject that missed its condition is
+worth more than one that was never written down, because `--score` names which of the four
+failures it was and what to do about it.
+
 ## Four shapes that work
 
 ### 1. A problem you solved  *(Unity, engine, build)*
