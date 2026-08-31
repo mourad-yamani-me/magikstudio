@@ -440,6 +440,7 @@ const NAV = cur => `
   <nav class="nav-links">
     <a href="/#games"${cur==='games'?' aria-current="page"':''}>Games</a>
     <a href="/blog/"${cur==='blog'?' aria-current="page"':''}>Blog</a>
+    <a href="/subscribe/?from=nav"${cur==='subscribe'?' aria-current="page"':''}>Newsletter</a>
     <a href="/about/"${cur==='about'?' aria-current="page"':''}>About</a>
     <a href="/privacy/"${cur==='privacy'?' aria-current="page"':''}>Privacy</a>
     <a href="/contact/"${cur==='contact'?' aria-current="page"':''}>Contact</a>
@@ -448,7 +449,7 @@ const NAV = cur => `
   <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobmenu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFF6E9" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </div>
 <div class="mobmenu" id="mobmenu">
-  <a href="/#games">Games</a><a href="/blog/">Blog</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a><a href="/legal/">Legal</a>
+  <a href="/#games">Games</a><a href="/blog/">Blog</a><a href="/subscribe/?from=nav">Newsletter</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a><a href="/legal/">Legal</a>
 </div></header>`;
 
 const FOOT = `
@@ -621,6 +622,18 @@ function pageHome(){
     <div class="cta-row" style="justify-content:center">
       <a class="btn btn-primary" href="/about/">About the studio</a>
       <a class="btn btn-ghost" href="/contact/">Get in touch</a>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec-tight"><div class="shell narrow">
+  <div class="band rv">
+    <span class="eyebrow">Mailing list</span>
+    <h2>Hear when the next one ships.</h2>
+    <p>A handful of emails a year &mdash; a new game, a real update to one, or a note about
+    building them. One click to leave, from any of them.</p>
+    <div class="cta-row" style="justify-content:center">
+      <a class="btn btn-primary" href="/subscribe/?from=home">Join the mailing list</a>
     </div>
   </div>
 </div></section>`;
@@ -1304,7 +1317,7 @@ function pageSubscribe(){
 </div></section>`;
   return layout({title:'Mailing list — Indie Core Dev',
     desc:'Hear when a new Indie Core Dev game ships. A few emails a year, one-click unsubscribe, no tracking and no sharing.',
-    canonical:'/subscribe/', cur:'', body,
+    canonical:'/subscribe/', cur:'subscribe', body,
     jsonld:[crumbLD([['Home','/'],['Mailing list','/subscribe/']])]});
 }
 
