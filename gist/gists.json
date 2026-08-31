@@ -8,5 +8,15 @@
     "dir": "build-gates",
     "marker": "Build gates for a static site — output verification and a Lighthouse budget",
     "post": "build-reviews-ai-code"
+  },
+  {
+    "dir": "responsive-images",
+    "marker": "Responsive image pipeline — Chrome's byte budget, measured sizes, one cache",
+    "post": "lighthouse-image-budget"
+  },
+  {
+    "dir": "accessible-lightbox",
+    "marker": "Accessible image lightbox — focus trap, restore, and the visibility trap",
+    "post": "opacity-zero-is-not-hidden"
   }
 ]

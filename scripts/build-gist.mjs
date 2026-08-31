@@ -20,6 +20,28 @@ const SITE = 'https://www.indiecore.net';
 
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 
+/* Pulls one marked region out of a real source file, so a gist can publish the
+   interesting 60 lines of an 1800-line generator without anyone copying them.
+   The markers are comments in the source and are stripped from the output:
+
+     /* gist:image-pipeline *\/   …code…   /* /gist:image-pipeline *\/
+
+   A missing marker fails the build rather than publishing an empty file — the
+   region moving or being renamed is exactly the drift this is here to stop. */
+function section(file, name) {
+  const src = read(file);
+  const open  = new RegExp(`(?:/\\*|//)\\s*gist:${name}\\s*(?:\\*/)?[^\\n]*\\n`);
+  const close = new RegExp(`[^\\n]*(?:/\\*|//)\\s*/gist:${name}\\s*(?:\\*/)?`);
+  const a = src.match(open);
+  if (!a) { console.error(`refusing to build: ${file} has no "gist:${name}" marker`); process.exit(1); }
+  const rest = src.slice(a.index + a[0].length);
+  const b = rest.match(close);
+  if (!b) { console.error(`refusing to build: ${file} has no "/gist:${name}" marker`); process.exit(1); }
+  const body = rest.slice(0, b.index).replace(/\s+$/, '');
+  if (!body.trim()) { console.error(`refusing to build: ${file} region "${name}" is empty`); process.exit(1); }
+  return body + '\n';
+}
+
 /* A post's URL is derived from its filename, so it is knowable before either
    exists — but that also means renaming the post would silently break the
    link. Resolve it from the file instead of hardcoding. */
@@ -44,6 +66,9 @@ const sanitize = str => str
   .replace(/www\.indiecore\.net/g, 'www.example.com')
   .replace(/"indiecore\.net"/g, '"example.com"')
   .replace(/https:\/\/www\.indiecore\.net/g, 'https://www.example.com')
+  // the form-action chain lists the apex as well as www; without this the
+  // real domain shipped in the published gist for months
+  .replace(/https:\/\/indiecore\.net/g, 'https://example.com')
   .replace(/github\.com\/oettaib/g, 'github.com/YOUR-USERNAME')
   // verify.mjs asserts that the legal pages still carry the real identity, so the
   // published copy has to carry placeholders instead. Without these the leak guard
@@ -194,12 +219,156 @@ Written up in full here: **${url}**
 
 _Generated from the live scripts — see the post for context._
 `,
+}, {
+  dir: 'responsive-images',
+  marker: 'Responsive image pipeline — Chrome\'s byte budget, measured sizes, one cache',
+  post: 'lighthouse-image-budget',
+  files: () => ({
+    'image-pipeline.mjs':    sanitize(section('build.mjs', 'image-pipeline')),
+    'responsive-markup.mjs': sanitize(section('build.mjs', 'responsive-markup')),
+  }),
+  readme: url => `# Responsive images that satisfy Chrome's actual budget
+
+Two pieces of a static site generator. One encodes every derivative and holds it under the
+byte budget Lighthouse measures against; the other writes the \`<picture>\` markup that
+decides which of them a browser downloads.
+
+\`\`\`
+source.jpg ──► 200w / 320w / … WebP ──► <picture> with a sizes string
+                    │
+                    └─ each one under w × h ÷ 6 bytes
+\`\`\`
+
+## The constant
+
+Lighthouse's *Improve image delivery* insight reports both a file's size and the bytes it
+considers wasted on compression. Subtract one from the other and the target it has in mind is
+**one sixth of a byte per pixel**, every time — a 256×256 icon: 65536 ÷ (18804 − 7881) =
+6.0000. Savings under 4 KiB are not reported, which is why some files sit over the line and
+stay quiet.
+
+\`ceiling()\` computes it. \`encodeWebp()\` re-encodes with \`cwebp -size\` only when a file
+overshoots.
+
+**Treat it as a ceiling, never a target.** Most images land far under it — one 400px
+screenshot here is 21 KB against a 47 KB ceiling — and encoding everything *to* the budget
+would double them.
+
+## Files
+
+| File | What it does |
+| --- | --- |
+| \`image-pipeline.mjs\` | Encodes the derivatives, content-addressed so nothing re-encodes twice |
+| \`responsive-markup.mjs\` | Rewrites \`<img>\` into \`<picture>\` with srcset, sizes and dimensions |
+
+## Worth knowing
+
+- **The cache key includes the encoder flags.** Change quality or method and every key
+  changes, so old output is never replayed as though it had been made with the new settings.
+  Without that, a warm cache silently serves you the previous encoder's work.
+- **\`sizes\` is a claim about layout, and it is easy to get wrong.** Every value in the markup
+  file was measured against the rendered page, not estimated. One string covering two
+  different layouts is right for neither: the same screenshot renders at a constant 254px in a
+  carousel and at 116px in a five-across grid on a tablet.
+- **One attribute per layout.** A marker that means two things — a hero on one template and a
+  carousel on another — will size one of them for the other's box.
+- **Method 6 with \`-sharp_yuv\` is smaller *and* sharper** than the default at a lower quality
+  number. It is slow, which is what the cache is for.
+- **The second half of the insight is geometry, not compression.** Its waste figure is
+  \`bytes × (1 − displayedPx ÷ intrinsicPx)\`, which reaches zero only when the file has as
+  many pixels as the CSS box. That is a 1× image, and it will look soft on any modern phone.
+
+---
+
+Written up in full here: **${url}**
+
+_Generated from the live generator — see the post for context._
+`,
+}, {
+  dir: 'accessible-lightbox',
+  marker: 'Accessible image lightbox — focus trap, restore, and the visibility trap',
+  post: 'opacity-zero-is-not-hidden',
+  files: () => ({
+    'lightbox.js':  sanitize(section('src/app.js', 'lightbox-js')),
+    'lightbox.css': sanitize(section('src/styles.css', 'lightbox-css')),
+  }),
+  readme: url => `# An image lightbox that behaves for keyboard users
+
+No dependencies. Attaches to any container marked \`data-lightbox\` containing \`.shot\`
+buttons, builds the dialog once, and gets the keyboard contract right.
+
+\`\`\`html
+<div data-lightbox>
+  <button class="shot" data-i="0"><span class="scr"><img src="…" data-full="…"></span></button>
+</div>
+\`\`\`
+
+## The bug this exists because of
+
+The obvious way to hide an overlay does not hide it:
+
+\`\`\`css
+.lb      { opacity: 0; pointer-events: none }
+.lb.open { opacity: 1; pointer-events: auto }
+\`\`\`
+
+That covers the mouse and nothing else. The element keeps its layout box, stays in the
+accessibility tree, and its buttons stay in the tab order — so a keyboard user tabs into
+Previous, Next and Close on a dialog that is not on screen. \`visibility: hidden\` is what
+actually removes it.
+
+## Then the part that catches you
+
+\`focus()\` on a \`visibility: hidden\` element does nothing. No error, no warning, and
+\`document.activeElement\` is unchanged. So this looks correct and is not:
+
+\`\`\`js
+lb.classList.add('open');
+lb.querySelector('.lb-close').focus();   // dropped, if .open has not applied yet
+\`\`\`
+
+With \`transition: opacity .3s, visibility .3s\` the computed value stays \`hidden\` until the
+transition starts on the next frame. Forcing a reflow does not help. Give visibility a zero
+duration and delay it only on the way out:
+
+\`\`\`css
+.lb      { visibility: hidden;  transition: opacity .3s, visibility 0s .3s }
+.lb.open { visibility: visible; transition: opacity .3s, visibility 0s 0s }
+\`\`\`
+
+Now it flips in the same tick, the focus lands, and the fade still finishes before the dialog
+disappears.
+
+## What the JS handles
+
+- \`role="dialog"\`, \`aria-modal\`, and a label — \`aria-modal\` tells assistive technology to
+  ignore the page behind, but does **not** stop Tab walking into it, so the trap is still
+  yours to write
+- Focus moves to Close on open and returns to the thumbnail that opened it on close
+- Tab and Shift+Tab cycle within the dialog
+- Escape closes; arrow keys move between images
+- \`data-full\` so the dialog can open a WebP rather than the \`<img>\` \`src\`, which is the
+  fallback JPEG and roughly three times the size
+
+## Test it by pressing the keys
+
+Reading the code will not find either bug above, because the code says the right thing both
+times. Dispatch real \`Tab\` and \`Escape\` events and print \`document.activeElement\` after each.
+The contract is visible as output: focus enters, cycles without escaping, returns to the
+opener.
+
+---
+
+Written up in full here: **${url}**
+
+_Generated from the live scripts — see the post for context._
+`,
 }];
 
 /* ─────────────────────────── build ─────────────────────────── */
 
 /* guard: never publish anything identifying */
-const LEAKS = ['indiecore.net/blog', 'oettaib', 'indiecode25', 'Othmane', 'Ettaib', '943 647', 'Bretagne'];
+const LEAKS = ['indiecore.net', 'oettaib', 'indiecode25', 'Othmane', 'Ettaib', '943 647', 'Bretagne'];
 
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
@@ -215,7 +384,7 @@ for (const g of GISTS) {
   for (const [name, content] of Object.entries(files)) {
     for (const leak of LEAKS) {
       // the one permitted mention is the link back to the post
-      if (leak === 'indiecore.net/blog' && name === '0-README.md') continue;
+      if (leak === 'indiecore.net' && name === '0-README.md') continue;
       if (content.toLowerCase().includes(leak.toLowerCase())) problems.push(`${g.dir}/${name}: "${leak}"`);
     }
   }

@@ -113,6 +113,7 @@
     secs.forEach(function(s){ sio.observe(s); });
   }
 
+  /* gist:lightbox-js */
   /* screenshot lightbox */
   var groups = document.querySelectorAll('[data-lightbox]');
   if (groups.length) {
@@ -188,6 +189,8 @@
       }
     });
   }
+
+  /* /gist:lightbox-js */
 
   /* trailer facade — the YouTube player is only created on click, so the page
      makes no third-party request unless someone actually wants the video */

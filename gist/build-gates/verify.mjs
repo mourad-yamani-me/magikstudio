@@ -76,6 +76,10 @@ for (const file of pages) {
   for (const src of attr(html, /<img[^>]*\ssrc="(\/[^"]+)"/g)) {
     if (!resolves(src)) fail(where, `missing image → ${src}`);
   }
+  // the lightbox loads this one, and a typo here is invisible until a click
+  for (const u of attr(html, /data-full="([^"]+)"/g))
+    if (u.startsWith('/') && !resolves(u)) fail(where, `missing lightbox image → ${u}`);
+
   for (const set of attr(html, /srcset="([^"]+)"/g)) {
     for (const cand of set.split(',')) {
       const u = cand.trim().split(/\s+/)[0];
@@ -132,7 +136,10 @@ else {
   const listed = new Set(locs.map(l => l.replace(SITE, '')));
   for (const p of pages) {
     const url = rel(p).replace(/index\.html$/, '');
+    // 404 and the two double opt-in landing pages are reached by error or by
+    // redirect from Kit, never by search. robots.txt disallows the latter two.
     if (url === '/404.html') continue;
+    if (url === '/subscribe/thanks/' || url === '/subscribe/confirmed/') continue;
     if (!listed.has(url)) warn('sitemap.xml', `page not listed: ${url}`);
   }
 }
@@ -158,6 +165,312 @@ else {
     for (const [what, re] of Object.entries(required)) {
       if (!re.test(html)) fail('/privacy/', `legal page is missing ${what}`);
     }
+  }
+}
+
+// ---- mailing list ----
+// Collecting an address for game marketing is prospection commerciale: it needs
+// consent given in advance, for a purpose stated where the address is typed.
+// Until this branch the policy said twice that no mailing list existed, so the
+// failure mode here is a real one — a form shipping while the policy still
+// describes a site that does not collect email, or a purpose named on the form
+// and nowhere in the document. Each rule below is one half of that pair.
+{
+  const sub = path.join(DIST, 'subscribe/index.html');
+  const pri = path.join(DIST, 'privacy/index.html');
+  const hasForm = fs.existsSync(sub);
+  const policy  = fs.existsSync(pri) ? fs.readFileSync(pri, 'utf8') : '';
+
+  if (hasForm) {
+    const html = fs.readFileSync(sub, 'utf8');
+    const required = {
+      'a link to the privacy policy':      /href="\/privacy\//,
+      'the double opt-in stated up front': /confirmation link|confirm/i,
+      'how to leave':                      /unsubscribe/i,
+      'the processor named':               /Kit/,
+      'both purposes described':           /games[\s\S]{0,200}blog|blog[\s\S]{0,200}games/i,
+    };
+    for (const [what, re] of Object.entries(required))
+      if (!re.test(html)) fail('/subscribe/', `signup page is missing ${what}`);
+
+    // The consent must be an affirmative act, enforced without JavaScript.
+    if (!/name="fields\[interest\]"[^>]*required|required[^>]*name="fields\[interest\]"/.test(html))
+      fail('/subscribe/', 'interest choice is not a required field — consent must be an affirmative act');
+    if (/<input[^>]+type="(radio|checkbox)"[^>]+checked/.test(html))
+      fail('/subscribe/', 'a consent option is pre-selected — consent cannot be the default');
+
+    // The source field is the one thing collected besides the address, so it
+    // has to stay declared and stay harmless. A non-empty default keeps the
+    // record true with JavaScript off; the page must also say it is collected,
+    // because "no name, nothing else" stopped being true when it was added.
+    const src = html.match(/<input[^>]*id="sub-source"[^>]*>/);
+    if (!src) fail('/subscribe/', 'hidden source field is missing');
+    else {
+      const value = (src[0].match(/value="([^"]*)"/) || [])[1] || '';
+      if (!/^[a-z0-9][a-z0-9-]{0,39}$/.test(value))
+        fail('/subscribe/', `source field default "${value}" is not a plain slug — it posts as-is when JavaScript is off`);
+    }
+    if (!/which page you came from/i.test(html))
+      fail('/subscribe/', 'source field is collected but the page does not say so');
+    if (!/which page you were on/i.test(policy))
+      fail('/privacy/', 'the signup form records a source but the policy does not disclose it');
+    // Kit puts an open-tracking pixel and click-wrapped links in every send,
+    // and the inactivity rule below is only enforceable because of them. The
+    // policy shipped once describing that rule without disclosing what powers
+    // it, so the two are checked together: keep the rule, keep the disclosure.
+    if (/without a single email\s+being opened/.test(policy) && !/invisible image/.test(policy))
+      fail('/privacy/', 'the policy applies an open-rate rule without disclosing the open tracking it depends on');
+    // .rv starts at opacity:0 and only becomes visible when app.js adds .in.
+    // unrevealHero() strips it from the first section only, so a form in any
+    // later section would be invisible with JavaScript off. That happened.
+    if (/<form[^>]*class="[^"]*\brv\b/.test(html))
+      fail('/subscribe/', 'form carries .rv — it would be invisible with JavaScript off');
+    // The site's own deferred app.js and the JSON-LD block are fine — neither
+    // touches the form. Anything else is either a third-party embed or inline
+    // logic the form would come to depend on.
+    for (const [, attrs] of html.matchAll(/<script\b([^>]*)>/gi)) {
+      if (/type="application\/ld\+json"/.test(attrs)) continue;
+      // Speculation rules are a declarative JSON block the browser reads to
+      // prefetch links. Nothing executes and nothing touches the form.
+      if (/type="speculationrules"/.test(attrs)) continue;
+      const src = attrs.match(/src="([^"]+)"/);
+      if (src && src[1].startsWith('/assets/')) continue;
+      fail('/subscribe/', `signup page loads a script (${src ? src[1] : 'inline'}) — the form must work with JavaScript off`);
+    }
+
+    const wants = {
+      'the mailing list section':   /join the mailing list/i,
+      'consent as the legal basis': /Article 6\(1\)\(a\)/,
+      'the right to withdraw':      /withdraw/i,
+      'Kit named as a processor':   /Kit/,
+    };
+    for (const [what, re] of Object.entries(wants))
+      if (!re.test(policy)) fail('/privacy/', `a signup form exists but the policy is missing ${what}`);
+  }
+
+  if (/there is no mailing list/i.test(policy))
+    fail('/privacy/', 'policy still says no mailing list exists');
+
+  // form-action follows redirects, and Kit answers the POST with a 302 to the
+  // apex domain which then 301s to www. Listing only the POST target shipped
+  // once and blocked every submission — silently, with a console message that
+  // names the one URL the policy does allow. Assert the whole chain.
+  if (hasForm) {
+    const headers = path.join(DIST, '_headers');
+    const csp = fs.existsSync(headers)
+      ? (fs.readFileSync(headers, 'utf8').match(/form-action ([^;]+);/) || [])[1] || ''
+      : '';
+    if (!csp) fail('_headers', 'a signup form exists but no form-action directive was found');
+    else for (const host of ['https://app.kit.com', 'https://example.com', 'https://www.example.com'])
+      if (!csp.split(/\s+/).includes(host))
+        fail('_headers', `form-action is missing ${host} — it is a hop in the signup redirect chain, and the browser blocks the whole submission`);
+  }
+
+  // Both double opt-in landing pages are configured as redirect targets inside
+  // Kit. Renaming one here strands every new subscriber on a 404.
+  if (hasForm) for (const u of ['subscribe/thanks', 'subscribe/confirmed'])
+    if (!fs.existsSync(path.join(DIST, u, 'index.html')))
+      fail('/subscribe/', `missing /${u}/ — Kit redirects there after signup and after confirming`);
+}
+
+// ---- the "no analytics" promise ----
+// /privacy/ says no analytics script of any kind runs in your browser and that
+// no request leaves this domain unless you start a trailer. Nothing in the
+// build enforces that — the CSP does, at runtime, and it is doing real work:
+// Cloudflare injects its Web Analytics beacon into production HTML at the edge
+// and script-src is the only reason it never loads. Widen script-src or
+// connect-src to any host and the policy silently becomes false.
+//
+// frame-src is deliberately not checked: the trailer's YouTube embed is the
+// one exception the policy itself names.
+{
+  const headers = path.join(DIST, '_headers');
+  const pri = path.join(DIST, 'privacy/index.html');
+  if (fs.existsSync(headers) && fs.existsSync(pri)) {
+    const policy = fs.readFileSync(pri, 'utf8');
+    const csp = fs.readFileSync(headers, 'utf8');
+    const claimsNoAnalytics = /no analytics script of any kind/i.test(policy);
+
+    if (claimsNoAnalytics) for (const directive of ['script-src', 'connect-src']) {
+      const found = csp.match(new RegExp(directive + ' ([^;]+);'));
+      if (!found) { fail('_headers', `${directive} is missing, so nothing enforces the "no analytics" claim`); continue; }
+      const hosts = found[1].trim().split(/\s+/).filter(t => /^https?:/.test(t) || t === '*');
+      if (hosts.length)
+        fail('_headers', `${directive} allows ${hosts.join(', ')} — /privacy/ promises no analytics script and no request off this domain, and that promise is only true while this stays same-origin`);
+    }
+  }
+}
+
+// ---- font fallback metrics ----
+// Plus Jakarta Sans is font-display:swap, so every weight paints in a fallback
+// first. 'Jakarta Fallback' carries size-adjust and ascent/descent overrides so
+// that swap does not resize anything — without it the nav links changed width
+// and shifted the row. Adding a weight to fonts.mjs without adding a matching
+// fallback face would bring the shift back for that weight, silently.
+{
+  for (const f of pages.slice(0, 1)) {          // the font CSS is identical on every page
+    const css = [...fs.readFileSync(f, 'utf8').matchAll(/<style>([\s\S]*?)<\/style>/g)]
+      .map(m => m[1]).join('');
+    // FONT_CSS is minified to '@font-face { ... }' and FONT_FALLBACK emits
+    // '@font-face{...}', so the optional space is not cosmetic here.
+    const faces = [...css.matchAll(/@font-face\s*\{([^}]*)\}/g)];
+    const declared = new Set(faces
+      .filter(m => /Plus Jakarta Sans/.test(m[1]))
+      .map(m => (m[1].match(/font-weight:\s*(\d+)/) || [])[1]).filter(Boolean));
+    const covered = new Set(faces
+      .filter(m => /Jakarta Fallback/.test(m[1]))
+      .map(m => (m[1].match(/font-weight:\s*(\d+)/) || [])[1]).filter(Boolean));
+
+    if (!declared.size) fail('fonts', 'no Plus Jakarta Sans @font-face was found — the parser below is looking at the wrong thing');
+    if (!covered.size) fail('fonts', "no 'Jakarta Fallback' faces were emitted — the swap will shift layout");
+    for (const w of declared)
+      if (!covered.has(w))
+        fail('fonts', `Plus Jakarta Sans ${w} has no metric-matched fallback — its swap will shift layout`);
+    if (!/--body:[^;}]*Jakarta Fallback/.test(css))
+      fail('fonts', "'Jakarta Fallback' is declared but --body does not use it, so nothing falls back to it");
+  }
+}
+
+// ---- link names ----
+// Two links with the same accessible name that go to different places read as
+// one repeated choice to anyone using a screen reader: five "Play free"
+// buttons on the home page, one per game, announced identically. The fix in
+// this repo is a .sr-only suffix, which "Learn more" already carries.
+//
+// Query strings are stripped before comparing, so /subscribe/?from=home and
+// /subscribe/?from=invite count as one destination — same page, same purpose,
+// and the ?from= only records which link was used.
+{
+  const strip = h => h.split(/[?#]/)[0];
+  for (const f of pages) {
+    const html = fs.readFileSync(f, 'utf8');
+    const names = new Map();
+    for (const [, attrs, inner] of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+      const href = attrs.match(/href="([^"]*)"/);
+      if (!href || href[1].startsWith('mailto:')) continue;
+      const label = attrs.match(/aria-label="([^"]*)"/);
+      // .sr-only text is part of the accessible name, so tags come out and
+      // their contents stay; an image inside contributes its alt text.
+      const name = (label ? label[1]
+        : inner.replace(/<img\b[^>]*\balt="([^"]*)"[^>]*>/gi, ' $1 ').replace(/<[^>]+>/g, ''))
+        .replace(/\s+/g, ' ').trim().toLowerCase();
+      if (!name) continue;
+      if (!names.has(name)) names.set(name, new Set());
+      names.get(name).add(strip(href[1]));
+    }
+    for (const [name, hrefs] of names)
+      if (hrefs.size > 1)
+        fail(rel(f), `${hrefs.size} links are announced as "${name}" but go to different places (${[...hrefs].slice(0, 3).join(', ')}) — add a .sr-only suffix so each says which`);
+  }
+}
+
+// ---- per-page CSS ----
+// build.mjs inlines only the rules a page can actually match, which cut the
+// privacy pages from 32 KB of CSS to 10 KB. A rule dropped by mistake is
+// invisible in the build log and surfaces as a broken layout in production,
+// so the result is re-derived here from the finished page rather than trusted.
+//
+// The invariant is exact, not approximate: a selector is kept whenever ANY
+// class it names is used, so for a class the page does use, EVERY selector
+// mentioning it must survive. Counting them catches a partial drop, which a
+// "does the name still appear somewhere" check does not — .toc a.on kept the
+// name alive after every other .toc rule had gone.
+{
+  const sheet = fs.readFileSync(path.resolve(import.meta.dirname, '..', 'src/styles.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+
+  // every selector that introduces a block, @media preludes excluded
+  const selectors = css => {
+    const parts = css.split(/([{}])/);
+    const out = [];
+    for (let i = 0; i < parts.length - 1; i++)
+      if (parts[i + 1] === '{' && !parts[i].trim().startsWith('@'))
+        out.push(...parts[i].split(','));
+    return out;
+  };
+  // .toc must not match .toc-h
+  const mentions = (sels, c) => {
+    const re = new RegExp('\\.' + c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\w-])');
+    return sels.filter(s => re.test(s)).length;
+  };
+
+  const sheetSels = selectors(sheet);
+  const sheetKeyframes = new Set([...sheet.matchAll(/@keyframes\s+([\w-]+)/g)].map(m => m[1]));
+
+  // app.js builds the lightbox and the trailer after load, so these class
+  // names are in no page's HTML and the loop below would never ask for them.
+  // They are what the class-name approach is least able to see.
+  const app = fs.readFileSync(path.resolve(import.meta.dirname, '..', 'src/app.js'), 'utf8');
+  const runtime = [...new Set([
+    ...[...app.matchAll(/classList\.(?:add|remove|toggle)\(\s*'([^']+)'/g)].map(m => m[1]),
+    ...[...app.matchAll(/className\s*=\s*'([^']+)'/g)].flatMap(m => m[1].split(/\s+/)),
+    ...[...app.matchAll(/class="([^"]+)"/g)].flatMap(m => m[1].split(/\s+/)),
+  ])].filter(c => c && mentions(sheetSels, c));
+
+  for (const f of pages) {
+    const html = fs.readFileSync(f, 'utf8');
+    const pageSels = selectors([...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join(''));
+    const used = new Set([...html.matchAll(/class="([^"]*)"/g)]
+      .flatMap(m => m[1].split(/\s+/)).filter(Boolean));
+    const loadsApp = /<script[^>]+src="\/assets\/app\./.test(html);
+
+    for (const c of [...used, ...(loadsApp ? runtime : [])]) {
+      const want = mentions(sheetSels, c);
+      if (!want) continue;
+      const got = mentions(pageSels, c);
+      if (got < want)
+        fail(rel(f), `.${c} is styled by ${want} selector(s) in src/styles.css but only ${got} survived this page's inlined CSS`);
+    }
+
+    // @keyframes are carried over by name, not by selector, so the loop above
+    // cannot see them going missing — and an animation that silently stops
+    // running looks like a design change rather than a bug.
+    const css = [...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('');
+    const defined = new Set([...css.matchAll(/@keyframes\s+([\w-]+)/g)].map(m => m[1]));
+    // Only names the stylesheet actually defines are interesting; the rest of
+    // an animation shorthand is timing functions and keywords.
+    for (const [, word] of css.matchAll(/animation(?:-name)?:([^;}]+)/g))
+      for (const name of word.split(/[\s,]+/))
+        if (sheetKeyframes.has(name) && !defined.has(name))
+          fail(rel(f), `CSS animates "${name}" but its @keyframes block was dropped from this page's inlined CSS`);
+  }
+}
+
+// ---- browser storage ----
+// The policy names every key this site writes and says the storage panel holds
+// that one entry and nothing else. That claim is checkable by any visitor with
+// devtools open, so it has to stay true: a second key added to app.js without a
+// matching line in the policy turns a verifiable promise into a false one.
+{
+  // The bundle is content-hashed (app.<hash>.js), so it has to be found by
+  // shape rather than by name. An existsSync() on a fixed name used to guard
+  // this block, which meant renaming the file would have switched the whole
+  // check off without a word — so a missing bundle is now an error, not a skip.
+  const bundles = fs.existsSync(path.join(DIST, 'assets'))
+    ? fs.readdirSync(path.join(DIST, 'assets')).filter(f => /^app\.[0-9a-f]+\.js$/.test(f))
+    : [];
+  if (bundles.length !== 1)
+    fail('/assets/', `expected exactly one app.<hash>.js bundle, found ${bundles.length}`);
+
+  const appJs = path.join(DIST, 'assets', bundles[0] || 'app.js');
+  const pri   = path.join(DIST, 'privacy/index.html');
+  if (fs.existsSync(appJs) && fs.existsSync(pri)) {
+    const js     = fs.readFileSync(appJs, 'utf8');
+    const policy = fs.readFileSync(pri, 'utf8');
+    const keys = new Set([...js.matchAll(/(?:local|session)Storage\.(?:get|set|remove)Item\(\s*([A-Za-z_$][\w$]*|'[^']*')/g)]
+      .map(m => m[1]));
+    // Resolve `KEY`-style constants back to their literal before reporting.
+    const resolved = [...keys].map(k => {
+      if (k.startsWith("'")) return k.slice(1, -1);
+      const lit = js.match(new RegExp(`\\b${k}\\s*=\\s*'([^']+)'`));
+      return lit ? lit[1] : k;
+    });
+    for (const key of resolved) {
+      if (!policy.includes(key))
+        fail('/privacy/', `app.js stores "${key}" but the policy never names it — the "one entry only" claim is checkable and would be false`);
+    }
+    if (/sessionStorage\./.test(js) && /no session\s+storage/.test(policy))
+      fail('/privacy/', 'app.js uses sessionStorage while the policy says it does not');
   }
 }
 

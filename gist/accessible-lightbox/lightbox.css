@@ -1,0 +1,28 @@
+/* visibility, not just opacity: a transparent lightbox is still in the tab
+   order and still in the accessibility tree, so its Previous/Next/Close
+   buttons were reachable by keyboard on every game page while invisible.
+   Transitioning visibility alongside opacity keeps the fade, because it
+   flips at the end of the transition rather than the start. */
+.lb{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  background:rgba(6,3,13,.94);backdrop-filter:blur(14px);opacity:0;pointer-events:none;
+  visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+/* visibility flips instantly on open and only after the fade on close. Putting
+   it in the transition with a duration instead leaves the computed value
+   hidden until the next frame, and focus() on a hidden element is dropped —
+   which silently broke the dialog's focus handling. */
+.lb.open{opacity:1;pointer-events:auto;visibility:visible;transition:opacity .3s,visibility 0s 0s}
+.lb-fig{position:relative;padding:8px;border-radius:34px;background:linear-gradient(160deg,#3A2358,#160C2A);
+  box-shadow:0 40px 90px -20px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.1) inset;
+  transform:scale(.92);transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+.lb.open .lb-fig{transform:scale(1)}
+.lb-fig img{display:block;border-radius:27px;max-height:min(84vh,900px);width:auto;max-width:calc(100vw - 160px)}
+.lb button{position:absolute;display:flex;align-items:center;justify-content:center;width:52px;height:52px;
+  border-radius:50%;border:1px solid var(--line);background:rgba(11,6,22,.8);backdrop-filter:blur(10px);
+  color:#FFF6E9;cursor:pointer;transition:background .2s,transform .2s}
+.lb button:hover{background:rgba(255,255,255,.14);transform:scale(1.08)}
+.lb-prev{left:24px;top:50%;margin-top:-26px}
+.lb-next{right:24px;top:50%;margin-top:-26px}
+.lb-close{right:24px;top:24px}
+.lb-count{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);padding:8px 16px;border-radius:100px;
+  background:rgba(11,6,22,.8);backdrop-filter:blur(10px);font-size:13px;font-weight:600;color:var(--muted);
+  font-variant-numeric:tabular-nums}

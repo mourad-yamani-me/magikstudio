@@ -1146,5 +1146,358 @@
     "published": null,
     "target": null,
     "history": []
+  },
+  {
+    "id": "unity-gradle-build-failed",
+    "query": "unity gradle build failed",
+    "shape": "problem",
+    "score": 87,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity gradle build failed",
+        "how to unity gradle build failed",
+        "why unity gradle build failed"
+      ]
+    },
+    "variants": [
+      "unity error gradle build failed",
+      "unity error commandinvokationfailure gradle build failed",
+      "unity android build failed gradle",
+      "unity commandinvokationfailure gradle build failed",
+      "unity 6 gradle build failed",
+      "unity android gradle build failed",
+      "unity firebase gradle build failed",
+      "unity 2022 gradle build failed",
+      "unity android build failed",
+      "unity gradle build error"
+    ],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "claude-code-agents-md-support",
+    "query": "claude code agents md support",
+    "shape": "other",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md",
+        "how to claude code agents md",
+        "why claude code agents md"
+      ]
+    },
+    "variants": [
+      "claude code agents md file",
+      "claude code agents md github",
+      "claude code agents md location",
+      "claude code agents.md symlink",
+      "how to make claude code use agents md",
+      "how to make claude code read agents md",
+      "claude code agents md",
+      "claude code agents md plugin",
+      "claude code agents md vs claude md",
+      "claude code agents md or claude md"
+    ],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "logo-quiz-guess-brand-trivia",
+    "query": "logo quiz guess brand trivia",
+    "shape": "other",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand",
+        "how to Logo Quiz: Guess Brand",
+        "why Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess brand game",
+      "logo quiz guess brand trivia solution",
+      "logo quiz guess the brand answers level 1",
+      "logo quiz guess the brand answers level 2",
+      "logo quiz guess the brand answers level 3",
+      "logo quiz guess brand",
+      "logo quiz guess the brand level 1",
+      "logo quiz guess the brand level 2"
+    ],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "google-play-console-data-safety-form",
+    "query": "google play console data safety form",
+    "shape": "store",
+    "score": 64,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play data safety form"
+      ]
+    },
+    "variants": [
+      "google play store data safety form",
+      "data safety form google play app",
+      "invalid data safety form google play",
+      "update data safety form google play"
+    ],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-vs-unity-ads-revenue",
+    "query": "admob vs unity ads revenue",
+    "shape": "store",
+    "score": 62,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity vs"
+      ]
+    },
+    "variants": [
+      "admob vs unity ads reddit",
+      "google admob vs unity ads",
+      "admob unity ads",
+      "admob vs unity ads",
+      "admob or unity ads",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-unity-sdk",
+    "query": "admob unity sdk",
+    "shape": "store",
+    "score": 57,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [
+      "admob unity mediation",
+      "admob unity github",
+      "admob unity integration",
+      "admob unity tutorial",
+      "admob unity guide",
+      "how to integrate admob in unity"
+    ],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-6-android-build-error",
+    "query": "unity 6 android build error",
+    "shape": "problem",
+    "score": 56,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity android build error"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "cloudflare-workers-vs-pages-functions",
+    "query": "cloudflare workers vs pages functions",
+    "shape": "other",
+    "score": 46,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "cloudflare workers vs pages",
+        "how to cloudflare workers vs pages",
+        "why cloudflare workers vs pages"
+      ]
+    },
+    "variants": [
+      "cloudflare workers dev vs pages dev",
+      "cloudflare pages vs workers nextjs"
+    ],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "how-to-check-admob-version-in-unity",
+    "query": "how to check admob version in unity",
+    "shape": "store",
+    "score": 38,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to admob unity"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "how-to-tell-if-a-website-uses-cloudflare",
+    "query": "how to tell if a website uses cloudflare",
+    "shape": "howto",
+    "score": 37,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to cloudflare workers static site"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "number-match-merge-puzzle",
+    "query": "number match merge puzzle",
+    "shape": "other",
+    "score": 36,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to Number Match & Merge Puzzle",
+        "why Number Match & Merge Puzzle"
+      ]
+    },
+    "variants": [
+      "number match merge puzzle ポイ 活"
+    ],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "bepinex-unity-il2cpp-android",
+    "query": "bepinex unity il2cpp android",
+    "shape": "other",
+    "score": 34,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity il2cpp android"
+      ]
+    },
+    "variants": [
+      "unity android mono vs il2cpp",
+      "unity il2cpp android"
+    ],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "color-block-master-gem-puzzle",
+    "query": "color block master gem puzzle",
+    "shape": "other",
+    "score": 31,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Color Block Puzzle Master"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "4-block-color-puzzle-solution",
+    "query": "4 block color puzzle solution",
+    "shape": "other",
+    "score": 31,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Color Block Puzzle Master"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "what-is-admob-and-how-it-works",
+    "query": "what is admob and how it works",
+    "shape": "store",
+    "score": 28,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity tutorial"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-08-31",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
   }
 ]

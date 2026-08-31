@@ -161,6 +161,7 @@ function unrevealHero(html){
   return html.replace(m[0], cleaned);
 }
 
+/* gist:responsive-markup */
 /* add intrinsic width/height (stops layout shift) and serve WebP with a JPEG fallback */
 function enhanceImages(html){
   return html.replace(/<img ([^>]*?)src="\/assets\/games\/([^"]+\.jpg)"([^>]*?)>/g, (m, pre, file, post) => {
@@ -240,6 +241,7 @@ function enhanceImages(html){
     return `<picture>${source}${img.replace('<img ', '<img' + full + ' ')}</picture>`;
   });
 }
+/* /gist:responsive-markup */
 
 /* ───────── game data ───────── */
 const GAMES = [
@@ -1659,6 +1661,7 @@ fs.cpSync(path.join(ROOT,'public/assets/fonts'),  path.join(OUT,'assets/fonts'),
 if (fs.existsSync(path.join(ROOT,'public/assets/og')))
   fs.cpSync(path.join(ROOT,'public/assets/og'),   path.join(OUT,'assets/og'),   {recursive:true});
 
+/* gist:image-pipeline */
 /* ── WebP derivatives (served via <picture>, the JPEG stays as fallback) ──
    Two things here are not obvious from the call sites.
 
@@ -1769,6 +1772,7 @@ for (const f of fs.readdirSync(path.join(OUT, 'assets/games'))) {
   for (const [w, q, m6] of v.widths)
     encodeWebp(src, `${base}-${w}.webp`, q, w, m6, v.cap && ceiling(dim, w));
 }
+/* /gist:image-pipeline */
 
 fs.writeFileSync(path.join(OUT,'favicon.svg'),
 `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC53D"/><stop offset="1" stop-color="#FF2D8E"/></linearGradient></defs><rect width="48" height="48" rx="12" fill="url(#g)"/><path d="M17 32V16h5.6c4.6 0 7.4 3 7.4 8s-2.8 8-7.4 8H17Zm4.6-3.6h.9c2.3 0 3.7-1.6 3.7-4.4s-1.4-4.4-3.7-4.4h-.9v8.8Z" fill="#20100A"/></svg>`);

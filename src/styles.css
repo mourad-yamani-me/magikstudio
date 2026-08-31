@@ -167,6 +167,7 @@ main,header,footer{position:relative;z-index:2}
 .shot:hover .zoom{opacity:1;transform:scale(1)}
 
 /* lightbox */
+/* gist:lightbox-css */
 /* visibility, not just opacity: a transparent lightbox is still in the tab
    order and still in the accessibility tree, so its Previous/Next/Close
    buttons were reachable by keyboard on every game page while invisible.
@@ -195,6 +196,7 @@ main,header,footer{position:relative;z-index:2}
 .lb-count{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);padding:8px 16px;border-radius:100px;
   background:rgba(11,6,22,.8);backdrop-filter:blur(10px);font-size:13px;font-weight:600;color:var(--muted);
   font-variant-numeric:tabular-nums}
+/* /gist:lightbox-css */
 .prose{max-width:720px}
 .prose ul{margin:0 0 22px;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px}
 .prose li{position:relative;padding-left:26px;font-size:16px;line-height:1.6;color:var(--muted)}
