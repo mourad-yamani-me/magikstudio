@@ -171,4 +171,55 @@
     if (from && /^[a-z0-9][a-z0-9-]{0,39}$/.test(from)) srcField.value = from;
   }
 
+
+  /* mailing-list invitation — shown once, to someone who is actually reading.
+
+     Everything here is deliberately conservative. It appears only past 60% of
+     the page, never moves the layout (position:fixed), never takes focus, and
+     closes on Escape as well as the button. Dismissing writes one flag; so
+     does clicking through, because someone on their way to the form does not
+     need asking again.
+
+     The flag is the only thing this site stores on a device, and it exists to
+     honour a refusal — without it the invitation returns on the next page,
+     which is the version worth avoiding. Every storage call is guarded:
+     private windows and blocked site data make these throw, and an invitation
+     that cannot remember a dismissal must not appear at all. */
+  var invite = document.getElementById('mlInvite');
+  if (invite) {
+    var KEY = 'icd-ml-dismissed';
+    var store = function (fn, fallback) {
+      try { return fn(); } catch (e) { return fallback; }
+    };
+    var seen = store(function () { return localStorage.getItem(KEY); }, 'blocked');
+
+    if (!seen) {
+      var dismiss = function () {
+        invite.classList.remove('in');
+        store(function () { return localStorage.setItem(KEY, '1'); });
+        setTimeout(function () { invite.hidden = true; }, 450);
+        document.removeEventListener('keydown', onKey);
+      };
+      var onKey = function (e) { if (e.key === 'Escape' && !invite.hidden) dismiss(); };
+
+      invite.querySelector('[data-ml-close]').addEventListener('click', dismiss);
+      // Clicking through counts as answered: remember it, but let the link go.
+      invite.querySelector('[data-ml-go]').addEventListener('click', function () {
+        store(function () { return localStorage.setItem(KEY, '1'); });
+      });
+      document.addEventListener('keydown', onKey);
+
+      var onScroll = function () {
+        var h = document.documentElement;
+        var max = h.scrollHeight - h.clientHeight;
+        if (max <= 0) return;
+        if ((h.scrollTop || document.body.scrollTop) / max < 0.6) return;
+        window.removeEventListener('scroll', onScroll);
+        invite.hidden = false;
+        requestAnimationFrame(function () { invite.classList.add('in'); });
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+  }
+
 })();

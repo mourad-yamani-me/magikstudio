@@ -520,10 +520,30 @@ ${NAV(cur)}
 <main id="main">
 ${body}
 </main>
+${INVITE(canonical)}
 ${FOOT}
 </body>
 </html>`;
 }
+
+/* The mailing-list invitation. Ships hidden and stays hidden until app.js
+   decides someone is actually reading, so with JavaScript off it never
+   appears at all — which is the correct behaviour, not a degradation.
+
+   Kept off the pages where it would be either redundant or tone-deaf: the
+   signup flow itself, and the two documents that explain what this site does
+   with your data. Asking for an address in the middle of a privacy policy is
+   the exact move the rest of this site is built against. */
+const INVITE_SKIP = ['/subscribe/', '/privacy/', '/legal/'];
+const INVITE = canonical => INVITE_SKIP.some(p => canonical.startsWith(p)) ? '' : `
+<aside class="ml-invite" id="mlInvite" hidden aria-labelledby="mlInviteH">
+  <button class="ml-invite-x" type="button" data-ml-close aria-label="Dismiss, and do not show this again">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <h2 class="ml-invite-h" id="mlInviteH">Hear when the next game ships</h2>
+  <p class="ml-invite-p">A few emails a year. One click to leave.</p>
+  <a class="btn btn-primary btn-sm" href="/subscribe/?from=invite" data-ml-go>Join the mailing list</a>
+</aside>`;
 
 const crumbLD = items => ({'@context':'https://schema.org','@type':'BreadcrumbList',
   itemListElement: items.map((it,i) => ({'@type':'ListItem', position:i+1, name:it[0], item:SITE+it[1]}))});
@@ -1039,16 +1059,25 @@ const SITE_PRIVACY = [
     to build a profile. No log is consulted to identify an individual visitor.</p>`],
 
   ['Cookies and tracking', `
-    <p><strong>This site sets no cookies.</strong> It uses no local storage, no session
-    storage, no tracking pixels, no fingerprinting and no advertising tags. There is no
-    Google Analytics, no Plausible, no Matomo &mdash; no analytics script of any kind runs
-    in your browser. You can verify this in your browser's developer tools: the storage
-    panel stays empty, and no request leaves this domain unless you start a trailer
-    (section 5).</p>
+    <p><strong>This site sets no cookies.</strong> It uses no session storage, no tracking
+    pixels, no fingerprinting and no advertising tags. There is no Google Analytics, no
+    Plausible, no Matomo &mdash; no analytics script of any kind runs in your browser, and
+    no request leaves this domain unless you start a trailer (section 5).</p>
+    <p><strong>Exactly one thing is written to your device</strong>, and only if you close
+    the mailing-list invitation that can appear in the corner of a page after you have read
+    most of it. Closing it stores a single entry in local storage, named
+    <i>icd-ml-dismissed</i>, holding the value <i>1</i>. That is the whole of it. It is not
+    an identifier, it is never sent anywhere, nothing else reads it, and clearing your
+    browsing data removes it. Clicking through to the signup page stores the same entry,
+    on the same reasoning: you have answered, so you should not be asked again.</p>
+    <p>It exists to honour a refusal. Without it the invitation would return on the next
+    page, and on every page after that. Storage that records your own choice needs no
+    consent under Article 82 of the French Data Protection Act, which is why there is still
+    no cookie banner here. You can check all of this in your browser's developer tools: that
+    one entry is the only thing the storage panel will ever hold, and nothing at all is
+    there until you close the invitation.</p>
     <p>Fonts are served from this domain rather than from a font CDN, so loading a page
     sends your IP address to no one but the host of this site.</p>
-    <p>Because nothing is read from or written to your device, no consent is required under
-    Article 82 of the French Data Protection Act, and no cookie banner is shown.</p>
     <p><strong>Do I measure anything?</strong> Yes, in two ways, and neither involves you
     individually:</p>
     <ul>

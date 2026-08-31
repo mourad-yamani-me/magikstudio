@@ -266,6 +266,34 @@ else {
       fail('/subscribe/', `missing /${u}/ — Kit redirects there after signup and after confirming`);
 }
 
+// ---- browser storage ----
+// The policy names every key this site writes and says the storage panel holds
+// that one entry and nothing else. That claim is checkable by any visitor with
+// devtools open, so it has to stay true: a second key added to app.js without a
+// matching line in the policy turns a verifiable promise into a false one.
+{
+  const appJs = path.join(DIST, 'assets/app.js');
+  const pri   = path.join(DIST, 'privacy/index.html');
+  if (fs.existsSync(appJs) && fs.existsSync(pri)) {
+    const js     = fs.readFileSync(appJs, 'utf8');
+    const policy = fs.readFileSync(pri, 'utf8');
+    const keys = new Set([...js.matchAll(/(?:local|session)Storage\.(?:get|set|remove)Item\(\s*([A-Za-z_$][\w$]*|'[^']*')/g)]
+      .map(m => m[1]));
+    // Resolve `KEY`-style constants back to their literal before reporting.
+    const resolved = [...keys].map(k => {
+      if (k.startsWith("'")) return k.slice(1, -1);
+      const lit = js.match(new RegExp(`\\b${k}\\s*=\\s*'([^']+)'`));
+      return lit ? lit[1] : k;
+    });
+    for (const key of resolved) {
+      if (!policy.includes(key))
+        fail('/privacy/', `app.js stores "${key}" but the policy never names it — the "one entry only" claim is checkable and would be false`);
+    }
+    if (/sessionStorage\./.test(js) && /no session\s+storage/.test(policy))
+      fail('/privacy/', 'app.js uses sessionStorage while the policy says it does not');
+  }
+}
+
 // ---- legal notice (LCEN art. 6 III) ----
 // A French site must publish who runs it and who hosts it. Same reasoning as
 // the privacy check: losing one of these to an edit would be invisible.
