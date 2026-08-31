@@ -156,4 +156,19 @@
     });
   });
 
+
+  /* signup provenance — narrows the hidden "source" field from the channel
+     ("web") to the page that linked here, read from ?from= on the link. The
+     field already holds a valid default, so with JavaScript off the form still
+     posts something true; this only makes it more specific.
+
+     The value is sanitised rather than trusted: it lands in a mailing-list
+     record, and anyone can put anything after ?from=. A short slug is the only
+     shape a real link produces, so anything else is discarded. */
+  var srcField = document.getElementById('sub-source');
+  if (srcField) {
+    var from = new URLSearchParams(location.search).get('from');
+    if (from && /^[a-z0-9][a-z0-9-]{0,39}$/.test(from)) srcField.value = from;
+  }
+
 })();

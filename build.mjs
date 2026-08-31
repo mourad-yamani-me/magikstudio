@@ -20,6 +20,31 @@ const OUT  = path.join(ROOT, 'dist');
 const SITE = 'https://www.indiecore.net';
 const EMAIL = 'contact@indiecore.net';
 
+/* Mailing list. The form posts straight to Kit — no embed script, no iframe,
+   no third-party JS on any page here. That is why /subscribe/ works with
+   JavaScript off, and why the only CSP concession is form-action.
+   KIT.processor and KIT.dpf feed the privacy policy; scripts/verify.mjs fails
+   the build while either still says TODO, because a legal section naming a
+   processor cannot ship half-written. */
+const KIT = {
+  origin:    'https://app.kit.com',        // where the form POSTs
+  /* form-action is checked against every hop of a redirect chain, not just the
+     POST target — it is one of the few directives that follows redirects. Kit
+     answers the POST with a 302 to the apex domain, which 301s to www, so all
+     three hosts have to be listed. Allowing only app.kit.com blocks the
+     submission and Chrome reports the violation against the *original* action
+     URL, which reads as a contradiction: the URL it names is the one allowed. */
+  returnTo:  ['https://indiecore.net', 'https://www.indiecore.net'],
+  action:    'https://app.kit.com/forms/9865536/subscriptions',
+  // Kit rebranded from ConvertKit and the paperwork has not caught up: the
+  // Terms name Kit Inc., while the Data Privacy Framework register still lists
+  // the certification under ConvertKit LLC. Naming only one leaves a reader
+  // unable to verify the other, so the policy names both.
+  processor: 'Kit Inc.',
+  dpf:       'Certified to the EU&ndash;US Data Privacy Framework under its former name, ConvertKit LLC.',
+  badge:     'https://kit.com/features/forms?utm_campaign=poweredby&utm_content=form&utm_medium=referral&utm_source=dynamic',
+};
+
 /* Identity published in the footer, the Organization schema, /about/, /contact/
    and /legal/. One source so the five cannot disagree — LCEN requires the
    legal notice to be accurate, and a stale copy in a footer is still a copy. */
@@ -441,6 +466,7 @@ const FOOT = `
     </ul></div>
     <div><h2 class="foot-h">Studio</h2><ul>
       <li><a href="/blog/">Blog</a></li>
+      <li><a href="/subscribe/?from=footer">Mailing list</a></li>
       <li><a href="/about/">About</a></li>
       <li><a href="/contact/">Contact</a></li>
       <li><a href="https://github.com/IndieCoreDev" target="_blank" rel="noopener">GitHub</a></li>
@@ -634,7 +660,8 @@ function pageGame(g){
     <div class="cta-row rv">
       ${g.live
         ? `<a class="btn btn-primary" href="${g.playUrl}" target="_blank" rel="noopener">${PLAY_ICON} Get it on Google Play</a>`
-        : `<span class="soon"><span class="dot"></span> Coming soon to Google Play</span>`}
+        : `<span class="soon"><span class="dot"></span> Coming soon to Google Play</span>
+           <a class="btn btn-primary" href="/subscribe/?from=${g.slug}">Tell me when it ships</a>`}
       <a class="btn btn-ghost" href="/privacy/${g.slug}/">Privacy policy</a>
     </div>
     <div class="trust rv"><span>${TICK} Free to play</span><span>${TICK} No purchases</span>${g.offline===false?'':`<span>${TICK} Plays offline</span>`}</div>
@@ -682,7 +709,7 @@ ${g.video ? `<section class="sec-tight"><div class="shell">
   <div class="sec-head rv" style="margin-bottom:32px"><span class="eyebrow">About this game</span><h2>What you&rsquo;re getting into</h2></div>
   <div class="prose rv">${g.desc ? renderDesc(g.desc) : `<p>${esc(g.blurb)}</p>`}</div>
   <ul class="feats rv" style="margin-top:26px">${g.feats.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
-  ${g.live?`<div class="cta-row rv"><a class="btn btn-primary" href="${g.playUrl}" target="_blank" rel="noopener">${PLAY_ICON} Play ${esc(g.name)} free</a></div>`:''}
+  ${g.live?`<div class="cta-row rv"><a class="btn btn-primary" href="${g.playUrl}" target="_blank" rel="noopener">${PLAY_ICON} Play ${esc(g.name)} free</a><a class="btn btn-ghost" href="/subscribe/?from=${g.slug}">Hear about updates</a></div>`:''}
 </div></section>
 
 <section class="sec"><div class="shell">
@@ -770,6 +797,9 @@ function pageBlogIndex(){
   <span class="eyebrow">Blog</span>
   <h1 style="font-size:clamp(38px,5.6vw,68px)">Notes from<br><span class="grad">the studio.</span></h1>
   <p class="lede">Game updates, what goes on behind them, and the occasional technical write-up — from the person building them.</p>
+  <div class="cta-row rv" style="margin-top:22px">
+    <a class="btn btn-primary" href="/subscribe/?from=blog">Get new posts by email</a>
+  </div>
   <p style="margin-top:18px"><a class="rsslink" href="/blog/feed.xml">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="6.2" cy="17.8" r="2.2"/><path d="M4 10.5v3a6.5 6.5 0 0 1 6.5 6.5h3A9.5 9.5 0 0 0 4 10.5Z"/><path d="M4 4v3a13 13 0 0 1 13 13h3A16 16 0 0 0 4 4Z"/></svg>
     RSS feed</a></p>
@@ -817,10 +847,10 @@ function pagePost(p, i){
 <section class="sec-tight"><div class="shell narrow">
   <div class="band">
     <h2 style="font-size:clamp(26px,3.4vw,38px)">More posts</h2>
-    <p>New writing when there is something worth saying. Subscribe by RSS, or get in touch.</p>
+    <p>New writing when there is something worth saying. By email or by RSS, whichever you prefer.</p>
     <div class="cta-row" style="justify-content:center">
-      <a class="btn btn-primary" href="/blog/feed.xml">Subscribe by RSS</a>
-      <a class="btn btn-ghost" href="mailto:${EMAIL}">Email me</a>
+      <a class="btn btn-primary" href="/subscribe/?from=blog-post">Get it by email</a>
+      <a class="btn btn-ghost" href="/blog/feed.xml">Subscribe by RSS</a>
     </div>
   </div>
 </div></section>`;
@@ -1051,17 +1081,45 @@ const SITE_PRIVACY = [
     correspondence, or steps taken at your request before entering a contract
     (Article 6(1)(b)) where that applies. Messages are kept while the exchange is live
     and for as long as needed afterwards to make sense of any follow-up, then deleted.
-    They are never added to a mailing list &mdash; there is no mailing list.</p>`],
+    Writing to me does not add you to the mailing list. That is a separate opt-in you have
+    to make deliberately, described below.</p>`],
+
+  ['If you join the mailing list', `
+    <p>The list is optional and this site works exactly the same without it. Joining asks
+    for your email address &mdash; no name &mdash; and you choose at that point whether you
+    want news about the games, the blog posts, or both.</p>
+    <p>One more thing is recorded with it: which page you were on when you signed up, as a
+    short label such as <i>mot-malin</i> or <i>blog</i>. It is part of the record showing
+    where and how you consented, which Article 7(1) requires me to be able to produce. It
+    is a single word chosen by the page itself &mdash; not the address you came from, not
+    anything your browser reports, and nothing that follows you between visits or between
+    sites. There is still no cookie and no tracking script anywhere on this website.</p>
+    <p>Nothing is sent until you click a confirmation link in an email. If you never click
+    it, the pending address is deleted after 30 days and you hear nothing at all.
+    <strong>Legal basis:</strong> your consent (Article 6(1)(a)), given by that confirmation
+    click and recorded with the date it happened. You can withdraw it at any time with the
+    unsubscribe link in the footer of every email &mdash; one click, no login and no
+    questions, because leaving has to be as easy as joining. Withdrawing does not affect
+    anything already sent.</p>
+    <p>The list is used for those emails and nothing else. It is never sold, rented or
+    shared, never used to build advertising audiences, and your address is not matched
+    against anything inside the games.</p>
+    <p>Unsubscribing stops everything and leaves a record marked unsubscribed, so that you
+    cannot be added back by mistake. Addresses that go three years without a single email
+    being opened are removed. Write to <a href="mailto:${EMAIL}">${EMAIL}</a> and the
+    unsubscribe record is erased too.</p>`],
 
   ['Where the data goes', `
     <p>Nothing is sold, rented or shared for advertising. There are no data brokers and
     no advertising partners involved in this website.</p>
-    <p>Two providers necessarily process data as described above, and both are based in
-    the United States:</p>
+    <p>Three providers necessarily process data as described above, and all three are based
+    in the United States:</p>
     <ul>
       <li><strong>Cloudflare, Inc.</strong> &mdash; hosting and delivery of this site</li>
       <li><strong>Google Ireland Ltd / Google LLC</strong> &mdash; only if you start a
       trailer</li>
+      <li><strong>${esc(KIT.processor)}</strong> (trading as Kit) &mdash; only if you join
+      the mailing list; it stores the list and sends the emails. ${KIT.dpf}</li>
     </ul>
     <p>Transfers outside the European Economic Area rely on the European Commission's
     Standard Contractual Clauses and, where the provider is certified, the EU&ndash;US
@@ -1076,7 +1134,8 @@ const SITE_PRIVACY = [
     <a href="mailto:${EMAIL}">${EMAIL}</a>. You will get an answer within one month.
     Be aware of a practical limit: this site keeps no identifier for you, so for ordinary
     browsing there is generally no record that could be located and connected to you. If
-    you have emailed me, that correspondence can be found and deleted.</p>
+    you have emailed me, that correspondence can be found and deleted, and the same goes
+    for your entry on the mailing list.</p>
     <p>If you believe your data has been mishandled you may lodge a complaint with the
     French supervisory authority (Article 77):</p>
     <ul>
@@ -1087,8 +1146,8 @@ const SITE_PRIVACY = [
 
   ['Changes to this policy', `
     <p>If this changes, the date at the top of the page changes with it and the previous
-    wording stays in the site's public Git history. There is no mailing list to notify,
-    so the date is the honest signal.</p>`],
+    wording stays in the site's public Git history, so the date is the honest signal.
+    If a change materially affects the mailing list, subscribers are told by email.</p>`],
 ];
 
 function pagePrivacyIndex(){
@@ -1184,6 +1243,106 @@ function pageContact(){
     jsonld:[crumbLD([['Home','/'],['Contact','/contact/']])]});
 }
 
+/* ───────── pages: mailing list ─────────
+   Three pages because double opt-in has three moments: the form, the "check
+   your email" wait, and the confirmed landing. Kit redirects into the last two
+   — their URLs are configured in the form settings, so renaming them here
+   silently strands subscribers on a 404. Change one, change both. */
+function pageSubscribe(){
+  const body = `
+<section class="hero" style="padding-bottom:40px"><div class="shell narrow">
+  <span class="eyebrow rv">Mailing list</span>
+  <h1 class="rv" style="font-size:clamp(38px,5.6vw,68px)">Hear when<br><span class="grad">a game ships.</span></h1>
+  <p class="lede rv">A handful of times a year, when there is a new game, a real update to one,
+  or something worth reading about building them. Never more often than that.</p>
+</div></section>
+
+<section class="sec-tight"><div class="shell narrow">
+  <form class="sub-form" action="${KIT.action}" method="post">
+    <label class="sub-label" for="sub-email">Your email address</label>
+    <input class="sub-input" id="sub-email" type="email" name="email_address"
+           autocomplete="email" placeholder="you@example.com" required>
+
+    <fieldset class="sub-choice">
+      <legend>What do you want to hear about?</legend>
+      <label><input type="radio" name="fields[interest]" value="Games" required>
+        <span>New games and updates</span></label>
+      <label><input type="radio" name="fields[interest]" value="Blog">
+        <span>Blog posts</span></label>
+      <label><input type="radio" name="fields[interest]" value="Both">
+        <span>Both</span></label>
+    </fieldset>
+
+    <!-- Which page sent you here, as a plain slug. Defaults to the channel, so
+         with JavaScript off this still records "web" rather than nothing — the
+         value that matters once the games start collecting opt-ins too. app.js
+         narrows it to the page. Never a URL, never the Referer header. -->
+    <input type="hidden" id="sub-source" name="fields[source]" value="web">
+
+    <button class="btn btn-primary" type="submit">Send me the confirmation link</button>
+  </form>
+
+  <ul class="sub-terms">
+    <li>Your email address and which page you came from. No name, and nothing
+        else about your visit.</li>
+    <li>Nothing is sent until you click a link in a confirmation email. Never click it and
+        the address is deleted within 30 days.</li>
+    <li>Every email has a one-click unsubscribe. No login, no questions.</li>
+    <li>Never sold, rented or shared. <a href="/privacy/#s8">What happens to your address</a>.</li>
+  </ul>
+
+  <p class="sub-by">The list is stored and sent by
+    <a href="${KIT.badge}" target="_blank" rel="nofollow noopener">Kit</a>,
+    on behalf of ${esc(LEGAL.trading)}.</p>
+</div></section>`;
+  return layout({title:'Mailing list — Indie Core Dev',
+    desc:'Hear when a new Indie Core Dev game ships. A few emails a year, one-click unsubscribe, no tracking and no sharing.',
+    canonical:'/subscribe/', cur:'', body,
+    jsonld:[crumbLD([['Home','/'],['Mailing list','/subscribe/']])]});
+}
+
+function subNote({eyebrow, head, lede, extra}){
+  return `
+<section class="hero" style="padding-bottom:56px"><div class="shell narrow" style="text-align:center">
+  <span class="eyebrow">${esc(eyebrow)}</span>
+  <h1 style="font-size:clamp(34px,5vw,60px)">${head}</h1>
+  <p class="lede" style="margin-left:auto;margin-right:auto">${lede}</p>
+  ${extra || ''}
+</div></section>`;
+}
+
+function pageSubscribeThanks(){
+  return layout({title:'Check your email — Indie Core Dev',
+    desc:'One more step: confirm your subscription from the link in the email just sent to you.',
+    canonical:'/subscribe/thanks/', cur:'', body: subNote({
+      eyebrow:'Almost there',
+      head:'Check your email.',
+      lede:`An email is on its way from <b>${EMAIL}</b> with a confirmation link. Nothing is sent
+            to you until you click it, and if you never do, the address is deleted within 30 days.`,
+      extra:`<p class="lede" style="margin-left:auto;margin-right:auto;font-size:15.5px">
+             Not there after a few minutes? Check the spam folder — and if it landed there,
+             drag it to the inbox before clicking, or write to
+             <a href="mailto:${EMAIL}" style="color:var(--accent)">${EMAIL}</a>.</p>
+             <div class="cta-row" style="justify-content:center"><a class="btn btn-ghost" href="/">Back to the games</a></div>`}),
+    jsonld:[crumbLD([['Home','/'],['Mailing list','/subscribe/']])]});
+}
+
+function pageSubscribeConfirmed(){
+  return layout({title:'You are on the list — Indie Core Dev',
+    desc:'Your subscription to the Indie Core Dev mailing list is confirmed.',
+    canonical:'/subscribe/confirmed/', cur:'', body: subNote({
+      eyebrow:'Confirmed',
+      head:'You&rsquo;re on the list.',
+      lede:`That is the whole setup. The next email arrives when there is a game to announce
+            or something worth reading — a handful of times a year, no more.`,
+      extra:`<p class="lede" style="margin-left:auto;margin-right:auto;font-size:15.5px">
+             Every email carries a one-click unsubscribe. You can also read
+             <a href="/privacy/#s8" style="color:var(--accent)">what happens to your address</a>
+             at any time.</p>
+             <div class="cta-row" style="justify-content:center"><a class="btn btn-primary" href="/#games">Browse the games</a><a class="btn btn-ghost" href="/blog/">Read the blog</a></div>`}),
+    jsonld:[crumbLD([['Home','/'],['Mailing list','/subscribe/']])]});
+}
+
 /* ───────── build ───────── */
 fs.rmSync(OUT, {recursive:true, force:true});
 fs.mkdirSync(OUT, {recursive:true});
@@ -1199,6 +1358,9 @@ write('blog/index.html', pageBlogIndex());
 POSTS.forEach((p, i) => write(`blog/${p.slug}/index.html`, pagePost(p, i)));
 write('about/index.html', pageAbout());
 write('contact/index.html', pageContact());
+write('subscribe/index.html', pageSubscribe());
+write('subscribe/thanks/index.html', pageSubscribeThanks());
+write('subscribe/confirmed/index.html', pageSubscribeConfirmed());
 
 /* assets */
 fs.mkdirSync(path.join(OUT,'assets'), {recursive:true});
@@ -1290,7 +1452,7 @@ const today = new Date().toISOString().slice(0,10);
 const urls = [
   ['/', '1.0'], ...ALL.map(g=>[`/games/${g.slug}/`, '0.9']),
   ['/blog/','0.8'], ...POSTS.map(p=>[`/blog/${p.slug}/`, '0.7']),
-  ['/about/','0.6'], ['/contact/','0.5'], ['/privacy/','0.4'], ['/legal/','0.3'],
+  ['/about/','0.6'], ['/subscribe/','0.6'], ['/contact/','0.5'], ['/privacy/','0.4'], ['/legal/','0.3'],
   ...ALL.map(g=>[`/privacy/${g.slug}/`, '0.3']),
 ];
 fs.writeFileSync(path.join(OUT,'sitemap.xml'),
@@ -1307,10 +1469,13 @@ fs.writeFileSync(path.join(OUT,'_headers'),
 /assets/og/*\n  Cache-Control: public, max-age=604800\n
 /assets/styles.css\n  Cache-Control: public, max-age=86400\n
 /assets/app.js\n  Cache-Control: public, max-age=86400\n
-/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Strict-Transport-Security: max-age=31536000; includeSubDomains\n  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=()\n  Cross-Origin-Opener-Policy: same-origin\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests\n`);
+/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Strict-Transport-Security: max-age=31536000; includeSubDomains\n  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=()\n  Cross-Origin-Opener-Policy: same-origin\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'self' ${KIT.origin} ${KIT.returnTo.join(' ')}; frame-ancestors 'none'; upgrade-insecure-requests\n`);
 fs.writeFileSync(path.join(OUT,'version.json'),
   JSON.stringify({ ...BUILD, builtAt: new Date().toISOString() }, null, 2) + '\n');
-fs.writeFileSync(path.join(OUT,'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
+// The two double opt-in landing pages are reached by redirect from Kit, not by
+// search. They are thin by design and there is nothing there worth indexing.
+fs.writeFileSync(path.join(OUT,'robots.txt'),
+  `User-agent: *\nAllow: /\nDisallow: /subscribe/thanks/\nDisallow: /subscribe/confirmed/\n\nSitemap: ${SITE}/sitemap.xml\n`);
 
 /* IndexNow key file — the crawlers fetch this to confirm we own the host
    before accepting a URL submission. Must sit at the site root. */

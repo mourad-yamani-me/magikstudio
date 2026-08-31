@@ -132,7 +132,10 @@ else {
   const listed = new Set(locs.map(l => l.replace(SITE, '')));
   for (const p of pages) {
     const url = rel(p).replace(/index\.html$/, '');
+    // 404 and the two double opt-in landing pages are reached by error or by
+    // redirect from Kit, never by search. robots.txt disallows the latter two.
     if (url === '/404.html') continue;
+    if (url === '/subscribe/thanks/' || url === '/subscribe/confirmed/') continue;
     if (!listed.has(url)) warn('sitemap.xml', `page not listed: ${url}`);
   }
 }
@@ -159,6 +162,102 @@ else {
       if (!re.test(html)) fail('/privacy/', `legal page is missing ${what}`);
     }
   }
+}
+
+// ---- mailing list ----
+// Collecting an address for game marketing is prospection commerciale: it needs
+// consent given in advance, for a purpose stated where the address is typed.
+// Until this branch the policy said twice that no mailing list existed, so the
+// failure mode here is a real one — a form shipping while the policy still
+// describes a site that does not collect email, or a purpose named on the form
+// and nowhere in the document. Each rule below is one half of that pair.
+{
+  const sub = path.join(DIST, 'subscribe/index.html');
+  const pri = path.join(DIST, 'privacy/index.html');
+  const hasForm = fs.existsSync(sub);
+  const policy  = fs.existsSync(pri) ? fs.readFileSync(pri, 'utf8') : '';
+
+  if (hasForm) {
+    const html = fs.readFileSync(sub, 'utf8');
+    const required = {
+      'a link to the privacy policy':      /href="\/privacy\//,
+      'the double opt-in stated up front': /confirmation link|confirm/i,
+      'how to leave':                      /unsubscribe/i,
+      'the processor named':               /Kit/,
+      'both purposes described':           /games[\s\S]{0,200}blog|blog[\s\S]{0,200}games/i,
+    };
+    for (const [what, re] of Object.entries(required))
+      if (!re.test(html)) fail('/subscribe/', `signup page is missing ${what}`);
+
+    // The consent must be an affirmative act, enforced without JavaScript.
+    if (!/name="fields\[interest\]"[^>]*required|required[^>]*name="fields\[interest\]"/.test(html))
+      fail('/subscribe/', 'interest choice is not a required field — consent must be an affirmative act');
+    if (/<input[^>]+type="(radio|checkbox)"[^>]+checked/.test(html))
+      fail('/subscribe/', 'a consent option is pre-selected — consent cannot be the default');
+
+    // The source field is the one thing collected besides the address, so it
+    // has to stay declared and stay harmless. A non-empty default keeps the
+    // record true with JavaScript off; the page must also say it is collected,
+    // because "no name, nothing else" stopped being true when it was added.
+    const src = html.match(/<input[^>]*id="sub-source"[^>]*>/);
+    if (!src) fail('/subscribe/', 'hidden source field is missing');
+    else {
+      const value = (src[0].match(/value="([^"]*)"/) || [])[1] || '';
+      if (!/^[a-z0-9][a-z0-9-]{0,39}$/.test(value))
+        fail('/subscribe/', `source field default "${value}" is not a plain slug — it posts as-is when JavaScript is off`);
+    }
+    if (!/which page you came from/i.test(html))
+      fail('/subscribe/', 'source field is collected but the page does not say so');
+    if (!/which page you were on/i.test(policy))
+      fail('/privacy/', 'the signup form records a source but the policy does not disclose it');
+    // .rv starts at opacity:0 and only becomes visible when app.js adds .in.
+    // unrevealHero() strips it from the first section only, so a form in any
+    // later section would be invisible with JavaScript off. That happened.
+    if (/<form[^>]*class="[^"]*\brv\b/.test(html))
+      fail('/subscribe/', 'form carries .rv — it would be invisible with JavaScript off');
+    // The site's own deferred app.js and the JSON-LD block are fine — neither
+    // touches the form. Anything else is either a third-party embed or inline
+    // logic the form would come to depend on.
+    for (const [, attrs] of html.matchAll(/<script\b([^>]*)>/gi)) {
+      if (/type="application\/ld\+json"/.test(attrs)) continue;
+      const src = attrs.match(/src="([^"]+)"/);
+      if (src && src[1].startsWith('/assets/')) continue;
+      fail('/subscribe/', `signup page loads a script (${src ? src[1] : 'inline'}) — the form must work with JavaScript off`);
+    }
+
+    const wants = {
+      'the mailing list section':   /join the mailing list/i,
+      'consent as the legal basis': /Article 6\(1\)\(a\)/,
+      'the right to withdraw':      /withdraw/i,
+      'Kit named as a processor':   /Kit/,
+    };
+    for (const [what, re] of Object.entries(wants))
+      if (!re.test(policy)) fail('/privacy/', `a signup form exists but the policy is missing ${what}`);
+  }
+
+  if (/there is no mailing list/i.test(policy))
+    fail('/privacy/', 'policy still says no mailing list exists');
+
+  // form-action follows redirects, and Kit answers the POST with a 302 to the
+  // apex domain which then 301s to www. Listing only the POST target shipped
+  // once and blocked every submission — silently, with a console message that
+  // names the one URL the policy does allow. Assert the whole chain.
+  if (hasForm) {
+    const headers = path.join(DIST, '_headers');
+    const csp = fs.existsSync(headers)
+      ? (fs.readFileSync(headers, 'utf8').match(/form-action ([^;]+);/) || [])[1] || ''
+      : '';
+    if (!csp) fail('_headers', 'a signup form exists but no form-action directive was found');
+    else for (const host of ['https://app.kit.com', 'https://indiecore.net', 'https://www.indiecore.net'])
+      if (!csp.split(/\s+/).includes(host))
+        fail('_headers', `form-action is missing ${host} — it is a hop in the signup redirect chain, and the browser blocks the whole submission`);
+  }
+
+  // Both double opt-in landing pages are configured as redirect targets inside
+  // Kit. Renaming one here strands every new subscriber on a 404.
+  if (hasForm) for (const u of ['subscribe/thanks', 'subscribe/confirmed'])
+    if (!fs.existsSync(path.join(DIST, u, 'index.html')))
+      fail('/subscribe/', `missing /${u}/ — Kit redirects there after signup and after confirming`);
 }
 
 // ---- legal notice (LCEN art. 6 III) ----
