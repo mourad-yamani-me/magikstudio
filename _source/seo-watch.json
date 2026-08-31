@@ -1,14 +1,14 @@
 {
   "site": "sc-domain:indiecore.net",
   "updated": "2026-08-31",
-  "runs": 1,
+  "runs": 2,
   "urls": {
     "https://www.indiecore.net/": {
       "first_seen": "2026-08-31",
       "seen": "2026-08-31",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-08-30"
+      "crawled": "2026-08-31"
     },
     "https://www.indiecore.net/games/word-slot/": {
       "first_seen": "2026-08-31",
@@ -105,7 +105,7 @@
       "first_seen": "2026-08-31",
       "seen": "2026-08-31",
       "verdict": "NEUTRAL",
-      "coverage": "URL is unknown to Google",
+      "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/contact/": {
@@ -161,7 +161,7 @@
       "first_seen": "2026-08-31",
       "seen": "2026-08-31",
       "verdict": "NEUTRAL",
-      "coverage": "URL is unknown to Google",
+      "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/privacy/mot-malin/": {
@@ -211,7 +211,7 @@
       "id": "never-crawled:games-word-slot",
       "kind": "never-crawled",
       "subject": "/games/word-slot/",
-      "detail": "in the sitemap and never crawled — Google reports \"Discovered - currently not indexed\"",
+      "detail": "in the sitemap since 2026-08-31 (0 days) and never crawled",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-08-31",
       "seen": "2026-08-31",
@@ -223,7 +223,7 @@
       "id": "never-crawled:subscribe",
       "kind": "never-crawled",
       "subject": "/subscribe/",
-      "detail": "in the sitemap and never crawled — Google reports \"URL is unknown to Google\"",
+      "detail": "in the sitemap since 2026-08-31 (0 days) and never crawled",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-08-31",
       "seen": "2026-08-31",
@@ -235,7 +235,7 @@
       "id": "never-crawled:privacy-word-slot",
       "kind": "never-crawled",
       "subject": "/privacy/word-slot/",
-      "detail": "in the sitemap and never crawled — Google reports \"URL is unknown to Google\"",
+      "detail": "in the sitemap since 2026-08-31 (0 days) and never crawled",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-08-31",
       "seen": "2026-08-31",
@@ -247,7 +247,7 @@
       "id": "never-crawled:privacy-number-match-merge-puzzle",
       "kind": "never-crawled",
       "subject": "/privacy/number-match-merge-puzzle/",
-      "detail": "in the sitemap and never crawled — Google reports \"URL is unknown to Google\"",
+      "detail": "in the sitemap since 2026-08-31 (0 days) and never crawled",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-08-31",
       "seen": "2026-08-31",
