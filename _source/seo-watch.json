@@ -1,7 +1,7 @@
 {
   "site": "sc-domain:indiecore.net",
   "updated": "2026-08-31",
-  "runs": 2,
+  "runs": 3,
   "urls": {
     "https://www.indiecore.net/": {
       "first_seen": "2026-08-31",
@@ -105,7 +105,7 @@
       "first_seen": "2026-08-31",
       "seen": "2026-08-31",
       "verdict": "NEUTRAL",
-      "coverage": "Discovered - currently not indexed",
+      "coverage": "URL is unknown to Google",
       "crawled": null
     },
     "https://www.indiecore.net/contact/": {
@@ -133,7 +133,7 @@
       "first_seen": "2026-08-31",
       "seen": "2026-08-31",
       "verdict": "NEUTRAL",
-      "coverage": "URL is unknown to Google",
+      "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/privacy/soda-jam-color-sort/": {
