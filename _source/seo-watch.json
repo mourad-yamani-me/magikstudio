@@ -1,0 +1,271 @@
+{
+  "site": "sc-domain:indiecore.net",
+  "updated": "2026-08-31",
+  "runs": 1,
+  "urls": {
+    "https://www.indiecore.net/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-30"
+    },
+    "https://www.indiecore.net/games/word-slot/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "NEUTRAL",
+      "coverage": "Discovered - currently not indexed",
+      "crawled": null
+    },
+    "https://www.indiecore.net/games/soda-jam-color-sort/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-30"
+    },
+    "https://www.indiecore.net/games/color-block-puzzle-master/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-30"
+    },
+    "https://www.indiecore.net/games/logo-quiz-guess-brand/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-27"
+    },
+    "https://www.indiecore.net/games/number-match-merge-puzzle/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-31"
+    },
+    "https://www.indiecore.net/games/mot-malin/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-28"
+    },
+    "https://www.indiecore.net/blog/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-31"
+    },
+    "https://www.indiecore.net/blog/change-privacy-policy-url-google-play/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-30"
+    },
+    "https://www.indiecore.net/blog/blast-radius-rule-ai-coding/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-28"
+    },
+    "https://www.indiecore.net/blog/build-reviews-ai-code/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-28"
+    },
+    "https://www.indiecore.net/blog/context-engineering-repo/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-31"
+    },
+    "https://www.indiecore.net/blog/static-site-cloudflare-workers/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-27"
+    },
+    "https://www.indiecore.net/about/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-31"
+    },
+    "https://www.indiecore.net/subscribe/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "NEUTRAL",
+      "coverage": "URL is unknown to Google",
+      "crawled": null
+    },
+    "https://www.indiecore.net/contact/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-31"
+    },
+    "https://www.indiecore.net/privacy/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-26"
+    },
+    "https://www.indiecore.net/legal/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-28"
+    },
+    "https://www.indiecore.net/privacy/word-slot/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "NEUTRAL",
+      "coverage": "URL is unknown to Google",
+      "crawled": null
+    },
+    "https://www.indiecore.net/privacy/soda-jam-color-sort/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-31"
+    },
+    "https://www.indiecore.net/privacy/color-block-puzzle-master/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-27"
+    },
+    "https://www.indiecore.net/privacy/logo-quiz-guess-brand/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-30"
+    },
+    "https://www.indiecore.net/privacy/number-match-merge-puzzle/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "NEUTRAL",
+      "coverage": "URL is unknown to Google",
+      "crawled": null
+    },
+    "https://www.indiecore.net/privacy/mot-malin/": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-08-31"
+    }
+  },
+  "queries": {
+    "indiecore": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "position": 7.6,
+      "impressions": 25,
+      "clicks": 1,
+      "best": 7.6
+    },
+    "perfect match puzzle": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "position": 33,
+      "impressions": 1,
+      "clicks": 1,
+      "best": 33
+    },
+    "indie core": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "position": 9.8,
+      "impressions": 17,
+      "clicks": 0,
+      "best": 9.8
+    },
+    "indie corevet": {
+      "first_seen": "2026-08-31",
+      "seen": "2026-08-31",
+      "position": 2,
+      "impressions": 1,
+      "clicks": 0,
+      "best": 2
+    }
+  },
+  "findings": [
+    {
+      "id": "never-crawled:games-word-slot",
+      "kind": "never-crawled",
+      "subject": "/games/word-slot/",
+      "detail": "in the sitemap and never crawled — Google reports \"Discovered - currently not indexed\"",
+      "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
+      "opened": "2026-08-31",
+      "seen": "2026-08-31",
+      "status": "open",
+      "closed": null,
+      "note": null
+    },
+    {
+      "id": "never-crawled:subscribe",
+      "kind": "never-crawled",
+      "subject": "/subscribe/",
+      "detail": "in the sitemap and never crawled — Google reports \"URL is unknown to Google\"",
+      "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
+      "opened": "2026-08-31",
+      "seen": "2026-08-31",
+      "status": "open",
+      "closed": null,
+      "note": null
+    },
+    {
+      "id": "never-crawled:privacy-word-slot",
+      "kind": "never-crawled",
+      "subject": "/privacy/word-slot/",
+      "detail": "in the sitemap and never crawled — Google reports \"URL is unknown to Google\"",
+      "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
+      "opened": "2026-08-31",
+      "seen": "2026-08-31",
+      "status": "open",
+      "closed": null,
+      "note": null
+    },
+    {
+      "id": "never-crawled:privacy-number-match-merge-puzzle",
+      "kind": "never-crawled",
+      "subject": "/privacy/number-match-merge-puzzle/",
+      "detail": "in the sitemap and never crawled — Google reports \"URL is unknown to Google\"",
+      "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
+      "opened": "2026-08-31",
+      "seen": "2026-08-31",
+      "status": "open",
+      "closed": null,
+      "note": null
+    },
+    {
+      "id": "near-miss:indiecore",
+      "kind": "near-miss",
+      "subject": "indiecore",
+      "detail": "position 7.6 on 25 impressions, 4.0% CTR",
+      "fix": "Sharpen the <title> and meta description of the page that ranks for it, so the phrase people typed is visible in the result.",
+      "opened": "2026-08-31",
+      "seen": "2026-08-31",
+      "status": "open",
+      "closed": null,
+      "note": null
+    }
+  ]
+}

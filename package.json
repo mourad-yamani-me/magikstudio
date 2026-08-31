@@ -16,6 +16,7 @@
     "lighthouse": "node scripts/lighthouse-check.mjs",
     "style": "node scripts/style-check.mjs",
     "seo": "node scripts/seo-ping.mjs",
+    "seo:watch": "node scripts/seo-watch.mjs",
     "topics": "node scripts/topics.mjs",
     "assets:og": "node og.mjs",
     "assets:fonts": "node fonts.mjs",

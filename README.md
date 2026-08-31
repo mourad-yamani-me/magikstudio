@@ -17,6 +17,8 @@ No framework. `build.mjs` reads content and templates and writes `dist/`.
 ```
 _source/play-data.json      Google Play metadata (descriptions, category, updated date)
 _source/legacy/*.txt        privacy policy source text, one per game
+_source/indexnow-key.txt    IndexNow ownership key (public; copied to dist/<key>.txt)
+_source/seo-watch.json      Search Console ledger — observations and open findings
 src/styles.css              the whole stylesheet (inlined into each page at build time)
 src/app.js                  reveals, galleries, lightbox, mobile nav
 public/assets/games/        game icons and screenshots (JPEG; WebP generated at build)
@@ -25,6 +27,8 @@ public/assets/og/           social preview images (committed — see below)
 build.mjs                   generator: pages, sitemap, robots, _redirects, _headers
 scripts/verify.mjs          build verification — dead links, images, meta, redirects
 scripts/lighthouse-check.mjs Lighthouse budget gate
+scripts/seo-ping.mjs        IndexNow + Search Console submit, and an index-status report
+scripts/seo-watch.mjs       Search Console watcher — what changed, and what to do about it
 scripts/serve.mjs           local server that mirrors Cloudflare (brotli, cache, redirects)
 ```
 
@@ -53,6 +57,8 @@ preview URL, squash-merge. `main` deploys to production automatically.
 | --- | --- |
 | PR opened / updated | build → verify → Lighthouse budget → Cloudflare preview, URL posted on the PR |
 | Merge to `main` | build → verify → Lighthouse budget → production deploy |
+| After a production deploy | SEO ping — IndexNow submit, sitemap resubmit, index-status report |
+| Daily, 06:17 UTC | SEO watch — compare against the ledger, raise what changed |
 
 Deploy jobs depend on the gates, so a failing build or budget never ships.
 
@@ -112,7 +118,14 @@ for approval.
 - Require status checks: **`Build & verify`** and **`Lighthouse budget`**
 - Require branches to be up to date before merging
 
-### 6. Domain
+### 6. Search Console (optional, but the SEO watch needs it)
+
+IndexNow works with no setup. The Google half of the SEO ping stays skipped until a
+service-account secret exists, and the SEO watch is Search Console only, so it does nothing
+until then — [docs/seo-automation.md](docs/seo-automation.md) has the walkthrough, and
+explains why the Indexing API is not the answer here.
+
+### 7. Domain
 
 In the Worker → **Settings → Domains & Routes**, add `indiecore.net` and `www.indiecore.net`.
 Point the DNS at Cloudflare and remove the Blogger records once the site is verified live.

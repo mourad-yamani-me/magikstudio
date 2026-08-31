@@ -1,0 +1,72 @@
+name: SEO ping
+
+# Announces the live URL set to the search engines, and reports back what
+# Google has actually indexed.
+#
+# Deliberately separate from ci-cd.yml, for the same reason sync-gist.yml is:
+# deploying the site must never depend on a third-party API being up. This runs
+# *after* a production deploy has finished, reads the live sitemap, and cannot
+# fail a release.
+#
+# The weekly cron is not about re-announcing unchanged pages — the engines
+# ignore that. It is there so the index-status table keeps arriving even in
+# weeks with no commits, which is when a silent deindexing would otherwise go
+# unnoticed.
+
+on:
+  # after a production deploy — workflow_run fires once ci-cd.yml finishes
+  workflow_run:
+    workflows: ['CI/CD']
+    types: [completed]
+    branches: [main]
+  # Mondays 06:00 UTC
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Resolve everything, send nothing'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seo-ping
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    name: Submit and report
+    # workflow_run fires on failed runs too; only ping what actually shipped.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Ping
+        env:
+          # Optional. A Google Cloud service-account key (whole JSON), added as
+          # a user on the Search Console property. Absent -> the Google half is
+          # skipped and only IndexNow runs. See docs/seo-automation.md.
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          # Optional. Set to sc-domain:indiecore.net if the Search Console
+          # property is a Domain property rather than a URL-prefix one.
+          GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+        # --submit-only: announce the URL set and resubmit the sitemap, but leave
+        # index status and search performance to the SEO watch workflow, which
+        # reports them against a ledger. Inspecting every URL twice a day costs
+        # minutes of billed CI to print a worse version of the same table.
+        run: node scripts/seo-ping.mjs --submit-only ${{ inputs.dry_run && '--dry-run' || '' }}

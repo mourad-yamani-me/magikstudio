@@ -1,0 +1,158 @@
+name: SEO watch
+
+# Follows what Search Console says about the site, keeps the record in the repo,
+# and raises the things worth acting on.
+#
+# `SEO ping` (seo-ping.yml) announces the URL set and reports the current state.
+# This is the other half: it remembers. A page that quietly falls out of the
+# index, or a query that slides off page one, is only visible against a previous
+# observation — so scripts/seo-watch.mjs keeps one in _source/seo-watch.json and
+# compares every run against it.
+#
+# The ledger is committed straight to main, which is the single exception to the
+# branch-and-PR rule in AGENTS.md: it is one machine-written file, it is never
+# part of the site, and a daily pull request nobody reads would be worse. The
+# push trigger in ci-cd.yml ignores that path, so a ledger commit never deploys.
+#
+# Daily rather than weekly: Search Console lags about two days, so a day is the
+# finest granularity that carries new information, and a deindexed page is worth
+# knowing about tomorrow rather than next Monday.
+
+on:
+  schedule:
+    - cron: '17 6 * * *'      # 06:17 UTC daily — off the hour, when runners are less contended
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Observe and report, write nothing'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seo-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    name: Observe and record
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write        # commit the ledger
+      issues: write          # raise what it found
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Observe
+        id: watch
+        env:
+          # Required. A Google Cloud service-account key (whole JSON), added as
+          # an OWNER of the Search Console property — Full is not enough for URL
+          # inspection. See docs/seo-automation.md.
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          # Optional. sc-domain:indiecore.net if the property is a Domain one.
+          GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${GOOGLE_SERVICE_ACCOUNT_JSON:-}" ]; then
+            echo "::error::GOOGLE_SERVICE_ACCOUNT_JSON is not set — see docs/seo-automation.md"
+            exit 1
+          fi
+
+          node scripts/seo-watch.mjs ${{ inputs.dry_run && '--dry-run' || '' }}
+
+          # The work list, for the issue body. Written to a file rather than an
+          # output so a long list cannot overflow the 1 MB output limit.
+          node scripts/seo-watch.mjs --brief > brief.md
+          open=$(node -e 'const l=require("./_source/seo-watch.json");
+            console.log(l.findings.filter(f => f.status === "open").length)')
+          echo "open=$open" >> "$GITHUB_OUTPUT"
+
+      - name: Commit the ledger
+        if: ${{ !inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          # Stage the one path this job owns. Never `git add -A` — see AGENTS.md.
+          git add _source/seo-watch.json
+          if git diff --cached --quiet; then
+            echo "ledger unchanged"
+            exit 0
+          fi
+          git commit -m 'chore: seo watch ledger'
+          # Another run may have landed while this one was talking to Google.
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main
+
+      - name: Raise what it found
+        if: ${{ !inputs.dry_run }}
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          OPEN: ${{ steps.watch.outputs.open }}
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- seo-watch -->';
+            const LABEL = 'seo-watch';
+            const { owner, repo } = context.repo;
+            const open = Number(process.env.OPEN || 0);
+
+            // One issue, updated in place, found by its label rather than a
+            // stored number. Deliberately not the search API: that index lags a
+            // few seconds behind issue creation, and a miss there would open a
+            // second issue every morning.
+            await github.rest.issues.createLabel({
+              owner, repo, name: LABEL, color: '1d76db',
+              description: 'Raised by the SEO watch workflow',
+            }).catch(e => { if (e.status !== 422) throw e; });   // 422 = already exists
+
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner, repo, labels: LABEL, state: 'all', per_page: 100,
+            });
+            const existing = issues.find(i => !i.pull_request && i.body?.includes(marker));
+
+            if (!open) {
+              if (existing && existing.state === 'open') {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: existing.number,
+                  body: 'Every finding is resolved — Search Console reports nothing worth acting on.',
+                });
+                await github.rest.issues.update({
+                  owner, repo, issue_number: existing.number, state: 'closed',
+                });
+              }
+              return;
+            }
+
+            const brief = fs.readFileSync('brief.md', 'utf8');
+            const body = [
+              marker,
+              `_Written by [SEO watch](../actions/workflows/seo-watch.yml). The ledger is \`_source/seo-watch.json\`._`,
+              '',
+              brief,
+              '',
+              '---',
+              'Work these in a branch like any other change. `npm run seo:watch -- --brief`',
+              'prints this list locally.',
+            ].join('\n');
+            const title = `SEO watch — ${open} open finding${open === 1 ? '' : 's'}`;
+
+            if (existing) {
+              await github.rest.issues.update({
+                owner, repo, issue_number: existing.number, title, body, state: 'open',
+              });
+            } else {
+              await github.rest.issues.create({ owner, repo, title, body, labels: [LABEL] });
+            }

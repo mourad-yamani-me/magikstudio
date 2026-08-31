@@ -34,9 +34,11 @@
  *                                Use sc-domain:indiecore.net for a Domain one.
  *
  * Flags:
- *   --dry-run    resolve everything, send nothing.
- *   --days=N     search-performance window (default 28).
- *   --no-google  skip steps 2 and 3 even when credentials are present.
+ *   --dry-run      resolve everything, send nothing.
+ *   --days=N       search-performance window (default 28).
+ *   --no-google    skip steps 2 and 3 even when credentials are present.
+ *   --submit-only  announce and submit, but skip the reporting in steps 3 and 4.
+ *                  scripts/seo-watch.mjs reports those, with history.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -50,6 +52,11 @@ const SCOPE = 'https://www.googleapis.com/auth/webmasters';
 const argv = new Set(process.argv.slice(2));
 const DRY = argv.has('--dry-run');
 const SKIP_GOOGLE = argv.has('--no-google');
+// Announce only. scripts/seo-watch.mjs inspects the same URLs and reads the same
+// performance data, but keeps a ledger so it can report what CHANGED — running
+// both in full spends minutes of billed CI on identical API calls for a strictly
+// worse version of the same report.
+const SUBMIT_ONLY = argv.has('--submit-only');
 const SITE_URL = process.env.GSC_SITE_URL || `${SITE}/`;
 
 const KEY = fs.readFileSync(
@@ -300,8 +307,13 @@ if (SKIP_GOOGLE) {
   const sa = JSON.parse(raw);
   const token = await googleToken(sa);
   await submitSitemap(token);
-  await inspect(token, urls);
-  await searchPerformance(token);
+  if (SUBMIT_ONLY) {
+    say('- **Index status and performance** — skipped (`--submit-only`); '
+      + '`npm run seo:watch` reports those, and can say what changed');
+  } else {
+    await inspect(token, urls);
+    await searchPerformance(token);
+  }
 }
 
 if (process.env.GITHUB_STEP_SUMMARY) {

@@ -23,6 +23,7 @@ npm run style      # flags writing that reads as machine-written (advisory)
 npm run lighthouse # the performance/a11y/SEO budget
 npm run gist       # regenerate gist/ from the live files
 npm run seo        # submit new URLs, then report index status and search performance
+npm run seo:watch  # what Search Console says changed, and what to do about it
 npm run topics     # what to write next, and the success condition for each subject
 ```
 
@@ -52,7 +53,10 @@ npm run topics     # what to write next, and the success condition for each subj
   hosts sit in the CSP. Chrome reports a blocked hop against the *original* URL, which reads
   like a false positive and sends you looking at the one part that works.
 - **Never commit to `main`.** Branch (`feat/`, `fix/`, `content/`, `chore/`), open a PR, let
-  the preview URL build, squash-merge. `main` deploys to production on merge.
+  the preview URL build, squash-merge. `main` deploys to production on merge. The one
+  exception is `_source/seo-watch.json`, which the SEO watch workflow commits daily — one
+  machine-written file, ignored by the deploy trigger, never part of the site. Everything
+  its findings ask you to *change* still goes through a branch and a PR.
 
 ## Staging changes
 
@@ -75,6 +79,7 @@ git add -A                                            # no
 | Changing game copy or routes | the `GAMES` array in `build.mjs`; store metadata in `_source/play-data.json` |
 | Changing a privacy policy | `_source/legacy/*.txt` — the text is parsed from there |
 | Changing the mailing list | the `KIT` block in `build.mjs`, and the matching settings in the Kit account |
+| Acting on Search Console | [`docs/seo-automation.md`](docs/seo-automation.md) — `npm run seo:watch -- --brief` prints the open findings and the fix each one implies |
 
 Those files are the source of truth. If something here disagrees with them, they win, and
 this file is the one to fix.

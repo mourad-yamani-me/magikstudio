@@ -6,6 +6,11 @@ name: CI/CD
 on:
   push:
     branches: [main]
+    # The SEO watch ledger is machine-written, is never part of dist/, and is
+    # committed daily. Deploying the site again for it would be pure noise — and
+    # would re-trigger the SEO ping through workflow_run every single day.
+    paths-ignore:
+      - '_source/seo-watch.json'
   pull_request:
     branches: [main]
   workflow_dispatch:
