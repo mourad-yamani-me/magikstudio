@@ -32,3 +32,6 @@
 # editor / OS
 /.vscode/
 .DS_Store
+
+# image derivative cache — content-addressed, safe to delete
+/.cache/

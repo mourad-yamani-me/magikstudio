@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+import crypto from 'node:crypto';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
@@ -99,6 +100,22 @@ const write = (rel, html) => {
   fs.writeFileSync(f, rel.endsWith('.html') ? enhanceImages(unrevealHero(html)) : html);
 };
 const gridCols = n => Math.min(n, 6);
+/* The screenshot grid is `cols` columns of at most `max`, inside .shell
+   (min(100vw,1240) - 48 of content) with 20px gaps, and each .shot adds 6px of
+   padding either side. Under 560px it stops being a grid and scrolls sideways
+   at a fixed 196px. Every number below comes from that layout rather than from
+   a guess: a hand-written sizes string was declaring 280px for a slot that
+   measures 116px on a tablet, so the browser was fetching the full 506px file
+   for it. The grid width depends on the shot count, which is why this is
+   generated per game instead of written once. */
+function shotsSizes(cols, max) {
+  const gap   = 20 * (cols - 1);
+  const fluid = `calc((100vw - ${48 + gap}px) / ${cols} - 12px)`;
+  const capVw = max * cols + gap + 48;   // viewport where --max starts winning
+  return capVw < 1288
+    ? `(max-width:560px) 184px, (max-width:${capVw}px) ${fluid}, ${max - 12}px`
+    : `(max-width:560px) 184px, (max-width:1288px) ${fluid}, ${Math.round((1192 - gap) / cols) - 12}px`;
+}
 const gridMax  = n => n <= 3 ? 336 : 264;
 const shotsFor = key => fs.readdirSync(path.join(ROOT,'public/assets/games'))
   .filter(f => f.startsWith(key + '-') && /-\d+\.jpg$/.test(f)).sort();
@@ -116,6 +133,16 @@ function jpegSize(buf){
   }
   return null;
 }
+/* Whether <picture> may advertise a WebP source at all. A <source> that 404s
+   is not recoverable — the browser does not fall back to the next source or to
+   the <img>, it just shows a broken image — so this is settled once, up front,
+   rather than assumed. */
+const HAS_WEBP = (() => {
+  try { execFileSync('cwebp', ['-version'], { stdio: 'ignore' }); return true; }
+  catch { return false; }
+})();
+if (!HAS_WEBP) console.warn('cwebp not found — building JPEG-only <picture> markup');
+
 const DIMS = {};
 for (const f of fs.readdirSync(path.join(ROOT,'public/assets/games'))) {
   if (!f.endsWith('.jpg')) continue;
@@ -140,19 +167,77 @@ function enhanceImages(html){
     const d = DIMS[file];
     const hasWH = /\bwidth=/.test(pre + post);
     const wh = (d && !hasWH) ? ` width="${d.w}" height="${d.h}"` : '';
-    const img = `<img ${pre}src="/assets/games/${file}"${post}${wh}>`;
+    const attrs = pre + post + wh;
+
+    // A lazy image is by definition not the LCP element, so let its decode go
+    // off the main thread. The hero deliberately keeps the synchronous default.
+    const dec = (/loading="lazy"/.test(attrs) && !/\bdecoding=/.test(attrs))
+      ? ' decoding="async"' : '';
+    const img = `<img ${pre}src="/assets/games/${file}"${post}${wh}${dec}>`;
+
+    if (!HAS_WEBP) return img;
+
     const base = file.replace(/\.jpg$/,'');
-    const isShot = /-\d+$/.test(base);
-    const isHero = /\bdata-hero\b/.test(pre + post);
+    const p = `/assets/games/${base}`;
     const isFeature = /-feature$/.test(base);
-    const srcset = isFeature
-      ? `srcset="/assets/games/${base}-640.webp 640w, /assets/games/${base}.webp 1024w" sizes="(max-width:980px) 100vw, 1100px"`
-      : isHero
-      ? `srcset="/assets/games/${base}-200.webp 200w, /assets/games/${base}-320.webp 320w" sizes="(max-width:700px) 190px, 270px"`
-      : isShot
-      ? `srcset="/assets/games/${base}-200.webp 200w, /assets/games/${base}-320.webp 320w, /assets/games/${base}.webp ${d ? d.w : 506}w" sizes="(max-width:700px) 50vw, 280px"`
-      : `srcset="/assets/games/${base}.webp"`;
-    return `<picture><source type="image/webp" ${srcset}>${img}</picture>`;
+    const isIcon    = /-icon$/.test(base);
+    // data-hero is the three floating phones on the home page and nothing else.
+    // It used to mark the game-page carousel too, which is a different width
+    // (a constant 254px against the phones' 154-242px), so one of the two was
+    // always sized for the other's layout.
+    const isHero    = /\bdata-hero\b/.test(attrs);
+    const isShot    = /-\d+$/.test(base);
+
+    // The slot an icon fills depends on the template — 56px on the home rows,
+    // 88px on a game header, 60px on the related-games cards — and the <img>
+    // already carries the real number. Reading it beats a hand-written sizes
+    // string that is necessarily wrong for two of the three.
+    const iconPx = +(/\bwidth="(\d+)"/.exec(attrs)?.[1] || 56);
+
+    // The screenshot grid on a game page carries its own layout, because it is
+    // the same file as the carousel but rendered at a completely different
+    // width — 116px in a five-across grid on a tablet against the carousel's
+    // constant 254px. One shared sizes string could only ever be right for one
+    // of them, and it was right for neither.
+    const grid = /\bdata-shot="(\d+):(\d+)"/.exec(attrs);
+
+    // The hero stays at 200/320 on purpose: it is the LCP element on the home
+    // page, and offering it a 400w candidate makes the one image on the
+    // critical path bigger to fix a sharpness nobody reported.
+    //
+    // The carousel stops at 400w for a related reason. Its slot is 254px at
+    // every breakpoint, so 400w is already ~1.6x — past the point anyone can
+    // see on a screenshot — while the 506w original costs 40% more bytes for
+    // an image that sits below the fold.
+    // The grid and the carousel share one ladder on purpose. A game page renders
+    // the same five screenshots twice, so ladders that disagree make the browser
+    // fetch every shot twice — capping only one of them measured 397 -> 578 KiB.
+    const set = isFeature ? [[`${p}-400`, 400], [`${p}-640`, 640],
+                             [`${p}-880`, 880], [p, 1024]]
+              : isIcon    ? [[`${p}-112`, 112], [`${p}-176`, 176]]
+              : (isHero || grid || isShot)
+                          ? [[`${p}-200`, 200], [`${p}-320`, 320]]
+              : null;
+
+    // .keyart fills .shell, which is min(100vw,1240) minus 48px of padding.
+    // The old string claimed 100vw and so fetched the 1024w file for a slot
+    // measuring 362px on a phone.
+    const sizes = isFeature ? '(max-width:1288px) calc(100vw - 48px), 1192px'
+                : isIcon    ? `${iconPx}px`
+                : isHero    ? '(max-width:560px) 180px, 242px'
+                : grid      ? shotsSizes(+grid[1], +grid[2])
+                : isShot    ? '254px'
+                : '';
+
+    // The lightbox opens the full-size image, and app.js used to read it from
+    // the <img> src — which is the JPEG fallback, so every enlarge pulled 217 KB
+    // when a 70 KB WebP of the same picture was already sitting in dist/.
+    const full = grid ? ` data-full="${p}.webp"` : '';
+
+    const srcset = set ? set.map(([u, w]) => `${u}.webp ${w}w`).join(', ') : `${p}.webp`;
+    const source = `<source type="image/webp" srcset="${srcset}"`
+      + (sizes ? ` sizes="${sizes}"` : '') + '>';
+    return `<picture>${source}${img.replace('<img ', '<img' + full + ' ')}</picture>`;
   });
 }
 
@@ -258,13 +343,151 @@ function renderDesc(raw){
 }
 
 const FONT_FILES = fs.readdirSync(path.join(ROOT,'public/assets/fonts')).filter(f=>f.endsWith('.woff2'));
-const FONT_DISPLAY = FONT_FILES.find(f=>/bricolage.*-800-/.test(f)) || FONT_FILES[0];
-const FONT_BODY    = FONT_FILES.find(f=>/jakarta.*-400-/.test(f))   || FONT_FILES[0];
+/* Every weight the nav and the buttons need, preloaded. Referenced only from
+   the inlined @font-face rules, 600 and 700 were not discoverable until the
+   browser had parsed the CSS and laid the page out, which is the one thing
+   the network-dependency insight fails on. */
+const FONT_PRELOAD = FONT_FILES
+  .filter(f => /bricolage.*-800-|jakarta.*-(400|600|700)-/.test(f))
+  .map(f => `<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/${f}" crossorigin>`)
+  .join('\n');
+
+/* Metric-matched fallback for Plus Jakarta Sans.
+   Jakarta is font-display:swap, so text paints in the fallback first and then
+   swaps. Helvetica and Arial are narrower and shorter than Jakarta, so that
+   swap resized every nav link and shifted the row — the one thing cls-culprits
+   reported, at 0.000221 on desktop.
+
+   size-adjust makes the fallback occupy Jakarta's width; the ascent and descent
+   overrides rebuild the line box after that rescale, so the swap changes glyph
+   shapes and nothing else. The numbers are measured, not guessed: rendered in
+   Chrome at 100px through canvas measureText, per weight, against both
+   Helvetica Neue and Arial (which differ by at most 1.2%, so each value is
+   their average).
+
+   Each weight is calibrated on the text it actually renders — 600 on the nav,
+   which is the row that shifts, 700 on button labels, 400 on prose. The width
+   ratio between two typefaces is not one number: it depends on the glyph mix,
+   and calibrating 600 on a pangram instead of the nav left it 0.67% short and
+   the shift almost untouched.
+
+   All three are measured against the *regular* fallback face, which is the
+   subtle part. local() inside @font-face resolves to one face, and the
+   font-weight descriptor only labels it — it does not pick a bold. So the
+   fallback for 600 and 700 is regular Helvetica relabelled, and sizing it
+   against Helvetica Bold made those two weights 6% too narrow, worse than
+   having no fallback at all. It renders lighter than Jakarta for the moment
+   before the swap; matching the metrics is the point, not matching the
+   colour. Re-derive by measuring again if the typeface changes. */
+const FONT_FALLBACK = [
+  [400, 104.04, 99.96, 21.15],
+  [600, 108.00, 96.29, 20.37],
+  [700, 105.73, 98.36, 20.81],
+].map(([w, size, asc, desc]) =>
+  `@font-face{font-family:'Jakarta Fallback';font-style:normal;font-weight:${w};`
+  + `src:local('Helvetica Neue'),local('Helvetica'),local('Arial');`
+  + `size-adjust:${size}%;ascent-override:${asc}%;descent-override:${desc}%;line-gap-override:0%}`
+).join('');
+
 const FONT_CSS = fs.readFileSync(path.join(ROOT,'public/assets/fonts/fonts.css'),'utf8')
   .replace(/(@font-face\s*\{[^}]*?Plus Jakarta Sans[^}]*?)font-display:\s*optional/g, '$1font-display:swap')
-  .replace(/\s+/g,' ').trim();
-const SITE_CSS = fs.readFileSync(path.join(ROOT,'src/styles.css'),'utf8')
-  .replace(/\/\*[\s\S]*?\*\//g,'').replace(/\s*([{}:;,>])\s*/g,'$1').replace(/;}/g,'}').replace(/\s+/g,' ').trim();
+  .replace(/\s+/g,' ').trim() + FONT_FALLBACK;
+/* app.js is fingerprinted so it can be cached for a year instead of a day.
+   The name is derived here because the <script> tag, the file written into
+   dist/ and the _headers rule all have to agree, and they are three different
+   places in this file. scripts/verify.mjs resolves it by glob for the same
+   reason — it reads app.js to check the storage keys against the policy. */
+const APP_SRC  = fs.readFileSync(path.join(ROOT,'src/app.js'),'utf8');
+const APP_FILE = `app.${crypto.createHash('sha256').update(APP_SRC).digest('hex').slice(0,8)}.js`;
+
+/* ── per-page CSS ──────────────────────────────────────────────────────
+   Inlining the stylesheet is what keeps the critical path at zero
+   render-blocking requests, but it also meant every page carried all
+   32 KB of it — the blog's syntax theme on the privacy policy, the
+   lightbox on the contact page.
+
+   Each page now gets only the rules it can match, decided by class name.
+   A selector naming no class (body, h1, :root, *) is always kept, and a
+   selector list is filtered member by member rather than all-or-nothing.
+
+   The one thing class names in the HTML cannot reveal is markup that
+   does not exist yet: app.js builds the lightbox and the trailer at
+   runtime. Those names are read back out of the script instead of being
+   listed here, so adding a runtime class keeps working without anyone
+   having to remember this comment. verify.mjs re-checks the result
+   against each page independently. */
+const RAW_CSS = fs.readFileSync(path.join(ROOT,'src/styles.css'),'utf8')
+  .replace(/\/\*[\s\S]*?\*\//g,'');
+
+const squash = css => css
+  .replace(/\s*([{}:;,>])\s*/g,'$1').replace(/;}/g,'}').replace(/\s+/g,' ').trim();
+
+/* class names app.js attaches at runtime, so they never appear in the HTML */
+const JS_CLASSES = new Set([
+  ...[...APP_SRC.matchAll(/classList\.(?:add|remove|toggle)\(\s*'([^']+)'/g)].map(m => m[1]),
+  ...[...APP_SRC.matchAll(/className\s*=\s*'([^']+)'/g)].flatMap(m => m[1].split(/\s+/)),
+  ...[...APP_SRC.matchAll(/class="([^"]+)"/g)].flatMap(m => m[1].split(/\s+/)),
+].filter(Boolean));
+
+/* top-level rules, with @media bodies left intact for a recursive pass */
+function cssRules(css){
+  const rules = []; let i = 0;
+  while (i < css.length) {
+    while (i < css.length && /\s/.test(css[i])) i++;
+    if (i >= css.length) break;
+    const from = i;
+    while (i < css.length && css[i] !== '{') i++;
+    if (i >= css.length) break;
+    const prelude = css.slice(from, i).trim();
+    let depth = 0, j = i;
+    do { if (css[j] === '{') depth++; else if (css[j] === '}') depth--; j++; }
+    while (j < css.length && depth > 0);
+    rules.push({ prelude, body: css.slice(i + 1, j - 1) });
+    i = j;
+  }
+  return rules;
+}
+
+const classesOf = sel => [...sel.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map(m => m[1]);
+
+function selectCss(css, used){
+  const out = [];
+  for (const { prelude, body } of cssRules(css)) {
+    if (/^@(media|supports)/i.test(prelude)) {
+      const inner = selectCss(body, used);
+      if (inner) out.push(`${prelude}{${inner}}`);
+      continue;
+    }
+    if (/^@keyframes/i.test(prelude)) continue;   // resolved by reference below
+    const kept = prelude.split(',').map(s => s.trim()).filter(s => {
+      const cs = classesOf(s);
+      return !cs.length || cs.some(c => used.has(c));
+    });
+    if (kept.length) out.push(`${kept.join(',')}{${body}}`);
+  }
+  return out.join('');
+}
+
+const CSS_CACHE = new Map();
+function cssFor(html){
+  const used = new Set(JS_CLASSES);
+  for (const [, list] of html.matchAll(/class="([^"]*)"/g))
+    for (const c of list.split(/\s+/)) if (c) used.add(c);
+
+  const key = [...used].sort().join(' ');
+  if (CSS_CACHE.has(key)) return CSS_CACHE.get(key);
+
+  let css = selectCss(RAW_CSS, used);
+  // A @keyframes block survives only if a rule that was actually kept still
+  // animates it — being present in the source stylesheet is not enough.
+  for (const { prelude, body } of cssRules(RAW_CSS)) {
+    const name = /^@keyframes\s+([\w-]+)/i.exec(prelude);
+    if (name && new RegExp(`\\b${name[1]}\\b`).test(css)) css += `${prelude}{${body}}`;
+  }
+  const out = squash(css);
+  CSS_CACHE.set(key, out);
+  return out;
+}
 
 /* ───────── blog ───────── */
 const BLOG_DIR = path.join(ROOT, 'content/blog');
@@ -437,7 +660,7 @@ const TICK = `<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentC
 const NAV = cur => `
 <header class="nav" id="nav"><div class="shell nav-in">
   <a href="/" class="brand">${LOGO(30)} Indie Core Dev</a>
-  <nav class="nav-links">
+  <nav class="nav-links" aria-label="Primary">
     <a href="/#games"${cur==='games'?' aria-current="page"':''}>Games</a>
     <a href="/blog/"${cur==='blog'?' aria-current="page"':''}>Blog</a>
     <a href="/subscribe/?from=nav"${cur==='subscribe'?' aria-current="page"':''}>Newsletter</a>
@@ -448,9 +671,9 @@ const NAV = cur => `
   </nav>
   <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobmenu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFF6E9" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </div>
-<div class="mobmenu" id="mobmenu">
+<nav class="mobmenu" id="mobmenu" aria-label="Primary, compact">
   <a href="/#games">Games</a><a href="/blog/">Blog</a><a href="/subscribe/?from=nav">Newsletter</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a><a href="/legal/">Legal</a>
-</div></header>`;
+</nav></header>`;
 
 const FOOT = `
 <footer class="foot"><div class="shell">
@@ -463,7 +686,10 @@ const FOOT = `
       ${ALL.map(g=>`<li><a href="/games/${g.slug}/">${esc(g.name)}${g.live?'':' — soon'}</a></li>`).join('')}
     </ul></div>
     <div><h2 class="foot-h">Privacy policies</h2><ul>
-      ${ALL.map(g=>`<li><a href="/privacy/${g.slug}/">${esc(g.name)}</a></li>`).join('')}
+      ${/* The column heading is not part of a link's accessible name, so
+            without the suffix each game is announced twice, identically, once
+            for the game page and once for the policy. */''}
+      ${ALL.map(g=>`<li><a href="/privacy/${g.slug}/">${esc(g.name)}<span class="sr-only"> privacy policy</span></a></li>`).join('')}
     </ul></div>
     <div><h2 class="foot-h">Studio</h2><ul>
       <li><a href="/blog/">Blog</a></li>
@@ -479,10 +705,24 @@ const FOOT = `
     <span>© 2026 Othmane Ettaib — Indie Core Dev <span class="ver" title="Build ${BUILD.sha} · ${BUILD.date}">v${BUILD.version}</span></span>
   </div>
 </div></footer>
-<script src="/assets/app.js" defer></script>`;
+<script type="speculationrules">
+{"prefetch":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/*.xml"}},{"not":{"href_matches":"/subscribe/thanks/*"}},{"not":{"href_matches":"/subscribe/confirmed/*"}}]},"eagerness":"moderate"}]}
+</script>
+<script src="/assets/${APP_FILE}" defer></script>`;
 
 function layout({title, desc, canonical, body, cur, jsonld, ogimg}){
   const og = SITE + (ogimg || '/assets/og/default.jpg');
+  // Assembled before the head so the inlined CSS can be chosen from the
+  // markup this page actually contains.
+  const markup = `<a class="skip" href="#main">Skip to content</a>
+<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="grain"></div>
+${NAV(cur)}
+<main id="main">
+${body}
+</main>
+${INVITE(canonical)}
+${FOOT}`;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -506,22 +746,13 @@ function layout({title, desc, canonical, body, cur, jsonld, ogimg}){
 <meta name="twitter:image" content="${og}">
 <meta name="theme-color" content="#0B0616">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">\n<link rel="alternate" type="application/rss+xml" title="Indie Core Dev — Blog" href="/blog/feed.xml">
-<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/${FONT_BODY}" crossorigin>
-<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/${FONT_DISPLAY}" crossorigin>
+${FONT_PRELOAD}
 <style>${FONT_CSS}</style>
-<style>${SITE_CSS}</style>
+<style>${cssFor(markup)}</style>
 ${(Array.isArray(jsonld) ? jsonld : jsonld ? [jsonld] : []).map(b => `<script type="application/ld+json">${JSON.stringify(b)}</script>`).join('\n')}
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
-<div class="grain"></div>
-${NAV(cur)}
-<main id="main">
-${body}
-</main>
-${INVITE(canonical)}
-${FOOT}
+${markup}
 </body>
 </html>`;
 }
@@ -552,14 +783,17 @@ const crumbLD = items => ({'@context':'https://schema.org','@type':'BreadcrumbLi
 function gameRow(g, i){
   const media = g.live && g.shots.length
     ? `<div><div class="gallery" data-gallery><div class="scr">
-         ${g.shots.slice(0,4).map((s,n)=>`<img${n?'':' class="on"'} src="/assets/games/${s}" alt="${esc(g.name)} screenshot ${n+1}" loading="lazy">`).join('')}
+         ${/* Only the visible slide is announced. app.js moves this as the
+               carousel turns; emitting it here keeps it correct with JS off,
+               where the others never become visible at all. */''}
+         ${g.shots.slice(0,4).map((s,n)=>`<img${n?' aria-hidden="true"':' class="on"'} src="/assets/games/${s}" alt="${esc(g.name)} screenshot ${n+1}" loading="lazy">`).join('')}
        </div></div><div class="gdots"></div></div>`
     : `<div class="gallery"><div class="scr" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#241442,#140A26)">
          <svg width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.1" stroke-linecap="round" opacity=".8"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 9h3M8 13h8M8 17h5"/></svg>
        </div></div>`;
   const cta = g.live
     ? `<img class="gicon" src="/assets/games/${g.icon}" alt="" width="56" height="56">
-       <a class="btn btn-primary" href="${g.playUrl}" target="_blank" rel="noopener">${PLAY_ICON} Play free</a>
+       <a class="btn btn-primary" href="${g.playUrl}" target="_blank" rel="noopener">${PLAY_ICON} Play free<span class="sr-only"> — ${esc(g.name)}</span></a>
        <a class="btn btn-ghost" href="/games/${g.slug}/">Learn more<span class="sr-only"> about ${esc(g.name)}</span></a>`
     : `<span class="soon"><span class="dot"></span> Coming soon</span>
        <a class="btn btn-ghost" href="/games/${g.slug}/">Learn more<span class="sr-only"> about ${esc(g.name)}</span></a>`;
@@ -684,7 +918,7 @@ function pageGame(g){
   const body = `
 <section class="ghero"><div class="shell ghero-grid">
   <div>
-    <nav class="crumb rv"><a href="/">Home</a> <span>/</span> <a href="/#games">Games</a> <span>/</span> <span style="color:var(--text)">${esc(g.name)}</span></nav>
+    <nav class="crumb rv" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/#games">Games</a> <span>/</span> <span style="color:var(--text)">${esc(g.name)}</span></nav>
     <div class="ghead rv">
       ${g.icon?`<img src="/assets/games/${g.icon}" alt="" width="88" height="88">`:''}
       <div><span class="gtag">${esc(g.category)}${g.live?'':' · in development'}</span><h1 style="margin-top:12px">${esc(g.name)}</h1></div>
@@ -702,7 +936,11 @@ function pageGame(g){
   </div>
   <div class="game-media rv"><div class="halo"></div>
     ${g.shots.length ? `<div><div class="gallery" data-gallery><div class="scr">
-      ${g.shots.map((s,n)=>`<img${n?'':' class="on"'} data-hero src="/assets/games/${s}" alt="${esc(g.name)} screenshot ${n+1}"${n?' loading="lazy"':''}>`).join('')}
+      ${/* The first slide is the LCP element on a game page — the same treatment
+            the home page already gives its centre phone. Without the hint the
+            browser discovers it at default priority behind the rest of the
+            head, which measured as a reproducible 0.26s of LCP. */''}
+      ${g.shots.map((s,n)=>`<img${n?' aria-hidden="true"':' class="on" fetchpriority="high"'} src="/assets/games/${s}" alt="${esc(g.name)} screenshot ${n+1}"${n?' loading="lazy"':''}>`).join('')}
     </div></div><div class="gdots"></div></div>`
     : `<div class="gallery"><div class="scr" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#241442,#140A26)">
          <svg width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.1" stroke-linecap="round" opacity=".8"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 9h3M8 13h8M8 17h5"/></svg></div></div>`}
@@ -720,7 +958,7 @@ ${g.shots.length > 1 ? `<section class="sec-shots"><div class="shell">
   </div>
   <div class="shots rv" style="--cols:${gridCols(g.shots.length)};--max:${gridMax(g.shots.length)}px" data-lightbox>
     ${g.shots.map((s,n)=>`<button class="shot" type="button" data-i="${n}" aria-label="Enlarge screenshot ${n+1} of ${g.shots.length}">
-      <span class="scr"><img src="/assets/games/${s}" alt="${esc(g.name)} screenshot ${n+1}" loading="lazy"></span>
+      <span class="scr"><img data-shot="${gridCols(g.shots.length)}:${gridMax(g.shots.length)}" src="/assets/games/${s}" alt="${esc(g.name)} screenshot ${n+1}" loading="lazy"></span>
       <span class="zoom"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8.5v5M8.5 11h5"/></svg></span>
     </button>`).join('')}
   </div>
@@ -778,13 +1016,13 @@ function pagePrivacy(g){
   const {meta, sections} = parsePolicy(g.legacy);
   const body = `
 <div class="shell doc">
-  <aside class="toc">
+  <nav class="toc" aria-label="On this page">
     <div class="toc-h">Contents</div>
     <ol>${sections.map(s=>`<li><a href="#s${s.num}"><i>${String(s.num).padStart(2,'0')}</i><span>${esc(s.head)}</span></a></li>`).join('')}</ol>
-  </aside>
+  </nav>
   <div>
     <div class="doc-head">
-      <nav class="crumb"><a href="/">Home</a> <span>/</span> <a href="/privacy/">Privacy</a> <span>/</span> <span style="color:var(--text)">${esc(g.name)}</span></nav>
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/privacy/">Privacy</a> <span>/</span> <span style="color:var(--text)">${esc(g.name)}</span></nav>
       <span class="eyebrow">Privacy policy</span>
       <h1>${esc(g.name)}</h1>
       <div class="doc-meta">
@@ -854,7 +1092,7 @@ function pagePost(p, i){
   const prev = POSTS[i + 1], next = POSTS[i - 1];
   const body = `
 <article class="post"><div class="shell narrow">
-  <nav class="crumb"><a href="/">Home</a> <span>/</span> <a href="/blog/">Blog</a> <span>/</span> <span style="color:var(--text)">${esc(p.title)}</span></nav>
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/blog/">Blog</a> <span>/</span> <span style="color:var(--text)">${esc(p.title)}</span></nav>
   <div class="pmeta" style="margin-top:26px"><time datetime="${p.date}">${humanDate(p.date)}</time><span>·</span><span>${p.minutes} min read</span></div>
   <h1>${esc(p.title)}</h1>
   ${p.description ? `<p class="lede" style="margin-top:20px">${esc(p.description)}</p>` : ''}
@@ -974,16 +1212,16 @@ const LEGAL_SECTIONS = [
 function pageLegal(){
   const body = `
 <div class="shell doc">
-  <aside class="toc">
+  <nav class="toc" aria-label="On this page">
     <div class="toc-h">Contents</div>
     <ol>${LEGAL_SECTIONS.map(([head], i)=>{
       const n = String(i + 1);
       return `<li><a href="#s${n}"><i>${n.padStart(2,'0')}</i><span>${esc(head)}</span></a></li>`;
     }).join('')}</ol>
-  </aside>
+  </nav>
   <div>
     <div class="doc-head">
-      <nav class="crumb"><a href="/">Home</a> <span>/</span> <span style="color:var(--text)">Legal notice</span></nav>
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <span style="color:var(--text)">Legal notice</span></nav>
       <span class="eyebrow">Mentions légales</span>
       <h1>Legal notice</h1>
       <div class="doc-meta">
@@ -1204,14 +1442,14 @@ function pagePrivacyIndex(){
   const last = String(SITE_PRIVACY.length + 1);
   const body = `
 <div class="shell doc">
-  <aside class="toc">
+  <nav class="toc" aria-label="On this page">
     <div class="toc-h">Contents</div>
     <ol>${sections.map(s=>`<li><a href="#s${s.num}"><i>${String(s.num).padStart(2,'0')}</i><span>${esc(s.head)}</span></a></li>`).join('')
       }<li><a href="#s${last}"><i>${last.padStart(2,'0')}</i><span>Privacy policies for the games</span></a></li></ol>
-  </aside>
+  </nav>
   <div>
     <div class="doc-head">
-      <nav class="crumb"><a href="/">Home</a> <span>/</span> <span style="color:var(--text)">Privacy</span></nav>
+      <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <span style="color:var(--text)">Privacy</span></nav>
       <span class="eyebrow">Privacy policy</span>
       <h1>This website</h1>
       <div class="doc-meta">
@@ -1413,33 +1651,123 @@ write('subscribe/confirmed/index.html', pageSubscribeConfirmed());
 
 /* assets */
 fs.mkdirSync(path.join(OUT,'assets'), {recursive:true});
-fs.copyFileSync(path.join(ROOT,'src/styles.css'), path.join(OUT,'assets/styles.css'));
-fs.copyFileSync(path.join(ROOT,'src/app.js'),     path.join(OUT,'assets/app.js'));
+/* No stylesheet is emitted: cssFor() inlines the rules each page needs, so the
+   copy at /assets/styles.css was 32 KB that no page ever linked to. */
+fs.writeFileSync(path.join(OUT, 'assets', APP_FILE), APP_SRC);
 fs.cpSync(path.join(ROOT,'public/assets/games'),  path.join(OUT,'assets/games'), {recursive:true});
 fs.cpSync(path.join(ROOT,'public/assets/fonts'),  path.join(OUT,'assets/fonts'), {recursive:true});
 if (fs.existsSync(path.join(ROOT,'public/assets/og')))
   fs.cpSync(path.join(ROOT,'public/assets/og'),   path.join(OUT,'assets/og'),   {recursive:true});
 
-/* WebP siblings (served via <picture>, JPEG stays as the fallback) */
-let webp = 0, saved = 0;
-for (const f of fs.readdirSync(path.join(OUT,'assets/games'))) {
-  if (!f.endsWith('.jpg')) continue;
-  const src = path.join(OUT,'assets/games',f);
-  const dst = src.replace(/\.jpg$/, '.webp');
+/* ── WebP derivatives (served via <picture>, the JPEG stays as fallback) ──
+   Two things here are not obvious from the call sites.
+
+   Encoding is content-addressed: the key is the source bytes plus the exact
+   encoder settings, so a rebuild re-encodes only what actually changed.
+   Before this, every build — including one that touched nothing but prose —
+   re-ran cwebp about ninety times and produced byte-identical output.
+
+   The widths are the sizes the page actually displays, not round numbers.
+   Icons are the case worth remembering: they shipped a single 256px square
+   into a 56px slot, which Lighthouse scored as 18 KB of waste per icon on a
+   page that renders five of them. */
+const IMG_CACHE = path.join(ROOT, '.cache/images');
+fs.mkdirSync(IMG_CACHE, { recursive: true });
+
+// -icon and -feature are checked before the numbered-screenshot pattern:
+// "word-slot-01" is a shot, but "logo-quiz-icon" must not be read as one.
+const kindOf = f => /-icon\.jpg$/.test(f)    ? 'icon'
+                  : /-feature\.jpg$/.test(f) ? 'feature'
+                  : /-\d+\.jpg$/.test(f)     ? 'shot'
+                  : 'other';
+
+/* Widths are what the templates render at, doubled for retina. Quality is per
+   width, and every value was derived rather than chosen: for each one, the
+   lowest -m 6 -sharp_yuv setting whose PSNR still matches or beats what the
+   old -m 4 encode produced, across every game's art, worst case wins. So this
+   cannot look worse than what it replaces — the slower encoder simply reaches
+   the same fidelity in fewer bytes, which is where an icon's 2.7 bits/px went.
+
+   The full-size icon and key art are the exceptions and stay on the old
+   encoder: at the quality they need, -m 6 came out marginally larger, so
+   there was nothing to win. */
+const M6 = true;
+const VARIANTS = {
+  // 56px on the home rows, 60px on the related-games cards, 88px on a game header.
+  // Icons are exempt from the byte ceiling below: they are small, and the art is
+  // lettering and gradients, which is where WebP shows its seams first. Holding
+  // one to w*h/6 costs 2.8-3.8 dB and shows as blotchy type at 3x, to save about
+  // 1.4 KB.
+  icon:    { base: [80, !M6], cap: false, widths: [[112, 65, M6], [176, 70, M6]] },
+  feature: { base: [80, !M6], cap: true,  widths: [[400, 55, M6], [640, 60, M6], [880, 65, M6]] },
+  // 200/320 serve the hero phones, the carousel and the screenshot grid alike.
+  // The ladder stops at 320 deliberately. A 254px slot on a 2x screen would
+  // take 508, and offering 400 got it: 1.57x of sharpness nobody asked for, at
+  // 243 KB across a home page against 165 KB here. 320 is still above 1x, and
+  // the full-size sibling is still built — the lightbox opens that.
+  shot:    { base: [55, M6],  cap: true,  widths: [[200, 60, M6], [320, 60, M6]] },
+  other:   { base: [80, !M6], cap: false, widths: [] },
+};
+
+/* The byte ceiling Chrome's image-delivery insight actually measures against.
+   It reports both a file's size and the bytes it considers wasted on
+   compression, and target = size - waste comes out at exactly one sixth of a
+   byte per pixel every time (a 256x256 icon: 65536/6 = 10923, and it reported
+   18804 - 7881 = 10923). Anything under the ceiling is never flagged, which is
+   why a file 615 bytes over it stays quiet — the insight ignores savings below
+   4 KiB.
+
+   This is a ceiling and never a goal. Most screenshots already sit far under
+   it, and encoding them *to* it would make them bigger: word-slot-02 at 400w
+   is 21 KB against a 47 KB ceiling. */
+const ceiling = (d, w) => {
+  if (!d) return 0;
+  const h = w ? Math.round(d.h * w / d.w) : d.h;
+  return Math.floor((w || d.w) * h / 6);
+};
+let webp = 0, cached = 0, saved = 0;
+
+/* Returns false only when cwebp itself is unavailable, which HAS_WEBP has
+   already established before any markup was generated. */
+function encodeWebp(src, dst, q, w, m6, cap) {
+  // The method flags and the ceiling are part of the key: without them a cache
+  // written before this change would be replayed as though it had been encoded
+  // with it.
+  const size = w ? ['-resize', String(w), '0'] : [];
+  const args = [...(m6 ? ['-m', '6', '-sharp_yuv'] : []), '-q', String(q), ...size, '-quiet'];
+  const key = crypto.createHash('sha256')
+    .update(fs.readFileSync(src))
+    .update('cwebp ' + args.join(' ') + ' cap=' + (cap || 0))
+    .digest('hex') + '.webp';
+  const hit = path.join(IMG_CACHE, key);
+
+  if (fs.existsSync(hit)) { fs.copyFileSync(hit, dst); cached++; return true; }
+
   try {
-    execFileSync('cwebp', ['-q', /-\d+\.jpg$/.test(f) ? '60' : '80', '-quiet', src, '-o', dst], {stdio:'ignore'});
-    webp++; saved += fs.statSync(src).size - fs.statSync(dst).size;
-    if (/-feature\.jpg$/.test(f)) {
-      execFileSync('cwebp', ['-q','72','-resize','640','0','-quiet', src, '-o',
-        src.replace(/\.jpg$/,'-640.webp')], {stdio:'ignore'});
-    }
-    if (/-\d+\.jpg$/.test(f)) {
-      for (const w of [200, 320]) {
-        execFileSync('cwebp', ['-q','70','-resize',String(w),'0','-quiet', src, '-o',
-          src.replace(/\.jpg$/,`-${w}.webp`)], {stdio:'ignore'});
-      }
-    }
-  } catch (e) { /* cwebp unavailable — <picture> falls back to the JPEG */ }
+    execFileSync('cwebp', [...args, src, '-o', dst], { stdio: 'ignore' });
+    // Only the files that overshoot get re-encoded to the ceiling, so nothing
+    // is ever made bigger to hit a target. -size runs its own search for the
+    // quality that lands there.
+    if (cap && fs.statSync(dst).size > cap)
+      execFileSync('cwebp', ['-size', String(cap), '-m', '6', '-sharp_yuv', '-pass', '8',
+        ...size, '-quiet', src, '-o', dst], { stdio: 'ignore' });
+  } catch { return false; }
+
+  fs.copyFileSync(dst, hit); webp++;
+  return true;
+}
+
+for (const f of fs.readdirSync(path.join(OUT, 'assets/games'))) {
+  if (!f.endsWith('.jpg')) continue;
+  const src  = path.join(OUT, 'assets/games', f);
+  const base = src.replace(/\.jpg$/, '');
+  const v    = VARIANTS[kindOf(f)];
+
+  const dim = DIMS[f];
+  if (!encodeWebp(src, `${base}.webp`, v.base[0], 0, v.base[1], v.cap && ceiling(dim, 0))) break;
+  saved += fs.statSync(src).size - fs.statSync(`${base}.webp`).size;
+  for (const [w, q, m6] of v.widths)
+    encodeWebp(src, `${base}-${w}.webp`, q, w, m6, v.cap && ceiling(dim, w));
 }
 
 fs.writeFileSync(path.join(OUT,'favicon.svg'),
@@ -1559,9 +1887,8 @@ fs.writeFileSync(path.join(OUT,'_headers'),
 `/assets/games/*\n  Cache-Control: public, max-age=31536000, immutable\n
 /assets/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n
 /assets/og/*\n  Cache-Control: public, max-age=604800\n
-/assets/styles.css\n  Cache-Control: public, max-age=86400\n
-/assets/app.js\n  Cache-Control: public, max-age=86400\n
-/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Strict-Transport-Security: max-age=31536000; includeSubDomains\n  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=()\n  Cross-Origin-Opener-Policy: same-origin\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'self' ${KIT.origin} ${KIT.returnTo.join(' ')}; frame-ancestors 'none'; upgrade-insecure-requests\n`);
+/assets/app.*.js\n  Cache-Control: public, max-age=31536000, immutable\n
+/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Strict-Transport-Security: max-age=31536000; includeSubDomains\n  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=(), interest-cohort=()\n  Cross-Origin-Opener-Policy: same-origin\n  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'inline-speculation-rules'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'self' ${KIT.origin} ${KIT.returnTo.join(' ')}; frame-ancestors 'none'; upgrade-insecure-requests\n`);
 fs.writeFileSync(path.join(OUT,'version.json'),
   JSON.stringify({ ...BUILD, builtAt: new Date().toISOString() }, null, 2) + '\n');
 // The two double opt-in landing pages are reached by redirect from Kit, not by
@@ -1578,6 +1905,6 @@ fs.writeFileSync(path.join(OUT, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY + '\n');
 fs.writeFileSync(path.join(OUT,"app-ads.txt"),
   "google.com, pub-1528760351282017, DIRECT, f08c47fec0942fa0\n");
 
-console.log(`v${BUILD.version} (${BUILD.sha}) — built ${urls.length} pages → dist/  (${webp} webp, ${(saved/1024/1024).toFixed(2)} MB saved)`);
+console.log(`v${BUILD.version} (${BUILD.sha}) — built ${urls.length} pages → dist/  (${webp} webp encoded, ${cached} from cache, ${(saved/1024/1024).toFixed(2)} MB saved)`);
 console.log(`  blog: ${POSTS.length} post(s)`);
 for (const g of ALL) console.log(`  /games/${g.slug}/  ·  /privacy/${g.slug}/  (${g.shots.length} shots)`);

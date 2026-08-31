@@ -25,7 +25,7 @@
   document.querySelectorAll('[data-gallery]').forEach(function(g){
     var imgs = g.querySelectorAll('img');
     if (imgs.length < 2) return;
-    var dots = g.parentElement.querySelector('.gdots'), i = 0, timer;
+    var dots = g.parentElement.querySelector('.gdots'), i = 0, timer, onscreen = false;
     imgs.forEach(function(_, n){
       var b = document.createElement('button');
       b.type = 'button';
@@ -35,37 +35,68 @@
       dots.appendChild(b);
     });
     function go(n){
-      imgs[i].classList.remove('on'); dots.children[i].classList.remove('on');
-      i = n; imgs[i].classList.add('on'); dots.children[i].classList.add('on');
+      // The four slides underneath are opacity:0 but still in the accessibility
+      // tree, so a screen reader read five screenshots where one is visible.
+      imgs[i].classList.remove('on'); imgs[i].setAttribute('aria-hidden', 'true');
+      dots.children[i].classList.remove('on');
+      i = n;
+      imgs[i].classList.add('on'); imgs[i].removeAttribute('aria-hidden');
+      dots.children[i].classList.add('on');
     }
-    function restart(){ clearInterval(timer); if(!reduce) timer = setInterval(function(){ go((i+1)%imgs.length); }, 3400); }
-    restart();
+    /* A gallery nobody can see has no business waking the main thread every
+       3.4s to swap a class, and the home page runs five of them at once. The
+       observer fires on observe(), so it also does the initial start. */
+    function restart(){
+      clearInterval(timer);
+      timer = (!reduce && onscreen && !document.hidden)
+        ? setInterval(function(){ go((i+1)%imgs.length); }, 3400) : 0;
+    }
+    new IntersectionObserver(function(es){ onscreen = es[0].isIntersecting; restart(); })
+      .observe(g);
+    document.addEventListener('visibilitychange', restart);
   });
 
   /* hero parallax */
+  /* pointermove fires faster than the screen refreshes, and this handler both
+     measures (getBoundingClientRect) and writes (style.transform) — so every
+     event forced a synchronous layout. Coalescing to one frame turns a burst
+     of events into a single read and a single write. */
   var phones = document.getElementById('phones');
   if (phones && !reduce) {
+    var plist = [].slice.call(phones.querySelectorAll('.phone')), pt = null, frame = 0;
     phones.addEventListener('pointermove', function(e){
-      var r = phones.getBoundingClientRect();
-      var x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
-      phones.querySelectorAll('.phone').forEach(function(p){
-        var d = +p.dataset.depth || 20;
-        p.style.transform = 'translate3d(' + (-x*d) + 'px,' + (-y*d) + 'px,0)';
-        p.style.animationPlayState = 'paused';
+      pt = e;
+      if (frame) return;
+      frame = requestAnimationFrame(function(){
+        frame = 0;
+        var r = phones.getBoundingClientRect();
+        var x = (pt.clientX - r.left)/r.width - .5, y = (pt.clientY - r.top)/r.height - .5;
+        plist.forEach(function(p){
+          var d = +p.dataset.depth || 20;
+          p.style.transform = 'translate3d(' + (-x*d) + 'px,' + (-y*d) + 'px,0)';
+          p.style.animationPlayState = 'paused';
+        });
       });
-    });
+    }, {passive:true});
     phones.addEventListener('pointerleave', function(){
-      phones.querySelectorAll('.phone').forEach(function(p){ p.style.transform=''; p.style.animationPlayState=''; });
-    });
+      if (frame) { cancelAnimationFrame(frame); frame = 0; }
+      plist.forEach(function(p){ p.style.transform=''; p.style.animationPlayState=''; });
+    }, {passive:true});
   }
 
   /* card cursor glow */
   document.querySelectorAll('[data-tilt]').forEach(function(c){
+    var at = null, f = 0;
     c.addEventListener('pointermove', function(e){
-      var r = c.getBoundingClientRect();
-      c.style.setProperty('--mx', (e.clientX - r.left)+'px');
-      c.style.setProperty('--my', (e.clientY - r.top)+'px');
-    });
+      at = e;
+      if (f) return;
+      f = requestAnimationFrame(function(){
+        f = 0;
+        var r = c.getBoundingClientRect();
+        c.style.setProperty('--mx', (at.clientX - r.left)+'px');
+        c.style.setProperty('--my', (at.clientY - r.top)+'px');
+      });
+    }, {passive:true});
   });
 
   /* TOC scroll-spy */
@@ -87,6 +118,12 @@
   if (groups.length) {
     var lb = document.createElement('div');
     lb.className = 'lb';
+    // It behaves as a modal, so it has to say so: without these a screen
+    // reader announces the buttons with no indication that a dialog opened or
+    // that the page behind it is out of play.
+    lb.setAttribute('role', 'dialog');
+    lb.setAttribute('aria-modal', 'true');
+    lb.setAttribute('aria-label', 'Screenshot viewer');
     lb.innerHTML =
       '<figure class="lb-fig"><img alt="" hidden></figure>' +
       '<button class="lb-prev" aria-label="Previous screenshot"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>' +
@@ -102,7 +139,10 @@
       idx = (n + shots.length) % shots.length;
       var src = shots[idx];
       img.hidden = false;
-      img.src = src.src;
+      // data-full is the WebP of the same shot; src is the JPEG fallback and
+      // costs about three times as much for a picture the browser can already
+      // decode. Fall back to src where no WebP was built.
+      img.src = src.dataset.full || src.src;
       img.alt = src.alt;
       count.textContent = (idx + 1) + ' / ' + shots.length;
     }
@@ -112,6 +152,8 @@
       show(n);
       lb.classList.add('open');
       document.body.style.overflow = 'hidden';
+      // .lb.open makes it visible with no transition delay, so this focus
+      // lands. Give visibility a duration instead and it is dropped silently.
       lb.querySelector('.lb-close').focus();
     }
     function close(){
@@ -135,6 +177,15 @@
       if (e.key === 'Escape') close();
       else if (e.key === 'ArrowLeft') show(idx - 1);
       else if (e.key === 'ArrowRight') show(idx + 1);
+      else if (e.key === 'Tab') {
+        /* Keep Tab inside the dialog. Without this it walks straight out into
+           the page behind, which is still fully rendered underneath — the
+           reason aria-modal alone is not enough. */
+        var f = lb.querySelectorAll('button');
+        var first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     });
   }
 

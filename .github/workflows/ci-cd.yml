@@ -53,6 +53,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The WebP derivatives are content-addressed on the source bytes plus the
+      # encoder settings, so this only ever replays work that has not changed.
+      # A miss is not a failure — the build just re-encodes and repopulates it.
+      - name: Restore image derivative cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .cache/images
+          key: webp-${{ hashFiles('public/assets/games/*.jpg', 'build.mjs') }}
+          restore-keys: webp-
+
       - name: Build
         run: npm run build
 
