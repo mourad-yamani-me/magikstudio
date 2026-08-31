@@ -3,6 +3,8 @@ title: Lighthouse's image budget is w × h ÷ 6
 date: 2026-09-01
 description: "Improve image delivery" makes two complaints in one panel. Both have exact arithmetic behind them, readable straight out of the JSON report.
 tags: [performance, lighthouse, images, web]
+code: https://gist.github.com/IndieCoreDev/d653221d437be0389aa4b4281f929e99
+codeLabel: The pipeline and the markup, ready to adapt
 draft: false
 ---
 

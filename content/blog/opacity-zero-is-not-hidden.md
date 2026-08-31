@@ -3,6 +3,8 @@ title: opacity 0 does not hide anything
 date: 2026-09-01
 description: My lightbox was invisible and still in the tab order. Fixing that broke focus handling silently, because focus() on a hidden element reports nothing.
 tags: [accessibility, css, javascript, web]
+code: https://gist.github.com/IndieCoreDev/94c7819fac39ad0f3b181aa84013a414
+codeLabel: The lightbox, dependency-free
 draft: false
 ---
 
