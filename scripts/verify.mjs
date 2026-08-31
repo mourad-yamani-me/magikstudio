@@ -273,6 +273,34 @@ else {
       fail('/subscribe/', `missing /${u}/ — Kit redirects there after signup and after confirming`);
 }
 
+// ---- the "no analytics" promise ----
+// /privacy/ says no analytics script of any kind runs in your browser and that
+// no request leaves this domain unless you start a trailer. Nothing in the
+// build enforces that — the CSP does, at runtime, and it is doing real work:
+// Cloudflare injects its Web Analytics beacon into production HTML at the edge
+// and script-src is the only reason it never loads. Widen script-src or
+// connect-src to any host and the policy silently becomes false.
+//
+// frame-src is deliberately not checked: the trailer's YouTube embed is the
+// one exception the policy itself names.
+{
+  const headers = path.join(DIST, '_headers');
+  const pri = path.join(DIST, 'privacy/index.html');
+  if (fs.existsSync(headers) && fs.existsSync(pri)) {
+    const policy = fs.readFileSync(pri, 'utf8');
+    const csp = fs.readFileSync(headers, 'utf8');
+    const claimsNoAnalytics = /no analytics script of any kind/i.test(policy);
+
+    if (claimsNoAnalytics) for (const directive of ['script-src', 'connect-src']) {
+      const found = csp.match(new RegExp(directive + ' ([^;]+);'));
+      if (!found) { fail('_headers', `${directive} is missing, so nothing enforces the "no analytics" claim`); continue; }
+      const hosts = found[1].trim().split(/\s+/).filter(t => /^https?:/.test(t) || t === '*');
+      if (hosts.length)
+        fail('_headers', `${directive} allows ${hosts.join(', ')} — /privacy/ promises no analytics script and no request off this domain, and that promise is only true while this stays same-origin`);
+    }
+  }
+}
+
 // ---- font fallback metrics ----
 // Plus Jakarta Sans is font-display:swap, so every weight paints in a fallback
 // first. 'Jakarta Fallback' carries size-adjust and ascent/descent overrides so
