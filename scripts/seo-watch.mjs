@@ -354,10 +354,14 @@ function detect({ index, perf, sitemap, prev }) {
         // appearing for the first time really is new, and deserves the wait.
         const age = was?.first_seen ? daysBetween(was.first_seen, today()) : 0;
         if (firstRun || age >= T.neverCrawledDays || alreadyOpen(`never-crawled:${slug(key)}`)) {
+          // One sentence that is true however the finding came to be open. The
+          // age is context, never the justification — a finding kept open
+          // because it is still true would otherwise report "(0 days)" and read
+          // as though nothing were wrong. Google's own reason is the useful
+          // half, so it stays in every variant rather than only the first.
           add('never-crawled', key,
-            firstRun
-              ? `in the sitemap and never crawled — Google reports "${now.coverage ?? 'unknown'}"`
-              : `in the sitemap since ${was.first_seen} (${age} days) and never crawled`,
+            `never crawled — Google reports "${now.coverage ?? 'no reason given'}"`
+            + (age > 0 ? `, and it has been in the sitemap since ${was.first_seen} (${age} days)` : ''),
             'Link to it from a page Google already crawls often. Discovery is an '
             + 'internal-linking problem, not a submission one — resubmitting a '
             + 'sitemap Google has already read changes nothing.');
