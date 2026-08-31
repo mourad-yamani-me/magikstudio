@@ -41,6 +41,16 @@ npm run topics     # what to write next, and the success condition for each subj
   legal basis for each processing, the Article 15–22 rights and the CNIL as supervisory
   authority. `scripts/verify.mjs` fails the build if any of those disappear. Rewriting it for
   tone is fine; dropping a required part is not.
+- **Half the mailing list lives in Kit, where the repo cannot see it.** `/subscribe/thanks/`
+  and `/subscribe/confirmed/` are redirect targets typed into the Kit form settings, and the
+  form posts to a form ID and two custom fields (`interest`, `source`) created there.
+  Renaming a route or a field name here breaks a setting no one can grep for. `verify.mjs`
+  catches a deleted page; it cannot catch a renamed one. The constants are in `KIT` at the
+  top of `build.mjs` — change them and the Kit account together.
+- **`form-action` is checked on every hop of a redirect chain**, not just the POST target.
+  Kit answers the signup with a 302 to the apex domain, which 301s to `www`, so all three
+  hosts sit in the CSP. Chrome reports a blocked hop against the *original* URL, which reads
+  like a false positive and sends you looking at the one part that works.
 - **Never commit to `main`.** Branch (`feat/`, `fix/`, `content/`, `chore/`), open a PR, let
   the preview URL build, squash-merge. `main` deploys to production on merge.
 
@@ -64,6 +74,7 @@ git add -A                                            # no
 | Stack, deploy setup, secrets | [`README.md`](README.md) |
 | Changing game copy or routes | the `GAMES` array in `build.mjs`; store metadata in `_source/play-data.json` |
 | Changing a privacy policy | `_source/legacy/*.txt` — the text is parsed from there |
+| Changing the mailing list | the `KIT` block in `build.mjs`, and the matching settings in the Kit account |
 
 Those files are the source of truth. If something here disagrees with them, they win, and
 this file is the one to fix.

@@ -1104,6 +1104,13 @@ const SITE_PRIVACY = [
     <p>The list is used for those emails and nothing else. It is never sold, rented or
     shared, never used to build advertising audiences, and your address is not matched
     against anything inside the games.</p>
+    <p>The emails themselves carry the measurement any mailing-list provider adds: a small
+    invisible image that records a message was opened, and links that pass through Kit so
+    clicks can be counted. That is how the inactivity rule below is applied, and it is the
+    one place this site measures anything at all. It records that a message was opened, not
+    what you did afterwards. It stops entirely when you unsubscribe, and blocking remote
+    images in your email program prevents it &mdash; nothing in the email breaks if you
+    do.</p>
     <p>Unsubscribing stops everything and leaves a record marked unsubscribed, so that you
     cannot be added back by mistake. Addresses that go three years without a single email
     being opened are removed. Write to <a href="mailto:${EMAIL}">${EMAIL}</a> and the

@@ -210,6 +210,12 @@ else {
       fail('/subscribe/', 'source field is collected but the page does not say so');
     if (!/which page you were on/i.test(policy))
       fail('/privacy/', 'the signup form records a source but the policy does not disclose it');
+    // Kit puts an open-tracking pixel and click-wrapped links in every send,
+    // and the inactivity rule below is only enforceable because of them. The
+    // policy shipped once describing that rule without disclosing what powers
+    // it, so the two are checked together: keep the rule, keep the disclosure.
+    if (/without a single email\s+being opened/.test(policy) && !/invisible image/.test(policy))
+      fail('/privacy/', 'the policy applies an open-rate rule without disclosing the open tracking it depends on');
     // .rv starts at opacity:0 and only becomes visible when app.js adds .in.
     // unrevealHero() strips it from the first section only, so a form in any
     // later section would be invisible with JavaScript off. That happened.
