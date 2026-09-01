@@ -106,9 +106,17 @@ for (const file of pages) {
 
     if (!/\balt=/.test(tag)) {
       fail(where, `<img> without alt: ${tag.slice(0, 70)}`);
-    } else if (/\balt=""/.test(tag) && !namedByAncestor(html, m.index)) {
-      fail(where, `<img alt=""> with nothing to name it: ${tag.slice(0, 70)}\n` +
-                  `           give it alt text, or put it inside the link/button whose text names it`);
+    } else if (/\balt=""/.test(tag)) {
+      // An empty alt is the correct HTML for an image inside a link that
+      // already names it — and a crawler cannot see that context, so Bing
+      // reported seven pages as missing alt text when every one was right.
+      // Rather than argue with the crawler, every image now carries real alt
+      // text and the redundant ones carry aria-hidden as well: the accessible
+      // name is unchanged, the attribute a crawler reads is populated, and a
+      // broken image shows something useful instead of nothing.
+      fail(where, `<img alt=""> — this site has no empty alts: ${tag.slice(0, 70)}\n` +
+                  `           write real alt text; if it would repeat the link that contains it,\n` +
+                  `           add aria-hidden="true" so it is not announced twice`);
     }
     if (!/\bwidth=/.test(tag)) warn(where, `<img> without width/height (layout shift risk)`);
   }
@@ -126,23 +134,6 @@ for (const file of pages) {
   }
 }
 
-/** Does an <a>/<button> ancestor of the tag at `pos` already carry a name? */
-function namedByAncestor(html, pos) {
-  const before = html.slice(0, pos);
-  for (const tag of ['a', 'button']) {
-    const opens = [...before.matchAll(new RegExp(`<${tag}\\b[^>]*>`, 'g'))];
-    const closes = (before.match(new RegExp(`</${tag}>`, 'g')) || []).length;
-    if (opens.length <= closes) continue;                   // not inside one
-    const open = opens[opens.length - 1];
-    if (/aria-label=/.test(open[0])) return true;
-    const end = html.indexOf(`</${tag}>`, pos);
-    const inner = html.slice(open.index + open[0].length, end < 0 ? pos : end);
-    // text, or a sibling image that does have alt text
-    if (inner.replace(/<[^>]+>/g, '').trim()) return true;
-    if (/<img\b[^>]*\balt="[^"]+"/.test(inner)) return true;
-  }
-  return false;
-}
 
 // ---- third-party embed consent ----
 // The trailer is the only thing on this site that hands a visitor to a third
@@ -402,8 +393,14 @@ else {
       const label = attrs.match(/aria-label="([^"]*)"/);
       // .sr-only text is part of the accessible name, so tags come out and
       // their contents stay; an image inside contributes its alt text.
+      // aria-hidden content is not part of the accessible name, so it has to
+      // come out before the alt text of what remains is folded in — otherwise
+      // this models a announcement no screen reader makes.
+      const visible = inner
+        .replace(/<(\w+)\b[^>]*\baria-hidden="true"[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+        .replace(/<(?:img|input|br)\b[^>]*\baria-hidden="true"[^>]*>/gi, ' ');
       const name = (label ? label[1]
-        : inner.replace(/<img\b[^>]*\balt="([^"]*)"[^>]*>/gi, ' $1 ').replace(/<[^>]+>/g, ''))
+        : visible.replace(/<img\b[^>]*\balt="([^"]*)"[^>]*>/gi, ' $1 ').replace(/<[^>]+>/g, ''))
         .replace(/\s+/g, ' ').trim().toLowerCase();
       if (!name) continue;
       if (!names.has(name)) names.set(name, new Set());

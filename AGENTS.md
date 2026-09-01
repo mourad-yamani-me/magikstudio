@@ -16,6 +16,11 @@ npm run check      # build + verify — the same gate CI runs
 Run it before every push. If it fails, the branch cannot deploy, so there is no value in
 pushing first and finding out from CI.
 
+It also checks that `gist/` and `hub/` still match their sources. Both are generated but
+committed, and both have gone stale in a PR that edited a file they mirror — harmless while
+only the published gists read them, and not harmless since `scripts/devto.mjs` began
+composing articles out of them.
+
 Optional, and worth it when the change is prose or performance:
 
 ```bash

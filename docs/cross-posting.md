@@ -85,6 +85,16 @@ the spam signal, and holding back an edit to an article that already exists help
 An article whose stored markdown already matches what would be sent is skipped without a
 request, so a scheduled run with nothing to do makes no writes at all.
 
+**That comparison ignores fence languages, deliberately.** dev.to labels an unlabelled code
+fence itself, and not with a fixed value — it detects the language, storing ` ```conf ` or
+` ```http ` where we sent a bare ` ``` `. Compared literally, no article could ever look
+unchanged, and every scheduled run rewrote all of them; the first run after the drip shipped
+reported nineteen updates when nothing had changed. Blanking the info string on both sides is
+what makes the comparison mean *the code and prose are the same*. The cost is that changing
+only a fence's language no longer counts as a change — worth it, because the alternative is
+sending ` ```plaintext ` ourselves to force a match, which suppresses the detection and loses
+syntax highlighting on every unlabelled block.
+
 On a `429` the script waits once if the retry window is short (Forem's ordinary 30s throttle)
 and otherwise **stops the run cleanly and exits 0**, because being rate limited is the
 expected steady state of a drip rather than a fault. The next scheduled run continues from

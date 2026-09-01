@@ -52,6 +52,17 @@ if (limitAt !== -1 && !Number.isInteger(limit)) {
   process.exit(1);
 }
 
+/* Writes each composed body to a file so it can be diffed against what dev.to
+   stores. Added while chasing a run that reported every article as updated
+   when none had changed — the answer was in the bytes, and guessing at it
+   costs more than the flag does. */
+const dumpAt  = args.indexOf('--dump');
+const dump    = dumpAt === -1 ? null : args[dumpAt + 1];
+if (dumpAt !== -1 && (!dump || dump.startsWith('--'))) {
+  console.error('--dump needs a directory after it, e.g. --dump /tmp/devto');
+  process.exit(1);
+}
+
 const onlyAt  = args.indexOf('--only');
 const only    = onlyAt === -1 ? undefined : args[onlyAt + 1];
 if (onlyAt !== -1 && (!only || only.startsWith('--'))) {
@@ -218,6 +229,11 @@ if (!publish) {
     console.log(`    body       ${p.article.body_markdown.length} chars`);
     const bad = p.article.body_markdown.match(/\{\{[a-z]+:/g);
     if (bad) console.log(`    WARN       unexpanded shortcodes: ${[...new Set(bad)].join(' ')}`);
+    if (dump) {
+      fs.mkdirSync(dump, { recursive: true });
+      fs.writeFileSync(path.join(dump, `${p.slug}.md`), p.article.body_markdown);
+      console.log(`    dumped     ${path.join(dump, `${p.slug}.md`)}`);
+    }
   }
   console.log('\nRe-run with --publish to send. DEVTO_API_KEY must be set.');
   process.exit(0);
@@ -263,9 +279,22 @@ const byCanonical = new Map(existing.filter(a => a.canonical_url).map(a => [a.ca
    update limit and fills the account's history with edits that changed
    nothing. The listing does not carry body_markdown, so it is fetched per
    candidate — cheap next to a write, and only for articles that exist. */
+/* dev.to labels an unlabelled fence itself, and not with a fixed value — it
+   detects the language, storing ```conf or ```http where we sent a bare ```.
+   Compared literally an article can therefore never look unchanged, and every
+   scheduled run rewrites all of them: the first run after the drip shipped
+   reported nineteen updates when nothing had changed. Blanking the info string
+   on both sides is what makes this mean "the code and prose are the same".
+
+   The cost is that changing only a fence's language stops counting as a
+   change. That is the better trade: the alternative is sending ```plaintext
+   ourselves to force an exact match, which suppresses the detection and loses
+   the syntax highlighting on every unlabelled block. */
+const fenceBlind = md => md.replace(/^(\s*)(`{3,}|~{3,}).*$/gm, '$1$2');
+
 async function unchanged(p, found) {
   const full = await api('GET', `/articles/${found.id}`);
-  return full.body_markdown === p.article.body_markdown
+  return fenceBlind(full.body_markdown ?? '') === fenceBlind(p.article.body_markdown)
       && full.title === p.article.title
       && (full.canonical_url ?? '') === p.article.canonical_url;
 }
