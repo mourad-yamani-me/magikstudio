@@ -5,6 +5,7 @@ description: A build-verify-deploy pipeline on Cloudflare's free tier, and the f
 tags: [cloudflare, ci-cd, github-actions, hosting]
 code: https://gist.github.com/IndieCoreDev/11369ffb01a68f04f0bfc9f803922b17
 codeLabel: Both files, ready to copy
+devto: true
 draft: false
 ---
 

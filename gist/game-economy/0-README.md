@@ -1,5 +1,7 @@
 # An economy priced off the difficulty model
 
+> **Full write-up:** [Pricing an economy off its difficulty model](https://www.indiecore.net/blog/pricing-an-economy-off-its-difficulty-model/)
+
 Levels in this game differ **13x** in the thinking they demand — a decision load of 7.5 on the
 easiest tier against 96.7 on the hardest. A flat coin reward is therefore wrong on nearly all of
 them, and it teaches players to grind the easy end and never touch the interesting levels.
@@ -39,6 +41,6 @@ difficulty walk the prices derive from still matches the metrics shipped on ever
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/pricing-an-economy-off-its-difficulty-model/**
+Written up in full here: **[Pricing an economy off its difficulty model](https://www.indiecore.net/blog/pricing-an-economy-off-its-difficulty-model/)**
 
 _A distilled snippet from a shipped engine — see the post for context._

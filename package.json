@@ -21,7 +21,10 @@
     "topics": "node scripts/topics.mjs",
     "assets:og": "node og.mjs",
     "assets:fonts": "node fonts.mjs",
-    "gist": "node scripts/build-gist.mjs"
+    "gist": "node scripts/build-gist.mjs",
+    "hub": "node scripts/build-hub.mjs",
+    "devto": "node scripts/devto.mjs",
+    "devto:publish": "node scripts/devto.mjs --publish"
   },
   "devDependencies": {
     "highlight.js": "^11.12.0",

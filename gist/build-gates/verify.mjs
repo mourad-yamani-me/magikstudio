@@ -86,11 +86,62 @@ for (const file of pages) {
       if (u.startsWith('/') && !resolves(u)) fail(where, `missing srcset image → ${u}`);
     }
   }
+  // Images, and the two ways an image ends up with no accessible name.
+  //
+  // A missing `alt` is the obvious one. `alt=""` is the one that got past this
+  // check for months: it is *correct* for an image inside a link that already
+  // names it — repeating the name announces it twice — and *wrong* everywhere
+  // else, where it means the image is decorative when it is not. Ten game icons
+  // shipped that way, and an SEO crawler reported them as missing alt text,
+  // which is exactly what they were.
+  //
+  // So `alt=""` has to be judged against its context rather than accepted on
+  // sight: allowed only when an ancestor <a> or <button> already carries a name.
   for (const m of html.matchAll(/<img\b[^>]*>/g)) {
-    if (/\bhidden\b/.test(m[0])) continue;                    // lightbox slot, intentionally empty
-    if (!/\balt=/.test(m[0]))  fail(where, `<img> without alt: ${m[0].slice(0, 70)}`);
-    if (!/\bwidth=/.test(m[0])) warn(where, `<img> without width/height (layout shift risk)`);
+    const tag = m[0];
+    // A bare boolean `hidden` — the lightbox's empty slot, which is filled from
+    // the thumbnail on open. NOT `aria-hidden`, which this used to match by
+    // accident and so skipped every carousel image without checking it.
+    if (/\shidden(?=[\s>])/.test(tag)) continue;
+
+    if (!/\balt=/.test(tag)) {
+      fail(where, `<img> without alt: ${tag.slice(0, 70)}`);
+    } else if (/\balt=""/.test(tag) && !namedByAncestor(html, m.index)) {
+      fail(where, `<img alt=""> with nothing to name it: ${tag.slice(0, 70)}\n` +
+                  `           give it alt text, or put it inside the link/button whose text names it`);
+    }
+    if (!/\bwidth=/.test(tag)) warn(where, `<img> without width/height (layout shift risk)`);
   }
+
+  // Inline SVG is an image too, and a screen reader announces an unlabelled one
+  // as a graphic with no name. Every icon on this site sits beside real text, so
+  // the right answer is always aria-hidden; a meaningful one would need a
+  // <title> or aria-label instead.
+  for (const m of html.matchAll(/<svg\b[^>]*>/g)) {
+    if (/aria-hidden|aria-label|role="img"/.test(m[0])) continue;
+    const close = html.indexOf('</svg>', m.index);
+    if (close > 0 && html.slice(m.index, close).includes('<title')) continue;
+    fail(where, `<svg> with no accessible name and no aria-hidden: ${m[0].slice(0, 60)}\n` +
+                `           decorative icons take aria-hidden="true"`);
+  }
+}
+
+/** Does an <a>/<button> ancestor of the tag at `pos` already carry a name? */
+function namedByAncestor(html, pos) {
+  const before = html.slice(0, pos);
+  for (const tag of ['a', 'button']) {
+    const opens = [...before.matchAll(new RegExp(`<${tag}\\b[^>]*>`, 'g'))];
+    const closes = (before.match(new RegExp(`</${tag}>`, 'g')) || []).length;
+    if (opens.length <= closes) continue;                   // not inside one
+    const open = opens[opens.length - 1];
+    if (/aria-label=/.test(open[0])) return true;
+    const end = html.indexOf(`</${tag}>`, pos);
+    const inner = html.slice(open.index + open[0].length, end < 0 ? pos : end);
+    // text, or a sibling image that does have alt text
+    if (inner.replace(/<[^>]+>/g, '').trim()) return true;
+    if (/<img\b[^>]*\balt="[^"]+"/.test(inner)) return true;
+  }
+  return false;
 }
 
 // ---- third-party embed consent ----

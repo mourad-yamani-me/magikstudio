@@ -1,5 +1,7 @@
 # An image lightbox that behaves for keyboard users
 
+> **Full write-up:** [opacity 0 does not hide anything](https://www.indiecore.net/blog/opacity-zero-is-not-hidden/)
+
 No dependencies. Attaches to any container marked `data-lightbox` containing `.shot`
 buttons, builds the dialog once, and gets the keyboard contract right.
 
@@ -65,6 +67,6 @@ opener.
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/opacity-zero-is-not-hidden/**
+Written up in full here: **[opacity 0 does not hide anything](https://www.indiecore.net/blog/opacity-zero-is-not-hidden/)**
 
 _Generated from the live scripts — see the post for context._

@@ -1,5 +1,7 @@
 # Responsive images that satisfy Chrome's actual budget
 
+> **Full write-up:** [Lighthouse's image budget is w × h ÷ 6](https://www.indiecore.net/blog/lighthouse-image-budget/)
+
 Two pieces of a static site generator. One encodes every derivative and holds it under the
 byte budget Lighthouse measures against; the other writes the `<picture>` markup that
 decides which of them a browser downloads.
@@ -51,6 +53,6 @@ would double them.
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/lighthouse-image-budget/**
+Written up in full here: **[Lighthouse's image budget is w × h ÷ 6](https://www.indiecore.net/blog/lighthouse-image-budget/)**
 
 _Generated from the live generator — see the post for context._

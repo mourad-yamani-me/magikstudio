@@ -44,7 +44,11 @@ function section(file, name) {
 
 /* A post's URL is derived from its filename, so it is knowable before either
    exists — but that also means renaming the post would silently break the
-   link. Resolve it from the file instead of hardcoding. */
+   link. Resolve it from the file instead of hardcoding.
+
+   The title comes out of the same file, because it is the anchor text of the
+   one link a reader is invited to copy. A bare URL as anchor text tells the
+   next person nothing about what they are linking to. */
 function backlink(slug) {
   const file = path.join(ROOT, 'content/blog', `${slug}.md`);
   if (!fs.existsSync(file)) {
@@ -52,12 +56,51 @@ function backlink(slug) {
     console.error(`but content/blog/${slug}.md does not exist.`);
     process.exit(1);
   }
-  if (/^draft:\s*true\s*$/m.test(fs.readFileSync(file, 'utf8'))) {
+  const src = fs.readFileSync(file, 'utf8');
+  if (/^draft:\s*true\s*$/m.test(src)) {
     console.error(`refusing to build: content/blog/${slug}.md is a draft,`);
     console.error('so the gist would link to a page that is never published.');
     process.exit(1);
   }
-  return `${SITE}/blog/${slug}/`;
+  const title = src.match(/^title:\s*(.+?)\s*$/m)?.[1].replace(/^["']|["']$/g, '');
+  if (!title) {
+    console.error(`refusing to build: content/blog/${slug}.md has no \`title:\``);
+    console.error('and the backlink would have nothing to use as anchor text.');
+    process.exit(1);
+  }
+  return { slug, title, url: `${SITE}/blog/${slug}/` };
+}
+
+/* `post:` is one slug or several. Several is the case where more than one post
+   sends readers to the same gist — build-gates is the `code:` card on three —
+   and the gist should point back at every one of them rather than at whichever
+   was written first. */
+const backlinks = post => (Array.isArray(post) ? post : [post]).map(backlink);
+
+/* The link a reader is most likely to click is the one they can see without
+   scrolling, and the one they are most likely to copy is the one at the end
+   with a title attached. The templates carry neither: both are composed here,
+   so all ten gists stay consistent and a new one cannot forget. */
+function compose(g, links) {
+  const [primary, ...also] = links;
+  const body = g.readme(primary.url);
+
+  // after the H1 and its blank line, before the first paragraph
+  const withHeader = body.replace(
+    /^(#[^\n]*\n)\n/,
+    `$1\n> **Full write-up:** [${primary.title}](${primary.url})\n\n`,
+  );
+  if (withHeader === body) {
+    console.error(`refusing to build: gist/${g.dir}/0-README.md does not start with an H1,`);
+    console.error('so there is nowhere to put the link readers see first.');
+    process.exit(1);
+  }
+
+  const more = also.length
+    ? '\n\nAlso written about in:\n\n' + also.map(l => `- [${l.title}](${l.url})`).join('\n')
+    : '';
+
+  return `${withHeader.replace(/\s+$/, '')}\n\n---\n\nWritten up in full here: **[${primary.title}](${primary.url})**${more}\n\n_${g.note}_\n`;
 }
 
 /** strip anything identifying: project name, domain, account handles */
@@ -156,16 +199,13 @@ preview URL posted as a comment; merges to \`main\` go to production.
 \`scripts/verify.mjs\` and \`scripts/lighthouse-check.mjs\` are referenced by the workflow but
 are specific to each site. There is a companion gist for those — linked from the post below.
 
----
-
-Written up in full here: **${url}**
-
-_Generated from the live configuration — see the post for context._
 `,
+  note: 'Generated from the live configuration — see the post for context.',
 }, {
   dir: 'build-gates',
   marker: 'Build gates for a static site — output verification and a Lighthouse budget',
-  post: 'build-reviews-ai-code',
+  // Three posts carry this gist as their `code:` card. It links back to all three.
+  post: ['build-reviews-ai-code', 'the-check-that-passed-while-broken', 'cloudflare-beacon-csp-blocked'],
   files: () => ({
     'verify.mjs':           sanitize(read('scripts/verify.mjs')),
     'lighthouse-check.mjs': sanitize(read('scripts/lighthouse-check.mjs')),
@@ -229,12 +269,8 @@ Write the failure messages for whoever — or whatever — has to fix them:
 A message that names the page, the problem and the offending value can be handed straight to
 a coding agent and fixed in one pass. "Validation failed" starts a conversation instead.
 
----
-
-Written up in full here: **${url}**
-
-_Generated from the live scripts — see the post for context._
 `,
+  note: 'Generated from the live scripts — see the post for context.',
 }, {
   dir: 'responsive-images',
   marker: 'Responsive image pipeline — Chrome\'s byte budget, measured sizes, one cache',
@@ -294,12 +330,8 @@ would double them.
   \`bytes × (1 − displayedPx ÷ intrinsicPx)\`, which reaches zero only when the file has as
   many pixels as the CSS box. That is a 1× image, and it will look soft on any modern phone.
 
----
-
-Written up in full here: **${url}**
-
-_Generated from the live generator — see the post for context._
 `,
+  note: 'Generated from the live generator — see the post for context.',
 }, {
   dir: 'accessible-lightbox',
   marker: 'Accessible image lightbox — focus trap, restore, and the visibility trap',
@@ -373,12 +405,8 @@ times. Dispatch real \`Tab\` and \`Escape\` events and print \`document.activeEl
 The contract is visible as output: focus enters, cycles without escaping, returns to the
 opener.
 
----
-
-Written up in full here: **${url}**
-
-_Generated from the live scripts — see the post for context._
 `,
+  note: 'Generated from the live scripts — see the post for context.',
 }, {
   dir: 'puzzle-difficulty-walk',
   marker: 'Rating puzzle difficulty by the decisions a level forces',
@@ -423,12 +451,8 @@ that will have to be undone.
 - **The rating is a prior.** \`confidence: 0.2\`, \`sampleCount: 0\`. It measures the board, not the
   difficulty a person experiences, and the code says so rather than pretending.
 
----
-
-Written up in full here: **${url}**
-
-_A distilled snippet from a shipped engine — see the post for context._
 `,
+  note: 'A distilled snippet from a shipped engine — see the post for context.',
 }, {
   dir: 'campaign-progression',
   marker: 'Campaign ordering — difficulty rates a level, progression places it',
@@ -472,12 +496,8 @@ remaining level is chosen for it on difficulty, role, ramp and variety together.
 - **Record how every slot was filled.** When no candidate fits, the builder loosens one constraint
   at a time and writes down which. That turns "why is level 214 a 3.1?" into reading one object.
 
----
-
-Written up in full here: **${url}**
-
-_A distilled snippet from a shipped engine — see the post for context._
 `,
+  note: 'A distilled snippet from a shipped engine — see the post for context.',
 }, {
   dir: 'vite-shrink-pack',
   marker: 'A Vite plugin that shrinks a JSON content pack into the build output',
@@ -515,12 +535,8 @@ Firestore chunk and a 168 KB Auth chunk come from.
 only helps while nothing re-imports the real thing; without the assertion the next dependency
 upgrade quietly puts 700 KB back and nobody finds out.
 
----
-
-Written up in full here: **${url}**
-
-_A distilled snippet from a shipped engine — see the post for context._
 `,
+  note: 'A distilled snippet from a shipped engine — see the post for context.',
 }, {
   dir: 'capacitor-android-size',
   marker: 'Cutting a Capacitor Android download in half — R8, ProGuard and the real delivered size',
@@ -578,12 +594,8 @@ the real download has halved.
 - **Verify on a device, in the release variant.** R8 breaks things by removing code reached only
   reflectively, and that is the one build nobody runs during development.
 
----
-
-Written up in full here: **${url}**
-
-_A distilled snippet from a shipped engine — see the post for context._
 `,
+  note: 'A distilled snippet from a shipped engine — see the post for context.',
 }, {
   dir: 'pack-conformance',
   marker: 'Conformance suite for generated game content — walk every level before shipping it',
@@ -636,12 +648,8 @@ Walking every level is seconds, not milliseconds. Sample it and you have a check
 the run where it mattered: the interesting board is always the one you did not draw. If it gets
 too slow, move it to the pack build and the release build — not to fewer levels.
 
----
-
-Written up in full here: **${url}**
-
-_A distilled snippet from a shipped engine — see the post for context._
 `,
+  note: 'A distilled snippet from a shipped engine — see the post for context.',
 }, {
   dir: 'game-economy',
   marker: 'A mobile game coin economy priced off its own difficulty model',
@@ -688,12 +696,8 @@ The simulator's \`--test\` mode checks that no legitimate action sequence produc
 coins, that every item is reachable from zero, that replaying never nets positive, and that the
 difficulty walk the prices derive from still matches the metrics shipped on every level.
 
----
-
-Written up in full here: **${url}**
-
-_A distilled snippet from a shipped engine — see the post for context._
 `,
+  note: 'A distilled snippet from a shipped engine — see the post for context.',
 }];
 
 /* ─────────────────────────── build ─────────────────────────── */
@@ -708,8 +712,8 @@ const problems = [];
 const manifest = [];
 
 for (const g of GISTS) {
-  const url   = backlink(g.post);
-  const files = { '0-README.md': g.readme(url), ...g.files() };
+  const links = backlinks(g.post);
+  const files = { '0-README.md': compose(g, links), ...g.files() };
   const dir   = path.join(OUT, g.dir);
 
   for (const [name, content] of Object.entries(files)) {
@@ -722,7 +726,9 @@ for (const g of GISTS) {
 
   fs.mkdirSync(dir, { recursive: true });
   for (const [name, content] of Object.entries(files)) fs.writeFileSync(path.join(dir, name), content);
-  manifest.push({ dir: g.dir, marker: g.marker, post: g.post });
+  // `post` stays the primary slug so existing readers of this file keep working;
+  // `posts` is every post the gist links back to.
+  manifest.push({ dir: g.dir, marker: g.marker, post: links[0].slug, posts: links.map(l => l.slug) });
 
   console.log(`gist/${g.dir}/ — ${Object.keys(files).length} files`);
   for (const [n, c] of Object.entries(files)) console.log(`  ${n}  ${(c.length / 1024).toFixed(1)} KB`);

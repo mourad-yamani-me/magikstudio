@@ -1,5 +1,7 @@
 # Build gates for a static site
 
+> **Full write-up:** [I don't review AI code. My build does.](https://www.indiecore.net/blog/build-reviews-ai-code/)
+
 Two dependency-free Node scripts that decide whether a build is allowed to ship. Run them
 after your generator writes its output; wire them into CI so the deploy job depends on them.
 
@@ -59,6 +61,11 @@ a coding agent and fixed in one pass. "Validation failed" starts a conversation 
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/build-reviews-ai-code/**
+Written up in full here: **[I don't review AI code. My build does.](https://www.indiecore.net/blog/build-reviews-ai-code/)**
+
+Also written about in:
+
+- [The check that passed while broken](https://www.indiecore.net/blog/the-check-that-passed-while-broken/)
+- [Cloudflare injects a beacon. My CSP said no.](https://www.indiecore.net/blog/cloudflare-beacon-csp-blocked/)
 
 _Generated from the live scripts — see the post for context._

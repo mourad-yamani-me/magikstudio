@@ -1,0 +1,99 @@
+name: Sync hub
+
+# Publishes hub/ to the public repo on the IndieCoreDev account that serves the
+# snippet index at https://indiecoredev.github.io/.
+#
+# Why a different repo at all: this one is private and owned under a real name,
+# while the gists are published anonymously. Serving Pages from here would join
+# the two identities, which is the thing build-gist.mjs strips every commit to
+# avoid. See the header of scripts/build-hub.mjs.
+#
+# Separate from ci-cd.yml for the same reason sync-gist.yml is: the site deploy
+# must not depend on a second repository being writable.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'hub/**'
+      - 'scripts/build-hub.mjs'
+      - 'gist/gists.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-hub
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Publish the hub
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Regenerate the hub from the manifest
+        run: node scripts/build-hub.mjs
+
+      - name: Push each file to the hub repo
+        env:
+          # A classic PAT on the IndieCoreDev account with `repo` scope, so it
+          # can write to that account's public repo. GIST_TOKEN cannot be
+          # reused: it is gist-scope only, on purpose.
+          GH_TOKEN: ${{ secrets.HUB_TOKEN }}
+          HUB_REPO: IndieCoreDev/IndieCoreDev.github.io
+        run: |
+          set -euo pipefail
+
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::HUB_TOKEN is not set — add it as a repository secret."
+            exit 1
+          fi
+
+          echo "acting as: $(gh api user --jq .login)"
+          echo "### Hub published" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          for f in hub/*; do
+            name=$(basename "$f")
+
+            # The contents API needs the current blob sha to replace a file,
+            # and no sha at all to create one. Empty when the file is new.
+            sha=$(gh api "/repos/$HUB_REPO/contents/$name" --jq .sha 2>/dev/null || true)
+
+            # Unchanged content would otherwise be committed every run, filling
+            # the hub repo's history with commits that change nothing.
+            remote=$(gh api "/repos/$HUB_REPO/contents/$name" --jq .content 2>/dev/null | tr -d '\n' | base64 -d 2>/dev/null || true)
+            if [ -n "$remote" ] && [ "$remote" = "$(cat "$f")" ]; then
+              echo "── $name unchanged"
+              echo "- \`$name\` unchanged" >> "$GITHUB_STEP_SUMMARY"
+              continue
+            fi
+
+            echo "── $name"
+            CONTENT=$(base64 < "$f" | tr -d '\n') SHA="$sha" NAME="$name" node -e '
+              const body = {
+                message: "Update " + process.env.NAME + " from the source repo",
+                content: process.env.CONTENT,
+              };
+              if (process.env.SHA) body.sha = process.env.SHA;
+              require("fs").writeFileSync("payload.json", JSON.stringify(body));
+            '
+            url=$(gh api -X PUT "/repos/$HUB_REPO/contents/$name" --input payload.json --jq .content.html_url)
+            echo "   $url"
+            echo "- \`$name\` → $url" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Live at <https://indiecoredev.github.io/>" >> "$GITHUB_STEP_SUMMARY"

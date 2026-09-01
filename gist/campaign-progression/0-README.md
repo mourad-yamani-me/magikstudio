@@ -1,5 +1,7 @@
 # Ordering a campaign without sorting it
 
+> **Full write-up:** [Difficulty rates a stage, progression places it](https://www.indiecore.net/blog/difficulty-rates-progression-places/)
+
 Sorting a level library easiest-to-hardest produces a campaign that is flat for a hundred levels
 and then a wall. On one 392-board library it put all 92 Easy boards inside the first 138 stages,
 with no Tricky board until stage 133.
@@ -34,6 +36,6 @@ remaining level is chosen for it on difficulty, role, ramp and variety together.
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/difficulty-rates-progression-places/**
+Written up in full here: **[Difficulty rates a stage, progression places it](https://www.indiecore.net/blog/difficulty-rates-progression-places/)**
 
 _A distilled snippet from a shipped engine — see the post for context._

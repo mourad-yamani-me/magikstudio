@@ -1,5 +1,7 @@
 # Cutting a Capacitor Android download in half
 
+> **Full write-up:** [Cutting a Capacitor Android build in half](https://www.indiecore.net/blog/capacitor-android-build-apk-size/)
+
 13.09 MB -> 5.88 MB delivered, on a WebView game with 392 levels of JSON in it.
 
 ```
@@ -47,6 +49,6 @@ the real download has halved.
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/capacitor-android-build-apk-size/**
+Written up in full here: **[Cutting a Capacitor Android build in half](https://www.indiecore.net/blog/capacitor-android-build-apk-size/)**
 
 _A distilled snippet from a shipped engine — see the post for context._

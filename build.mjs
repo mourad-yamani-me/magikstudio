@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process';
 import crypto from 'node:crypto';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
+import { GIST_DIR, GIST_RE, gistAnchor, resolveGistEmbed } from './scripts/gist-embed.mjs';
 import hljs from 'highlight.js';
 
 /* Syntax highlighting happens at build time — no runtime JS, no CDN. */
@@ -501,7 +502,6 @@ function cssFor(html){
 
 /* ───────── blog ───────── */
 const BLOG_DIR = path.join(ROOT, 'content/blog');
-const GIST_DIR = path.join(ROOT, 'gist');
 
 /* Embeds a gist file inline, at the point in the article where it is being
    discussed. The content comes from gist/ — the same files the gist is
@@ -509,74 +509,11 @@ const GIST_DIR = path.join(ROOT, 'gist');
    GitHub's <script> embed is deliberately avoided: it is a render-blocking
    third-party request, unstyled, and would break the performance budget.
 
-     {{gist:wrangler.jsonc}}          whole file
-     {{gist:ci-cd.yml#head}}          everything above `jobs:`
-     {{gist:ci-cd.yml#preview}}       one job, found by name
-     {{gist:ci-cd.yml:64-92}}         explicit lines (fragile — prefer #anchors)
-
-   Anchors are resolved from the YAML structure, so they survive edits above
-   them; line numbers do not.
-*/
-const gistAnchor = name => 'file-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-const LANG = { '.jsonc': 'json', '.json': 'json', '.yml': 'yaml', '.yaml': 'yaml', '.md': 'markdown', '.mjs': 'javascript', '.js': 'javascript', '.gradle': 'groovy', '.pro': 'properties' };
-
-/* gist/ holds one subdirectory per published gist. An embed may name the file
-   alone — `verify.mjs` — and it is found wherever it lives, so posts don't
-   have to know which gist a file ended up in. A `dir/file` path also works.
-   Ambiguity is an error rather than a coin toss. */
-function resolveGistFile(name, postFile) {
-  const direct = path.join(GIST_DIR, name);
-  if (fs.existsSync(direct) && fs.statSync(direct).isFile()) return direct;
-
-  const hits = fs.readdirSync(GIST_DIR, { withFileTypes: true })
-    .filter(e => e.isDirectory())
-    .map(e => path.join(GIST_DIR, e.name, name))
-    .filter(f => fs.existsSync(f));
-
-  if (hits.length === 1) return hits[0];
-  if (hits.length > 1) {
-    const where = hits.map(h => path.relative(GIST_DIR, h)).join(', ');
-    throw new Error(`${postFile}: {{gist:${name}}} — ambiguous, matches ${where}. Qualify it with the directory.`);
-  }
-  throw new Error(`${postFile}: {{gist:${name}}} — no such file under gist/`);
-}
-
+   Which lines an embed selects is decided in scripts/gist-embed.mjs, shared
+   with the dev.to publisher; only the markup below is specific to the site. */
 function embedGists(body, gistUrl, postFile) {
-  return body.replace(/\{\{gist:([^:#}]+)(?:#([\w-]+))?(?::(\d+)-(\d+))?\}\}/g, (_, name, anchor, from, to) => {
-    const file = resolveGistFile(name.trim(), postFile);
-    const base = path.basename(name.trim());
-    let content = fs.readFileSync(file, 'utf8').replace(/\s+$/, '');
-    let note = '';
-
-    if (anchor) {
-      const lines = content.split('\n');
-      if (anchor === 'head') {
-        const j = lines.findIndex(l => /^jobs:\s*$/.test(l));
-        if (j < 0) throw new Error(`${postFile}: {{gist:${name}#head}} — no top-level "jobs:" key found`);
-        content = lines.slice(0, j).join('\n').replace(/\s+$/, '');
-        note = ' — triggers and permissions';
-      } else {
-        // find `  <anchor>:` and take everything until the next key at that indent
-        const start = lines.findIndex(l => new RegExp(`^(\\s+)${anchor}:\\s*$`).test(l));
-        if (start < 0) throw new Error(`${postFile}: {{gist:${name}#${anchor}}} — no "${anchor}:" key in ${path.relative(ROOT, file)}`);
-        const indent = lines[start].match(/^\s*/)[0].length;
-        let end = lines.length;
-        for (let i = start + 1; i < lines.length; i++) {
-          const l = lines[i];
-          if (l.trim() === '' || l.startsWith(' '.repeat(indent + 1))) continue;
-          if (/^\s*#/.test(l)) continue;
-          end = i; break;
-        }
-        content = lines.slice(start, end).join('\n').replace(/\s+$/, '');
-        note = ` — ${anchor} job`;
-      }
-    } else if (from) {
-      const lines = content.split('\n');
-      if (+to > lines.length) throw new Error(`${postFile}: {{gist:${name}:${from}-${to}}} — file has only ${lines.length} lines`);
-      content = lines.slice(+from - 1, +to).join('\n');
-      note = ` lines ${from}–${to}`;
-    }
-    const lang = LANG[path.extname(base)] || '';
+  return body.replace(GIST_RE, (_, name, anchor, from, to) => {
+    const { base, content, note, lang } = resolveGistEmbed(name, anchor, from, to, postFile);
     const href = gistUrl ? `${gistUrl}#${gistAnchor(base)}` : '';
     // marked renders the fence; the surrounding markup is passed through as HTML
     return [
@@ -664,11 +601,13 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
   const manifest = path.join(GIST_DIR, 'gists.json');
   if (fs.existsSync(manifest)) {
     for (const g of JSON.parse(fs.readFileSync(manifest, 'utf8'))) {
-      const post = POSTS.find(p => p.slug === g.post);
-      if (!post) continue;                       // draft or renamed; build-gist.mjs guards that
-      if (!post.code) console.warn(
-        `  warn  gist/${g.dir}/ links to /blog/${g.post}/, but that post has no \`code:\` field ` +
-        `— add the gist URL so readers can find it.`);
+      for (const slug of g.posts ?? [g.post]) {
+        const post = POSTS.find(p => p.slug === slug);
+        if (!post) continue;                     // draft or renamed; build-gist.mjs guards that
+        if (!post.code) console.warn(
+          `  warn  gist/${g.dir}/ links to /blog/${slug}/, but that post has no \`code:\` field ` +
+          `— add the gist URL so readers can find it.`);
+      }
     }
   }
 }

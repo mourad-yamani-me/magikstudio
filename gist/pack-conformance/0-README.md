@@ -1,5 +1,7 @@
 # Testing content you did not write
 
+> **Full write-up:** [Testing a level pack you did not write](https://www.indiecore.net/blog/testing-a-level-pack-you-did-not-write/)
+
 The failure mode of a bad content pack is not a crash. It is a level that cannot be solved,
 found by a player, three weeks after release, in a review. Unit tests will not find it — they
 test the code, and the code is faithfully rendering an impossible board.
@@ -45,6 +47,6 @@ too slow, move it to the pack build and the release build — not to fewer level
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/testing-a-level-pack-you-did-not-write/**
+Written up in full here: **[Testing a level pack you did not write](https://www.indiecore.net/blog/testing-a-level-pack-you-did-not-write/)**
 
 _A distilled snippet from a shipped engine — see the post for context._

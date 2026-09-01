@@ -1,5 +1,7 @@
 # Rating a puzzle by the decisions it forces
 
+> **Full write-up:** [Rating puzzle difficulty by decisions](https://www.indiecore.net/blog/rating-puzzle-difficulty-by-decisions/)
+
 Grid size is the obvious difficulty proxy and it is wrong. This measures the branching factor
 of the solve instead.
 
@@ -35,6 +37,6 @@ that will have to be undone.
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/rating-puzzle-difficulty-by-decisions/**
+Written up in full here: **[Rating puzzle difficulty by decisions](https://www.indiecore.net/blog/rating-puzzle-difficulty-by-decisions/)**
 
 _A distilled snippet from a shipped engine — see the post for context._

@@ -25,6 +25,8 @@ npm run gist       # regenerate gist/ from the live files
 npm run seo        # submit new URLs, then report index status and search performance
 npm run seo:watch  # what Search Console says changed, and what to do about it
 npm run topics     # what to write next, and the success condition for each subject
+npm run devto      # dry run: which posts would be cross-posted to dev.to
+npm run hub        # regenerate hub/ — the public snippet index
 ```
 
 ## Never break these
@@ -80,6 +82,8 @@ git add -A                                            # no
 | Changing a privacy policy | `_source/legacy/*.txt` — the text is parsed from there |
 | Changing the mailing list | the `KIT` block in `build.mjs`, and the matching settings in the Kit account |
 | Acting on Search Console | [`docs/seo-automation.md`](docs/seo-automation.md) — `npm run seo:watch -- --brief` prints the open findings and the fix each one implies |
+| Cross-posting to dev.to | [`docs/cross-posting.md`](docs/cross-posting.md) — the canonical rule, `devto: true`, and why only dev.to |
+| Changing the snippet hub | [`docs/cross-posting.md`](docs/cross-posting.md#the-snippet-hub) — why it lives on a second account, and the one-time setup |
 
 Those files are the source of truth. If something here disagrees with them, they win, and
 this file is the one to fix.

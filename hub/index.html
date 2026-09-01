@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IndieCore — code from the posts</title>
+<meta name="description" content="Ten gists generated from the code that actually runs, each one written up in full on indiecore.net.">
+<link rel="canonical" href="https://indiecoredev.github.io/">
+<style>
+  :root { color-scheme: light dark; --bg:#fbfbfa; --fg:#1a1a19; --dim:#5c5c58; --line:#e3e3df; --card:#fff; --link:#1d4ed8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#141414; --fg:#e8e8e5; --dim:#a0a09a; --line:#2c2c2a; --card:#1c1c1b; --link:#93b4ff; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 3rem 1.25rem 4rem; }
+  h1 { font-size: 1.75rem; line-height:1.25; margin:0 0 .5rem; }
+  .lede { color: var(--dim); margin: 0 0 2.5rem; }
+  ul { list-style:none; margin:0; padding:0; display:grid; gap:1rem; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:1.1rem 1.25rem; }
+  .card h2 { font-size:1.05rem; line-height:1.35; margin:0 0 .4rem; }
+  .card p { margin:0 0 .55rem; }
+  .files { font-size:.8rem; color:var(--dim); }
+  .files code { background:color-mix(in srgb, var(--fg) 7%, transparent); padding:.1rem .35rem; border-radius:4px; }
+  .links { display:flex; flex-wrap:wrap; gap:.4rem 1rem; margin:0; font-size:.9rem; }
+  a { color:var(--link); }
+  footer { margin-top:3rem; padding-top:1.5rem; border-top:1px solid var(--line); color:var(--dim); font-size:.9rem; }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Code from the posts</h1>
+    <p class="lede">Each of these is generated from the file that actually runs — not pasted from
+      it — so a snippet here cannot drift from the thing it was taken out of. Every one is
+      written up in full on <a href="https://www.indiecore.net/blog/">indiecore.net</a>.</p>
+    <ul>
+      <li class="card">
+        <h2>Static site → Cloudflare Workers with gated GitHub Actions deploys</h2>
+        <p>A build-verify-deploy pipeline on Cloudflare's free tier, and the five traps that cost me an evening — including one that silently takes your staging URL offline.</p>
+        <p class="files"><code>ci-cd.yml</code> <code>wrangler.jsonc</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/11369ffb01a68f04f0bfc9f803922b17">Read the code</a>
+          <a href="https://www.indiecore.net/blog/static-site-cloudflare-workers/">Deploying a static site to Cloudflare Workers</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>Build gates for a static site — output verification and a Lighthouse budget</h2>
+        <p>Reading every diff at generation speed isn't review, it's skimming. Here is the 169-line verifier that gates this site, and the bug behind every check in it.</p>
+        <p class="files"><code>lighthouse-check.mjs</code> <code>verify.mjs</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/6c707bf89e5d215225f3bdac6e4a4b25">Read the code</a>
+          <a href="https://www.indiecore.net/blog/build-reviews-ai-code/">I don't review AI code. My build does.</a>
+          <a href="https://www.indiecore.net/blog/the-check-that-passed-while-broken/">The check that passed while broken</a>
+          <a href="https://www.indiecore.net/blog/cloudflare-beacon-csp-blocked/">Cloudflare injects a beacon. My CSP said no.</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>Responsive image pipeline — Chrome's byte budget, measured sizes, one cache</h2>
+        <p>Improve image delivery&quot; makes two complaints in one panel. Both have exact arithmetic behind them, readable straight out of the JSON report.</p>
+        <p class="files"><code>image-pipeline.mjs</code> <code>responsive-markup.mjs</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/d653221d437be0389aa4b4281f929e99">Read the code</a>
+          <a href="https://www.indiecore.net/blog/lighthouse-image-budget/">Lighthouse's image budget is w × h ÷ 6</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>Accessible image lightbox — focus trap, restore, and the visibility trap</h2>
+        <p>My lightbox was invisible and still in the tab order. Fixing that broke focus handling silently, because focus() on a hidden element reports nothing.</p>
+        <p class="files"><code>lightbox.css</code> <code>lightbox.js</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/94c7819fac39ad0f3b181aa84013a414">Read the code</a>
+          <a href="https://www.indiecore.net/blog/opacity-zero-is-not-hidden/">opacity 0 does not hide anything</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>Rating puzzle difficulty by the decisions a level forces</h2>
+        <p>Grid size is the obvious difficulty proxy and it is wrong. Measuring the branching factor of the solve gives a rating that survives contact with players.</p>
+        <p class="files"><code>summarise.js</code> <code>tiers.js</code> <code>walk.js</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/02835f475522e68083df2567f1a562b5">Read the code</a>
+          <a href="https://www.indiecore.net/blog/rating-puzzle-difficulty-by-decisions/">Rating puzzle difficulty by decisions</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>Campaign ordering — difficulty rates a level, progression places it</h2>
+        <p>Sorting a level library easiest-to-hardest gives a campaign that is flat for a hundred stages and then a wall. What replaced the sort.</p>
+        <p class="files"><code>beats.js</code> <code>envelope.js</code> <code>tones.js</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/85b015318475143f35ee6df50fcf9d65">Read the code</a>
+          <a href="https://www.indiecore.net/blog/difficulty-rates-progression-places/">Difficulty rates a stage, progression places it</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>A Vite plugin that shrinks a JSON content pack into the build output</h2>
+        <p>392 levels of JSON, pretty-printed for review and minified for the store. The Vite plugin that does it, and the hook choice that hid a real error.</p>
+        <p class="files"><code>shrink-stage-pack.js</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/788e88e15747179b5ee493057be4821e">Read the code</a>
+          <a href="https://www.indiecore.net/blog/shipping-a-4mb-level-pack/">Shipping a 4 MB level pack</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>Cutting a Capacitor Android download in half — R8, ProGuard and the real delivered size</h2>
+        <p>13.1 MB down to 5.9 MB delivered. R8 is off in the project Capacitor generates, and one library's consumer ProGuard rule was pinning 9,304 classes.</p>
+        <p class="files"><code>delivered-size.mjs</code> <code>drop-web-firebase.js</code> <code>proguard-rules.pro</code> <code>release-build.gradle</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/5d3ca9b6ad1add515f358883a1bf106f">Read the code</a>
+          <a href="https://www.indiecore.net/blog/capacitor-android-build-apk-size/">Cutting a Capacitor Android build in half</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>Conformance suite for generated game content — walk every level before shipping it</h2>
+        <p>Unit-testing the game does not tell you whether the 392 levels in this build are solvable. So the suite plays every one of them.</p>
+        <p class="files"><code>pack-suite.js</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/95eb02285852062865e861573d020faa">Read the code</a>
+          <a href="https://www.indiecore.net/blog/testing-a-level-pack-you-did-not-write/">Testing a level pack you did not write</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>A mobile game coin economy priced off its own difficulty model</h2>
+        <p>Levels differ 13x in the thinking they demand, so a flat coin reward is wrong on nearly all of them. Tying payouts to the difficulty walk.</p>
+        <p class="files"><code>economy.js</code></p>
+        <p class="links">
+          <a href="https://gist.github.com/IndieCoreDev/8f228b50bc004fc45e826368d0d1da22">Read the code</a>
+          <a href="https://www.indiecore.net/blog/pricing-an-economy-off-its-difficulty-model/">Pricing an economy off its difficulty model</a>
+        </p>
+      </li>
+    </ul>
+    <footer>
+      <p>Published from the same repository that generates them. The write-ups live at
+        <a href="https://www.indiecore.net/blog/">indiecore.net/blog</a>.</p>
+    </footer>
+  </main>
+</body>
+</html>

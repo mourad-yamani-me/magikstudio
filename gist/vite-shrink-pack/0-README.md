@@ -1,5 +1,7 @@
 # Two Vite plugins for a Capacitor game
 
+> **Full write-up:** [Shipping a 4 MB level pack](https://www.indiecore.net/blog/shipping-a-4mb-level-pack/)
+
 One shrinks a JSON content pack on its way into `dist/`; the other removes an SDK the shipped
 app can never execute.
 
@@ -30,6 +32,6 @@ upgrade quietly puts 700 KB back and nobody finds out.
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/shipping-a-4mb-level-pack/**
+Written up in full here: **[Shipping a 4 MB level pack](https://www.indiecore.net/blog/shipping-a-4mb-level-pack/)**
 
 _A distilled snippet from a shipped engine — see the post for context._

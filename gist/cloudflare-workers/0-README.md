@@ -1,5 +1,7 @@
 # Static site → Cloudflare Workers, with gated deploys
 
+> **Full write-up:** [Deploying a static site to Cloudflare Workers](https://www.indiecore.net/blog/static-site-cloudflare-workers/)
+
 A GitHub Actions pipeline that builds a static site, refuses to ship it if the checks fail,
 and deploys it to Cloudflare Workers. Free tier throughout.
 
@@ -51,6 +53,6 @@ are specific to each site. There is a companion gist for those — linked from t
 
 ---
 
-Written up in full here: **https://www.indiecore.net/blog/static-site-cloudflare-workers/**
+Written up in full here: **[Deploying a static site to Cloudflare Workers](https://www.indiecore.net/blog/static-site-cloudflare-workers/)**
 
 _Generated from the live configuration — see the post for context._

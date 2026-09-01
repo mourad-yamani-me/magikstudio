@@ -253,7 +253,13 @@ Then `node scripts/build-gist.mjs` and commit `gist/`.
 - **`marker` is the identity.** The workflow finds the gist by that description string, so
   changing it later creates a *second* gist instead of updating the first.
 - **`post` is checked.** The build refuses to run if that post is missing or still a draft, so
-  a gist can never advertise a URL that 404s.
+  a gist can never advertise a URL that 404s. It takes a list when more than one post carries
+  the same gist as its `code:` card — `build-gates` is the `code:` card on three — and the
+  gist then links back to every one of them instead of only the first.
+- **The backlink is composed, not written.** The template is the body; the link under the H1
+  and the one in the footer are generated from the post's own `title:`, so all ten read the
+  same and a new gist cannot forget one. Anchor text is the title because that is the text
+  someone copies when they cite you.
 - **`sanitize()` and the leak guard** strip the project name, domain and account handles.
   Anything identifying that slips through fails the build rather than getting published.
 
@@ -277,6 +283,12 @@ warn  gist/build-gates/ links to /blog/build-reviews-ai-code/, but that post has
 That warning is the only thing standing between "I'll add the link later" and a gist nobody
 ever finds. It is deliberately not an error — there's a legitimate window where the URL
 genuinely doesn't exist yet.
+
+### Cross-posting a post to dev.to
+
+Add `devto: true` to the frontmatter and `npm run devto` will pick it up. The copy is
+canonicalised back to this site, which is the part that keeps it from competing with the
+original. Full procedure in [`docs/cross-posting.md`](../../docs/cross-posting.md).
 
 ### Embedding files inline
 
