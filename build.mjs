@@ -252,6 +252,7 @@ const GAMES = [
     blurb:'Pour, sort and clear the bottles until every colour finds its place. It starts gentle and turns genuinely mean — in the best way.',
     feats:['Hundreds of levels','No timer pressure','Undo & hints','Plays offline'] },
   { key:'gridsmash',    slug:'color-block-puzzle-master', legacy:'privacy-policy-for-gridsmash-block',
+    asset:'color-block-puzzle-master',
     video:'eOv0iC1BGfg',   // official gameplay trailer, the one listing that has one
     blurb:'Drop blocks, clear lines, chain the combo. One more go turns into an hour, and the grid never blinks first.',
     feats:['Combo scoring','Play Games leaderboards','Achievements','Plays offline'] },
@@ -259,6 +260,7 @@ const GAMES = [
     blurb:'Reveal the logo, name the brand. You know more than you think you do — until suddenly you don’t.',
     feats:['Cloud save','Level packs','Hint system','Plays offline'] },
   { key:'perfectmatch', slug:'number-match-merge-puzzle', legacy:'privacy-policy-for-perfectmatch-numbers',
+    asset:'number-match-merge-puzzle',
     blurb:'Match the pairs, merge the numbers, clear the board before it fills. The first game we shipped, and still the purest loop we’ve made.',
     feats:['Classic & endless','Quick sessions','No timer','Plays offline'] },
 
@@ -274,12 +276,18 @@ const GAMES = [
 ].map(g => {
   const p = play[g.key] || {};                       // no Play listing yet -> entry carries its own
   const art = f => fs.existsSync(path.join(ROOT, 'public/assets/games', f)) ? f : '';
+  // `key` identifies the game to us and to the Play scrape. `asset` names its
+  // image files, and defaults to the same thing — they only differ where the
+  // key is an internal codename, because Google reads the file name to work out
+  // what an image is, and "gridsmash" is a word no player has ever searched for.
+  // Renaming the key instead would mean renaming what the scraper writes.
+  const a = g.asset || g.key;
   return { live:true, ...p, ...g,
            name: g.name || p.title, tagline: g.tagline || p.short,
            pkg: g.pkg || p.pkg,
            playUrl:`https://play.google.com/store/apps/details?id=${g.pkg || p.pkg}`,
-           shots:shotsFor(g.key),
-           icon:art(`${g.key}-icon.jpg`), feature:art(`${g.key}-feature.jpg`) };
+           shots:shotsFor(a),
+           icon:art(`${a}-icon.jpg`), feature:art(`${a}-feature.jpg`) };
 });
 
 const ALL = GAMES;
@@ -838,7 +846,7 @@ function pageHome(){
   </div>
   <div class="phones" id="phones">
     <div class="glowpad"></div>
-    <div class="phone p2" data-depth="26"><div class="scr"><img data-hero fetchpriority="low" src="/assets/games/gridsmash-02.jpg" alt="Color Block Puzzle Master gameplay" loading="lazy"></div></div>
+    <div class="phone p2" data-depth="26"><div class="scr"><img data-hero fetchpriority="low" src="/assets/games/color-block-puzzle-master-02.jpg" alt="Color Block Puzzle Master gameplay" loading="lazy"></div></div>
     <div class="phone p3" data-depth="20"><div class="scr"><img data-hero fetchpriority="low" src="/assets/games/word-slot-01.jpg" alt="Word Slot: Fill-In Crossword gameplay" loading="lazy"></div></div>
     <div class="phone p1" data-depth="42"><div class="scr"><img data-hero src="/assets/games/soda-jam-02.jpg" alt="Soda Jam: Color Sort gameplay" width="250" height="444" fetchpriority="high"></div></div>
   </div>
@@ -1820,6 +1828,16 @@ const redirects = [
   `/p/contact.html                                /contact/             301`,
   // the single blog post: "PerfectMatch: Numbers"
   `/2025/05/perfectmatch-numbers.html             /games/number-match-merge-puzzle/  301`,
+  // Two games' artwork was named after an internal codename. The files are now
+  // named for the game, because Google reads a file name to work out what an
+  // image is. These keep the old URLs answering — Google Images may hold them,
+  // and a 404 there loses the image rather than moving it.
+  ...ALL.filter(g => g.asset).flatMap(g => [
+    `/assets/games/${g.key}-icon.jpg                /assets/games/${g.asset}-icon.jpg      301`,
+    `/assets/games/${g.key}-feature.jpg             /assets/games/${g.asset}-feature.jpg   301`,
+    ...g.shots.map((s, i) =>
+      `/assets/games/${g.key}-0${i + 1}.jpg           /assets/games/${s}   301`),
+  ]),
   // Blogger's feed endpoints, for anything still subscribed
   `/feeds/posts/default                           /blog/feed.xml        301`,
   `/feeds/posts/default/*                         /blog/feed.xml        301`,
