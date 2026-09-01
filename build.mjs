@@ -574,7 +574,7 @@ function embedGists(body, gistUrl, postFile) {
     return [
       `<figure class="gembed">`,
       `<figcaption><span class="gfile">${esc(base)}${note}</span>`,
-      href ? `<a href="${href}" target="_blank" rel="noopener">Open in gist<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>` : '',
+      href ? `<a href="${href}" target="_blank" rel="noopener">Open in gist<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>` : '',
       `</figcaption>`,
       '',
       '```' + lang,
@@ -657,7 +657,7 @@ const LOGO = (s=30) => `<svg width="${s}" height="${s}" viewBox="0 0 48 48" fill
 <rect x="4" y="4" width="40" height="40" rx="12" fill="url(#lg)"/>
 <path d="M17 32V16h5.6c4.6 0 7.4 3 7.4 8s-2.8 8-7.4 8H17Zm4.6-3.6h.9c2.3 0 3.7-1.6 3.7-4.4s-1.4-4.4-3.7-4.4h-.9v8.8Z" fill="#20100A"/></svg>`;
 const PLAY_ICON = `<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.6 2.3 13.8 12 3.6 21.7c-.4-.2-.6-.6-.6-1.1V3.4c0-.5.2-.9.6-1.1Zm11.6 8.3L5.8 1.8l11.6 6.6-2.2 2.2Zm0 2.8 2.2 2.2-11.6 6.6 9.4-8.8Zm1.4-1.4 2.9-1.7c.7-.4.7-1.4 0-1.8l-2.9-1.7L14.2 12l2.4 2.4Z"/></svg>`;
-const TICK = `<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+const TICK = `<svg aria-hidden="true" class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
 
 const NAV = cur => `
 <header class="nav" id="nav"><div class="shell nav-in">
@@ -671,7 +671,7 @@ const NAV = cur => `
     <a href="/contact/"${cur==='contact'?' aria-current="page"':''}>Contact</a>
     <a class="btn btn-primary btn-sm" href="/#games">Get the games</a>
   </nav>
-  <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobmenu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFF6E9" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobmenu"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFF6E9" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </div>
 <nav class="mobmenu" id="mobmenu" aria-label="Primary, compact">
   <a href="/#games">Games</a><a href="/blog/">Blog</a><a href="/subscribe/?from=nav">Newsletter</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a><a href="/legal/">Legal</a>
@@ -791,10 +791,10 @@ function gameRow(g, i){
          ${g.shots.slice(0,4).map((s,n)=>`<img${n?' aria-hidden="true"':' class="on"'} src="/assets/games/${s}" alt="${esc(g.name)} screenshot ${n+1}" loading="lazy">`).join('')}
        </div></div><div class="gdots"></div></div>`
     : `<div class="gallery"><div class="scr" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#241442,#140A26)">
-         <svg width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.1" stroke-linecap="round" opacity=".8"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 9h3M8 13h8M8 17h5"/></svg>
+         <svg aria-hidden="true" width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.1" stroke-linecap="round" opacity=".8"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 9h3M8 13h8M8 17h5"/></svg>
        </div></div>`;
   const cta = g.live
-    ? `<img class="gicon" src="/assets/games/${g.icon}" alt="" width="56" height="56">
+    ? `<img class="gicon" src="/assets/games/${g.icon}" alt="${esc(g.name)} app icon" width="56" height="56">
        <a class="btn btn-primary" href="${g.playUrl}" target="_blank" rel="noopener">${PLAY_ICON} Play free<span class="sr-only"> — ${esc(g.name)}</span></a>
        <a class="btn btn-ghost" href="/games/${g.slug}/">Learn more<span class="sr-only"> about ${esc(g.name)}</span></a>`
     : `<span class="soon"><span class="dot"></span> Coming soon</span>
@@ -863,7 +863,7 @@ function pageHome(){
   </div>
   <div class="why">
     ${WHY.map(([h,p,ico])=>`<div class="wcard rv" data-tilt>
-      <div class="wico"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${ico}</svg></div>
+      <div class="wico"><svg aria-hidden="true" width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${ico}</svg></div>
       <h3>${h}</h3><p>${p}</p></div>`).join('')}
   </div>
 </div></section>
@@ -922,7 +922,7 @@ function pageGame(g){
   <div>
     <nav class="crumb rv" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/#games">Games</a> <span>/</span> <span style="color:var(--text)">${esc(g.name)}</span></nav>
     <div class="ghead rv">
-      ${g.icon?`<img src="/assets/games/${g.icon}" alt="" width="88" height="88">`:''}
+      ${g.icon?`<img src="/assets/games/${g.icon}" alt="${esc(g.name)} app icon" width="88" height="88">`:''}
       <div><span class="gtag">${esc(g.category)}${g.live?'':' · in development'}</span><h1 style="margin-top:12px">${esc(g.name)}</h1></div>
     </div>
     <p class="lede rv">${esc(g.tagline)}</p>
@@ -945,7 +945,7 @@ function pageGame(g){
       ${g.shots.map((s,n)=>`<img${n?' aria-hidden="true"':' class="on" fetchpriority="high"'} src="/assets/games/${s}" alt="${esc(g.name)} screenshot ${n+1}"${n?' loading="lazy"':''}>`).join('')}
     </div></div><div class="gdots"></div></div>`
     : `<div class="gallery"><div class="scr" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#241442,#140A26)">
-         <svg width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.1" stroke-linecap="round" opacity=".8"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 9h3M8 13h8M8 17h5"/></svg></div></div>`}
+         <svg aria-hidden="true" width="76" height="76" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.1" stroke-linecap="round" opacity=".8"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 9h3M8 13h8M8 17h5"/></svg></div></div>`}
   </div>
 </div></section>
 
@@ -961,7 +961,7 @@ ${g.shots.length > 1 ? `<section class="sec-shots"><div class="shell">
   <div class="shots rv" style="--cols:${gridCols(g.shots.length)};--max:${gridMax(g.shots.length)}px" data-lightbox>
     ${g.shots.map((s,n)=>`<button class="shot" type="button" data-i="${n}" aria-label="Enlarge screenshot ${n+1} of ${g.shots.length}">
       <span class="scr"><img data-shot="${gridCols(g.shots.length)}:${gridMax(g.shots.length)}" src="/assets/games/${s}" alt="${esc(g.name)} screenshot ${n+1}" loading="lazy"></span>
-      <span class="zoom"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8.5v5M8.5 11h5"/></svg></span>
+      <span class="zoom"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5M11 8.5v5M8.5 11h5"/></svg></span>
     </button>`).join('')}
   </div>
 </div></section>` : ''}
@@ -1060,7 +1060,7 @@ function postCard(p){
     <h2>${esc(p.title)}</h2>
     ${p.description ? `<p>${esc(p.description)}</p>` : ''}
     ${p.tags.length || p.code ? `<div class="ptags">${p.tags.map(t=>`<span>${esc(t)}</span>`).join('')}${p.code ? `<span class="tcode">${/gist\.github\.com/.test(p.code) ? 'gist' : 'code'}</span>` : ''}</div>` : ''}
-    <span class="plink">Read<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+    <span class="plink">Read<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
   </a>`;
 }
 
@@ -1074,7 +1074,7 @@ function pageBlogIndex(){
     <a class="btn btn-primary" href="/subscribe/?from=blog">Get new posts by email</a>
   </div>
   <p style="margin-top:18px"><a class="rsslink" href="/blog/feed.xml">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="6.2" cy="17.8" r="2.2"/><path d="M4 10.5v3a6.5 6.5 0 0 1 6.5 6.5h3A9.5 9.5 0 0 0 4 10.5Z"/><path d="M4 4v3a13 13 0 0 1 13 13h3A16 16 0 0 0 4 4Z"/></svg>
+    <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="6.2" cy="17.8" r="2.2"/><path d="M4 10.5v3a6.5 6.5 0 0 1 6.5 6.5h3A9.5 9.5 0 0 0 4 10.5Z"/><path d="M4 4v3a13 13 0 0 1 13 13h3A16 16 0 0 0 4 4Z"/></svg>
     RSS feed</a></p>
 </div></section>
 <section class="sec-tight"><div class="shell narrow">
@@ -1107,7 +1107,7 @@ function pagePost(p, i){
     return `<a class="repocard" href="${esc(p.code)}" target="_blank" rel="noopener">
     <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
     <span><strong>${esc(label)}</strong><em>${esc(kind)} &middot; ${esc(handle)}</em></span>
-    <svg class="ext" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+    <svg aria-hidden="true" class="ext" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
   </a>`;
   })() : ''}
   <hr class="prule">

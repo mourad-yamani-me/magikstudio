@@ -99,6 +99,19 @@ Not every post needs one. A post about a decision or about documentation has no 
 publish, and inventing one is worse than omitting it. The build warns when a gist points at a
 post that has no `code:` field, which is the case worth catching.
 
+## Images and icons
+
+Two rules the build enforces, both because something shipped wrong:
+
+- **`alt=""` is a claim that an image is decorative**, and it is only true when an ancestor
+  `<a>` or `<button>` already names it — otherwise the name is announced twice. Ten game icons
+  sat outside any link with `alt=""`, which an SEO crawler correctly reported as missing alt
+  text. `verify.mjs` now judges an empty alt against its context, so it cannot be reintroduced
+  by writing `alt=""` out of habit.
+- **Inline `<svg>` is an image.** Every icon here sits beside real text, so it takes
+  `aria-hidden="true"`; a meaningful one would need a `<title>` or `aria-label`. Unlabelled SVG
+  fails the build.
+
 ## How to add a check
 
 Every rule in `scripts/verify.mjs` exists because something got past a review. Follow that:
