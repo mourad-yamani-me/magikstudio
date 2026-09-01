@@ -103,11 +103,16 @@ post that has no `code:` field, which is the case worth catching.
 
 Two rules the build enforces, both because something shipped wrong:
 
-- **`alt=""` is a claim that an image is decorative**, and it is only true when an ancestor
-  `<a>` or `<button>` already names it — otherwise the name is announced twice. Ten game icons
-  sat outside any link with `alt=""`, which an SEO crawler correctly reported as missing alt
-  text. `verify.mjs` now judges an empty alt against its context, so it cannot be reintroduced
-  by writing `alt=""` out of habit.
+- **No image on this site has an empty `alt`.** `alt=""` is correct HTML for an image inside a
+  link that already names it — but a crawler cannot see that context, and Bing reported seven
+  pages as missing alt text when every one of them was right. Arguing with the crawler was not
+  worth it. Every image carries real alt text, and the ones that would repeat their own link
+  carry `aria-hidden="true"` as well: the announced name is unchanged, the attribute a crawler
+  reads is populated, and a broken image shows something useful rather than nothing. `verify.mjs`
+  fails on any `alt=""`.
+- **An accessible name is computed with `aria-hidden` subtrees removed.** The duplicate-link-name
+  check folds image `alt` text into the name it compares; once icons carried both `alt` and
+  `aria-hidden` that would have modelled an announcement no screen reader makes.
 - **Inline `<svg>` is an image.** Every icon here sits beside real text, so it takes
   `aria-hidden="true"`; a meaningful one would need a `<title>` or `aria-label`. Unlabelled SVG
   fails the build.

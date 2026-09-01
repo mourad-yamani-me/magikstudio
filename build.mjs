@@ -994,7 +994,7 @@ ${g.shots.length > 1 ? `<section class="sec-shots"><div class="shell">
 ${g.video ? `<section class="sec-tight"><div class="shell">
   <div class="sec-head rv" style="margin-bottom:30px"><span class="eyebrow">Trailer</span><h2>See it in motion</h2></div>
   <button class="trailer rv" type="button" data-trailer="${g.video}" aria-label="Play the ${esc(g.name)} gameplay trailer">
-    <img src="/assets/games/${g.feature}" alt="" loading="lazy" decoding="async">
+    <img src="/assets/games/${g.feature}" alt="${esc(g.name)} key art" aria-hidden="true" loading="lazy" decoding="async">
     <span class="tplay"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5Z"/></svg></span>
     <span class="tnote">Watch on YouTube &middot; nothing loads until you press play</span>
   </button>
@@ -1014,7 +1014,7 @@ ${g.video ? `<section class="sec-tight"><div class="shell">
   <div class="sec-head rv" style="margin-bottom:32px"><span class="eyebrow">More from the studio</span><h2>Other games</h2></div>
   <div class="grid4">
     ${others.map(o=>`<a class="mini rv" href="/games/${o.slug}/">
-      ${o.icon?`<img src="/assets/games/${o.icon}" alt="" width="60" height="60">`:'<div style="width:60px;height:60px;border-radius:16px;margin-bottom:16px;border:1px dashed rgba(255,255,255,.26)"></div>'}
+      ${o.icon?`<img src="/assets/games/${o.icon}" alt="${esc(o.name)} app icon" aria-hidden="true" width="60" height="60">`:'<div style="width:60px;height:60px;border-radius:16px;margin-bottom:16px;border:1px dashed rgba(255,255,255,.26)"></div>'}
       <h3>${esc(o.name)}</h3><span>${esc(o.category)}${o.live?'':' · soon'}</span></a>`).join('')}
   </div>
 </div></section>`;
@@ -1498,7 +1498,7 @@ function pagePrivacyIndex(){
       </section>
       <div class="grid4 grid-2" style="margin-top:28px">
         ${ALL.map(g=>`<a class="mini" href="/privacy/${g.slug}/">
-          ${g.icon?`<img src="/assets/games/${g.icon}" alt="" width="60" height="60">`:'<div style="width:60px;height:60px;border-radius:16px;margin-bottom:16px;border:1px dashed rgba(255,255,255,.26)"></div>'}
+          ${g.icon?`<img src="/assets/games/${g.icon}" alt="${esc(g.name)} app icon" aria-hidden="true" width="60" height="60">`:'<div style="width:60px;height:60px;border-radius:16px;margin-bottom:16px;border:1px dashed rgba(255,255,255,.26)"></div>'}
           <h3 class="mini-h">${esc(g.name)}</h3><span>${esc(g.pkg)}</span></a>`).join('')}
       </div>
     </div>
