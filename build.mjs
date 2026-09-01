@@ -518,7 +518,7 @@ const GIST_DIR = path.join(ROOT, 'gist');
    them; line numbers do not.
 */
 const gistAnchor = name => 'file-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-const LANG = { '.jsonc': 'json', '.json': 'json', '.yml': 'yaml', '.yaml': 'yaml', '.md': 'markdown', '.mjs': 'javascript', '.js': 'javascript' };
+const LANG = { '.jsonc': 'json', '.json': 'json', '.yml': 'yaml', '.yaml': 'yaml', '.md': 'markdown', '.mjs': 'javascript', '.js': 'javascript', '.gradle': 'groovy', '.pro': 'properties' };
 
 /* gist/ holds one subdirectory per published gist. An embed may name the file
    alone — `verify.mjs` — and it is found wherever it lives, so posts don't
@@ -627,6 +627,14 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
       description: meta.description || '',
       tags: meta.tags || [],
       draft: meta.draft === true,
+      // Optional. Orders posts that share a `date`, ascending, so a series
+      // published in one go reads part 1 first. Without it the tie falls to
+      // readdirSync order, which is alphabetical on macOS and unspecified on
+      // the CI runner's filesystem — so the index could differ between the
+      // preview and production builds of the same commit.
+      order: Number.isFinite(Number(meta.order)) && String(meta.order).trim() !== ''
+        ? Number(meta.order)
+        : null,
       // `code:` takes a GitHub URL — a gist for a snippet, a repo for a project.
       // `repo:` is kept as an alias. The kind is detected from the URL.
       code: meta.code || meta.repo || meta.gist || '',
@@ -636,7 +644,16 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
     };
   })
   .filter(p => !p.draft)
-  .sort((a, b) => b.date.localeCompare(a.date));
+  // Newest first; then `order` ascending for a series; then slug, so the result
+  // never depends on the order the filesystem happened to list the directory in.
+  // MAX_SAFE_INTEGER rather than Infinity: Infinity - Infinity is NaN, which a
+  // comparator reads as "equal" and silently drops back to filesystem order.
+  .sort((a, b) => {
+    const rank = p => (p.order === null ? Number.MAX_SAFE_INTEGER : p.order);
+    return b.date.localeCompare(a.date)
+        || rank(a) - rank(b)
+        || a.slug.localeCompare(b.slug);
+  });
 
 /* Every gist declares the post it links back to (scripts/build-gist.mjs). That
    post should carry a `code:` card pointing the other way, or the gist is

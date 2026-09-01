@@ -18,11 +18,40 @@ built.
 | --- | --- | --- |
 | `title` | yes | Build fails without it. Aim for under 48 characters — the site name is appended. |
 | `date` | yes | `YYYY-MM-DD`. Controls ordering. |
+| `order` | no | A number. Orders posts sharing a `date`, ascending, so a series published in one go reads part 1 first. Without it the tie falls to the order the filesystem lists the directory in, which is not the same on macOS and on the CI runner. |
 | `description` | no, but do it | Shows on the index and in Google results. One or two sentences. |
 | `tags` | no | `[unity, android]` |
 | `code` | no | A gist or repo URL. Renders a link card; the type is detected from the host. |
 | `codeLabel` | no | Overrides the card's title. |
 | `draft` | no | `true` keeps it out of the site, sitemap and RSS entirely. |
+
+## Tags
+
+Tags render on the index card, on the post, and into the page's JSON-LD `keywords`. There are
+no tag archive pages, so an unused tag costs nothing structurally — what it costs is a reader
+seeing two words for one subject, and a keywords list that says the site covers more ground
+than it does.
+
+**Reuse before inventing.** The vocabulary in use, by area:
+
+| Area | Tags |
+| --- | --- |
+| Games | `gamedev` `puzzle` `level-design` `difficulty` `procedural-generation` `game-economy` `free-to-play` |
+| Mobile build | `capacitor` `android` `apk` `gradle` `r8` `release` |
+| Web build | `vite` `ci-cd` `github-actions` `cloudflare` `hosting` |
+| Web quality | `performance` `lighthouse` `accessibility` `seo` `images` `css` `javascript` `web` |
+| Working with AI | `ai` `claude-code` `context-engineering` `workflow` |
+| Store and legal | `google-play` `privacy` `security` |
+| Cross-cutting | `architecture` `testing` `design` `monorepo` |
+
+Three or four tags is the norm; five is a lot. Two rules that came out of getting it wrong:
+
+- **A tag has one meaning across the site.** `performance` here means page speed. A post about
+  an app download being 13 MB is about bytes, not speed, and tagging it `performance` puts two
+  different subjects under one word.
+- **Prefer the term someone would search.** `apk` and `r8` earn their place as singletons
+  because people type them. `build`, `tooling` and `layout` do not — they are categories, and
+  every post is in one.
 
 ## Choosing what to write
 

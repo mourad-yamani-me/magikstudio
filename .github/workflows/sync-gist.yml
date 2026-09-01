@@ -18,6 +18,8 @@ on:
       - 'wrangler.jsonc'
       - '.github/workflows/ci-cd.yml'
       - 'scripts/build-gist.mjs'
+      # snippets the engine gists are generated from
+      - '_source/snippets/**'
       - 'scripts/verify.mjs'
       - 'scripts/lighthouse-check.mjs'
       - 'gist/**'

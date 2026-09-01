@@ -18,5 +18,35 @@
     "dir": "accessible-lightbox",
     "marker": "Accessible image lightbox — focus trap, restore, and the visibility trap",
     "post": "opacity-zero-is-not-hidden"
+  },
+  {
+    "dir": "puzzle-difficulty-walk",
+    "marker": "Rating puzzle difficulty by the decisions a level forces",
+    "post": "rating-puzzle-difficulty-by-decisions"
+  },
+  {
+    "dir": "campaign-progression",
+    "marker": "Campaign ordering — difficulty rates a level, progression places it",
+    "post": "difficulty-rates-progression-places"
+  },
+  {
+    "dir": "vite-shrink-pack",
+    "marker": "A Vite plugin that shrinks a JSON content pack into the build output",
+    "post": "shipping-a-4mb-level-pack"
+  },
+  {
+    "dir": "capacitor-android-size",
+    "marker": "Cutting a Capacitor Android download in half — R8, ProGuard and the real delivered size",
+    "post": "capacitor-android-build-apk-size"
+  },
+  {
+    "dir": "pack-conformance",
+    "marker": "Conformance suite for generated game content — walk every level before shipping it",
+    "post": "testing-a-level-pack-you-did-not-write"
+  },
+  {
+    "dir": "game-economy",
+    "marker": "A mobile game coin economy priced off its own difficulty model",
+    "post": "pricing-an-economy-off-its-difficulty-model"
   }
 ]

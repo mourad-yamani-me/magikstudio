@@ -80,6 +80,22 @@ const sanitize = str => str
 
 /* ─────────────────────────── the gists ─────────────────────────── */
 
+/* Snippets from the game engine.
+ *
+ * Everything else in this file is generated from THIS repo's live config, which
+ * is what stops a published snippet drifting from what the site actually runs.
+ * The game engine is a different repo, so that guarantee is not available here
+ * and pretending otherwise would be worse than saying so.
+ *
+ * What these are instead: distilled snippets — the interesting 60 lines of a
+ * much larger module, with the reasoning kept and the app-specific plumbing
+ * removed — written to _source/snippets/ and read from there. They still go
+ * through sanitize() and the leak guard below, and they are still one file per
+ * subject rather than a paste of a private codebase, which is the shape the
+ * posts link to.
+ */
+const snippet = (dir, file) => sanitize(read(`_source/snippets/${dir}/${file}`));
+
 const GISTS = [{
   dir: 'cloudflare-workers',
   // Must not change: the workflow finds the existing gist by this string.
@@ -362,6 +378,321 @@ opener.
 Written up in full here: **${url}**
 
 _Generated from the live scripts — see the post for context._
+`,
+}, {
+  dir: 'puzzle-difficulty-walk',
+  marker: 'Rating puzzle difficulty by the decisions a level forces',
+  post: 'rating-puzzle-difficulty-by-decisions',
+  files: () => ({
+    'walk.js':      snippet('puzzle-difficulty-walk', 'walk.js'),
+    'summarise.js': snippet('puzzle-difficulty-walk', 'summarise.js'),
+    'tiers.js':     snippet('puzzle-difficulty-walk', 'tiers.js'),
+  }),
+  readme: url => `# Rating a puzzle by the decisions it forces
+
+Grid size is the obvious difficulty proxy and it is wrong. This measures the branching factor
+of the solve instead.
+
+\`\`\`
+fill the topmost-leftmost empty cell
+count how many pieces still in hand could go there
+\`\`\`
+
+One means the board placed the piece for you. Five means a real decision, and a wrong answer
+that will have to be undone.
+
+## Files
+
+| File | What it is |
+| --- | --- |
+| \`walk.js\` | The walk, and the four numbers derived from it |
+| \`tiers.js\` | Turning a 0-10 rating into a tier a player can read |
+
+## Worth knowing
+
+- **The walk has to be exact, because it runs three times.** Offline in the rater, again in an
+  independent verifier, and again on the device — two power-ups are this walk with a different
+  question asked of it, and the economy is priced off its \`decisions\` total. A test asserts all
+  three agree, board for board, or the build fails. Approximation makes that impossible to check.
+- **Tier boundaries are the pack's own quartiles**, not round numbers. p25/p50/p75/p90 split one
+  392-board library 23/25/24/15/12 percent. Round numbers put 60% of it in one tier.
+- **Ratings must overlap across board sizes.** If they form disjoint bands by size, the model is
+  measuring size. A 10x10 here spans 4.0 to 7.7 and meets both the 8x8s below and the 13x13s above.
+- **Leave out dimensions you do not have.** No timer, no dexterity, no luck — so no precision,
+  reaction or randomness axes. A dimension that is always 0 dilutes every weight next to it.
+- **The rating is a prior.** \`confidence: 0.2\`, \`sampleCount: 0\`. It measures the board, not the
+  difficulty a person experiences, and the code says so rather than pretending.
+
+---
+
+Written up in full here: **${url}**
+
+_A distilled snippet from a shipped engine — see the post for context._
+`,
+}, {
+  dir: 'campaign-progression',
+  marker: 'Campaign ordering — difficulty rates a level, progression places it',
+  post: 'difficulty-rates-progression-places',
+  files: () => ({
+    'envelope.js': snippet('campaign-progression', 'envelope.js'),
+    'beats.js':    snippet('campaign-progression', 'beats.js'),
+    'tones.js':    snippet('campaign-progression', 'tones.js'),
+  }),
+  readme: url => `# Ordering a campaign without sorting it
+
+Sorting a level library easiest-to-hardest produces a campaign that is flat for a hundred levels
+and then a wall. On one 392-board library it put all 92 Easy boards inside the first 138 stages,
+with no Tricky board until stage 133.
+
+The rule that replaced it:
+
+> Difficulty **rates** a level. Progression **places** it.
+
+The library is a pool. Each slot carries an ask — a target, a tone, constraints — and the best
+remaining level is chosen for it on difficulty, role, ramp and variety together.
+
+## The three that took a rewrite each
+
+- **The target is a quantile of what is left, not the minimum.** Anchoring to the easiest unplayed
+  level sounds equivalent. It is not: the pool is consumed roughly easiest-first, so the minimum
+  creeps up one level at a time and the target creeps with it — a sort wearing a rhythm.
+- **Tone windows are four different ranges, not one band.** A single symmetric band makes an easy
+  level *ineligible* once the anchor climbs past it, so the whole easy tail is untouchable through
+  the middle and has nowhere to go but the end.
+- **Beat order matters as much as beat counts.** With a comfort beat before the milestone, the
+  milestone has to climb out of a dip and the anti-oscillation cap holds it down: only four of
+  eighteen were the hardest board anywhere near them.
+
+## Worth knowing
+
+- **\`MODEL_VERSION\` is a migration.** Level numbers are saved progress. Bumping it keeps a
+  player's completed count and changes which levels those numbers mean.
+- **Damping the rhythm for beginners is the wrong protection** — it flattens the opening into one
+  long shallow run. Beginners need no *spikes*, which is one line, not a curve change.
+- **Record how every slot was filled.** When no candidate fits, the builder loosens one constraint
+  at a time and writes down which. That turns "why is level 214 a 3.1?" into reading one object.
+
+---
+
+Written up in full here: **${url}**
+
+_A distilled snippet from a shipped engine — see the post for context._
+`,
+}, {
+  dir: 'vite-shrink-pack',
+  marker: 'A Vite plugin that shrinks a JSON content pack into the build output',
+  post: 'shipping-a-4mb-level-pack',
+  files: () => ({
+    'shrink-stage-pack.js': snippet('vite-shrink-pack', 'shrink-stage-pack.js'),
+  }),
+  readme: url => `# Two Vite plugins for a Capacitor game
+
+One shrinks a JSON content pack on its way into \`dist/\`; the other removes an SDK the shipped
+app can never execute.
+
+## Files
+
+One file. It minifies a JSON content pack on its way into \`dist/\`, leaving the repo copies
+pretty-printed and diffable: 4.37 MB -> 2.36 MB, 45% of it whitespace nothing reads at runtime.
+
+## The two bugs these encode
+
+**\`closeBundle\` also fires when the build failed.** A cleanup hook there throws its own ENOENT
+about a \`dist/\` that was never created, and replaces the real error with it. \`writeBundle\` runs
+only on a successful write — and Vite copies \`publicDir\` into \`outDir\` *before* the write phase,
+so the files are already there. (Get \`outDir\` from \`configResolved\`, too: Vite may load a config
+from a temp file, so \`import.meta.dirname\` can point into \`node_modules/.vite-temp/\`.)
+
+**Capacitor plugins ship a browser fallback you cannot tree-shake.** Every
+\`@capacitor-firebase/*\` plugin registers \`web: () => import('./web')\`. \`registerPlugin\` only calls
+it on a browser, but it is a static import site, so the bundler emits it — and each of those
+\`web.js\` files drags in its slice of the Firebase JS SDK. That, not app code, is where a 525 KB
+Firestore chunk and a 168 KB Auth chunk come from.
+
+## The part to copy even if you copy nothing else
+
+\`generateBundle\` scans the emitted chunks and **fails the build** if the SDK reappears. A stub
+only helps while nothing re-imports the real thing; without the assertion the next dependency
+upgrade quietly puts 700 KB back and nobody finds out.
+
+---
+
+Written up in full here: **${url}**
+
+_A distilled snippet from a shipped engine — see the post for context._
+`,
+}, {
+  dir: 'capacitor-android-size',
+  marker: 'Cutting a Capacitor Android download in half — R8, ProGuard and the real delivered size',
+  post: 'capacitor-android-build-apk-size',
+  files: () => ({
+    'release-build.gradle': snippet('capacitor-android-size', 'release-build.gradle'),
+    'proguard-rules.pro':   snippet('capacitor-android-size', 'proguard-rules.pro'),
+    'delivered-size.mjs':   snippet('capacitor-android-size', 'delivered-size.mjs'),
+    'drop-web-firebase.js': snippet('capacitor-android-size', 'drop-web-firebase.js'),
+  }),
+  readme: url => `# Cutting a Capacitor Android download in half
+
+13.09 MB -> 5.88 MB delivered, on a WebView game with 392 levels of JSON in it.
+
+\`\`\`
+dex             9.55 MB  ->  4.24 MB     R8 on
+web assets      1.65 MB  ->  1.10 MB     the SDK the app cannot run
+splash + icons  1.15 MB  ->  0.13 MB     PNG -> WebP
+SDK metadata    0.16 MB  ->  0.02 MB     packaging excludes
+\`\`\`
+
+## Files
+
+| File | What it is |
+| --- | --- |
+| \`release-build.gradle\` | The release block \`npx cap add android\` does not give you |
+| \`proguard-rules.pro\` | Keep rules R8 cannot infer, for a Capacitor app |
+| \`delivered-size.mjs\` | What a phone actually downloads from an \`.aab\` |
+| \`drop-web-firebase.js\` | Vite plugin: stub the SDK a native build can never execute |
+
+## Read the right number first
+
+\`ls -l\` on the \`.aab\` is not the download. Play splits a bundle per density, ABI and language,
+and strips its own metadata. Turning on R8 *adds* a multi-megabyte \`proguard.map\` under
+\`BUNDLE-METADATA/\` that is never delivered — so the file on disk can look barely improved while
+the real download has halved.
+
+## Things that will bite you
+
+- **R8 is off in the generated project.** \`minifyEnabled false\` is the Capacitor default, so every
+  class of Play Services, Firebase and gRPC ships whole. Four lines of Gradle is the single
+  largest win available.
+- **A dependency can disable your optimisation and nothing tells you.** One auth library shipped
+  \`-keep class com.google.android.gms.internal.** { *; }\` as a *consumer* rule — 9,304 classes
+  pinned unshrunk, and an app-optimisation score of 28% with R8 already on. If the numbers are
+  worse than they should be, unzip the AARs and grep for \`-keep\`.
+- **The first R8 build fails on a provider SDK you do not use.** Auth plugins compile in handlers
+  for every provider they support. R8 writes the exact rules you need to
+  \`app/build/outputs/mapping/release/missing_rules.txt\` — copy from there.
+- **\`@JavascriptInterface\` on an anonymous object is a silent, release-only breakage.** The bridge
+  method returns \`undefined\` and nothing throws.
+- **PNG splash screens are enormous.** A full-bleed gradient is close to the worst case for PNG's
+  row filters: 457 KB as PNG, 28 KB as WebP at q88, indistinguishable. \`@drawable/splash\` resolves
+  to either extension, so there is no XML to change.
+- **Verify on a device, in the release variant.** R8 breaks things by removing code reached only
+  reflectively, and that is the one build nobody runs during development.
+
+---
+
+Written up in full here: **${url}**
+
+_A distilled snippet from a shipped engine — see the post for context._
+`,
+}, {
+  dir: 'pack-conformance',
+  marker: 'Conformance suite for generated game content — walk every level before shipping it',
+  post: 'testing-a-level-pack-you-did-not-write',
+  files: () => ({
+    'pack-suite.js': snippet('pack-conformance', 'pack-suite.js'),
+  }),
+  readme: url => `# Testing content you did not write
+
+The failure mode of a bad content pack is not a crash. It is a level that cannot be solved,
+found by a player, three weeks after release, in a review. Unit tests will not find it — they
+test the code, and the code is faithfully rendering an impossible board.
+
+Each game's whole test file:
+
+\`\`\`js
+import { describeGameShell } from '@your-scope/engine/testing'
+
+describeGameShell(import.meta.url)
+\`\`\`
+
+The suites live in the **engine**, not the game. A copy per app is a copy that drifts, and the
+sibling whose copy is stale is the one that ships the broken pack.
+
+## What it checks
+
+| Suite | Catches |
+| --- | --- |
+| board walk | a level that dead-ends, and shipped metrics that no longer match |
+| opening layout | overlapping pieces, and an arrangement that leaks the answer |
+| pack declaration | a stage count that disagrees with the catalogue on disk |
+| shell | game logic appearing in an app directory |
+
+## The assertion worth stealing
+
+Re-derive the generator's own claims from the shipped artifact. Three numbers ride on every
+level here, written months earlier by a different implementation in another repo; the runtime
+recomputes them and they must match exactly.
+
+That one check ties together the difficulty model, the campaign order built from it, the
+power-ups that use it and the prices derived from it. If any drifts, the game keeps working and
+starts **lying** — and nothing throws.
+
+Every genuine content bug is of the form "the data says X and the data is wrong". A test that
+mocks the data cannot see any of them.
+
+## Do not sample it
+
+Walking every level is seconds, not milliseconds. Sample it and you have a check that passes on
+the run where it mattered: the interesting board is always the one you did not draw. If it gets
+too slow, move it to the pack build and the release build — not to fewer levels.
+
+---
+
+Written up in full here: **${url}**
+
+_A distilled snippet from a shipped engine — see the post for context._
+`,
+}, {
+  dir: 'game-economy',
+  marker: 'A mobile game coin economy priced off its own difficulty model',
+  post: 'pricing-an-economy-off-its-difficulty-model',
+  files: () => ({
+    'economy.js': snippet('game-economy', 'economy.js'),
+  }),
+  readme: url => `# An economy priced off the difficulty model
+
+Levels in this game differ **13x** in the thinking they demand — a decision load of 7.5 on the
+easiest tier against 96.7 on the hardest. A flat coin reward is therefore wrong on nearly all of
+them, and it teaches players to grind the easy end and never touch the interesting levels.
+
+\`\`\`js
+clearReward = round(6 + 0.30 * decisionLoad)   // 8 coins Easy, 35 Expert
+\`\`\`
+
+## The structural decision
+
+Nothing in this module touches the UI framework, the store, or storage. That is what lets the
+**balance simulator import the same file**. A simulator that re-implements the economy describes
+a game you are not shipping, and it diverges on the first tuning pass without telling you.
+
+## What simulation found that play did not
+
+- **Star bonuses were 45% of all income** — the largest faucet in the game, while three stars is
+  earned on two thirds of levels. That is a salary, not a reward. They are now paid as a *delta*
+  against the best tier ever banked, so replaying a completed level nets zero.
+- **The daily chest escalated without limit.** By the eighth cycle its day-7 chest paid 225 coins
+  — more than three level clears — for opening the app.
+- **The largest single payout sets the price floor.** If a hint costs less than the top star
+  delta, buying hints until three stars is guaranteed is optimal, forever, and the economy is a
+  vending machine.
+
+## Ads
+
+Rewarded video is a **multiplier on the level**, never a flat coin amount, so it inherits the
+difficulty scaling for free. Doubling a 35-coin clear is worth watching; doubling an 8-coin one
+is not, and the player self-selects. A flat "watch for 25 coins" inverts that.
+
+## Assert properties, not numbers
+
+The simulator's \`--test\` mode checks that no legitimate action sequence produces unbounded
+coins, that every item is reachable from zero, that replaying never nets positive, and that the
+difficulty walk the prices derive from still matches the metrics shipped on every level.
+
+---
+
+Written up in full here: **${url}**
+
+_A distilled snippet from a shipped engine — see the post for context._
 `,
 }];
 

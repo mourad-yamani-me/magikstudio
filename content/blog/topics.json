@@ -30,7 +30,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 10,
         "annualViews": 7460,
@@ -87,7 +87,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 10,
         "annualViews": 5801,
@@ -146,7 +146,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 10,
         "annualViews": 8400,
@@ -208,7 +208,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 10,
         "annualViews": 20142,
@@ -271,7 +271,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -316,7 +316,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 1,
         "annualViews": 206,
@@ -378,7 +378,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -433,7 +433,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -477,7 +477,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 1,
         "annualViews": 113,
@@ -528,7 +528,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 10,
         "annualViews": 2880,
@@ -581,7 +581,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -632,7 +632,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -682,7 +682,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 10,
         "annualViews": 649,
@@ -731,7 +731,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-08-30",
+      "date": "2026-09-01",
       "demand": {
         "questions": 2,
         "annualViews": 646,
@@ -791,7 +791,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 28833,
+        "totalViews": 153044,
+        "stale": 9,
+        "unanswered": 7,
+        "rotted": 10,
+        "top": {
+          "title": "How to fix &#39;&#39;Gradle Build Failed&#39;&#39; on Unity?",
+          "views": 104620,
+          "answered": true
+        },
+        "quota": 298,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "google-play-console-change-privacy-policy-url",
@@ -855,7 +885,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 4,
+        "annualViews": 4671,
+        "totalViews": 16443,
+        "stale": 3,
+        "unanswered": 2,
+        "rotted": 4,
+        "top": {
+          "title": "Issue found: Invalid Data safety form google play console error",
+          "views": 7786,
+          "answered": true
+        },
+        "quota": 297,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "3 of 4 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "unity-android-build-error",
@@ -878,7 +938,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 6797,
+        "totalViews": 51370,
+        "stale": 9,
+        "unanswered": 6,
+        "rotted": 10,
+        "top": {
+          "title": "Unity Android Build Error WIN32 Exception ZipAlign",
+          "views": 25513,
+          "answered": true
+        },
+        "quota": 296,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "how-to-add-admob-ads-in-unity-game",
@@ -904,7 +994,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 11105,
+        "totalViews": 141302,
+        "stale": 10,
+        "unanswered": 4,
+        "rotted": 10,
+        "top": {
+          "title": "2D cross-platform game engine for Android and iOS?",
+          "views": 128396,
+          "answered": true
+        },
+        "quota": 296,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "claude-code-agents-md-example",
@@ -936,7 +1056,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 294,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "logo-quiz-guess-brand-answers",
@@ -967,7 +1112,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 1,
+        "annualViews": 9,
+        "totalViews": 126,
+        "stale": 1,
+        "unanswered": 0,
+        "rotted": 1,
+        "top": {
+          "title": "How to do letter-by-letter validation for an iphone quiz app?",
+          "views": 126,
+          "answered": true
+        },
+        "quota": 294,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "1 of 1 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "admob-unity-sdk-download",
@@ -990,7 +1165,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 11738,
+        "totalViews": 143221,
+        "stale": 10,
+        "unanswered": 2,
+        "rotted": 10,
+        "top": {
+          "title": "2D cross-platform game engine for Android and iOS?",
+          "views": 128396,
+          "answered": true
+        },
+        "quota": 294,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "cloudflare-workers-vs-pages-pricing",
@@ -1015,7 +1220,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 291,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this site",
+        "ok": true,
+        "what": "reproducible against this repo and its live deploy"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "admob-unity-package",
@@ -1039,7 +1269,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 1891,
+        "totalViews": 15911,
+        "stale": 10,
+        "unanswered": 7,
+        "rotted": 10,
+        "top": {
+          "title": "Admob unity rewarded videos not working",
+          "views": 5278,
+          "answered": false
+        },
+        "quota": 291,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "unity-android-il2cpp-or-mono",
@@ -1064,7 +1324,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 3362,
+        "totalViews": 18480,
+        "stale": 9,
+        "unanswered": 5,
+        "rotted": 10,
+        "top": {
+          "title": "Unity Android Build Works in Mono but Fails in IL2CPP due to Undefined References, Missing Library",
+          "views": 9371,
+          "answered": true
+        },
+        "quota": 289,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "unity-admob-mediation-tutorial",
@@ -1086,7 +1376,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 3,
+        "annualViews": 1492,
+        "totalViews": 15142,
+        "stale": 3,
+        "unanswered": 1,
+        "rotted": 3,
+        "top": {
+          "title": "How do I setup rewarded ads in unity",
+          "views": 10406,
+          "answered": true
+        },
+        "quota": 289,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "3 of 3 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "what-is-google-play-store-data",
@@ -1107,7 +1427,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 6293,
+        "totalViews": 72167,
+        "stale": 10,
+        "unanswered": 3,
+        "rotted": 10,
+        "top": {
+          "title": "Getting statistics from Google Play Developers with an API",
+          "views": 54938,
+          "answered": true
+        },
+        "quota": 287,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "is-google-play-services-safe",
@@ -1126,7 +1476,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 13326,
+        "totalViews": 171580,
+        "stale": 10,
+        "unanswered": 1,
+        "rotted": 10,
+        "top": {
+          "title": "LogCat message: The Google Play services resources were not found. Check your project configuration to ensure that the resources are included",
+          "views": 144672,
+          "answered": true
+        },
+        "quota": 287,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "admob-unity-test-ids",
@@ -1145,7 +1525,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 3230,
+        "totalViews": 19425,
+        "stale": 10,
+        "unanswered": 3,
+        "rotted": 10,
+        "top": {
+          "title": "Google AdMob Unity: Only test ads work (in Unity Editor) but no real ads",
+          "views": 5313,
+          "answered": true
+        },
+        "quota": 287,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "unity-gradle-build-failed",
@@ -1177,7 +1587,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 2784,
+        "totalViews": 17870,
+        "stale": 9,
+        "unanswered": 9,
+        "rotted": 10,
+        "top": {
+          "title": "Unity gradle build failed",
+          "views": 4228,
+          "answered": false
+        },
+        "quota": 284,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "claude-code-agents-md-support",
@@ -1209,7 +1649,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 284,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "logo-quiz-guess-brand-trivia",
@@ -1239,7 +1704,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 282,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "google-play-console-data-safety-form",
@@ -1263,7 +1753,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 5997,
+        "totalViews": 22200,
+        "stale": 9,
+        "unanswered": 5,
+        "rotted": 10,
+        "top": {
+          "title": "Does firebase app data collection need to be declared in Data Safety Form of Play Console?",
+          "views": 7977,
+          "answered": true
+        },
+        "quota": 282,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "admob-vs-unity-ads-revenue",
@@ -1290,7 +1810,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 282,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "admob-unity-sdk",
@@ -1316,7 +1861,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 3756,
+        "totalViews": 22398,
+        "stale": 10,
+        "unanswered": 7,
+        "rotted": 10,
+        "top": {
+          "title": "Android resource linking failed : Unity Error :unexpected element &lt;queries&gt; found in &lt;manifest&gt;",
+          "views": 11695,
+          "answered": true
+        },
+        "quota": 279,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "unity-6-android-build-error",
@@ -1335,7 +1910,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 2314,
+        "totalViews": 10167,
+        "stale": 9,
+        "unanswered": 6,
+        "rotted": 10,
+        "top": {
+          "title": "Build error of Google Cardboard SDK for Unity Demo in Xcode",
+          "views": 2700,
+          "answered": true
+        },
+        "quota": 279,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "cloudflare-workers-vs-pages-functions",
@@ -1359,7 +1964,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 1,
+        "annualViews": 198,
+        "totalViews": 310,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": {
+          "title": "Why would the Supabase client cause a MiniOxygen error with &quot;dev&quot; script but work with &quot;preview&quot; script?",
+          "views": 310,
+          "answered": true
+        },
+        "quota": 279,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 10,
+        "why": "1 of 1 recently maintained — a current answer already exists",
+        "staleShare": 0
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this site",
+        "ok": true,
+        "what": "reproducible against this repo and its live deploy"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "how-to-check-admob-version-in-unity",
@@ -1378,7 +2013,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 6,
+        "annualViews": 2008,
+        "totalViews": 12482,
+        "stale": 6,
+        "unanswered": 3,
+        "rotted": 6,
+        "top": {
+          "title": "How to find out which version of Google AdMob is used in Unity?",
+          "views": 7102,
+          "answered": true
+        },
+        "quota": 276,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "6 of 6 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "how-to-tell-if-a-website-uses-cloudflare",
@@ -1397,7 +2062,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 1359,
+        "totalViews": 8698,
+        "stale": 10,
+        "unanswered": 3,
+        "rotted": 10,
+        "top": {
+          "title": "Error 524 A timeout occurred | Wordpress | Cloudflare",
+          "views": 4017,
+          "answered": false
+        },
+        "quota": 276,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this site",
+        "ok": true,
+        "what": "reproducible against this repo and its live deploy"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "number-match-merge-puzzle",
@@ -1419,7 +2114,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 6,
+        "annualViews": 762,
+        "totalViews": 8274,
+        "stale": 5,
+        "unanswered": 2,
+        "rotted": 5,
+        "top": {
+          "title": "Subversion mergeinfo messed up after merging trunk to branch",
+          "views": 6948,
+          "answered": true
+        },
+        "quota": 274,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 68,
+        "why": "5 of 6 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.83
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "bepinex-unity-il2cpp-android",
@@ -1441,7 +2166,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 274,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "color-block-master-gem-puzzle",
@@ -1460,7 +2210,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 1,
+        "annualViews": 110,
+        "totalViews": 621,
+        "stale": 1,
+        "unanswered": 0,
+        "rotted": 1,
+        "top": {
+          "title": "Recommendation System by using Euclidean Distance (TypeError: unsupported operand type(s) for -: &#39;str&#39; and &#39;str&#39;)",
+          "views": 621,
+          "answered": true
+        },
+        "quota": 272,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "1 of 1 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "4-block-color-puzzle-solution",
@@ -1479,7 +2259,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 4,
+        "annualViews": 831,
+        "totalViews": 5172,
+        "stale": 3,
+        "unanswered": 0,
+        "rotted": 3,
+        "top": {
+          "title": "Sudoku Puzzle with boxes containing square numbers",
+          "views": 2979,
+          "answered": true
+        },
+        "quota": 271,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 83,
+        "why": "3 of 4 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.75
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "what-is-admob-and-how-it-works",
@@ -1498,6 +2308,829 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 5111,
+        "totalViews": 52532,
+        "stale": 10,
+        "unanswered": 3,
+        "rotted": 10,
+        "top": {
+          "title": "Interstitial Admob ads: &quot;IllegalStateException: Only fullscreen activities can request orientation&quot;",
+          "views": 27723,
+          "answered": true
+        },
+        "quota": 271,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "unity-error-gradle-build-failed",
+    "query": "unity error gradle build failed",
+    "shape": "problem",
+    "score": 86,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity gradle build failed",
+        "unity gradle build failed error"
+      ]
+    },
+    "variants": [
+      "unity error commandinvokationfailure gradle build failed",
+      "unity android build failed gradle",
+      "unity commandinvokationfailure gradle build failed",
+      "unity 6 gradle build failed",
+      "unity android gradle build failed",
+      "unity firebase gradle build failed",
+      "unity 2022 gradle build failed",
+      "unity android build failed",
+      "unity gradle build error"
+    ],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 2114,
+        "totalViews": 10198,
+        "stale": 9,
+        "unanswered": 10,
+        "rotted": 10,
+        "top": {
+          "title": "Gradle Build Failed -- Unity",
+          "views": 2906,
+          "answered": false
+        },
+        "quota": 271,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "claude-code-agents-md-file",
+    "query": "claude code agents md file",
+    "shape": "other",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md",
+        "how to claude code agents md",
+        "why claude code agents md"
+      ]
+    },
+    "variants": [
+      "claude code agents md github",
+      "claude code agents md location",
+      "claude code agents.md symlink",
+      "how to make claude code use agents md",
+      "how to make claude code read agents md",
+      "claude code agents md",
+      "claude code agents md plugin",
+      "claude code agents md vs claude md",
+      "claude code agents md or claude md",
+      "claude code skills vs agents.md"
+    ],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 268,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "logo-quiz-guess-brand-game",
+    "query": "logo quiz guess brand game",
+    "shape": "other",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand",
+        "how to Logo Quiz: Guess Brand",
+        "why Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess brand trivia solution",
+      "logo quiz guess the brand answers level 1",
+      "logo quiz guess the brand answers level 2",
+      "logo quiz guess the brand answers level 3",
+      "logo quiz guess brand",
+      "logo quiz guess the brand level 1",
+      "logo quiz guess the brand level 2"
+    ],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 1,
+        "annualViews": 152,
+        "totalViews": 692,
+        "stale": 1,
+        "unanswered": 1,
+        "rotted": 1,
+        "top": {
+          "title": "Android Studio Mediaplayer",
+          "views": 692,
+          "answered": false
+        },
+        "quota": 268,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "1 of 1 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "admob-vs-unity-ads-reddit",
+    "query": "admob vs unity ads reddit",
+    "shape": "store",
+    "score": 62,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity vs"
+      ]
+    },
+    "variants": [
+      "google admob vs unity ads",
+      "admob unity ads",
+      "admob vs unity ads",
+      "admob or unity ads",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 268,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "google-play-store-data-safety-form",
+    "query": "google play store data safety form",
+    "shape": "store",
+    "score": 60,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play data safety form"
+      ]
+    },
+    "variants": [
+      "data safety form google play app",
+      "invalid data safety form google play",
+      "update data safety form google play"
+    ],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 7,
+        "annualViews": 4798,
+        "totalViews": 27171,
+        "stale": 7,
+        "unanswered": 4,
+        "rotted": 7,
+        "top": {
+          "title": "Specific value from http response content c#",
+          "views": 11294,
+          "answered": true
+        },
+        "quota": 265,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "7 of 7 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "ionic-capacitor-build-android-apk",
+    "query": "ionic capacitor build android apk",
+    "shape": "other",
+    "score": 55,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "capacitor android build"
+      ]
+    },
+    "variants": [
+      "ionic capacitor build android release",
+      "capacitor android build apk",
+      "capacitor build android app",
+      "ionic capacitor android build",
+      "capacitor build android release",
+      "npx capacitor build android",
+      "capacitor android build"
+    ],
+    "proposed": "2026-09-01",
+    "status": "published",
+    "slug": "capacitor-android-build-apk-size",
+    "published": "2026-08-31",
+    "target": {
+      "indexDays": 14,
+      "impressionsDays": 60,
+      "impressions": 50,
+      "positionDays": 90,
+      "position": 20,
+      "clicksDays": 90,
+      "clicks": 5,
+      "basis": "provisional"
+    },
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 5496,
+        "totalViews": 28800,
+        "stale": 9,
+        "unanswered": 4,
+        "rotted": 9,
+        "top": {
+          "title": "Where is the APK file created when building with Ionic 4 and Capacitor?",
+          "views": 11931,
+          "answered": true
+        },
+        "quota": 265,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 93,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "admob-unity-mediation",
+    "query": "admob unity mediation",
+    "shape": "store",
+    "score": 53,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [
+      "admob unity github",
+      "admob unity integration",
+      "admob unity tutorial",
+      "admob unity guide",
+      "how to integrate admob in unity"
+    ],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 5189,
+        "totalViews": 29240,
+        "stale": 9,
+        "unanswered": 6,
+        "rotted": 9,
+        "top": {
+          "title": "How to resolve &quot;Could not create an instance of type org.gradle.initialization.DefaultSettings_Decorated.&quot; for InMobi Unity Mediation Plugin",
+          "views": 19066,
+          "answered": true
+        },
+        "quota": 265,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 73,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "procedural-level-generation-with-difficulty-level-estimation",
+    "query": "procedural level generation with difficulty level estimation for puzzle games",
+    "shape": "other",
+    "score": 41,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "procedural level generation puzzle game"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-01",
+    "status": "published",
+    "slug": "rating-puzzle-difficulty-by-decisions",
+    "published": "2026-08-25",
+    "target": {
+      "indexDays": 14,
+      "impressionsDays": 60,
+      "impressions": 50,
+      "positionDays": 90,
+      "position": 20,
+      "clicksDays": 90,
+      "clicks": 5,
+      "basis": "provisional"
+    },
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 262,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "cloudflare-workers-dev-vs-pages-dev",
+    "query": "cloudflare workers dev vs pages dev",
+    "shape": "other",
+    "score": 35,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "cloudflare workers vs pages"
+      ]
+    },
+    "variants": [
+      "cloudflare pages vs workers nextjs"
+    ],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 1,
+        "annualViews": 198,
+        "totalViews": 310,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": {
+          "title": "Why would the Supabase client cause a MiniOxygen error with &quot;dev&quot; script but work with &quot;preview&quot; script?",
+          "views": 310,
+          "answered": true
+        },
+        "quota": 262,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 30,
+        "why": "1 of 1 recently maintained — a current answer already exists",
+        "staleShare": 0
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this site",
+        "ok": true,
+        "what": "reproducible against this repo and its live deploy"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "unity-android-mono-vs-il2cpp",
+    "query": "unity android mono vs il2cpp",
+    "shape": "other",
+    "score": 34,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity il2cpp android vs"
+      ]
+    },
+    "variants": [
+      "unity il2cpp android",
+      "unity il2cpp vs mono"
+    ],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 262,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "number-match-merge-puzzle",
+    "query": "number match merge puzzle ポイ 活",
+    "shape": "other",
+    "score": 32,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to Number Match & Merge Puzzle",
+        "why Number Match & Merge Puzzle"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 259,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "why-gradle-is-better-than-maven",
+    "query": "why gradle is better than maven",
+    "shape": "other",
+    "score": 26,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "why unity gradle build failed"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 9,
+        "annualViews": 4184,
+        "totalViews": 41477,
+        "stale": 8,
+        "unanswered": 3,
+        "rotted": 8,
+        "top": {
+          "title": "Intellij build times are too long. Gradle not helping",
+          "views": 21842,
+          "answered": true
+        },
+        "quota": 259,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 72,
+        "why": "8 of 9 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.89
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "capacitor-android-app-builder",
+    "query": "capacitor android app builder",
+    "shape": "other",
+    "score": 26,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "capacitor android build"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 10,
+        "annualViews": 3060,
+        "totalViews": 14835,
+        "stale": 7,
+        "unanswered": 5,
+        "rotted": 9,
+        "top": {
+          "title": "Ionic app: an unhandled exception occurred: Could not find module “@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs/utils”",
+          "views": 7198,
+          "answered": true
+        },
+        "quota": 257,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 73,
+        "why": "7 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "nes-puzzle-games-list",
+    "query": "nes puzzle games list",
+    "shape": "other",
+    "score": 26,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "procedural level generation puzzle game"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 1,
+        "annualViews": 548,
+        "totalViews": 3450,
+        "stale": 1,
+        "unanswered": 0,
+        "rotted": 1,
+        "top": {
+          "title": "render output in ejs file from ajax post request using nodejs",
+          "views": 3450,
+          "answered": true
+        },
+        "quota": 257,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "1 of 1 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "types-of-video-game-puzzles",
+    "query": "types of video game puzzles",
+    "shape": "other",
+    "score": 26,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "procedural level generation puzzle game"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-01",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-01",
+      "demand": {
+        "questions": 4,
+        "annualViews": 482,
+        "totalViews": 6468,
+        "stale": 4,
+        "unanswered": 2,
+        "rotted": 4,
+        "top": {
+          "title": "Hammerwatch Puzzle; Solving with Python",
+          "views": 3180,
+          "answered": true
+        },
+        "quota": 257,
+        "checked": "2026-09-01"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "4 of 4 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
   }
 ]

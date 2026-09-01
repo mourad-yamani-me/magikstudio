@@ -173,6 +173,21 @@ const SEEDS = [
   'google play privacy policy url',
   'admob unity',
   'admob eea consent',
+  // The engine the games are actually built on. The Unity seeds above predate
+  // it and stay because the Gradle failures are the same file either way, but
+  // everything shipped since runs Capacitor in a WebView, and none of these
+  // subjects were reachable while the seed list did not say so.
+  'capacitor android build',
+  'reduce android app bundle size',
+  'r8 minify capacitor android',
+  'android app bundle vs apk size',
+  'proguard rules capacitor',
+  'shrink android apk webp',
+  'procedural level generation puzzle game',
+  'difficulty curve level progression',
+  'vite plugin build assets',
+  'monorepo multiple mobile games',
+  'play games saved games snapshot',
   'cloudflare workers static site',
   'cloudflare workers vs pages',
   'github actions cloudflare deploy',
@@ -194,6 +209,9 @@ const CAPABILITY = new Set([
   'cloudflare', 'workers', 'wrangler', 'github', 'actions', 'lighthouse', 'lcp', 'seo',
   'sitemap', 'indexnow', 'gdpr', 'rgpd', 'cnil', 'privacy', 'claude', 'agent', 'ai',
   'puzzle', 'wordle', 'crossword', 'indie', 'gamedev', 'devlog', 'aso', 'keystore',
+  'capacitor', 'webview', 'vite', 'react', 'r8', 'proguard', 'minify', 'shrink', 'dex',
+  'webp', 'bundle', 'size', 'monorepo', 'generation', 'procedural', 'difficulty',
+  'progression', 'levels', 'firebase', 'crashlytics', 'snapshot',
 ].map(w => w.replace(/[^a-z0-9]/g, '')));
 
 const STOP = new Set(['the', 'a', 'an', 'to', 'in', 'on', 'for', 'of', 'and', 'or', 'is', 'it',
