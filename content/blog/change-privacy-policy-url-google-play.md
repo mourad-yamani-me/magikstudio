@@ -3,6 +3,7 @@ title: Changing a Google Play privacy policy URL
 date: 2026-08-30
 description: Five live listings pointed at my old Blogger URLs. How I moved them without ever serving a broken privacy policy link.
 tags: [google-play, privacy, hosting, seo]
+devto: true
 draft: false
 ---
 

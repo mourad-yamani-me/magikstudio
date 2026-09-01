@@ -5,6 +5,7 @@ description: A CSP error in production, from a script I never added. The usual f
 tags: [cloudflare, security, privacy, performance]
 code: https://gist.github.com/IndieCoreDev/6c707bf89e5d215225f3bdac6e4a4b25
 codeLabel: The verifier, including the CSP guard
+devto: true
 draft: false
 ---
 

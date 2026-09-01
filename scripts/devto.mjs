@@ -45,6 +45,13 @@ const draft   = args.includes('--draft');
    which under `--publish` reads the flag itself as a slug and silently matches
    no posts. The run then succeeds having published nothing, which is the worst
    shape a bug can take in a workflow nobody watches. */
+const limitAt = args.indexOf('--limit');
+const limit   = limitAt === -1 ? null : Number(args[limitAt + 1]);
+if (limitAt !== -1 && !Number.isInteger(limit)) {
+  console.error('--limit needs a whole number after it, e.g. --limit 1');
+  process.exit(1);
+}
+
 const onlyAt  = args.indexOf('--only');
 const only    = onlyAt === -1 ? undefined : args[onlyAt + 1];
 if (onlyAt !== -1 && (!only || only.startsWith('--'))) {
@@ -139,15 +146,40 @@ function posts() {
 
 /* ───────── the API ───────── */
 
+/* Thrown on 429 so the caller can stop the run rather than fail it. Being
+   rate limited is the expected steady state of a drip, not a fault. */
+class RateLimited extends Error {
+  constructor(seconds) { super(`rate limited, retry in ${seconds}s`); this.seconds = seconds; }
+}
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
 async function api(method, endpoint, body) {
-  const res = await fetch(API + endpoint, {
-    method,
-    headers: { 'api-key': KEY, 'content-type': 'application/json', accept: 'application/vnd.forem.api-v1+json' },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const text = await res.text();
-  if (!res.ok) throw new Error(`${method} ${endpoint} → ${res.status}\n${text.slice(0, 600)}`);
-  return text ? JSON.parse(text) : null;
+  for (let attempt = 0; ; attempt++) {
+    const res = await fetch(API + endpoint, {
+      method,
+      headers: { 'api-key': KEY, 'content-type': 'application/json', accept: 'application/vnd.forem.api-v1+json' },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+
+    if (res.status === 429) {
+      const wait = Number(res.headers.get('retry-after')) || 300;
+      /* A short wait is Forem's ordinary throttle — 30s between writes — and is
+         worth sitting through once. A long one is the anti-spam limiter, which
+         means this run has done its share for now; the schedule picks the rest
+         up rather than holding a job open for five minutes. */
+      if (wait <= 60 && attempt === 0) {
+        console.log(`  rate limited, waiting ${wait}s`);
+        await sleep(wait * 1000);
+        continue;
+      }
+      throw new RateLimited(wait);
+    }
+
+    const text = await res.text();
+    if (!res.ok) throw new Error(`${method} ${endpoint} → ${res.status}\n${text.slice(0, 600)}`);
+    return text ? JSON.parse(text) : null;
+  }
 }
 
 /** every article on the account, so an existing one can be matched by canonical */
@@ -197,21 +229,81 @@ if (!KEY) {
   process.exit(1);
 }
 
+/* Forem's own limits, read off app/models/settings/rate_limit.rb:
+
+     published_article_creation           9 per 30s
+     published_article_antispam_creation  1 per 300s   ← for "new" users
+     user_considered_new_days             3
+
+   An account younger than three days may publish one article every five
+   minutes, so opting nineteen posts in at once cannot work as one run no
+   matter how it is written. Worse than the limit is how it looks: a new
+   account posting nineteen articles in a burst, every one canonicalised to the
+   same outside domain, is the shape moderators suspend — and a suspension
+   costs every link on the account at once.
+
+   So creations drip. Everything can carry `devto: true` from the start; this
+   decides how many of them become articles today. Updates are not capped:
+   they are cheap, they are not the spam signal, and holding back an edit to an
+   article that already exists helps nobody. */
+const NEW_ACCOUNT_DAYS = 3;
+const me = await api('GET', '/users/me');
+const ageDays = (Date.now() - new Date(me.joined_at).getTime()) / 86400000;
+const isNew = Number.isFinite(ageDays) && ageDays < NEW_ACCOUNT_DAYS;
+const cap = limit ?? (isNew ? 1 : 3);
+
+console.log(`account @${me.username}, joined ${me.joined_at}` +
+  (isNew ? ` — under ${NEW_ACCOUNT_DAYS} days old, so dev.to allows one new article per 5 minutes` : ''));
+
 const existing = await mine();
 const byCanonical = new Map(existing.filter(a => a.canonical_url).map(a => [a.canonical_url, a]));
 
+/* An article whose stored markdown already matches what we would send needs no
+   request. Without this every run would rewrite all of them, which burns the
+   update limit and fills the account's history with edits that changed
+   nothing. The listing does not carry body_markdown, so it is fetched per
+   candidate — cheap next to a write, and only for articles that exist. */
+async function unchanged(p, found) {
+  const full = await api('GET', `/articles/${found.id}`);
+  return full.body_markdown === p.article.body_markdown
+      && full.title === p.article.title
+      && (full.canonical_url ?? '') === p.article.canonical_url;
+}
+
 const creating = queue.filter(p => !byCanonical.has(p.article.canonical_url));
 if (creating.length && process.stdin.isTTY) {
-  console.log(`about to create ${creating.length} new dev.to article(s):`);
-  creating.forEach(p => console.log(`  - ${p.article.title}`));
+  console.log(`about to create ${Math.min(creating.length, cap)} new dev.to article(s):`);
+  creating.slice(0, cap).forEach(p => console.log(`  - ${p.article.title}`));
   console.log('The API can unpublish but not delete — removing one afterwards is a manual job.');
   if (!await ask('create them? [y/N] ')) process.exit(0);
 }
 
-for (const p of queue) {
-  const found = byCanonical.get(p.article.canonical_url);
-  const res = found
-    ? await api('PUT', `/articles/${found.id}`, { article: p.article })
-    : await api('POST', '/articles', { article: p.article });
-  console.log(`${found ? 'updated' : 'created'}  ${res.url}`);
+let created = 0, updated = 0, skipped = 0, held = 0;
+
+try {
+  for (const p of queue) {
+    const found = byCanonical.get(p.article.canonical_url);
+
+    if (found) {
+      if (await unchanged(p, found)) { skipped++; continue; }
+      const res = await api('PUT', `/articles/${found.id}`, { article: p.article });
+      updated++;
+      console.log(`updated  ${res.url}`);
+      continue;
+    }
+
+    if (created >= cap) { held++; continue; }
+    const res = await api('POST', '/articles', { article: p.article });
+    created++;
+    console.log(`created  ${res.url}`);
+  }
+} catch (err) {
+  if (!(err instanceof RateLimited)) throw err;
+  /* Expected, and self-healing: the scheduled run picks up where this stopped.
+     Exiting 0 keeps a normal drip from showing as a broken workflow. */
+  console.log(`\nstopped early — ${err.message}. The next scheduled run continues.`);
 }
+
+const heldNote = held ? `, ${held} held for a later run (cap ${cap})` : '';
+console.log(`\n${created} created, ${updated} updated, ${skipped} unchanged${heldNote}`);
+if (held) console.log('Raise the cap with --limit N, or let the daily schedule work through them.');

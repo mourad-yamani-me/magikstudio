@@ -3,6 +3,7 @@ title: The blast radius rule for AI coding
 date: 2026-08-28
 description: How I decide what an AI agent may change on its own — sorted by what a mistake costs to undo, not by how hard the task is. Three zones, and the check for each.
 tags: [ai, claude-code, workflow, google-play]
+devto: true
 draft: false
 ---
 

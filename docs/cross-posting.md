@@ -58,6 +58,38 @@ node scripts/devto.mjs --only <slug>       # just one
 
 Nothing is sent for a post without `devto: true`, and nothing is ever sent for a draft.
 
+## Why every post can opt in at once
+
+Because creations drip. These are Forem's own limits, read off
+`app/models/settings/rate_limit.rb` rather than from anyone's memory:
+
+| limit | value |
+| --- | --- |
+| `published_article_creation` | 9 per 30s |
+| `published_article_antispam_creation` | **1 per 300s** — for "new" users |
+| `user_considered_new_days` | 3 |
+| `article_update` | 30 per 30s |
+
+An account younger than three days may publish **one article every five minutes**, so
+nineteen posts cannot go out as one run however the script is written.
+
+The limit is not the real risk though. A new account publishing nineteen articles in a
+burst, every one canonicalised to the same outside domain, is the shape dev.to moderators
+suspend — and a suspension costs every link on the account at once.
+
+So `scripts/devto.mjs` caps how many *new* articles it creates per run: **1 while the account
+is under three days old, 3 after**, overridable with `--limit N`. The daily schedule in
+`devto.yml` works through the backlog. Updates are not capped — they are cheap, they are not
+the spam signal, and holding back an edit to an article that already exists helps nobody.
+
+An article whose stored markdown already matches what would be sent is skipped without a
+request, so a scheduled run with nothing to do makes no writes at all.
+
+On a `429` the script waits once if the retry window is short (Forem's ordinary 30s throttle)
+and otherwise **stops the run cleanly and exits 0**, because being rate limited is the
+expected steady state of a drip rather than a fault. The next scheduled run continues from
+where it stopped.
+
 ## What the script changes on the way out
 
 Three mechanical differences between what this site renders and what dev.to needs:

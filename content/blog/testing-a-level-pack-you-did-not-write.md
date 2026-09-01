@@ -6,6 +6,7 @@ description: Unit-testing the game does not tell you whether the 392 levels in t
 tags: [testing, gamedev, puzzle, architecture]
 code: https://gist.github.com/IndieCoreDev/95eb02285852062865e861573d020faa
 codeLabel: The whole conformance suite
+devto: true
 draft: false
 ---
 

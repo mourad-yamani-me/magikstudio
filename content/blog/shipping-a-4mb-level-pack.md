@@ -6,6 +6,7 @@ description: 392 levels of JSON, pretty-printed for review and minified for the 
 tags: [gamedev, capacitor, vite, performance]
 code: https://gist.github.com/IndieCoreDev/788e88e15747179b5ee493057be4821e
 codeLabel: The plugin, both fixes included
+devto: true
 draft: false
 ---
 

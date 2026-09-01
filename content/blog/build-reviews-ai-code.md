@@ -5,6 +5,7 @@ description: Reading every diff at generation speed isn't review, it's skimming.
 tags: [ai, claude-code, ci-cd, workflow]
 code: https://gist.github.com/IndieCoreDev/6c707bf89e5d215225f3bdac6e4a4b25
 codeLabel: Both scripts, ready to drop in
+devto: true
 draft: false
 ---
 

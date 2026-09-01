@@ -9,7 +9,14 @@ name: Cross-post to dev.to
 # only needs to run when a post or an embedded snippet changes.
 #
 # Re-running is safe. Articles are matched by their canonical_url, so a second
-# run updates the article the first one created rather than duplicating it.
+# run updates the article the first one created rather than duplicating it, and
+# an article whose stored markdown already matches is skipped entirely.
+#
+# The daily schedule is what lets every post carry `devto: true` at once.
+# dev.to allows a new account one published article per five minutes, and a
+# burst of nineteen would look like exactly what its moderators remove, so the
+# script creates a small number per run and the schedule works through the
+# backlog over days. Edits to articles that already exist are not capped.
 
 on:
   push:
@@ -19,6 +26,8 @@ on:
       - 'gist/**'
       - 'scripts/devto.mjs'
       - 'scripts/gist-embed.mjs'
+  schedule:
+    - cron: '41 7 * * *'      # 07:41 UTC daily — off the hour, and clear of the SEO watch
   workflow_dispatch:
 
 permissions:

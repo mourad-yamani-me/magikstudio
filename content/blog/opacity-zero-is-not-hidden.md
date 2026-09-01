@@ -5,6 +5,7 @@ description: My lightbox was invisible and still in the tab order. Fixing that b
 tags: [accessibility, css, javascript, web]
 code: https://gist.github.com/IndieCoreDev/94c7819fac39ad0f3b181aa84013a414
 codeLabel: The lightbox, dependency-free
+devto: true
 draft: false
 ---
 

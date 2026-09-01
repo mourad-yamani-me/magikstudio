@@ -82,7 +82,7 @@ git add -A                                            # no
 | Changing a privacy policy | `_source/legacy/*.txt` — the text is parsed from there |
 | Changing the mailing list | the `KIT` block in `build.mjs`, and the matching settings in the Kit account |
 | Acting on Search Console | [`docs/seo-automation.md`](docs/seo-automation.md) — `npm run seo:watch -- --brief` prints the open findings and the fix each one implies |
-| Cross-posting to dev.to | [`docs/cross-posting.md`](docs/cross-posting.md) — the canonical rule, `devto: true`, and why only dev.to |
+| Cross-posting to dev.to | [`docs/cross-posting.md`](docs/cross-posting.md) — the canonical rule, `devto: true`, and why creations drip |
 | Changing the snippet hub | [`docs/cross-posting.md`](docs/cross-posting.md#the-snippet-hub) — why it lives on a second account, and the one-time setup |
 
 Those files are the source of truth. If something here disagrees with them, they win, and

@@ -5,6 +5,7 @@ description: "Improve image delivery" makes two complaints in one panel. Both ha
 tags: [performance, lighthouse, images, web]
 code: https://gist.github.com/IndieCoreDev/d653221d437be0389aa4b4281f929e99
 codeLabel: The pipeline and the markup, ready to adapt
+devto: true
 draft: false
 ---
 
