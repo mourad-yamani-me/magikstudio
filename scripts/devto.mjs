@@ -41,7 +41,16 @@ const API  = 'https://dev.to/api';
 const args    = process.argv.slice(2);
 const publish = args.includes('--publish');
 const draft   = args.includes('--draft');
-const only    = args[args.indexOf('--only') + 1];
+/* indexOf returns -1 when the flag is absent, and args[-1 + 1] is args[0] —
+   which under `--publish` reads the flag itself as a slug and silently matches
+   no posts. The run then succeeds having published nothing, which is the worst
+   shape a bug can take in a workflow nobody watches. */
+const onlyAt  = args.indexOf('--only');
+const only    = onlyAt === -1 ? undefined : args[onlyAt + 1];
+if (onlyAt !== -1 && (!only || only.startsWith('--'))) {
+  console.error('--only needs a post slug after it, e.g. --only static-site-cloudflare-workers');
+  process.exit(1);
+}
 const KEY     = process.env.DEVTO_API_KEY;
 
 /* ───────── reading the posts ───────── */
