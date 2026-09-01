@@ -4,6 +4,8 @@ date: 2026-09-01
 order: 9
 description: 13.1 MB down to 5.9 MB delivered. R8 is off in the project Capacitor generates, and one library's consumer ProGuard rule was pinning 9,304 classes.
 tags: [gamedev, capacitor, android, apk, r8]
+code: https://gist.github.com/IndieCoreDev/5d3ca9b6ad1add515f358883a1bf106f
+codeLabel: Gradle, ProGuard, the size script and the Vite plugin
 draft: false
 ---
 

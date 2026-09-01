@@ -4,6 +4,8 @@ date: 2026-09-01
 order: 7
 description: Unit-testing the game does not tell you whether the 392 levels in this build are solvable. So the suite plays every one of them.
 tags: [testing, gamedev, puzzle, architecture]
+code: https://gist.github.com/IndieCoreDev/95eb02285852062865e861573d020faa
+codeLabel: The whole conformance suite
 draft: false
 ---
 

@@ -4,6 +4,8 @@ date: 2026-09-01
 order: 3
 description: Grid size is the obvious difficulty proxy and it is wrong. Measuring the branching factor of the solve gives a rating that survives contact with players.
 tags: [gamedev, difficulty, puzzle, procedural-generation]
+code: https://gist.github.com/IndieCoreDev/02835f475522e68083df2567f1a562b5
+codeLabel: The walk and the tiers, ready to adapt
 draft: false
 ---
 

@@ -4,6 +4,8 @@ date: 2026-09-01
 order: 4
 description: Sorting a level library easiest-to-hardest gives a campaign that is flat for a hundred stages and then a wall. What replaced the sort.
 tags: [gamedev, difficulty, level-design, puzzle]
+code: https://gist.github.com/IndieCoreDev/85b015318475143f35ee6df50fcf9d65
+codeLabel: The envelope, the rhythm and the tone windows
 draft: false
 ---
 
