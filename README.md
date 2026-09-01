@@ -18,7 +18,7 @@ No framework. `build.mjs` reads content and templates and writes `dist/`.
 _source/play-data.json      Google Play metadata (descriptions, category, updated date)
 _source/legacy/*.txt        privacy policy source text, one per game
 _source/indexnow-key.txt    IndexNow ownership key (public; copied to dist/<key>.txt)
-_source/seo-watch.json      Search Console ledger — observations and open findings
+_source/seo-watch.json      search ledger — Google and Bing observations, open findings
 src/styles.css              the whole stylesheet (inlined into each page at build time)
 src/app.js                  reveals, galleries, lightbox, mobile nav
 public/assets/games/        game icons and screenshots (JPEG; WebP generated at build)
@@ -27,8 +27,9 @@ public/assets/og/           social preview images (committed — see below)
 build.mjs                   generator: pages, sitemap, robots, _redirects, _headers
 scripts/verify.mjs          build verification — dead links, images, meta, redirects
 scripts/lighthouse-check.mjs Lighthouse budget gate
-scripts/seo-ping.mjs        IndexNow + Search Console submit, and an index-status report
-scripts/seo-watch.mjs       Search Console watcher — what changed, and what to do about it
+scripts/seo-ping.mjs        IndexNow + Search Console + Bing submit, and an index-status report
+scripts/seo-watch.mjs       search watcher — what changed across both engines, and what to do
+scripts/bing-api.mjs        Bing Webmaster Tools API client, shared by the two above
 scripts/serve.mjs           local server that mirrors Cloudflare (brotli, cache, redirects)
 ```
 
@@ -118,12 +119,21 @@ for approval.
 - Require status checks: **`Build & verify`** and **`Lighthouse budget`**
 - Require branches to be up to date before merging
 
-### 6. Search Console (optional, but the SEO watch needs it)
+### 6. Search Console and Bing (optional, but the SEO watch needs one of them)
 
-IndexNow works with no setup. The Google half of the SEO ping stays skipped until a
-service-account secret exists, and the SEO watch is Search Console only, so it does nothing
-until then — [docs/seo-automation.md](docs/seo-automation.md) has the walkthrough, and
-explains why the Indexing API is not the answer here.
+IndexNow works with no setup, and it is what tells Bing a page changed. What needs
+credentials is the answer coming back.
+
+| Secret | Buys you |
+| --- | --- |
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | Search Console: sitemap submit, per-URL index status, query performance |
+| `BING_API_KEY` | Bing Webmaster Tools: per-URL crawl records, crawl errors, query stats |
+
+The SEO ping skips whichever half is missing. The SEO watch runs on either, and skips
+the other rather than reading its silence as a regression.
+[docs/seo-automation.md](docs/seo-automation.md) has both walkthroughs — including why
+Google's Indexing API is not the answer here, and why the Bing API retirement headline
+does not apply to the endpoint this repo calls.
 
 ### 7. Domain
 

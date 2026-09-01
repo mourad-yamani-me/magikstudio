@@ -1,7 +1,9 @@
 name: SEO watch
 
-# Follows what Search Console says about the site, keeps the record in the repo,
-# and raises the things worth acting on.
+# Follows what Search Console and Bing Webmaster Tools say about the site, keeps
+# the record in the repo, and raises the things worth acting on. Each engine
+# writes its own half of the ledger: a page one has and the other does not is a
+# fact worth seeing, and a single combined number is what would hide it.
 #
 # `SEO ping` (seo-ping.yml) announces the URL set and reports the current state.
 # This is the other half: it remembers. A page that quietly falls out of the
@@ -16,7 +18,8 @@ name: SEO watch
 #
 # Daily rather than weekly: Search Console lags about two days, so a day is the
 # finest granularity that carries new information, and a deindexed page is worth
-# knowing about tomorrow rather than next Monday.
+# knowing about tomorrow rather than next Monday. Bing's stats are weekly buckets
+# and will simply repeat between refreshes, which costs nothing.
 
 on:
   schedule:
@@ -55,18 +58,28 @@ jobs:
       - name: Observe
         id: watch
         env:
-          # Required. A Google Cloud service-account key (whole JSON), added as
-          # an OWNER of the Search Console property — Full is not enough for URL
-          # inspection. See docs/seo-automation.md.
+          # A Google Cloud service-account key (whole JSON), added as an OWNER of
+          # the Search Console property — Full is not enough for URL inspection.
+          # See docs/seo-automation.md.
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           # Optional. sc-domain:indiecore.net if the property is a Domain one.
           GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+          # Bing Webmaster Tools -> Settings -> API access -> API key. Optional,
+          # but without it the Bing half of the ledger stops being updated and
+          # its findings are left alone rather than resolved.
+          BING_API_KEY: ${{ secrets.BING_API_KEY }}
         run: |
           set -euo pipefail
 
-          if [ -z "${GOOGLE_SERVICE_ACCOUNT_JSON:-}" ]; then
-            echo "::error::GOOGLE_SERVICE_ACCOUNT_JSON is not set — see docs/seo-automation.md"
+          if [ -z "${GOOGLE_SERVICE_ACCOUNT_JSON:-}" ] && [ -z "${BING_API_KEY:-}" ]; then
+            echo "::error::Neither GOOGLE_SERVICE_ACCOUNT_JSON nor BING_API_KEY is set — see docs/seo-automation.md"
             exit 1
+          fi
+          if [ -z "${GOOGLE_SERVICE_ACCOUNT_JSON:-}" ]; then
+            echo "::warning::GOOGLE_SERVICE_ACCOUNT_JSON is not set — watching Bing only"
+          fi
+          if [ -z "${BING_API_KEY:-}" ]; then
+            echo "::warning::BING_API_KEY is not set — watching Search Console only"
           fi
 
           node scripts/seo-watch.mjs ${{ inputs.dry_run && '--dry-run' || '' }}
@@ -127,7 +140,7 @@ jobs:
               if (existing && existing.state === 'open') {
                 await github.rest.issues.createComment({
                   owner, repo, issue_number: existing.number,
-                  body: 'Every finding is resolved — Search Console reports nothing worth acting on.',
+                  body: 'Every finding is resolved — neither Search Console nor Bing reports anything worth acting on.',
                 });
                 await github.rest.issues.update({
                   owner, repo, issue_number: existing.number, state: 'closed',

@@ -17,6 +17,7 @@
     "style": "node scripts/style-check.mjs",
     "seo": "node scripts/seo-ping.mjs",
     "seo:watch": "node scripts/seo-watch.mjs",
+    "seo:bing": "node scripts/seo-ping.mjs --bing-only",
     "topics": "node scripts/topics.mjs",
     "assets:og": "node og.mjs",
     "assets:fonts": "node fonts.mjs",

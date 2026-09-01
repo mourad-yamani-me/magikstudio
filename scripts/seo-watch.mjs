@@ -32,10 +32,17 @@
  * records; the fixing happens in a branch, in a pull request, like every other
  * change. See docs/seo-automation.md.
  *
+ * Both engines are watched. Google answers through Search Console, Bing through
+ * the Webmaster Tools API, and each writes into its own half of the ledger — a
+ * page can be indexed by one and invisible to the other, which is a fact worth
+ * seeing rather than averaging away. Either credential alone is enough to run.
+ *
  * Environment (same as scripts/seo-ping.mjs — set it once):
- *   GOOGLE_SERVICE_ACCOUNT_JSON  service-account key, whole JSON blob. Required.
+ *   GOOGLE_SERVICE_ACCOUNT_JSON  service-account key, whole JSON blob.
  *   GSC_SITE_URL                 Search Console property, default the URL-prefix
  *                                property for the canonical host.
+ *   BING_API_KEY                 Bing Webmaster Tools -> Settings -> API access.
+ *                                Absent -> the Bing half is skipped.
  *
  * Usage:
  *   npm run seo:watch                    observe, compare, update the ledger
@@ -52,9 +59,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import * as bing from './bing-api.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SITE = 'https://www.indiecore.net';
+const HOST = new URL(SITE).host;
 const SITEMAP = `${SITE}/sitemap.xml`;
 const SCOPE = 'https://www.googleapis.com/auth/webmasters';
 const SITE_URL = process.env.GSC_SITE_URL || `${SITE}/`;
@@ -74,6 +83,19 @@ const DAYS = Number(opt('days', 28)) || 28;
 const CLOSE = opt('close', '');
 const WONTFIX = opt('wontfix', '');
 const NOTE = opt('note', '');
+// Bing throttles per-URL lookups hard (ErrorCode 5, "ThrottleHost") and the block
+// outlasts a CI run, so a pass over the whole sitemap returns nothing for most of
+// it. Measured against the live API rather than guessed: exactly ten calls
+// succeed and the eleventh is refused, and spacing them three seconds apart does
+// not raise that — it is a budget per window, not a rate. Slowing down further
+// buys nothing, so ten is the default and the run stops when Bing says stop.
+//
+// Check a rotating slice instead and let the ledger accumulate what one run
+// cannot. Index membership shifts over weeks, so revisiting a URL every few days
+// samples it far more often than it actually changes.
+const BING_URL_BUDGET = Number(opt('bing-urls', 10)) || 10;
+const BING_GAP_MS = 3000;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 const today = () => new Date().toISOString().slice(0, 10);
 const ymd = d => d.toISOString().slice(0, 10);
@@ -85,7 +107,15 @@ const say = line => { console.log(line); summary.push(line); };
 /* ------------------------------------------------------------------ */
 /* the ledger                                                          */
 
-const EMPTY = { site: SITE_URL, updated: null, runs: 0, urls: {}, queries: {}, findings: [] };
+// `bing` is a parallel half rather than extra fields on `urls`: the two engines
+// answer different questions, on different schedules, and either can be absent
+// from a run. Keeping them apart means a missing Bing key cannot look like a
+// Google regression, and an old ledger reads correctly with no migration.
+const EMPTY = {
+  site: SITE_URL, updated: null, runs: 0, urls: {}, queries: {},
+  bing: { site: null, urls: {}, queries: {} },
+  findings: [],
+};
 
 const readLedger = () => {
   if (!fs.existsSync(LEDGER)) return structuredClone(EMPTY);
@@ -272,6 +302,113 @@ async function sitemapHealth(token) {
 }
 
 /* ------------------------------------------------------------------ */
+/* observe — Bing                                                      */
+/*                                                                     */
+/* Bing has no equivalent of Google's inspection verdict. GetUrlInfo    */
+/* returns a record for a URL it has crawled and nothing at all for one */
+/* it has not, so "Bing knows this page" is an inference from a crawl   */
+/* date, not a claim Bing makes. The findings below are worded to match */
+/* what the data actually supports — a report that overstates its       */
+/* evidence is worse than one that admits the gap.                      */
+
+/** Weekly buckets, all of history, no date parameters — so the window is cut
+ *  here. Position is averaged across weeks weighted by each week's
+ *  impressions; a flat mean would let a quiet week count as much as a busy one. */
+function bingQueryWindow(rows) {
+  const cutoff = ymd(new Date(Date.now() - DAYS * 864e5));
+  const acc = new Map();
+  for (const r of rows) {
+    const d = bing.msDate(r.Date);
+    if (!d || d < cutoff) continue;
+    const q = String(r.Query ?? '').trim();
+    if (!q) continue;
+    const a = acc.get(q) ?? { clicks: 0, impressions: 0, weighted: 0 };
+    const imp = Number(r.Impressions) || 0;
+    a.clicks += Number(r.Clicks) || 0;
+    a.impressions += imp;
+    a.weighted += (Number(r.AvgImpressionPosition) || 0) * imp;
+    acc.set(q, a);
+  }
+  return [...acc].map(([query, a]) => ({
+    query, clicks: a.clicks, impressions: a.impressions,
+    position: a.impressions ? Number((a.weighted / a.impressions).toFixed(1)) : 0,
+  }));
+}
+
+async function bingObserve(urls, prev) {
+  if (!bing.bingKey()) {
+    say('- **Bing** — skipped: `BING_API_KEY` is not set');
+    return null;
+  }
+
+  const resolved = await bing.resolveSite(HOST);
+  if (!resolved.ok) {
+    say(`- **Bing** — skipped: ${resolved.error}`);
+    return null;
+  }
+
+  const site = resolved.site.url;
+  if (!resolved.canonical) {
+    say(`- **Bing** — WARNING: no property covering \`${HOST}\`, reading \`${site}\` instead. `
+      + 'That is a different domain, so nothing below describes this site. Add '
+      + `\`${SITE}/\` in Bing Webmaster Tools.`);
+  }
+
+  // Longest-unchecked first, so every URL comes round rather than the same ten
+  // being re-read while the tail is never looked at.
+  const slice = [...urls]
+    .sort((a, b) => (prev.bing?.urls?.[a]?.checked ?? '')
+      .localeCompare(prev.bing?.urls?.[b]?.checked ?? ''))
+    .slice(0, BING_URL_BUDGET);
+
+  const index = {};
+  let throttled = false;
+  let failures = 0;
+
+  // Sequential and spaced. Concurrency here does not finish sooner — it trips
+  // the throttle on the second call and loses the rest of the run with it.
+  for (const u of slice) {
+    const res = await bing.getUrlInfo(site, u);
+    if (!res.ok) {
+      // Once throttled, every further call fails too. Stop rather than spend
+      // the run proving it, and leave the untouched URLs for tomorrow.
+      if (/throttle/i.test(res.error ?? '')) { throttled = true; break; }
+      failures++;
+      continue;
+    }
+    index[u] = {
+      crawled: bing.msDate(res.data?.LastCrawledDate),
+      discovered: bing.msDate(res.data?.DiscoveryDate),
+      http: res.data?.HttpStatus ?? null,
+    };
+    await sleep(BING_GAP_MS);
+  }
+
+  const done = Object.keys(index).length;
+  if (!done) {
+    // Nothing readable. Returning null keeps every Bing finding untouched,
+    // rather than reading silence as "Bing knows none of these pages" and
+    // opening one for all of them.
+    say(`- **Bing** — URL lookups returned nothing this run`
+      + (throttled ? ' (throttled by Bing — it will pick up where it left off)' : ''));
+    return null;
+  }
+  say(`- **Bing** — checked ${done} of ${urls.length} URLs this run`
+    + (throttled ? ', then Bing throttled; the rest roll over to tomorrow' : '')
+    + (failures ? `, ${failures} failed` : ''));
+
+  const issuesRes = await bing.getCrawlIssues(site);
+  const statsRes = await bing.getQueryStats(site);
+
+  return {
+    site,
+    index,
+    issues: issuesRes.ok ? (issuesRes.data ?? []) : null,
+    queries: statsRes.ok ? bingQueryWindow(statsRes.data ?? []) : null,
+  };
+}
+
+/* ------------------------------------------------------------------ */
 /* findings                                                            */
 /*                                                                     */
 /* One rule per thing that has a distinct fix. A finding that cannot be */
@@ -323,9 +460,10 @@ const KINDS = {
   index:   ['deindexed', 'never-crawled', 'not-indexed', 'stale-crawl'],
   sitemap: ['sitemap-errors', 'sitemap-warnings'],
   perf:    ['position-slip', 'near-miss', 'zero-click'],
+  bing:    ['bing-coverage', 'bing-not-indexed', 'bing-crawl-issue'],
 };
 
-function detect({ index, perf, sitemap, prev }) {
+function detect({ index, perf, sitemap, bingObs, bingState, prev }) {
   const found = [];
   const firstRun = !(prev.runs > 0);
   // A gate decides whether a finding is worth OPENING. It must never decide
@@ -437,10 +575,60 @@ function detect({ index, perf, sitemap, prev }) {
     }
   }
 
+  /* --- Bing ------------------------------------------------------- */
+  /* Deliberately no Bing near-miss or position-slip. The fix for either would
+     be the same title rewrite the Google finding already asks for, and a rule
+     that duplicates its neighbour's fix is noise by the standard in AGENTS.md.
+     The query data is still recorded — it just does not raise anything until
+     there is a fix that belongs to it alone. */
+  if (bingObs) {
+    // Read from the accumulated ledger, not just this run's slice. Coverage is
+    // built up over several days of rotating checks, and a URL checked on
+    // Tuesday is still known on Wednesday. Only URLs Bing has actually been
+    // asked about are counted: one never checked is an absence of evidence,
+    // not evidence of absence, and must not become a finding.
+    const known = Object.entries(bingState ?? {}).filter(([, v]) => v.checked);
+    const missing = known.filter(([, v]) => !v.crawled).map(([u]) => u);
+
+    if (known.length && missing.length > known.length / 2) {
+      // A site-level fact, not a page-level one. Thirty-odd identical rows
+      // would bury every other finding in the report to say a single thing.
+      add('bing-coverage', 'site',
+        `Bing has a crawl record for ${known.length - missing.length} of the `
+        + `${known.length} sitemap URL${known.length === 1 ? '' : 's'} checked so far`,
+        'Normal for a property added in the last few weeks — bingbot reaches a new '
+        + 'site more slowly than Googlebot, and IndexNow only announces a URL, it '
+        + 'does not schedule a crawl. Worth acting on if the number has not moved in '
+        + 'a month: check the property is on the canonical host and that nothing '
+        + 'blocks bingbot.');
+    } else {
+      for (const url of missing) {
+        add('bing-not-indexed', short(url),
+          'in the sitemap and announced through IndexNow, but Bing has no crawl record for it',
+          'Bing keeps a small manual submission quota, which Google has no equivalent '
+          + 'of. `npm run seo -- --bing-only --submit-urls` spends it. If the page is '
+          + 'still missing a fortnight later, the problem is internal links or a '
+          + 'blocked bingbot, not submission.');
+      }
+    }
+
+    for (const row of bingObs.issues ?? []) {
+      const names = bing.decodeIssues(row.Issues);
+      if (!names.length) continue;
+      add('bing-crawl-issue', short(String(row.Url ?? 'unknown')),
+        `Bing reports ${names.join(', ')}`
+        + (row.HttpCode ? ` (HTTP ${row.HttpCode})` : ''),
+        bing.issueFix(names));
+    }
+  }
+
   const observed = new Set([
     ...(index ? KINDS.index : []),
     ...(sitemap ? KINDS.sitemap : []),
     ...(perf ? KINDS.perf : []),
+    // Only when the Bing half actually returned. A skipped source proves
+    // nothing, and must never be read as the problem having gone away.
+    ...(bingObs ? KINDS.bing : []),
   ]);
   return { found, observed };
 }
@@ -481,8 +669,11 @@ if (BRIEF) {
     console.log('Nothing open. Search Console reports no regression and no near-miss worth acting on.');
     process.exit(0);
   }
-  const order = ['deindexed', 'sitemap-errors', 'never-crawled', 'not-indexed',
-                 'position-slip', 'sitemap-warnings', 'zero-click', 'near-miss',
+  // Roughly: things that are broken, then things that are missing, then things
+  // that are merely underperforming.
+  const order = ['deindexed', 'sitemap-errors', 'bing-crawl-issue', 'never-crawled',
+                 'not-indexed', 'bing-not-indexed', 'position-slip',
+                 'sitemap-warnings', 'zero-click', 'near-miss', 'bing-coverage',
                  'stale-crawl'];
   const rank = f => { const i = order.indexOf(f.kind); return i === -1 ? order.length : i; };
   for (const f of open.sort((a, b) => rank(a) - rank(b))) {
@@ -500,26 +691,34 @@ if (BRIEF) {
 /* the run                                                             */
 
 const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-if (!raw) {
-  console.error('GOOGLE_SERVICE_ACCOUNT_JSON is not set — this script is Search Console only.');
-  console.error('See docs/seo-automation.md for the one-time setup.');
+if (!raw && !bing.bingKey()) {
+  console.error('Neither GOOGLE_SERVICE_ACCOUNT_JSON nor BING_API_KEY is set, so there is');
+  console.error('nothing to observe. See docs/seo-automation.md for the one-time setup.');
   process.exit(1);
 }
 
-const sa = JSON.parse(raw);
-const token = await googleToken(sa);
-const property = await preflight(token, sa);
+let token = null;
+let property = null;
+if (raw) {
+  const sa = JSON.parse(raw);
+  token = await googleToken(sa);
+  property = await preflight(token, sa);
+} else {
+  say('- **Search Console** — skipped: `GOOGLE_SERVICE_ACCOUNT_JSON` is not set');
+}
 
 const urls = await liveUrls();
 const prev = readLedger();
 const stamp = today();
 
-const index = (NO_INSPECT || !property.canInspect) ? null : await inspectAll(token, urls);
-const perf = await performance(token);
-const sitemap = await sitemapHealth(token);
+const index = (!token || NO_INSPECT || !property?.canInspect)
+  ? null : await inspectAll(token, urls);
+const perf = token ? await performance(token) : null;
+const sitemap = token ? await sitemapHealth(token) : null;
+const bingObs = await bingObserve(urls, prev);
 
-if (!perf && !index) {
-  say('Nothing could be read from Search Console — the ledger was left alone.');
+if (!perf && !index && !bingObs) {
+  say('Nothing could be read from either engine — the ledger was left alone.');
   process.exit(1);
 }
 
@@ -531,8 +730,39 @@ const next = {
   runs: (prev.runs ?? 0) + 1,
   urls: {},
   queries: {},
+  // Carried forward untouched when the Bing half did not run, so a missing key
+  // loses the history rather than silently rewriting it as empty.
+  bing: prev.bing ?? { site: null, urls: {}, queries: {} },
   findings: [],
 };
+
+if (bingObs) {
+  next.bing = { site: bingObs.site, urls: {}, queries: {} };
+  for (const u of urls) {
+    const was = prev.bing?.urls?.[u];
+    const now = bingObs.index[u];
+    // When a URL was looked at this run its result stands, nulls included — a
+    // page that fell out of Bing has to be able to show that. When it was not,
+    // the previous answer carries forward untouched.
+    next.bing.urls[u] = {
+      first_seen: was?.first_seen ?? stamp,
+      seen: stamp,
+      checked: now ? stamp : (was?.checked ?? null),
+      crawled: now ? now.crawled : (was?.crawled ?? null),
+      http: now ? now.http : (was?.http ?? null),
+    };
+  }
+  for (const r of bingObs.queries ?? []) {
+    const was = prev.bing?.queries?.[r.query];
+    next.bing.queries[r.query] = {
+      first_seen: was?.first_seen ?? stamp,
+      seen: stamp,
+      position: r.position,
+      impressions: r.impressions,
+      clicks: r.clicks,
+    };
+  }
+}
 
 for (const u of urls) {
   const was = prev.urls[u];
@@ -569,7 +799,8 @@ if (perf) {
 
 /* --- findings: open the new, keep the still-true, close the rest --- */
 
-const { found: detected, observed } = detect({ index, perf, sitemap, prev });
+const { found: detected, observed } =
+  detect({ index, perf, sitemap, bingObs, bingState: next.bing.urls, prev });
 const byId = new Map(detected.map(f => [f.id, f]));
 const opened = [], closed = [];
 
@@ -606,9 +837,26 @@ say(`### SEO watch — run ${next.runs}${DRY ? ' (dry run)' : ''}`);
 say('');
 // Never print a count for something this run did not look at: "0 indexed"
 // reads as a catastrophe when it only means inspection was skipped.
-say(`${urls.length} URLs in the sitemap`
-  + (index ? `, ${indexed} indexed.` : '. Index not checked this run.')
+say(`${urls.length} URLs in the sitemap. `
+  + `**Google** — `
+  + (index ? `${indexed} indexed.` : 'index not checked this run.')
   + (perf ? ` Performance window ${perf.start} to ${perf.end}.` : ''));
+
+// Reported separately rather than summed. A page Google has and Bing does not
+// is the interesting case, and one combined number is exactly what hides it.
+if (bingObs) {
+  const checked = Object.values(next.bing.urls).filter(u => u.checked).length;
+  const crawled = Object.values(next.bing.urls).filter(u => u.crawled).length;
+  const rows = Object.values(next.bing.queries);
+  const clicks = rows.reduce((a, q) => a + q.clicks, 0);
+  const imps = rows.reduce((a, q) => a + q.impressions, 0);
+  say('');
+  say(`**Bing** — ${crawled} of ${checked} checked URLs crawled `
+    + `(${urls.length} in the sitemap)`
+    + (imps
+      ? `, ${clicks} click${clicks === 1 ? '' : 's'} from ${imps} impressions in ${DAYS} days.`
+      : ', no impressions in the window.'));
+}
 say('');
 
 if (opened.length) {

@@ -65,6 +65,10 @@ jobs:
           # Optional. Set to sc-domain:indiecore.net if the Search Console
           # property is a Domain property rather than a URL-prefix one.
           GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+          # Optional. Bing Webmaster Tools -> Settings -> API access -> API key.
+          # Absent -> the Bing step is skipped and IndexNow still announces to
+          # Bing, which needs no credentials. See docs/seo-automation.md.
+          BING_API_KEY: ${{ secrets.BING_API_KEY }}
         # --submit-only: announce the URL set and resubmit the sitemap, but leave
         # index status and search performance to the SEO watch workflow, which
         # reports them against a ledger. Inspecting every URL twice a day costs

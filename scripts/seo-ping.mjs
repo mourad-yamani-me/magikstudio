@@ -8,6 +8,9 @@
  *
  *   1. IndexNow      — instant push to Bing, DuckDuckGo, Yandex and Copilot.
  *                      Needs no credentials, only the key file at the root.
+ *   1b. Bing          — Webmaster Tools API. The two things IndexNow cannot
+ *                      do: confirm the sitemap is registered against the
+ *                      property, and report the manual submission quota.
  *   2. Sitemap submit — Search Console API. Google removed the old public
  *                      /ping?sitemap= endpoint in June 2023, so this is the
  *                      only supported way left to nudge it.
@@ -32,17 +35,24 @@
  *   GSC_SITE_URL                 Search Console property. Defaults to the
  *                                URL-prefix property for the canonical host.
  *                                Use sc-domain:indiecore.net for a Domain one.
+ *   BING_API_KEY                 Bing Webmaster Tools -> Settings -> API access.
+ *                                Absent -> the Bing step is skipped.
  *
  * Flags:
  *   --dry-run      resolve everything, send nothing.
  *   --days=N       search-performance window (default 28).
  *   --no-google    skip steps 2 and 3 even when credentials are present.
+ *   --no-bing      skip the Bing step even when the key is present.
+ *   --bing-only    Bing and nothing else — the flag for checking the setup.
+ *   --submit-urls  spend Bing's manual submission quota on the whole URL set.
+ *                  Off by default: IndexNow already covers this for free.
  *   --submit-only  announce and submit, but skip the reporting in steps 3 and 4.
  *                  scripts/seo-watch.mjs reports those, with history.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import * as bing from './bing-api.mjs';
 
 const SITE = 'https://www.indiecore.net';
 const HOST = new URL(SITE).host;
@@ -57,6 +67,14 @@ const SKIP_GOOGLE = argv.has('--no-google');
 // both in full spends minutes of billed CI on identical API calls for a strictly
 // worse version of the same report.
 const SUBMIT_ONLY = argv.has('--submit-only');
+const BING_ONLY = argv.has('--bing-only');
+const SKIP_BING = argv.has('--no-bing');
+// The quota is generous (100/day, 3000/month at the time of writing), so this is
+// not about rationing. It is that IndexNow already announces the same URL set on
+// every deploy, for free and without a credential — so submitting them again
+// here would spend a budget to repeat a message Bing received seconds earlier.
+// Worth spending deliberately on a page seo-watch reports as actually missing.
+const SUBMIT_URLS = argv.has('--submit-urls');
 const SITE_URL = process.env.GSC_SITE_URL || `${SITE}/`;
 
 const KEY = fs.readFileSync(
@@ -105,6 +123,76 @@ async function indexNow(urls) {
   } else {
     say(`- **IndexNow** — FAILED: HTTP ${res.status} ${(await res.text()).slice(0, 200)}`);
     process.exitCode = 1;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* 1b. Bing Webmaster Tools                                            */
+/*                                                                     */
+/* IndexNow has already told Bing which URLs changed, without needing  */
+/* a credential. This step does the two things IndexNow cannot: check  */
+/* the sitemap is registered against the property, and report how much */
+/* manual submission quota is left.                                    */
+
+async function bingPing(urls) {
+  if (!bing.bingKey()) {
+    say('- **Bing** — skipped: `BING_API_KEY` is not set');
+    return;
+  }
+
+  // Bing matches siteUrl against the exact registered string, so ask it which
+  // sites the key can see rather than asserting one and reading the failure as
+  // a bad key. See resolveSite() for why the host has to be checked too.
+  const resolved = await bing.resolveSite(HOST);
+  if (!resolved.ok) {
+    say(`- **Bing** — FAILED: ${resolved.error}`);
+    process.exitCode = 1;
+    return;
+  }
+
+  const site = resolved.site.url;
+  if (!resolved.canonical) {
+    say(`- **Bing** — WARNING: no property covering \`${HOST}\`, using \`${site}\``);
+    say('  - that property is a different domain, so none of what follows describes this '
+      + `site. Add \`${SITE}/\` in Bing Webmaster Tools.`);
+  }
+
+  /* --- the sitemap, registered against the property --------------- */
+  const feeds = await bing.getFeeds(site);
+  if (!feeds.ok) {
+    say(`- **Bing sitemap** — could not be listed: ${feeds.error}`);
+    process.exitCode = 1;
+  } else {
+    const known = (feeds.data ?? []).find(f => f.Url === SITEMAP);
+    if (known) {
+      say(`- **Bing sitemap** — registered, ${known.UrlCount ?? '?'} URLs, `
+        + `last read ${bing.msDate(known.LastCrawled) ?? 'never'}`);
+    } else if (DRY) {
+      say(`- **Bing sitemap** — dry run, would submit ${SITEMAP}`);
+    } else {
+      const sub = await bing.submitFeed(site, SITEMAP);
+      say(sub.ok
+        ? `- **Bing sitemap** — submitted ${SITEMAP}`
+        : `- **Bing sitemap** — FAILED: ${sub.error}`);
+      if (!sub.ok) process.exitCode = 1;
+    }
+  }
+
+  /* --- what is left to spend by hand ------------------------------ */
+  const quota = await bing.getUrlSubmissionQuota(site);
+  if (quota.ok && quota.data) {
+    say(`- **Bing quota** — ${quota.data.DailyQuota ?? '?'} URL submissions left today, `
+      + `${quota.data.MonthlyQuota ?? '?'} this month`);
+  }
+
+  /* --- spending it, only when asked ------------------------------- */
+  if (SUBMIT_URLS) {
+    if (DRY) { say(`- **Bing URLs** — dry run, would submit ${urls.length}`); return; }
+    const res = await bing.submitUrlBatch(site, urls);
+    say(res.ok
+      ? `- **Bing URLs** — submitted ${urls.length} against the quota (\`--submit-urls\`)`
+      : `- **Bing URLs** — FAILED: ${res.error}`);
+    if (!res.ok) process.exitCode = 1;
   }
 }
 
@@ -296,10 +384,22 @@ say('');
 say(`${urls.length} URLs in \`${SITEMAP}\``);
 say('');
 
-await indexNow(urls);
+if (BING_ONLY) {
+  say('- **IndexNow** — skipped (`--bing-only`)');
+} else {
+  await indexNow(urls);
+}
+
+if (SKIP_BING) {
+  say('- **Bing** — skipped (`--no-bing`)');
+} else {
+  await bingPing(urls);
+}
 
 const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-if (SKIP_GOOGLE) {
+if (BING_ONLY) {
+  say('- **Google** — skipped (`--bing-only`)');
+} else if (SKIP_GOOGLE) {
   say('- **Google** — skipped (`--no-google`)');
 } else if (!raw) {
   say('- **Google** — skipped: `GOOGLE_SERVICE_ACCOUNT_JSON` is not set');
