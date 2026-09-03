@@ -23,6 +23,16 @@ linkedinText:
 Without `linkedinText` the post goes out as its own title and description, which works and
 reads like a machine wrote it. Write the blurb.
 
+**New posts only. The back catalogue is deliberately not announced.** Nineteen posts were
+already published and unannounced when this shipped, most of them dated the same day, and
+opting them all in would have dripped one link a day for three weeks. That is comfortably
+inside LinkedIn's API limits — 150 requests per member per day, about four per post — and well
+outside what a personal feed absorbs: more than roughly one post a day suppresses the reach of
+each one, and three straight weeks of daily self-links to the same domain reads as automation
+whether or not it is. Four or five posts with a real hook would beat all nineteen, and doing
+none of them costs nothing that was not already lost. So the flag goes on a post when it is
+written, and old posts stay off the feed unless there is a reason to bring one back.
+
 ```bash
 npm run linkedin                             # dry run — the exact text, rendered as a reader sees it
 npm run linkedin:publish                     # post it, after showing it and asking
