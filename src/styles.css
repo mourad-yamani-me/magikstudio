@@ -340,6 +340,15 @@ main,header,footer{position:relative;z-index:2}
 .article tbody tr:last-child td{border-bottom:0}
 .article tbody tr:hover{background:rgba(255,255,255,.03)}
 .article table code{white-space:nowrap}
+/* Change history — post-publication edits, newest first. Sits under the
+   article and above the prev/next pair, so it reads as a footnote to the post
+   rather than as part of the argument. */
+.chlog{margin-top:52px;padding-top:28px;border-top:1px solid var(--line)}
+.chlog h2{font-family:var(--display);font-size:17px;font-weight:700;letter-spacing:-.01em;color:var(--muted)}
+.chlog ol{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:13px}
+.chlog li{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:baseline}
+.chlog time{font-size:12.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.chlog p{margin:0;font-size:15px;line-height:1.6}
 .pnav{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:56px;padding-top:30px;border-top:1px solid var(--line)}
 .pnav a{display:block;padding:20px 22px;border-radius:16px;background:var(--card);border:1px solid var(--line);
   transition:border-color .3s,background .3s}
@@ -393,6 +402,7 @@ main,header,footer{position:relative;z-index:2}
   .glowpad{width:330px;height:330px;margin:-165px 0 0 -165px}
   .foot-grid{grid-template-columns:1fr}
   .prose ul{grid-template-columns:1fr}
+  .chlog li{grid-template-columns:1fr;gap:3px}
   .pnav{grid-template-columns:1fr}
   .pnav a.r{text-align:left}
   .post{padding-top:110px}

@@ -5,6 +5,8 @@ description: How I decide what an AI agent may change on its own — sorted by w
 tags: [ai, claude-code, workflow, google-play]
 devto: true
 draft: false
+changes:
+  - 2026-09-03 — Zone 2: what a reader caught about immutable assets, and why the fix is a query rather than a fingerprinted filename
 ---
 
 My domain carries email as well as the website. When I moved this site to Cloudflare I sat
@@ -83,6 +85,38 @@ verify against reality: either the check goes into the build, which is
 [what I mostly do now](/blog/build-reviews-ai-code/), or I `curl` the deployed thing and read
 what actually came back. "The deploy succeeded" and "the new behaviour is live and correct"
 are two different claims and only one of them is checkable.
+
+**Added after publishing.** A reader on the dev.to copy of this post,
+[@vinhnguyenthanhdn](https://dev.to/vinhnguyenthanhdn), made the point I had missed: the
+concatenation bug was *protecting* me. While the header was malformed the browser read
+`max-age=86400` first, so the year never applied. Fix the concatenation and `immutable`
+starts working — which is the moment it turns dangerous, because `immutable` is only safe
+over a filename that changes when the file does.
+
+They were right, and about a part of the site this post doesn't show. Game screenshots and
+font subsets were served for a year under names that stay put when the file behind them is
+replaced. Anyone who had already fetched one would hold those bytes for a year, and no
+deploy reaches them — the browser isn't asking. They also named the limit of the `curl`
+above: it reads what the origin answers now, so it covers new visitors and says nothing
+about the ones already holding a copy.
+
+The obvious fix is to fingerprint the filenames the way the JS bundle already is. I didn't,
+and the reason is SEO. Google Images has these screenshot URLs indexed, and the filename is
+itself an input — Google reads `soda-jam-02.jpg` to work out what the picture shows, which is
+why the artwork got renamed off its internal codename in the first place and why the repo
+still carries 301s for the old names. Fingerprinting means a new URL on every edit: the
+indexed one 404s unless I add another redirect each time, and the replacement starts its
+crawl from nothing.
+
+So the hash goes in a query instead — `soda-jam-02.jpg?v=5137594b`. The filename never moves,
+Google Images keeps one stable URL, no redirect is added, and the browser still sees an
+address it has never fetched. Structured data and `og:image` stay bare for the same reason,
+since a scraper wants the URL that doesn't move. The build now fails if one of those paths is
+emitted without a key.
+
+Which is this section arguing with itself. The failure was silent, it survived a review and
+a build gate, and it was caught by someone checking against reality. Just not by me. Thanks
+for the catch.
 
 ## Zone 3 — the undo doesn't live in git
 

@@ -78,11 +78,23 @@ function frontmatter(raw) {
   const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!m) return null;
   const meta = {};
-  for (const line of m[1].split(/\r?\n/)) {
-    const kv = line.match(/^([a-zA-Z_]+):\s*(.*)$/);
+  const lines = m[1].split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    const kv = lines[i].match(/^([a-zA-Z_]+):\s*(.*)$/);
     if (!kv) continue;
     let [, k, v] = kv;
     v = v.trim().replace(/^["']|["']$/g, '');
+    // Block lists (`changes:`, then `  - ` items). This parser is a second
+    // copy of build.mjs's on purpose — the script has to read a post without
+    // importing the site build — so a frontmatter shape added there has to be
+    // taught here too, or the cross-post silently drops it.
+    if (v === '' && /^\s+-\s/.test(lines[i + 1] || '')) {
+      const items = [];
+      while (/^\s+-\s/.test(lines[i + 1] || ''))
+        items.push(lines[++i].replace(/^\s+-\s+/, '').trim());
+      meta[k] = items;
+      continue;
+    }
     if (v.startsWith('[') && v.endsWith(']')) {
       meta[k] = v.slice(1, -1).split(',').map(s => s.trim()).filter(Boolean);
     } else if (v === 'true' || v === 'false') {
@@ -127,7 +139,20 @@ function toDevtoMarkdown(body, meta, slug) {
     '',
   ].join('\n');
 
-  return head + out.replace(/\s+$/, '') + '\n' + foot;
+  // 4. The change history the site renders from frontmatter rather than from
+  //    the body. Without this the dev.to copy quietly claims the post has
+  //    never been revised, which is the one thing a cross-post must not do
+  //    differently from the page it is canonical to.
+  const changes = (meta.changes || [])
+    .map(l => String(l).match(/^(\d{4}-\d{2}-\d{2})\s*[—–-]\s*(.+)$/))
+    .filter(Boolean)
+    .sort((a, b) => b[1].localeCompare(a[1]));
+  const history = changes.length
+    ? ['', '---', '', '## Change history', '',
+       ...changes.map(c => `- **${c[1]}** — ${c[2].trim()}`)].join('\n') + '\n'
+    : '';
+
+  return head + out.replace(/\s+$/, '') + '\n' + history + foot;
 }
 
 function posts() {

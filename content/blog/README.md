@@ -23,7 +23,42 @@ built.
 | `tags` | no | `[unity, android]` |
 | `code` | no | A gist or repo URL. Renders a link card; the type is detected from the host. |
 | `codeLabel` | no | Overrides the card's title. |
+| `changes` | no | Post-publication edits. A block list, one `YYYY-MM-DD — what changed` per line. See below. |
 | `draft` | no | `true` keeps it out of the site, sitemap and RSS entirely. |
+
+## Editing a post after it is published
+
+Small fixes — a typo, a broken link, a clearer sentence — just get made. Nothing to record.
+
+Record a change when a reader who already read the post would want to know: a correction, a
+reversal, something you got wrong, or an addition that changes the conclusion.
+
+```yaml
+changes:
+  - 2026-09-03 — Zone 2: what a reader caught about immutable assets, and why the fix is a query
+  - 2026-09-11 — Replaced the benchmark; the first one measured a warm cache
+```
+
+It is a block list rather than the inline `[a, b]` form because that one splits on commas, and
+an entry written as prose has a comma in it sooner or later. The failure there is a silently
+truncated list, not an error, which is the worst shape for a field nobody re-reads.
+
+**Where it goes.** Put the substance where it belongs in the article — a correction is worth
+most next to the passage it corrects — and let the frontmatter carry the one-line record. The
+build renders a *Change history* section under the article, stamps `Updated <date>` next to
+the reading time, and `scripts/devto.mjs` appends the same list to the cross-post, so the copy
+never claims the post has not been revised.
+
+**What it moves, and why it matters.** `updated` is not a field you write: it is derived from
+the newest entry, because two places holding the same date is two places that can disagree.
+It drives the JSON-LD `dateModified` and the sitemap's `lastmod`. Before this existed
+`dateModified` was hardcoded to the publish date, so a materially revised post went on telling
+Google it had never changed.
+
+Three things fail the build, each of which has a message naming the fix: an entry that is not
+`YYYY-MM-DD — text`, an entry dated before the post itself, and a `dateModified` in the future
+— which is what you get by copying a date off the publishing calendar instead of using the day
+the edit happened.
 
 ## Tags
 

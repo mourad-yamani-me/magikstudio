@@ -98,7 +98,8 @@ const ents = s => String(s)
 const write = (rel, html) => {
   const f = path.join(OUT, rel);
   fs.mkdirSync(path.dirname(f), {recursive:true});
-  fs.writeFileSync(f, rel.endsWith('.html') ? enhanceImages(unrevealHero(html)) : html);
+  fs.writeFileSync(f, rel.endsWith('.html')
+    ? versionAssets(enhanceImages(unrevealHero(html))) : html);
 };
 const gridCols = n => Math.min(n, 6);
 /* The screenshot grid is `cols` columns of at most `max`, inside .shell
@@ -161,6 +162,62 @@ function unrevealHero(html){
   }).replace(/\sstyle="transition-delay:[^"]*"/g, '');
   return html.replace(m[0], cleaned);
 }
+
+/* ── asset versioning ──────────────────────────────────────────────────
+   /assets/games/* and /assets/fonts/* are served immutable for a year under
+   names that do not change when the file behind them does. A screenshot keeps
+   its name when it is replaced, deliberately: Google Images has the name
+   indexed, and the redirect block further down exists because renaming artwork
+   once already cost exactly that. So the cache key rides in a query instead —
+   soda-jam-02.jpg?v=<hash of the bytes>.
+
+   That query is the whole reason `immutable` is safe here. A browser only ever
+   learns these URLs from the HTML, which is served must-revalidate, so a
+   replaced file arrives under a URL the browser has never seen and is fetched
+   on the next visit. Without it there is nothing that reaches a client holding
+   the old bytes: it is not asking us anything, and no deploy can make it.
+
+   WebP derivatives key off their source JPEG. They are a pure function of
+   those bytes plus the encoder settings, and they do not exist yet at the
+   point the HTML is written. */
+const ASSET_SRC = { games: 'public/assets/games', fonts: 'public/assets/fonts' };
+const assetVer  = new Map();
+
+/* soda-jam-02.webp and soda-jam-02-320.webp are both encoded from
+   soda-jam-02.jpg, so all three carry that one file's hash. */
+function assetOrigin(kind, file) {
+  const dir  = path.join(ROOT, ASSET_SRC[kind]);
+  const bare = file.replace(/\.webp$/, '');
+  for (const c of [file, `${bare}.jpg`, `${bare.replace(/-\d+$/, '')}.jpg`]) {
+    const p = path.join(dir, c);
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
+}
+function assetVersion(kind, file) {
+  const key = `${kind}/${file}`;
+  if (!assetVer.has(key)) {
+    const src = assetOrigin(kind, file);
+    assetVer.set(key, src
+      ? crypto.createHash('sha256').update(fs.readFileSync(src)).digest('hex').slice(0, 8)
+      : null);
+  }
+  return assetVer.get(key);
+}
+
+/* Runs last, after enhanceImages: that one matches a src ending in .jpg, and a
+   query arriving on the way in would stop it matching at all.
+
+   The lookbehind is what keeps this off the absolute URLs in JSON-LD and
+   og:image — in `…indiecore.net/assets/…` the slash has a letter before it.
+   Those are read by Google and by social scrapers, where one URL that never
+   moves is worth more than a cache key. */
+const versionAssets = html => html.replace(
+  /(?<=["'(\s,])\/assets\/(games|fonts)\/([A-Za-z0-9._-]+\.(?:jpg|webp|woff2))/g,
+  (m, kind, file) => {
+    const v = assetVersion(kind, file);
+    return v ? `/assets/${kind}/${file}?v=${v}` : m;
+  });
 
 /* gist:responsive-markup */
 /* add intrinsic width/height (stops layout shift) and serve WebP with a JPEG fallback */
@@ -537,11 +594,24 @@ function frontmatter(raw){
   const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!m) return { meta: {}, body: raw };
   const meta = {};
-  for (const line of m[1].split(/\r?\n/)) {
-    const kv = line.match(/^([A-Za-z_][\w-]*):\s*(.*)$/);
+  const lines = m[1].split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    const kv = lines[i].match(/^([A-Za-z_][\w-]*):\s*(.*)$/);
     if (!kv) continue;
     let [, k, v] = kv;
     v = v.trim();
+    /* A block list — `key:` alone on its line, then `  - ` items beneath it.
+       The inline [a, b] form splits on commas, which is fine for tags and
+       hopeless for anything written as prose: every change-history entry has
+       a comma in it sooner or later, and the failure is a silently truncated
+       list rather than an error. */
+    if (v === '' && /^\s+-\s/.test(lines[i + 1] || '')) {
+      const items = [];
+      while (/^\s+-\s/.test(lines[i + 1] || ''))
+        items.push(lines[++i].replace(/^\s+-\s+/, '').trim());
+      meta[k] = items;
+      continue;
+    }
     if (/^\[.*\]$/.test(v)) meta[k] = v.slice(1, -1).split(',').map(x => x.trim()).filter(Boolean);
     else if (v === 'true' || v === 'false') meta[k] = v === 'true';
     else meta[k] = v.replace(/^["']|["']$/g, '');
@@ -557,6 +627,22 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
     const words = body.split(/\s+/).filter(Boolean).length;
     if (!meta.title) throw new Error(`content/blog/${f}: missing "title" in frontmatter`);
     if (!meta.date)  throw new Error(`content/blog/${f}: missing "date" in frontmatter`);
+    /* Post-publication edits: `changes:` is a block list of
+       `YYYY-MM-DD — what changed`, newest first once sorted here.
+
+       `updated` is derived from the newest entry rather than carried as its
+       own frontmatter field. Two places holding the same date is two places
+       that can disagree, and the one nobody reads is the one that goes stale.
+       It is what moves dateModified and the sitemap's lastmod — a post that
+       was materially revised should not go on telling Google it is untouched. */
+    const changes = (meta.changes || []).map(line => {
+      const c = String(line).match(/^(\d{4}-\d{2}-\d{2})\s*[—–-]\s*(.+)$/);
+      if (!c) throw new Error(
+        `content/blog/${f}: a change entry reads "YYYY-MM-DD — what changed", got: ${line}`);
+      return { date: c[1], text: c[2].trim() };
+    }).sort((a, b) => b.date.localeCompare(a.date));
+    if (changes.length && changes[changes.length - 1].date < String(meta.date).slice(0, 10))
+      throw new Error(`content/blog/${f}: a change is dated before the post itself (${meta.date})`);
     return {
       slug: f.replace(/\.md$/, ''),
       title: meta.title,
@@ -576,6 +662,8 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
       // `repo:` is kept as an alias. The kind is detected from the URL.
       code: meta.code || meta.repo || meta.gist || '',
       codeLabel: meta.codeLabel || meta.repoLabel || '',
+      changes,
+      updated: changes.length ? changes[0].date : '',
       minutes: Math.max(1, Math.round(words / 200)),
       html: marked.parse(embedGists(body, meta.code || '', f), { mangle: false, headerIds: false }),
     };
@@ -1059,7 +1147,8 @@ function pagePost(p, i){
   const body = `
 <article class="post"><div class="shell narrow">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/blog/">Blog</a> <span>/</span> <span style="color:var(--text)">${esc(p.title)}</span></nav>
-  <div class="pmeta" style="margin-top:26px"><time datetime="${p.date}">${humanDate(p.date)}</time><span>·</span><span>${p.minutes} min read</span></div>
+  <div class="pmeta" style="margin-top:26px"><time datetime="${p.date}">${humanDate(p.date)}</time><span>·</span><span>${p.minutes} min read</span>${
+    p.updated ? `<span>·</span><span>Updated <time datetime="${p.updated}">${humanDate(p.updated)}</time></span>` : ''}</div>
   <h1>${esc(p.title)}</h1>
   ${p.description ? `<p class="lede" style="margin-top:20px">${esc(p.description)}</p>` : ''}
   ${p.tags.length ? `<div class="ptags" style="margin-top:22px">${p.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>` : ''}
@@ -1076,6 +1165,11 @@ function pagePost(p, i){
   })() : ''}
   <hr class="prule">
   <div class="article">${p.html}</div>
+  ${p.changes.length ? `<section class="chlog" aria-labelledby="chlog-h">
+    <h2 id="chlog-h">Change history</h2>
+    <ol>${p.changes.map(c =>
+      `<li><time datetime="${c.date}">${humanDate(c.date)}</time><p>${esc(c.text)}</p></li>`).join('')}</ol>
+  </section>` : ''}
   <div class="pnav">
     ${prev ? `<a href="/blog/${prev.slug}/"><span>← Previous</span><strong>${esc(prev.title)}</strong></a>` : '<span></span>'}
     ${next ? `<a href="/blog/${next.slug}/" class="r"><span>Next →</span><strong>${esc(next.title)}</strong></a>` : '<span></span>'}
@@ -1097,7 +1191,7 @@ function pagePost(p, i){
     canonical: `/blog/${p.slug}/`, cur: 'blog', body,
     jsonld: [{
       '@context':'https://schema.org','@type':'BlogPosting',
-      headline: p.title, datePublished: p.date, dateModified: p.date,
+      headline: p.title, datePublished: p.date, dateModified: p.updated || p.date,
       description: p.description, url: SITE + `/blog/${p.slug}/`,
       keywords: p.tags.join(', ') || undefined,
       author: { '@type':'Person', name:'Othmane Ettaib' },
@@ -1836,7 +1930,9 @@ const asIso = s => {                            // play-data ships "Aug 26, 2026
 /* An index page is as fresh as the freshest thing it lists. */
 const newest = (...ds) => ds.filter(Boolean).sort().at(-1) || today;
 
-const postDate   = p => String(p.date).slice(0, 10);
+/* lastmod is "when the content last changed", not "when it was published" —
+   so a revised post advertises the revision. */
+const postDate   = p => String(p.updated || p.date).slice(0, 10);
 const gameDate   = g => asIso(g.updated) || gitDate('_source/play-data.json') || today;
 const policyDate = g => gitDate(`_source/legacy/txt_${g.legacy}.txt`) || today;
 
@@ -1857,10 +1953,17 @@ fs.writeFileSync(path.join(OUT,'sitemap.xml'),
 `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${
   urls.map(([u,pr,mod])=>`  <url><loc>${SITE}${u}</loc><lastmod>${mod}</lastmod><priority>${pr}</priority></url>`).join('\n')}\n</urlset>\n`);
 
-/* long-lived caching for fingerprint-free static assets */
+/* long-lived caching for static assets */
 // Rules must not overlap: every matching rule is applied and the values are
 // concatenated, so a broad /assets/* alongside /assets/games/* produces a
 // malformed Cache-Control with two max-age values.
+//
+// `immutable` is only honest where a changed file can be given a changed URL.
+// app.<hash>.js carries the hash in its name; games and fonts keep their names
+// so Google Images keeps its index, and carry ?v=<hash> instead — see
+// versionAssets above. verify.mjs fails the build if one of these paths is
+// ever emitted without a cache key, because that copy would be unreachable
+// for a year.
 fs.writeFileSync(path.join(OUT,'_headers'),
 `/assets/games/*\n  Cache-Control: public, max-age=31536000, immutable\n
 /assets/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n

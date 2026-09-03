@@ -35,6 +35,7 @@ const resolves = url => {
 };
 
 const attr = (html, re) => [...html.matchAll(re)].map(m => m[1]);
+const TODAY = new Date().toISOString().slice(0, 10);   // UTC, the clock build.mjs dates by
 
 for (const file of pages) {
   const where = rel(file);
@@ -85,6 +86,38 @@ for (const file of pages) {
       const u = cand.trim().split(/\s+/)[0];
       if (u.startsWith('/') && !resolves(u)) fail(where, `missing srcset image → ${u}`);
     }
+  }
+  // Freshness in the structured data. dateModified was hardcoded to the
+  // publish date for every post, so a materially revised page went on telling
+  // Google it had never changed — and the opposite mistake, a change entry
+  // dated off the publishing calendar instead of off the day it happened,
+  // claims a revision that has not occurred yet. Neither is visible on the
+  // page, and both are read by a crawler rather than by a person.
+  for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    let data;
+    try { data = JSON.parse(m[1]); }
+    catch { fail(where, 'structured data is not valid JSON'); continue; }
+    for (const node of [].concat(data)) {
+      const pub = node?.datePublished, mod = node?.dateModified;
+      if (!pub || !mod) continue;
+      if (mod < pub)
+        fail(where, `dateModified ${mod} is before datePublished ${pub}`);
+      if (mod > TODAY)
+        fail(where, `dateModified ${mod} is in the future — a change history entry is dated ahead of today`);
+    }
+  }
+  // /assets/games/ and /assets/fonts/ are served immutable for a year under
+  // names that deliberately do not change when the file does — a screenshot
+  // keeps its name because Google Images has it indexed. So ?v=<hash> is the
+  // only thing that can reach a browser already holding the old bytes, and a
+  // URL that lost it is cached wrong for a year with no deploy that fixes it.
+  // Nothing about that failure is visible from the outside, which is why it is
+  // checked here instead of remembered.
+  for (const m of html.matchAll(
+    /(?<=["'(\s,])(\/assets\/(?:games|fonts)\/[A-Za-z0-9._-]+\.(?:jpg|webp|woff2))([^"'\s,)]*)/g)) {
+    if (!/^\?v=[0-9a-f]{8}$/.test(m[2]))
+      fail(where, `immutable asset with no cache key → ${m[1]} — needs ?v=<hash>, `
+        + 'or a stale copy can never be replaced');
   }
   // Images, and the two ways an image ends up with no accessible name.
   //
