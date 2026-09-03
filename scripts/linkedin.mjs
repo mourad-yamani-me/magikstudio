@@ -178,6 +178,24 @@ const readable = text => text
   .replace(/\{hashtag\|\\?[#\uFF03]\|([^}]+)\}/g, '#$1')
   .replace(/\\([|{}@[\]()<>#\\*_~])/g, '$1');
 
+/* LinkedIn turns anything shaped like a domain into a link, and it does not
+   check that the domain exists. The first post out of this script said
+   "mainTemplate.gradle" and LinkedIn published it as a link to
+   http://maintemplate.gradle/ — a dead host, in the middle of a paragraph about
+   reading build logs.
+
+   Nothing in the little format prevents this: escaping a dot is not a thing,
+   and a zero-width character would break anyone copying the text. The only fix
+   is to not write the token, so this finds them and says so. Real URLs are
+   stripped first, and this site's own host is allowed — a bare `indiecore.net`
+   in a blurb links where it should. */
+const SITE_HOST = new URL(SITE).host.replace(/^www\./, '');
+const autolinks = text => [...new Set(
+  [...text.replace(/https?:\/\/\S+/g, ' ').matchAll(/\b[a-z0-9][\w-]*\.[a-z]{2,24}\b/gi)]
+    .map(m => m[0])
+    .filter(h => !h.toLowerCase().endsWith(SITE_HOST)),
+)];
+
 function commentary(meta, url) {
   /* `linkedinText` is a block list, one paragraph per item, for the posts worth
      writing a real blurb for. Without it the post gets its own title and
@@ -440,6 +458,9 @@ for (const p of going) {
     console.log(`  ERROR   ${p.text.length - MAX_COMMENTARY} characters over LinkedIn's limit — shorten \`linkedinText\`.`);
   if (!p.meta.linkedinText && !p.meta.description)
     console.log('  WARN    no `linkedinText` and no `description` — this post is its title and a link.');
+  const links = autolinks(p.text);
+  if (links.length)
+    console.log(`  ERROR   LinkedIn would turn ${links.join(', ')} into a link to a dead host. Rewrite without the dot.`);
 }
 
 if (held) console.log(`\n${held} more waiting; one per run by default, or --limit ${pending.length}.`);
@@ -452,6 +473,19 @@ if (!publish) {
 const over = going.filter(p => p.text.length > MAX_COMMENTARY);
 if (over.length) {
   console.error(`\n${over.length} post(s) exceed LinkedIn's ${MAX_COMMENTARY}-character limit. Nothing was posted.`);
+  process.exit(1);
+}
+
+/* Refused rather than warned about. A warning on a step nobody watches is how
+   the first one shipped, and the damage is public and permanent-ish: the
+   commentary can be patched afterwards, but only by hand, and only after
+   somebody has already read it. */
+const linky = going.filter(p => autolinks(p.text).length);
+if (linky.length) {
+  console.error('\nLinkedIn would publish these as links to hosts that do not exist:');
+  for (const p of linky) console.error(`  ${p.slug}: ${autolinks(p.text).join(', ')}`);
+  console.error('Rewrite them without the dot — "a mainTemplate gradle file" rather than');
+  console.error('"mainTemplate.gradle". Nothing was posted.');
   process.exit(1);
 }
 
