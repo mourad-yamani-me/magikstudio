@@ -32,6 +32,8 @@ npm run seo:watch  # what Search Console says changed, and what to do about it
 npm run schedule   # the publishing queue and calendar; `-- --claim <slug>` takes a date
 npm run topics     # what to write next, and the success condition for each subject
 npm run devto      # dry run: which posts would be cross-posted to dev.to
+npm run linkedin   # dry run: the LinkedIn post a `linkedin: true` article would get
+node scripts/linkedin.mjs --check-token   # days left on the LinkedIn token
 npm run hub        # regenerate hub/ — the public snippet index
 ```
 
@@ -61,10 +63,12 @@ npm run hub        # regenerate hub/ — the public snippet index
   hosts sit in the CSP. Chrome reports a blocked hop against the *original* URL, which reads
   like a false positive and sends you looking at the one part that works.
 - **Never commit to `main`.** Branch (`feat/`, `fix/`, `content/`, `chore/`), open a PR, let
-  the preview URL build, squash-merge. `main` deploys to production on merge. The one
-  exception is `_source/seo-watch.json`, which the SEO watch workflow commits daily — one
-  machine-written file, ignored by the deploy trigger, never part of the site. Everything
-  its findings ask you to *change* still goes through a branch and a PR.
+  the preview URL build, squash-merge. `main` deploys to production on merge. The two
+  exceptions are `_source/seo-watch.json`, committed daily by the SEO watch workflow, and
+  `_source/linkedin.json`, committed by the LinkedIn workflow whenever it announces a post.
+  Both are machine-written, ignored by the deploy trigger, and never part of the site.
+  Everything the SEO findings ask you to *change* still goes through a branch and a PR; the
+  LinkedIn ledger records what has already happened rather than deciding anything.
 
 ## Staging changes
 
@@ -91,6 +95,7 @@ git add -A                                            # no
 | Changing the mailing list | the `KIT` block in `build.mjs`, and the matching settings in the Kit account |
 | Acting on Search Console | [`docs/seo-automation.md`](docs/seo-automation.md) — `npm run seo:watch -- --brief` prints the open findings and the fix each one implies |
 | Cross-posting to dev.to | [`docs/cross-posting.md`](docs/cross-posting.md) — the canonical rule, `devto: true`, and why creations drip |
+| Announcing a post on LinkedIn | [`docs/linkedin.md`](docs/linkedin.md) — `linkedin: true`, the blurb, and the 60-day token the daily workflow rests on |
 | Changing the snippet hub | [`docs/cross-posting.md`](docs/cross-posting.md#the-snippet-hub) — why it lives on a second account, and the one-time setup |
 
 Those files are the source of truth. If something here disagrees with them, they win, and

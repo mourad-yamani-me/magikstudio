@@ -1,0 +1,157 @@
+name: Post to LinkedIn
+
+# Announces posts carrying `linkedin: true` on the studio's own LinkedIn feed —
+# a blurb and a link card, not a copy of the article. See docs/linkedin.md.
+#
+# Deliberately separate from ci-cd.yml, for the same reason devto.yml is:
+# deploying the site must not depend on a third-party API being up.
+#
+# ── What makes this workflow different from devto.yml ────────────────────────
+#
+# A LinkedIn post cannot be edited or re-run into place. dev.to articles are
+# matched by canonical_url and updated, so a mistake there is a re-run away from
+# fixed; here a second run is a duplicate on a public feed that only a person
+# can delete. Three things follow, and all three are why this file is shaped the
+# way it is:
+#
+#   - There is no `push` trigger. devto.yml has one because re-running is free.
+#     A post landing on main must not put anything on a feed by itself.
+#   - `_source/linkedin.json` is committed back. It is the only record of what
+#     has gone out; without it every scheduled run would re-post the backlog.
+#   - The token is checked before anything else, every run, whether or not there
+#     is a post waiting.
+#
+# ── The token ────────────────────────────────────────────────────────────────
+#
+# LinkedIn access tokens last 60 days and cannot be refreshed programmatically
+# outside the Marketing Developer Platform, so the secret under this workflow
+# expires six times a year and there is no automating that away. The failure
+# that matters is not this job going red — it is this job going green with
+# nothing in it on the morning a post was due. So the token check runs first and
+# fails the job outright when the token is dead, and warns from fourteen days
+# out while there is still time to renew between two posts.
+#
+# Renewing: mint a token at
+# https://www.linkedin.com/developers/tools/oauth/token-generator with `openid`,
+# `profile` and `w_member_social` — the same three every time, because LinkedIn
+# invalidates existing tokens when a different scope set is requested — and
+# update the LINKEDIN_ACCESS_TOKEN secret.
+
+on:
+  schedule:
+    # After devto.yml's 15:41, which is itself after the site's own 14:09. The
+    # ordering is the same rule three times: nothing announces a post before the
+    # build that publishes it has deployed, because the link is the whole post
+    # and a link to a 404 is worse than a late one.
+    - cron: '12 16 * * *'     # 16:12 UTC daily
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Show what would be posted without posting it'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: linkedin
+  cancel-in-progress: false
+
+jobs:
+  post:
+    name: Announce opted-in posts
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write        # commit the ledger of what has gone out
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      # Without the token there is nothing to do, and failing daily over a
+      # secret that was never added is noise rather than a signal.
+      - name: Check for the token
+        id: secret
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+        run: |
+          if [ -z "${LINKEDIN_ACCESS_TOKEN:-}" ]; then
+            echo "::notice::LINKEDIN_ACCESS_TOKEN is not set — skipping. Add it as a repository secret to enable posting."
+            echo "have=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "have=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # First, and unconditionally. A quiet day is exactly when an expired token
+      # goes unnoticed, so the check does not wait to find out whether there is
+      # anything to post.
+      - name: How long the token has left
+        if: steps.secret.outputs.have == 'true'
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          # Introspection only. Neither of these can post, and neither can mint
+          # a token on its own — both are on the app's Auth tab.
+          LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
+          LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
+        run: |
+          set -uo pipefail
+          node scripts/linkedin.mjs --check-token | tee token.txt
+          code=${PIPESTATUS[0]}
+          {
+            echo "### LinkedIn token"
+            echo ""
+            sed 's/^/- /' token.txt
+          } >> "$GITHUB_STEP_SUMMARY"
+          case "$code" in
+            0) ;;
+            2) echo "::warning::LinkedIn token expires soon — renew it at https://www.linkedin.com/developers/tools/oauth/token-generator and update the LINKEDIN_ACCESS_TOKEN secret." ;;
+            *) echo "::error::The LinkedIn token cannot post. Nothing was announced. Renew it and update the LINKEDIN_ACCESS_TOKEN secret."
+               exit 1 ;;
+          esac
+
+      - name: What would be posted
+        if: steps.secret.outputs.have == 'true'
+        run: node scripts/linkedin.mjs
+
+      - name: Post it
+        if: steps.secret.outputs.have == 'true' && !inputs.dry_run
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_AUTHOR_URN: ${{ secrets.LINKEDIN_AUTHOR_URN }}
+        run: |
+          set -euo pipefail
+          # --yes because there is nobody to ask. The script refuses to post
+          # without either a terminal or this flag, so an unattended post is
+          # always something this file asked for explicitly.
+          node scripts/linkedin.mjs --publish --yes | tee out.txt
+          {
+            echo "### Posted to LinkedIn"
+            echo ""
+            sed 's/^/- /' out.txt
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # The ledger is the only memory of what has gone out. A run that posts and
+      # fails to record it will post the same thing again tomorrow.
+      - name: Commit the ledger
+        if: steps.secret.outputs.have == 'true' && !inputs.dry_run
+        run: |
+          set -euo pipefail
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          # Stage the one path this job owns. Never `git add -A` — see AGENTS.md.
+          git add _source/linkedin.json
+          if git diff --cached --quiet; then
+            echo "nothing posted, ledger unchanged"
+            exit 0
+          fi
+          git commit -m 'chore: linkedin ledger'
+          # Another run may have landed while this one was talking to LinkedIn.
+          git pull --rebase --autostash origin main
+          git push origin HEAD:main

@@ -11,6 +11,9 @@ on:
     # would re-trigger the SEO ping through workflow_run every single day.
     paths-ignore:
       - '_source/seo-watch.json'
+      # Same for the LinkedIn ledger: machine-written, never part of dist/, and
+      # committed by linkedin.yml whenever a post is announced.
+      - '_source/linkedin.json'
       # hub/ publishes to a different repo entirely and never reaches dist/,
       # so a change to it alone has nothing to deploy.
       - 'hub/**'

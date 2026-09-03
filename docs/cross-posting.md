@@ -126,12 +126,16 @@ edit.
 The API can unpublish an article but **cannot delete one**, so a mistaken create is a manual
 cleanup on dev.to. That is why `--publish` lists what it is about to create and asks first.
 
-## Why nothing else is automated
+## Why Reddit and Hacker News are not automated
 
 Reddit, Hacker News and Lobsters nofollow everything, so they are worth posting to for reach
 and worth nothing for links — and all three treat automated self-promotion badly enough that
 scripting it would cost more than it returns. Post there by hand, when the post is genuinely
 relevant to the room.
+
+LinkedIn is the exception, and it lives in [`docs/linkedin.md`](linkedin.md): it is a feed
+rather than a room, announcing your own writing is what it is for, and what goes out is a link
+card rather than a copy of the article — so none of the canonical rules above apply to it.
 
 ---
 

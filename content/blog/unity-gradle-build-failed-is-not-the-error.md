@@ -5,6 +5,11 @@ description: Unity prints CommandInvokationFailure, then 67 environment variable
 tags: [unity, android, gradle, gamedev]
 keySections: [Where the cause actually is, Four builds I broke on purpose]
 devto: true
+linkedin: true
+linkedinText:
+  - Unity tells you "CommandInvokationFailure: Gradle build failed." and then prints 67 environment variables. Not one of them is the reason. In my log the line that actually said what broke was at 923, and the message everyone searches for was 235 lines below it, at 1158.
+  - So I made a throwaway Unity 6000.4 project and broke it four ways on purpose — one jar included twice, a repository declared in the wrong file, a mainTemplate.gradle left over from an older Unity, and one I could not break at all. Every log in the write-up came off this laptop, not off a forum thread.
+  - The short version: search the console for "* What went wrong:". Whatever follows it is the thing to look up, and it has an answer. "Gradle build failed" is a category, the way "the car won't start" is a category.
 draft: false
 ---
 

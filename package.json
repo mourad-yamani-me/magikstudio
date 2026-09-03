@@ -26,7 +26,9 @@
     "hub": "node scripts/build-hub.mjs",
     "schedule": "node scripts/schedule.mjs",
     "devto": "node scripts/devto.mjs",
-    "devto:publish": "node scripts/devto.mjs --publish"
+    "devto:publish": "node scripts/devto.mjs --publish",
+    "linkedin": "node scripts/linkedin.mjs",
+    "linkedin:publish": "node scripts/linkedin.mjs --publish"
   },
   "devDependencies": {
     "highlight.js": "^11.12.0",

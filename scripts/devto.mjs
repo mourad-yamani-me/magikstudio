@@ -32,6 +32,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import readline from 'node:readline';
 import { GIST_RE, resolveGistEmbed } from './gist-embed.mjs';
+import { frontmatter } from './frontmatter.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const BLOG = path.join(ROOT, 'content/blog');
@@ -73,37 +74,6 @@ if (onlyAt !== -1 && (!only || only.startsWith('--'))) {
 const KEY     = process.env.DEVTO_API_KEY;
 
 /* ───────── reading the posts ───────── */
-
-/** minimal frontmatter, the same shape build.mjs parses */
-function frontmatter(raw) {
-  const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
-  if (!m) return null;
-  const meta = {};
-  const lines = m[1].split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    const kv = lines[i].match(/^([a-zA-Z_]+):\s*(.*)$/);
-    if (!kv) continue;
-    let [, k, v] = kv;
-    v = v.trim().replace(/^["']|["']$/g, '');
-    // Block lists (`changes:`, then `  - ` items). This parser is a second
-    // copy of build.mjs's on purpose — the script has to read a post without
-    // importing the site build — so a frontmatter shape added there has to be
-    // taught here too, or the cross-post silently drops it.
-    if (v === '' && /^\s+-\s/.test(lines[i + 1] || '')) {
-      const items = [];
-      while (/^\s+-\s/.test(lines[i + 1] || ''))
-        items.push(lines[++i].replace(/^\s+-\s+/, '').trim());
-      meta[k] = items;
-      continue;
-    }
-    if (v.startsWith('[') && v.endsWith(']')) {
-      meta[k] = v.slice(1, -1).split(',').map(s => s.trim()).filter(Boolean);
-    } else if (v === 'true' || v === 'false') {
-      meta[k] = v === 'true';
-    } else meta[k] = v;
-  }
-  return { meta, body: m[2] };
-}
 
 /* dev.to tags are alphanumeric only — `ci-cd` is rejected outright rather than
    slugified for you, which fails the whole request with a validation error.
