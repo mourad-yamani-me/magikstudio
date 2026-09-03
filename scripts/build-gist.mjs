@@ -9,7 +9,9 @@
  *
  * Adding a gist for a new post: append an entry to GISTS below. The `post`
  * slug is checked — the build refuses to run if the post it links to is
- * missing or still a draft, so a gist can never advertise a dead URL.
+ * missing or still a draft, so a gist can never advertise a dead URL. A post
+ * dated ahead is not refused: it is going to exist, just not yet, so the entry
+ * carries the date it does (`live`) and the workflow waits for it.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -68,7 +70,18 @@ function backlink(slug) {
     console.error('and the backlink would have nothing to use as anchor text.');
     process.exit(1);
   }
-  return { slug, title, url: `${SITE}/blog/${slug}/` };
+  /* The date the linked page starts answering. A post dated ahead is held by the
+     build until then, so the gist has to be held too — see the `live` field on
+     the manifest entry below. Read here rather than compared here: this output
+     is committed and diffed by check-generated.mjs, so nothing it writes may
+     depend on what day the generator ran. */
+  const date = src.match(/^date:\s*(\d{4}-\d{2}-\d{2})\s*$/m)?.[1];
+  if (!date) {
+    console.error(`refusing to build: content/blog/${slug}.md has no \`date: YYYY-MM-DD\``);
+    console.error('so there is no way to know whether its page is live yet.');
+    process.exit(1);
+  }
+  return { slug, title, date, url: `${SITE}/blog/${slug}/` };
 }
 
 /* `post:` is one slug or several. Several is the case where more than one post
@@ -728,7 +741,14 @@ for (const g of GISTS) {
   for (const [name, content] of Object.entries(files)) fs.writeFileSync(path.join(dir, name), content);
   // `post` stays the primary slug so existing readers of this file keep working;
   // `posts` is every post the gist links back to.
-  manifest.push({ dir: g.dir, marker: g.marker, post: links[0].slug, posts: links.map(l => l.slug) });
+  /* `posts` is every post the gist links back to. `live` is the date the last of
+     them comes out: until then the gist body carries a link that would 404, so
+     sync-gist.yml skips it and its daily run publishes it once the date lands. */
+  manifest.push({
+    dir: g.dir, marker: g.marker, post: links[0].slug,
+    posts: links.map(l => l.slug),
+    live: links.map(l => l.date).sort().at(-1),
+  });
 
   console.log(`gist/${g.dir}/ — ${Object.keys(files).length} files`);
   for (const [n, c] of Object.entries(files)) console.log(`  ${n}  ${(c.length / 1024).toFixed(1)} KB`);

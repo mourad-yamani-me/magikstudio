@@ -16,6 +16,13 @@ on:
       - 'hub/**'
   pull_request:
     branches: [main]
+  # A post carries the date it comes out, and build.mjs holds anything dated
+  # ahead of today. Publishing later therefore needs a build on the day rather
+  # than a person on the day — this is that build. The `due` job below decides
+  # whether it has anything to publish, so an ordinary day costs one API call
+  # and stops there.
+  schedule:
+    - cron: '9 14 * * *'      # 14:09 UTC daily — ~10am New York, when a new post is most read
   workflow_dispatch:
 
 # Least privilege by default; individual jobs elevate only what they need.
@@ -32,8 +39,41 @@ env:
   WRANGLER_SEND_METRICS: "false"
 
 jobs:
+  # Only ever asked on a scheduled run: is there a post whose date has arrived
+  # that the live site does not serve yet? Asking the live sitemap rather than
+  # "is anything dated today" means a missed or delayed run catches up by itself
+  # instead of leaving a post held forever.
+  due:
+    name: Anything due?
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      due: ${{ steps.check.outputs.due }}
+      slugs: ${{ steps.check.outputs.slugs }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+
+      # No npm ci: the script reads frontmatter and one sitemap, and nothing else.
+      - name: Check the publishing queue
+        id: check
+        run: node scripts/schedule.mjs | tee -a "$GITHUB_STEP_SUMMARY"
+
   build:
     name: Build & verify
+    needs: [due]
+    # `due` is skipped on a push or a PR, which would skip everything downstream
+    # of it without always(). The condition then says what it means: build for
+    # every event except a scheduled run with nothing to publish.
+    if: always() && (github.event_name != 'schedule' || needs.due.outputs.due == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -67,6 +107,13 @@ jobs:
           restore-keys: webp-
 
       - name: Build
+        env:
+          # A pull request renders the posts that are still held for a later
+          # date, so a scheduled post can be read on the preview URL before it
+          # ships. dist/ from this job is the artifact the production deploy
+          # downloads, so the flag must never be set on a run that can deploy —
+          # and a pull_request run is exactly the one that cannot.
+          PREVIEW_SCHEDULED: ${{ github.event_name == 'pull_request' && '1' || '0' }}
         run: npm run build
 
       - name: Verify output
@@ -83,6 +130,12 @@ jobs:
   lighthouse:
     name: Lighthouse budget
     needs: build
+    # `due` is skipped on every event except the daily schedule, and a skip
+    # propagates down the whole needs graph — build survives it with always(),
+    # but everything after build inherited the skip and stopped running. That
+    # silently disabled the preview AND the production deploy, because both
+    # need this job. So each job below states what it actually requires.
+    if: always() && needs.build.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -117,6 +170,8 @@ jobs:
     #  - Dependabot runs use a separate secret store, so repository secrets are
     #    empty even though the branch lives in this repo
     if: >-
+      always() && needs.build.result == 'success' &&
+      needs.lighthouse.result == 'success' &&
       github.event_name == 'pull_request' &&
       github.event.pull_request.head.repo.full_name == github.repository &&
       github.actor != 'dependabot[bot]'
@@ -183,7 +238,13 @@ jobs:
   production:
     name: Deploy production
     needs: [build, lighthouse]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # A scheduled run only reaches here when `due` found a post to publish, and
+    # a schedule always runs on the default branch, so the ref check holds.
+    if: >-
+      always() && needs.build.result == 'success' &&
+      needs.lighthouse.result == 'success' &&
+      (github.event_name == 'push' || github.event_name == 'schedule') &&
+      github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:

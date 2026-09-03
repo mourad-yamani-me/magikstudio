@@ -23,6 +23,11 @@ on:
       - 'scripts/verify.mjs'
       - 'scripts/lighthouse-check.mjs'
       - 'gist/**'
+  # A gist whose post is dated ahead is skipped below rather than published with
+  # a link that 404s. Nothing would come back for it without a second look, so
+  # this is that look: the same run, once a day, publishing whatever came due.
+  schedule:
+    - cron: '33 14 * * *'     # 14:33 UTC daily — after the site build that puts the post out
   workflow_dispatch:
 
 permissions:
@@ -68,10 +73,18 @@ jobs:
           echo "### Gists published" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
 
-          # dir<TAB>marker, one line per gist
+          # dir<TAB>marker, one line per gist. `live` is the date the last post it
+          # links back to comes out; publishing before then would ship a gist
+          # whose "full write-up" link 404s. The daily schedule above catches it
+          # the morning the post lands.
           node -e '
             const m = require("./gist/gists.json");
-            process.stdout.write(m.map(g => `${g.dir}\t${g.marker}`).join("\n") + "\n");
+            const today = new Date().toISOString().slice(0, 10);
+            for (const g of m.filter(g => g.live && g.live > today)) {
+              console.error(`held: ${g.dir} until ${g.live}`);
+            }
+            const due = m.filter(g => !g.live || g.live <= today);
+            process.stdout.write(due.map(g => `${g.dir}\t${g.marker}`).join("\n") + "\n");
           ' | while IFS=$'\t' read -r dir marker; do
             [ -n "$dir" ] || continue
             echo "── $dir"

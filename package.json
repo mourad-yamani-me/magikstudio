@@ -11,7 +11,7 @@
     "build": "node build.mjs",
     "verify": "node scripts/verify.mjs",
     "serve": "node scripts/serve.mjs",
-    "dev": "npm run build && npm run serve",
+    "dev": "PREVIEW_SCHEDULED=1 npm run build && npm run serve",
     "check": "npm run build && npm run verify && npm run check:generated",
     "check:generated": "node scripts/check-generated.mjs",
     "lighthouse": "node scripts/lighthouse-check.mjs",
@@ -24,6 +24,7 @@
     "assets:fonts": "node fonts.mjs",
     "gist": "node scripts/build-gist.mjs",
     "hub": "node scripts/build-hub.mjs",
+    "schedule": "node scripts/schedule.mjs",
     "devto": "node scripts/devto.mjs",
     "devto:publish": "node scripts/devto.mjs --publish"
   },

@@ -41,8 +41,13 @@ main,header,footer{position:relative;z-index:2}
 .nav.stuck .nav-in{height:62px}
 .brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.01em}
 .nav-links{display:flex;align-items:center;gap:30px}
-.nav-links a{font-size:14.5px;font-weight:600;color:var(--muted);transition:color .2s}
-.nav-links a:hover,.nav-links a[aria-current]{color:var(--text)}
+/* :not(.btn) because the CTA lives inside this nav too, and `.nav-links a` beats
+   `.btn-primary` on specificity — which painted the button's label in --muted,
+   light purple on gold, while the identical button elsewhere on the site kept
+   the dark --onAccent. Same classes, different colour, depending only on where
+   it sat. */
+.nav-links a:not(.btn){font-size:14.5px;font-weight:600;color:var(--muted);transition:color .2s}
+.nav-links a:not(.btn):hover,.nav-links a:not(.btn)[aria-current]{color:var(--text)}
 .burger{display:none;width:44px;height:44px;align-items:center;justify-content:center;background:none;border:0;cursor:pointer}
 .mobmenu{display:none;flex-direction:column;gap:4px;padding:14px 24px 22px;background:rgba(11,6,22,.97);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
 .mobmenu.open{display:flex}
@@ -340,6 +345,70 @@ main,header,footer{position:relative;z-index:2}
 .article tbody tr:last-child td{border-bottom:0}
 .article tbody tr:hover{background:rgba(255,255,255,.03)}
 .article table code{white-space:nowrap}
+/* copy button — the wrapper and the button are both built by app.js */
+.codewrap{position:relative}
+.codewrap>pre{padding-right:96px}
+.copybtn{position:absolute;top:11px;right:11px;display:inline-flex;align-items:center;gap:6px;
+  height:30px;padding:0 10px;border-radius:9px;cursor:pointer;
+  background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--muted);
+  font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:-.01em;
+  /* No opacity here. At .8 the muted text blended toward the block behind it
+     and measured 4.19:1, under the 4.5 AA floor — Lighthouse caught it at 96.
+     Full-strength --muted on the same background is 5.77:1 and looks the same
+     to the eye. Fade a control and you fade its contrast with it. */
+  transition:background .2s,color .2s,border-color .2s}
+.copybtn:hover,.copybtn:focus-visible{background:rgba(255,255,255,.13);color:var(--text)}
+.copybtn.ok{color:var(--lime);border-color:rgba(139,239,74,.45);background:rgba(139,239,74,.10)}
+.gembed .codewrap>pre{padding-right:96px}
+
+/* post: table of contents.
+   Reuses .toc from the doc pages so the scroll-spy in app.js keeps working
+   unchanged — it looks for one .toc and toggles .on. What differs is the
+   shape: on the doc pages the nav sits in a fixed two-column layout, here it
+   has to fold into the page on a phone and step out into the margin on a wide
+   screen. .ptoc carries those differences and, being later in the file, wins
+   on equal specificity. */
+.post-shell{max-width:940px}
+.ptoc{position:static;margin:0 0 32px;padding:4px 6px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.ptoc>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:11px 12px;
+  font-family:var(--display);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.ptoc>summary::-webkit-details-marker{display:none}
+.ptoc>summary::after{content:"";margin-left:auto;width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .25s}
+.ptoc[open]>summary::after{transform:rotate(-135deg) translateY(-1px)}
+.ptoc>summary:hover{color:var(--text)}
+.ptoc nav{padding:0 0 8px}
+.ptoc .toc-h{display:none}
+.ptoc ol{max-height:none;overflow:visible}
+.ptoc a{font-size:13.5px;line-height:1.45}
+.ptoc li.l3 a{padding-left:28px;font-size:13px}
+/* the sections the author says a reader is here for */
+.ptoc li.key a{color:var(--text);font-weight:700}
+.ptoc li.key a::before{content:"";width:3px;align-self:stretch;margin:2px 4px 2px -4px;border-radius:2px;background:var(--accent)}
+/* When a key section is also the one being read, .toc a.on paints the gold
+   pill — but `.ptoc li.key a` is more specific than `.toc a.on`, so it kept
+   the pale text and left it at 1.47:1 on gold: highlighted into invisibility,
+   and only on the item the reader is actually looking at. */
+.ptoc li.key a.on{color:var(--onAccent)}
+.ptoc li.key a.on::before{background:var(--onAccent);opacity:.5}
+/* the fixed nav is 96px tall, so an anchored heading has to clear it */
+.article h2,.article h3{scroll-margin-top:104px}
+
+@media (min-width:1240px){
+  .post-shell{max-width:var(--shell)}
+  .postgrid{display:grid;grid-template-columns:220px minmax(0,940px);gap:32px;justify-content:center;align-items:start}
+  .postgrid>.post-head{grid-column:2;grid-row:1}
+  .postgrid>.article{grid-column:2;grid-row:2}
+  /* The change history is a .postgrid child as well. Without a row of its own
+     it auto-places into column 1, i.e. underneath the sticky contents. */
+  .postgrid>.chlog{grid-column:2;grid-row:3}
+  .postgrid>.pnav{grid-column:2;grid-row:4}
+  /* out of the flow of the article, into the left margin, and it stays put */
+  .ptoc{grid-column:1;grid-row:1 / span 4;position:sticky;top:96px;margin:132px 0 0;padding:0;border:0;background:none}
+  .ptoc>summary{display:none}
+  .ptoc .toc-h{display:block;margin:0 0 12px;padding-left:11px}
+  .ptoc ol{max-height:calc(100vh - 170px);overflow-y:auto;scrollbar-width:thin}
+}
+
 /* Change history — post-publication edits, newest first. Sits under the
    article and above the prev/next pair, so it reads as a footnote to the post
    rather than as part of the argument. */

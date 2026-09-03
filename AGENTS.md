@@ -29,6 +29,7 @@ npm run lighthouse # the performance/a11y/SEO budget
 npm run gist       # regenerate gist/ from the live files
 npm run seo        # submit new URLs, then report index status and search performance
 npm run seo:watch  # what Search Console says changed, and what to do about it
+npm run schedule   # the publishing queue and calendar; `-- --claim <slug>` takes a date
 npm run topics     # what to write next, and the success condition for each subject
 npm run devto      # dry run: which posts would be cross-posted to dev.to
 npm run hub        # regenerate hub/ — the public snippet index
@@ -80,6 +81,8 @@ git add -A                                            # no
 | Doing this | Read |
 | --- | --- |
 | Writing a blog post | [`content/blog/README.md`](content/blog/README.md) — frontmatter, post shapes, gists, style check |
+| Publishing a post on a later date | [`content/blog/README.md`](content/blog/README.md#publishing-on-a-date) — date it ahead, merge it, the daily build puts it out |
+| Picking the date for a new post | [`content/blog/README.md`](content/blog/README.md#the-publishing-calendar) — never by hand: `npm run schedule -- --claim <slug>` |
 | Choosing what to write | [`content/blog/README.md`](content/blog/README.md#choosing-what-to-write) — `npm run topics`, and the success condition every subject carries |
 | Branching, local commands | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Stack, deploy setup, secrets | [`README.md`](README.md) |

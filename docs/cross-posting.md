@@ -56,7 +56,11 @@ node scripts/devto.mjs --only <slug>       # just one
 `DEVTO_API_KEY` must be set for anything that writes. Create one at
 **dev.to → Settings → Extensions → DEV API Keys**.
 
-Nothing is sent for a post without `devto: true`, and nothing is ever sent for a draft.
+Nothing is sent for a post without `devto: true`, and nothing is ever sent for a draft — or
+for a post dated ahead of today, which the site is still holding. The canonical points back
+here, so an article published before its own canonical exists would point at a 404. The daily
+run is scheduled after the site's own (15:41 UTC against 14:09) for the same reason, and picks
+the post up the afternoon it goes live.
 
 ## Why every post can opt in at once
 

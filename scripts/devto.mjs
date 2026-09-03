@@ -36,6 +36,7 @@ import { GIST_RE, resolveGistEmbed } from './gist-embed.mjs';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const BLOG = path.join(ROOT, 'content/blog');
 const SITE = 'https://www.indiecore.net';
+const TODAY = new Date().toISOString().slice(0, 10);   // UTC, same clock as the build
 const API  = 'https://dev.to/api';
 
 const args    = process.argv.slice(2);
@@ -164,6 +165,10 @@ function posts() {
     if (!parsed) continue;
     const { meta, body } = parsed;
     if (meta.draft) continue;           // never send something the site itself does not show
+    // Same rule for a post whose date has not arrived: the article's canonical
+    // points back here, and a canonical that 404s is worse than a late article.
+    // The daily schedule picks it up on the first run after the date.
+    if (String(meta.date ?? '') > TODAY) continue;
     if (meta.devto !== true) continue;  // opt in, one post at a time
     out.push({
       slug, meta,

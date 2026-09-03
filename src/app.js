@@ -107,10 +107,61 @@
     var sio = new IntersectionObserver(function(es){
       es.forEach(function(e){
         if (!e.isIntersecting) return;
-        links.forEach(function(a){ a.classList.toggle('on', a.getAttribute('href') === '#'+e.target.id); });
+        links.forEach(function(a){
+          var here = a.getAttribute('href') === '#'+e.target.id;
+          a.classList.toggle('on', here);
+          // The class is a colour. Without this a screen reader is told
+          // nothing about which section the page is actually showing.
+          if (here) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current');
+        });
       });
     }, {rootMargin:'-90px 0px -70% 0px'});
     secs.forEach(function(s){ sio.observe(s); });
+  }
+
+  /* copy button on every code block.
+     Built here rather than in the HTML because the button is useless without
+     JavaScript — rendering one server-side would ship a control that does
+     nothing for anyone whose script failed to load. The class names are set
+     with className = '...' so build.mjs picks them up: per-page CSS is
+     filtered by the classes it can find, and these never appear in markup. */
+  var blocks = [].slice.call(document.querySelectorAll('.article pre'));
+  if (blocks.length && navigator.clipboard) {
+    blocks.forEach(function (pre) {
+      var wrap = document.createElement('div');
+      wrap.className = 'codewrap';
+      pre.parentNode.insertBefore(wrap, pre);
+      wrap.appendChild(pre);
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copybtn';
+      // The icon is decoration; the word beside it is the accessible name.
+      btn.innerHTML =
+        '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+        '<span>Copy</span>';
+      // role=status so the change from Copy to Copied is spoken, not just seen.
+      btn.querySelector('span').setAttribute('role', 'status');
+
+      var revert;
+      btn.addEventListener('click', function () {
+        // textContent, not innerText: <pre> already holds the exact whitespace,
+        // and innerText would rewrite it to what the browser happens to render.
+        navigator.clipboard.writeText(pre.textContent.replace(/\n$/, '')).then(function () {
+          btn.classList.add('ok');
+          btn.querySelector('span').textContent = 'Copied';
+          clearTimeout(revert);
+          revert = setTimeout(function () {
+            btn.classList.remove('ok');
+            btn.querySelector('span').textContent = 'Copy';
+          }, 1800);
+        }, function () {
+          btn.querySelector('span').textContent = 'Press Ctrl+C';
+        });
+      });
+      wrap.appendChild(btn);
+    });
   }
 
   /* gist:lightbox-js */

@@ -5,7 +5,8 @@
     "post": "static-site-cloudflare-workers",
     "posts": [
       "static-site-cloudflare-workers"
-    ]
+    ],
+    "live": "2026-08-26"
   },
   {
     "dir": "build-gates",
@@ -15,7 +16,8 @@
       "build-reviews-ai-code",
       "the-check-that-passed-while-broken",
       "cloudflare-beacon-csp-blocked"
-    ]
+    ],
+    "live": "2026-09-01"
   },
   {
     "dir": "responsive-images",
@@ -23,7 +25,8 @@
     "post": "lighthouse-image-budget",
     "posts": [
       "lighthouse-image-budget"
-    ]
+    ],
+    "live": "2026-09-01"
   },
   {
     "dir": "accessible-lightbox",
@@ -31,7 +34,8 @@
     "post": "opacity-zero-is-not-hidden",
     "posts": [
       "opacity-zero-is-not-hidden"
-    ]
+    ],
+    "live": "2026-09-01"
   },
   {
     "dir": "puzzle-difficulty-walk",
@@ -39,7 +43,8 @@
     "post": "rating-puzzle-difficulty-by-decisions",
     "posts": [
       "rating-puzzle-difficulty-by-decisions"
-    ]
+    ],
+    "live": "2026-09-01"
   },
   {
     "dir": "campaign-progression",
@@ -47,7 +52,8 @@
     "post": "difficulty-rates-progression-places",
     "posts": [
       "difficulty-rates-progression-places"
-    ]
+    ],
+    "live": "2026-09-01"
   },
   {
     "dir": "vite-shrink-pack",
@@ -55,7 +61,8 @@
     "post": "shipping-a-4mb-level-pack",
     "posts": [
       "shipping-a-4mb-level-pack"
-    ]
+    ],
+    "live": "2026-09-01"
   },
   {
     "dir": "capacitor-android-size",
@@ -63,7 +70,8 @@
     "post": "capacitor-android-build-apk-size",
     "posts": [
       "capacitor-android-build-apk-size"
-    ]
+    ],
+    "live": "2026-09-01"
   },
   {
     "dir": "pack-conformance",
@@ -71,7 +79,8 @@
     "post": "testing-a-level-pack-you-did-not-write",
     "posts": [
       "testing-a-level-pack-you-did-not-write"
-    ]
+    ],
+    "live": "2026-09-01"
   },
   {
     "dir": "game-economy",
@@ -79,6 +88,7 @@
     "post": "pricing-an-economy-off-its-difficulty-model",
     "posts": [
       "pricing-an-economy-off-its-difficulty-model"
-    ]
+    ],
+    "live": "2026-09-01"
   }
 ]

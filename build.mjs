@@ -5,6 +5,7 @@ import crypto from 'node:crypto';
 import { Marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import { GIST_DIR, GIST_RE, gistAnchor, resolveGistEmbed } from './scripts/gist-embed.mjs';
+import { violations as calendarViolations } from './scripts/schedule-rule.mjs';
 import hljs from 'highlight.js';
 
 /* Syntax highlighting happens at build time — no runtime JS, no CDN. */
@@ -619,7 +620,12 @@ function frontmatter(raw){
   return { meta, body: m[2] };
 }
 
-const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
+/* Today in UTC, and the only clock the publishing queue reads. Local time would
+   make the laptop that wrote a post and the runner that publishes it disagree
+   about what day it is, and a post is either out or it is not. */
+const TODAY = new Date().toISOString().slice(0, 10);
+
+const ALL_POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
   // files starting with _ are scaffolding, not posts (templates, notes, README)
   .filter(f => f.endsWith('.md') && !f.startsWith('_') && f.toLowerCase() !== 'readme.md')
   .map(f => {
@@ -627,6 +633,10 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
     const words = body.split(/\s+/).filter(Boolean).length;
     if (!meta.title) throw new Error(`content/blog/${f}: missing "title" in frontmatter`);
     if (!meta.date)  throw new Error(`content/blog/${f}: missing "date" in frontmatter`);
+    // The date decides when the post goes out, so a date this cannot compare is
+    // a post that would silently never publish. Fail on it here instead.
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(meta.date)))
+      throw new Error(`content/blog/${f}: "date" must be YYYY-MM-DD, got "${meta.date}"`);
     /* Post-publication edits: `changes:` is a block list of
        `YYYY-MM-DD — what changed`, newest first once sorted here.
 
@@ -665,20 +675,121 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
       changes,
       updated: changes.length ? changes[0].date : '',
       minutes: Math.max(1, Math.round(words / 200)),
-      html: marked.parse(embedGists(body, meta.code || '', f), { mangle: false, headerIds: false }),
+      ...(() => {
+        const o = outline(marked.parse(embedGists(body, meta.code || '', f), { mangle: false, headerIds: false }));
+        markKeySections(o.toc, Array.isArray(meta.keySections) ? meta.keySections : [], f);
+        return o;
+      })(),
     };
   })
-  .filter(p => !p.draft)
-  // Newest first; then `order` ascending for a series; then slug, so the result
-  // never depends on the order the filesystem happened to list the directory in.
-  // MAX_SAFE_INTEGER rather than Infinity: Infinity - Infinity is NaN, which a
-  // comparator reads as "equal" and silently drops back to filesystem order.
-  .sort((a, b) => {
-    const rank = p => (p.order === null ? Number.MAX_SAFE_INTEGER : p.order);
-    return b.date.localeCompare(a.date)
-        || rank(a) - rank(b)
-        || a.slug.localeCompare(b.slug);
+  .filter(p => !p.draft);
+
+/* Headings carry no ids by default (`headerIds: false`), so the table of
+   contents has nothing to link to. This adds them, and returns the outline it
+   found in the same pass — one walk, and the ids in the page and the ids in the
+   nav can never disagree because they are produced together.
+
+   Duplicate headings get -2, -3 suffixes. Two sections called "Questions" would
+   otherwise both own #questions, and the second would be unreachable. */
+function outline(html){
+  const seen = new Map();
+  const toc = [];
+  const out = html.replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (_m, lvl, inner) => {
+    const text = inner.replace(/<[^>]*>/g, '').replace(/&amp;/g,'&').replace(/&lt;/g,'<')
+                      .replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").trim();
+    let id = text.toLowerCase()
+      .replace(/[\u2018\u2019\u201c\u201d]/g,'')
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'') || 'section';
+    const n = (seen.get(id) || 0) + 1;
+    seen.set(id, n);
+    if (n > 1) id = `${id}-${n}`;
+    toc.push({ level: Number(lvl), id, text });
+    return `<h${lvl} id="${id}">${inner}</h${lvl}>`;
   });
+  return { html: out, toc };
+}
+
+/* `keySections:` in the frontmatter promotes headings in the contents list —
+   the two or three a reader is actually hunting for, usually "how do I install
+   it". The author decides, because nothing in the markup can tell which
+   section someone came for.
+
+   A name that matches nothing fails the build. The alternative is a typo that
+   silently highlights nothing, which is the worst kind of feature: one you
+   believe is on. */
+function markKeySections(toc, names, file){
+  if (!names.length) return toc;
+  const norm = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  for (const name of names) {
+    const want = norm(String(name));
+    const hits = toc.filter(h => norm(h.text) === want || norm(h.text).includes(want));
+    if (!hits.length)
+      throw new Error(
+        `content/blog/${file}: keySections lists "${name}", which matches no heading. ` +
+        `Headings in this post: ${toc.map(h => `"${h.text}"`).join(', ')}`);
+    if (hits.length > 1)
+      throw new Error(
+        `content/blog/${file}: keySections entry "${name}" matches ${hits.length} headings ` +
+        `(${hits.map(h => `"${h.text}"`).join(', ')}). Use the full heading text.`);
+    hits[0].key = true;
+  }
+  return toc;
+}
+
+/* A post dated in the future is finished, reviewed and merged — it just has not
+   come out yet. It is held exactly as a draft is: off the index, the sitemap and
+   the feed, so nothing ever links to a page that does not answer. Nobody has to
+   come back and flip a flag on the day: ci-cd.yml rebuilds daily, and this
+   filter lets the post through on the first build after its date. */
+// Newest first; then `order` ascending for a series; then slug, so the result
+// never depends on the order the filesystem happened to list the directory in.
+// MAX_SAFE_INTEGER rather than Infinity: Infinity - Infinity is NaN, which a
+// comparator reads as "equal" and silently drops back to filesystem order.
+const byNewest = (a, b) => {
+  const rank = p => (p.order === null ? Number.MAX_SAFE_INTEGER : p.order);
+  return b.date.localeCompare(a.date)
+      || rank(a) - rank(b)
+      || a.slug.localeCompare(b.slug);
+};
+
+const SCHEDULED = ALL_POSTS.filter(p => p.date > TODAY).sort(byNewest);
+const POSTS     = ALL_POSTS.filter(p => p.date <= TODAY).sort(byNewest);
+
+/* A post nobody can look at is a post nobody can review, and the PR that merges
+   it is the only place anyone would. So a preview build renders the held ones
+   too — marked as held, and `noindex` so a leaked preview URL cannot be indexed
+   ahead of the real page. They stay out of the sitemap and the feed either way.
+
+   The production deploy takes the artifact this build job uploads, so the flag
+   is what separates the preview from what ships: ci-cd.yml sets it on pull
+   requests only, which are exactly the runs that cannot deploy production. */
+const PREVIEW = process.env.PREVIEW_SCHEDULED === '1';
+const VISIBLE = PREVIEW ? [...SCHEDULED, ...POSTS].sort(byNewest) : POSTS;
+
+for (const p of SCHEDULED) console.log(
+  `  held  /blog/${p.slug}/ — publishes ${p.date}${PREVIEW ? ' (rendered for preview)' : ''}`);
+
+/* The publishing calendar — how many posts a day may carry, which day is off,
+   and which slot each post claimed. It is a rule about the source rather than
+   the output, so it is enforced here rather than in verify.mjs: CI runs the
+   build first, and a post on a day that cannot hold it should stop the branch
+   before a page is written for it.
+
+   The rule lives in scripts/schedule-rule.mjs and is read by the allocator from
+   the same file, so a slot `npm run schedule -- --claim` hands out can never be
+   one this refuses. Posts predating `rule.from` are not checked: the archive was
+   published before the rule existed, and re-dating pages Google has already
+   crawled to satisfy it would cost more than the tidiness is worth. */
+{
+  const { errors, warnings, overrides } = calendarViolations();
+  for (const o of overrides) console.log(`  override  ${o}`);
+  for (const w of warnings)  console.warn(`  warn  calendar: ${w}`);
+  if (errors.length) {
+    for (const e of errors) console.error(`  ERROR  calendar: ${e}`);
+    throw new Error(`the publishing calendar refuses ${errors.length} post(s) — see above`);
+  }
+}
 
 /* Every gist declares the post it links back to (scripts/build-gist.mjs). That
    post should carry a `code:` card pointing the other way, or the gist is
@@ -691,7 +802,7 @@ const POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
     for (const g of JSON.parse(fs.readFileSync(manifest, 'utf8'))) {
       for (const slug of g.posts ?? [g.post]) {
         const post = POSTS.find(p => p.slug === slug);
-        if (!post) continue;                     // draft or renamed; build-gist.mjs guards that
+        if (!post) continue;                     // draft, held or renamed; build-gist.mjs guards that
         if (!post.code) console.warn(
           `  warn  gist/${g.dir}/ links to /blog/${slug}/, but that post has no \`code:\` field ` +
           `— add the gist URL so readers can find it.`);
@@ -764,7 +875,7 @@ const FOOT = `
 </script>
 <script src="/assets/${APP_FILE}" defer></script>`;
 
-function layout({title, desc, canonical, body, cur, jsonld, ogimg}){
+function layout({title, desc, canonical, body, cur, jsonld, ogimg, noindex}){
   const og = SITE + (ogimg || '/assets/og/default.jpg');
   // Assembled before the head so the inlined CSS can be chosen from the
   // markup this page actually contains.
@@ -785,6 +896,7 @@ ${FOOT}`;
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${SITE}${canonical}">
+${noindex ? '<meta name="robots" content="noindex">\n' : ''}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:type" content="website">
@@ -1107,11 +1219,20 @@ function pagePrivacy(g){
 
 /* ───────── page: blog ───────── */
 function postCard(p){
+  // The held pill only ever appears on a preview build; the index that ships
+  // has nothing to mark. It sits in the same row as the tags because that row
+  // already has the pill styling — a marker needing its own CSS to say one word
+  // is not worth the rule.
+  const pills = [
+    p.date > TODAY ? `<span class="tcode">Publishes ${humanDate(p.date)}</span>` : '',
+    ...p.tags.map(t => `<span>${esc(t)}</span>`),
+    p.code ? `<span class="tcode">${/gist\.github\.com/.test(p.code) ? 'gist' : 'code'}</span>` : '',
+  ].filter(Boolean);
   return `<a class="pcard rv" href="/blog/${p.slug}/">
     <div class="pmeta"><time datetime="${p.date}">${humanDate(p.date)}</time><span>·</span><span>${p.minutes} min read</span></div>
     <h2>${esc(p.title)}</h2>
     ${p.description ? `<p>${esc(p.description)}</p>` : ''}
-    ${p.tags.length || p.code ? `<div class="ptags">${p.tags.map(t=>`<span>${esc(t)}</span>`).join('')}${p.code ? `<span class="tcode">${/gist\.github\.com/.test(p.code) ? 'gist' : 'code'}</span>` : ''}</div>` : ''}
+    ${pills.length ? `<div class="ptags">${pills.join('')}</div>` : ''}
     <span class="plink">Read<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
   </a>`;
 }
@@ -1130,8 +1251,8 @@ function pageBlogIndex(){
     RSS feed</a></p>
 </div></section>
 <section class="sec-tight"><div class="shell narrow">
-  ${POSTS.length
-    ? `<div class="plist">${POSTS.map(postCard).join('')}</div>`
+  ${VISIBLE.length
+    ? `<div class="plist">${VISIBLE.map(postCard).join('')}</div>`
     : `<p class="lede">No posts yet — the first one is being written.</p>`}
 </div></section>`;
   return layout({
@@ -1142,11 +1263,36 @@ function pageBlogIndex(){
   });
 }
 
+/* The table of contents. Rendered from the same outline that put the ids on the
+   headings, so a link here cannot point at a heading that is not there.
+
+   It is a <details> because that is a disclosure widget the browser already
+   makes accessible — a keyboard-operable, screen-reader-announced toggle for
+   free. On a wide screen it becomes a sticky column and the toggle is hidden,
+   which is why the tiny script below opens it: a closed <details> hides its
+   content in the UA stylesheet, and overriding that with CSS is not reliable
+   across browsers. The script runs during parse, before first paint, so the
+   sidebar is never drawn closed and nothing shifts. */
+function tocBlock(toc){
+  if (toc.length < 3) return '';   // two headings is a list, not a map
+  return `<details class="toc ptoc" id="toc">
+    <summary><span>Contents</span></summary>
+    <nav aria-label="Table of contents">
+      <div class="toc-h" aria-hidden="true">Contents</div><ol>
+      ${toc.map(h => `<li class="l${h.level}${h.key ? ' key' : ''}"><a href="#${h.id}">${esc(h.text)}</a></li>`).join('')}
+    </ol></nav>
+  </details>
+  <script>if(matchMedia('(min-width:1240px)').matches){var t=document.getElementById('toc');if(t)t.open=true}</script>`;
+}
+
 function pagePost(p, i){
-  const prev = POSTS[i + 1], next = POSTS[i - 1];
+  const prev = VISIBLE[i + 1], next = VISIBLE[i - 1];
+  const held = p.date > TODAY;
   const body = `
-<article class="post"><div class="shell narrow">
+<article class="post"><div class="shell post-shell"><div class="postgrid">
+  <div class="post-head">
   <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/blog/">Blog</a> <span>/</span> <span style="color:var(--text)">${esc(p.title)}</span></nav>
+  ${held ? `<div class="ptags" style="margin-top:26px"><span class="tcode">Not published yet — this page goes live on ${humanDate(p.date)}</span></div>` : ''}
   <div class="pmeta" style="margin-top:26px"><time datetime="${p.date}">${humanDate(p.date)}</time><span>·</span><span>${p.minutes} min read</span>${
     p.updated ? `<span>·</span><span>Updated <time datetime="${p.updated}">${humanDate(p.updated)}</time></span>` : ''}</div>
   <h1>${esc(p.title)}</h1>
@@ -1164,6 +1310,8 @@ function pagePost(p, i){
   </a>`;
   })() : ''}
   <hr class="prule">
+  </div>
+  ${tocBlock(p.toc)}
   <div class="article">${p.html}</div>
   ${p.changes.length ? `<section class="chlog" aria-labelledby="chlog-h">
     <h2 id="chlog-h">Change history</h2>
@@ -1174,7 +1322,7 @@ function pagePost(p, i){
     ${prev ? `<a href="/blog/${prev.slug}/"><span>← Previous</span><strong>${esc(prev.title)}</strong></a>` : '<span></span>'}
     ${next ? `<a href="/blog/${next.slug}/" class="r"><span>Next →</span><strong>${esc(next.title)}</strong></a>` : '<span></span>'}
   </div>
-</div></article>
+</div></div></article>
 <section class="sec-tight"><div class="shell narrow">
   <div class="band">
     <h2 style="font-size:clamp(26px,3.4vw,38px)">More posts</h2>
@@ -1189,6 +1337,9 @@ function pagePost(p, i){
     title: `${p.title} — Indie Core Dev`,
     desc: p.description || `${p.title} — notes from Indie Core Dev.`,
     canonical: `/blog/${p.slug}/`, cur: 'blog', body,
+    // Only ever true on a preview build. The page exists so it can be read
+    // before it ships; it must not be indexed before it ships.
+    noindex: held,
     jsonld: [{
       '@context':'https://schema.org','@type':'BlogPosting',
       headline: p.title, datePublished: p.date, dateModified: p.updated || p.date,
@@ -1702,7 +1853,7 @@ for (const g of ALL) {
 write('privacy/index.html', pagePrivacyIndex());
 write('legal/index.html', pageLegal());
 write('blog/index.html', pageBlogIndex());
-POSTS.forEach((p, i) => write(`blog/${p.slug}/index.html`, pagePost(p, i)));
+VISIBLE.forEach((p, i) => write(`blog/${p.slug}/index.html`, pagePost(p, i)));
 write('about/index.html', pageAbout());
 write('contact/index.html', pageContact());
 write('subscribe/index.html', pageSubscribe());
@@ -1987,5 +2138,5 @@ fs.writeFileSync(path.join(OUT,"app-ads.txt"),
   "google.com, pub-1528760351282017, DIRECT, f08c47fec0942fa0\n");
 
 console.log(`v${BUILD.version} (${BUILD.sha}) — built ${urls.length} pages → dist/  (${webp} webp encoded, ${cached} from cache, ${(saved/1024/1024).toFixed(2)} MB saved)`);
-console.log(`  blog: ${POSTS.length} post(s)`);
+console.log(`  blog: ${POSTS.length} post(s)${SCHEDULED.length ? ` · ${SCHEDULED.length} held` : ''}`);
 for (const g of ALL) console.log(`  /games/${g.slug}/  ·  /privacy/${g.slug}/  (${g.shots.length} shots)`);

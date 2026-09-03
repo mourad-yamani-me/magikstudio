@@ -102,7 +102,12 @@ for (const file of pages) {
       if (!pub || !mod) continue;
       if (mod < pub)
         fail(where, `dateModified ${mod} is before datePublished ${pub}`);
-      if (mod > TODAY)
+      // Only a *revision* dated ahead is wrong. A post held by the publishing
+      // calendar is legitimately dated in the future and has no changes yet,
+      // so dateModified falls back to datePublished and both are ahead of
+      // today — which is the calendar working, not a typo. Those pages are
+      // noindex on a preview build anyway.
+      if (mod > TODAY && mod > pub)
         fail(where, `dateModified ${mod} is in the future — a change history entry is dated ahead of today`);
     }
   }
@@ -215,6 +220,10 @@ else {
     // redirect from Kit, never by search. robots.txt disallows the latter two.
     if (url === '/404.html') continue;
     if (url === '/subscribe/thanks/' || url === '/subscribe/confirmed/') continue;
+    // A page that asks not to be indexed has no business in the sitemap either.
+    // This is a preview build rendering a post that is still held for a later
+    // date: the page is there to be read before it ships, not to be found.
+    if (/<meta name="robots" content="noindex"/.test(fs.readFileSync(p, 'utf8'))) continue;
     if (!listed.has(url)) warn('sitemap.xml', `page not listed: ${url}`);
   }
 }

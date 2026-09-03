@@ -12,12 +12,15 @@ The filename is the URL. `my-post-slug.md` → `/blog/my-post-slug/`.
 Publish by setting `draft: false`, then push and merge. Files starting with `_` are never
 built.
 
+To publish it on a later day, give it that `date` and merge it anyway — see
+[Publishing on a date](#publishing-on-a-date).
+
 ## Frontmatter
 
 | Field | Required | Notes |
 | --- | --- | --- |
 | `title` | yes | Build fails without it. Aim for under 48 characters — the site name is appended. |
-| `date` | yes | `YYYY-MM-DD`. Controls ordering. |
+| `date` | yes | `YYYY-MM-DD`. Controls ordering, and *when the post comes out* — a date ahead of today holds it. |
 | `order` | no | A number. Orders posts sharing a `date`, ascending, so a series published in one go reads part 1 first. Without it the tie falls to the order the filesystem lists the directory in, which is not the same on macOS and on the CI runner. |
 | `description` | no, but do it | Shows on the index and in Google results. One or two sentences. |
 | `tags` | no | `[unity, android]` |
@@ -25,6 +28,113 @@ built.
 | `codeLabel` | no | Overrides the card's title. |
 | `changes` | no | Post-publication edits. A block list, one `YYYY-MM-DD — what changed` per line. See below. |
 | `draft` | no | `true` keeps it out of the site, sitemap and RSS entirely. |
+| `keySections` | no | Headings to promote in the post's contents list — the two or three a reader is actually here for, e.g. `[How do I install it, The motivation]`. Matched against the heading text; a name matching none, or more than one, **fails the build** and prints the headings it found. |
+| `schedule` | no | A reason, e.g. `schedule: Play policy change`. Exempts the post from the day's quota and from the day off. Printed by every build — see [the publishing calendar](#the-publishing-calendar). |
+
+## Publishing on a date
+
+A post dated ahead of today is held: it is not on the index, not in the sitemap, not in the
+feed, and not cross-posted. On the first build on or after its date it appears, everywhere, at
+once.
+
+```bash
+date: 2026-10-14      # merge it whenever; it comes out on the 14th
+npm run schedule      # what is held, what is due, what is already out
+```
+
+Nothing has to be run on the day. `ci-cd.yml` builds daily at 14:09 UTC — around 10am in New
+York, which is when a new post is most read — and a build on or after the date is all the post
+needs. The gist follows at 14:33 and the dev.to cross-post at 15:41, in that order and for that
+reason: neither may go out pointing at a page the site has not published yet.
+
+Four things follow from this, all of them deliberate:
+
+- **The clock is UTC**, on the laptop and on the runner both. A post dated the 14th goes out at
+  16:09 Paris time on the 14th, not at midnight.
+- **It goes out even if nothing else changed.** The daily run asks the live sitemap what is
+  already published rather than trusting "is anything dated today", so a cron that was delayed,
+  a runner that failed, or a schedule GitHub paused for inactivity all catch up on the next run
+  instead of stranding the post.
+- **`draft: true` still wins.** A draft is never published, whatever its date says. Use the
+  date for "this is finished, it comes out Tuesday" and `draft` for "this is not finished".
+
+- **You can read it before it ships.** `npm run dev` and the PR preview build the held post for
+  real, marked `Publishes <date>` and served `noindex` so a leaked preview URL cannot be indexed
+  ahead of the page itself. It stays out of the sitemap and the feed in both. Production never
+  builds it at all — the flag is set on pull requests only, which are the runs that cannot
+  deploy production.
+
+A held post is still fully checked — `npm run check`, `npm run style` and the Lighthouse budget
+all run on the PR that merges it, and the build prints `held /blog/<slug>/ — publishes <date>`
+so it is visible in the log rather than silently absent. Its gist, if it has one, is generated
+in that PR and published by `sync-gist.yml` on the day the post lands, not before: a gist whose
+"full write-up" link 404s is the thing being avoided.
+
+## The publishing calendar
+
+Dates are not chosen by hand. The calendar decides how many posts a day can carry, and you
+ask it for the next free slot:
+
+```bash
+npm run schedule                                  # the queue, and the next free days
+npm run schedule -- --claim my-post-slug          # take the next free slot
+npm run schedule -- --claim my-post-slug --on 2026-10-14   # take a specific day
+npm run schedule -- --claim my-post-slug --release         # give it back
+```
+
+It prints the date; put that date in the frontmatter. That is the whole workflow, and it is
+the same one an agent follows — which is why it is a command and not a paragraph of judgement.
+
+```
+  claimed 2026-10-14 for my-post-slug — slot 1 of 2
+
+  put it in the frontmatter:   date: 2026-10-14
+```
+
+**The rule**, in [`_source/schedule.json`](../../_source/schedule.json):
+
+| | |
+| --- | --- |
+| Posting days | every day except **Sunday** |
+| Per day | **1–3**, and which of those a given day gets is drawn |
+| Per month | a total drawn between **30 and 60**, which the daily quotas add up to |
+| In force from | **2026-09-02** — everything published before that is not checked |
+
+**The quotas are drawn, not written down.** A file listing every day of the next year is one
+somebody has to extend every December; a draw seeded on the date itself is the same calendar,
+derived, and it never runs out. The seed is the date string, so `2026-10-14` holds the same
+number of slots on your laptop, on the runner, today and in three years. `Math.random()` would
+have made the same commit pass CI once and fail the next time.
+
+Because the month is drawn too, a heavy month and a quiet one look different rather than
+tidy: 26 posting days might carry 38 posts one month and 56 the next, some days holding one
+and some three.
+
+**Claims live in the ledger**, not in the post. `_source/schedule.json` records which slug
+took which day, so a slot can be reserved before the post exists — and the build refuses a
+post whose date nothing claimed, which is what stops two branches quietly landing on the same
+day. Commit the ledger with the post.
+
+**The build is the enforcement.** `npm run build` fails, naming the fix:
+
+```
+  ERROR  calendar: 2026-10-14 holds 2 posts and its quota is 1: a-post, b-post
+         — re-claim the extra one, or add `schedule: <reason>` to it if it has to go out that day.
+  ERROR  calendar: b-post is dated 2026-10-14 but nothing claimed that slot
+         — run `npm run schedule -- --claim b-post --on 2026-10-14` to record it.
+```
+
+**The exception is `schedule:` in the frontmatter**, and it carries its reason:
+
+```yaml
+date: 2026-10-14
+schedule: Play policy change, had to go out the day it landed
+```
+
+That post does not count against the day's quota and may sit on a Sunday. Every override is
+printed by the build and by `npm run schedule`, so it stays visible instead of becoming the
+normal way to post. If overrides start appearing weekly, the rule is wrong — change the
+numbers in the ledger rather than working around them.
 
 ## Editing a post after it is published
 
@@ -255,6 +365,17 @@ of code.
 
 Keep inline snippets under ~30 lines. Anything longer goes in `code:` so the post stays about
 the reasoning.
+
+**One fenced block gets one copy button.** So the fence is the unit a reader copies, and that
+is an authoring decision, not a styling one:
+
+- commands meant to be **run one at a time** — two slash commands typed into a prompt, a
+  claim then a check — get **one fence each**, so each can be taken on its own
+- a script, a config file, or a shell sequence meant to run in one go stays in **one fence**;
+  splitting it would make the reader copy four times to get one thing
+
+Getting this wrong is quiet. A reader copies both lines, pastes them where only the first can
+run, and blames the instructions.
 
 ## Publishing a gist for a post
 

@@ -59,6 +59,10 @@ post stays about the reasoning rather than becoming a wall of code.
 
 - **Reading time** is calculated automatically from the word count.
 - **Ordering** is by `date`, newest first. Use `YYYY-MM-DD`.
+- **A `date` in the future holds the post** until that day, then the daily build puts it out —
+  index, sitemap, feed and cross-post together. Merge it whenever it is ready.
+- **The date is not yours to pick.** Run `npm run schedule -- --claim <post-slug>`; it answers
+  with the next free day and records the claim. The build refuses a date nothing claimed.
 - **`draft: true`** keeps a post out of the site entirely — not in the index, not in the
   sitemap, not in the RSS feed.
 - The build **fails** if `title` or `date` is missing, so a broken post can't ship.

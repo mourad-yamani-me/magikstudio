@@ -30,7 +30,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 7460,
@@ -87,7 +87,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 5801,
@@ -146,7 +146,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 8400,
@@ -208,7 +208,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 20142,
@@ -271,7 +271,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -316,7 +316,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 1,
         "annualViews": 206,
@@ -378,7 +378,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -433,7 +433,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -477,7 +477,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 1,
         "annualViews": 113,
@@ -528,7 +528,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 2880,
@@ -581,7 +581,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -632,7 +632,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -682,7 +682,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 649,
@@ -731,7 +731,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 2,
         "annualViews": 646,
@@ -793,7 +793,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 28833,
@@ -1583,10 +1583,19 @@
       "unity gradle build error"
     ],
     "proposed": "2026-08-31",
-    "status": "proposed",
-    "slug": null,
-    "published": null,
-    "target": null,
+    "status": "published",
+    "slug": "unity-gradle-build-failed-is-not-the-error",
+    "published": "2026-09-03",
+    "target": {
+      "indexDays": 14,
+      "impressionsDays": 60,
+      "impressions": 50,
+      "positionDays": 90,
+      "position": 20,
+      "clicksDays": 90,
+      "clicks": 5,
+      "basis": "provisional"
+    },
     "history": [],
     "validation": {
       "date": "2026-09-01",
@@ -3132,5 +3141,588 @@
       },
       "verdict": "NO-GO"
     }
+  },
+  {
+    "id": "unity-error-commandinvokationfailure-gradle-build-failed",
+    "query": "unity error commandinvokationfailure gradle build failed",
+    "shape": "problem",
+    "score": 85,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity gradle build failed error"
+      ]
+    },
+    "variants": [
+      "unity android build failed gradle",
+      "unity commandinvokationfailure gradle build failed",
+      "unity 6 gradle build failed",
+      "unity android gradle build failed",
+      "unity firebase gradle build failed",
+      "unity 2022 gradle build failed",
+      "unity gradle build error"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "claude-code-agents-md-github",
+    "query": "claude code agents md github",
+    "shape": "other",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md",
+        "how to claude code agents md",
+        "why claude code agents md"
+      ]
+    },
+    "variants": [
+      "claude code agents md location",
+      "claude code agents.md symlink",
+      "how to make claude code use agents md",
+      "how to make claude code read agents md",
+      "claude code agents md",
+      "claude code agents md plugin",
+      "claude code agents md vs claude md",
+      "claude code agents md or claude md",
+      "claude code skills vs agents.md",
+      "why claude code does not support agents md"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "google-admob-vs-unity-ads",
+    "query": "google admob vs unity ads",
+    "shape": "store",
+    "score": 58,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity vs"
+      ]
+    },
+    "variants": [
+      "admob unity ads",
+      "admob vs unity ads",
+      "admob or unity ads",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "data-safety-form-google-play-app",
+    "query": "data safety form google play app",
+    "shape": "store",
+    "score": 56,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play data safety form"
+      ]
+    },
+    "variants": [
+      "invalid data safety form google play",
+      "update data safety form google play"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "logo-quiz-guess-brand-trivia-solution",
+    "query": "logo quiz guess brand trivia solution",
+    "shape": "other",
+    "score": 54,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to Logo Quiz: Guess Brand",
+        "why Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess brand",
+      "logo quiz guess the brand level 1",
+      "logo quiz guess the brand level 2"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-android-build-failed",
+    "query": "unity android build failed",
+    "shape": "problem",
+    "score": 51,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity android build error"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "logo-quiz-guess-the-brand-answers-level-1",
+    "query": "logo quiz guess the brand answers level 1",
+    "shape": "other",
+    "score": 49,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess the brand answers level 2",
+      "logo quiz guess the brand answers level 3"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-unity-github",
+    "query": "admob unity github",
+    "shape": "store",
+    "score": 49,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [
+      "admob unity integration",
+      "admob unity tutorial",
+      "admob unity guide",
+      "how to integrate admob in unity"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "cloudflare-pages-vs-workers-nextjs",
+    "query": "cloudflare pages vs workers nextjs",
+    "shape": "other",
+    "score": 26,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "cloudflare workers vs pages"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "github-actions-disable-job",
+    "query": "github actions disable job",
+    "shape": "other",
+    "score": 26,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "github actions cloudflare deploy"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-il2cpp-android",
+    "query": "unity il2cpp android",
+    "shape": "other",
+    "score": 25,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity il2cpp android"
+      ]
+    },
+    "variants": [
+      "unity il2cpp vs mono"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "guess-the-logo-examples",
+    "query": "guess the logo examples",
+    "shape": "other",
+    "score": 21,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-vs-unified",
+    "query": "unity vs unified",
+    "shape": "other",
+    "score": 16,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity il2cpp android vs"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "what-is-a-github-deployment",
+    "query": "what is a github deployment",
+    "shape": "other",
+    "score": 16,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "why github actions cloudflare deploy"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-android-build-failed-gradle",
+    "query": "unity android build failed gradle",
+    "shape": "problem",
+    "score": 80,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity android build error"
+      ]
+    },
+    "variants": [
+      "unity commandinvokationfailure gradle build failed",
+      "unity 6 gradle build failed",
+      "unity android gradle build failed",
+      "unity firebase gradle build failed",
+      "unity 2022 gradle build failed",
+      "unity gradle build error"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "claude-code-agents-md-location",
+    "query": "claude code agents md location",
+    "shape": "other",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md",
+        "how to claude code agents md",
+        "why claude code agents md"
+      ]
+    },
+    "variants": [
+      "claude code agents.md symlink",
+      "how to make claude code use agents md",
+      "how to make claude code read agents md",
+      "claude code agents md",
+      "claude code agents md plugin",
+      "claude code agents md vs claude md",
+      "claude code agents md or claude md",
+      "claude code skills vs agents.md",
+      "why claude code does not support agents md"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "logo-quiz-guess-the-brand-answers-level-2",
+    "query": "logo quiz guess the brand answers level 2",
+    "shape": "other",
+    "score": 57,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess the brand answers level 3",
+      "logo quiz guess brand",
+      "logo quiz guess the brand level 1",
+      "logo quiz guess the brand level 2"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-unity-integration",
+    "query": "admob unity integration",
+    "shape": "store",
+    "score": 57,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [
+      "admob unity ads",
+      "admob unity tutorial",
+      "admob unity guide",
+      "admob vs unity ads",
+      "admob or unity ads",
+      "how to integrate admob in unity",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "invalid-data-safety-form-google-play",
+    "query": "invalid data safety form google play",
+    "shape": "store",
+    "score": 52,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play data safety form"
+      ]
+    },
+    "variants": [
+      "update data safety form google play"
+    ],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-il2cpp-vs-mono",
+    "query": "unity il2cpp vs mono",
+    "shape": "other",
+    "score": 21,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity il2cpp android vs"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-02",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "unity-commandinvokationfailure-gradle-build-failed",
+    "query": "unity commandinvokationfailure gradle build failed",
+    "shape": "problem",
+    "score": 76,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "unity gradle build failed"
+      ]
+    },
+    "variants": [
+      "unity 6 gradle build failed",
+      "unity android gradle build failed",
+      "unity firebase gradle build failed",
+      "unity 2022 gradle build failed",
+      "unity gradle build error"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "claude-code-agents-md-symlink",
+    "query": "claude code agents.md symlink",
+    "shape": "other",
+    "score": 67,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md",
+        "how to claude code agents md",
+        "why claude code agents md"
+      ]
+    },
+    "variants": [
+      "how to make claude code use agents md",
+      "how to make claude code read agents md",
+      "claude code agents md",
+      "claude code agents md vs claude md",
+      "claude code agents md or claude md",
+      "claude code skills vs agents.md",
+      "why claude code does not support agents md"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-unity-ads",
+    "query": "admob unity ads",
+    "shape": "store",
+    "score": 57,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [
+      "admob unity tutorial",
+      "admob unity guide",
+      "admob vs unity ads",
+      "admob or unity ads",
+      "how to integrate admob in unity",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "logo-quiz-guess-the-brand-answers-level-3",
+    "query": "logo quiz guess the brand answers level 3",
+    "shape": "other",
+    "score": 53,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess brand",
+      "logo quiz guess the brand level 1",
+      "logo quiz guess the brand level 2"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "update-data-safety-form-google-play",
+    "query": "update data safety form google play",
+    "shape": "store",
+    "score": 48,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "google play data safety form"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
   }
 ]
