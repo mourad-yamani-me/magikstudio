@@ -7,6 +7,7 @@ tags: [testing, gamedev, puzzle, architecture]
 code: https://gist.github.com/IndieCoreDev/95eb02285852062865e861573d020faa
 codeLabel: The whole conformance suite
 devto: true
+linkedin: false
 draft: false
 ---
 

@@ -9,6 +9,14 @@ tags: [devlog, design]
 # Either URL goes in `code:`; the card labels itself accordingly.
 code: https://gist.github.com/IndieCoreDev/abc123
 codeLabel: The full component
+# Required — the build refuses a post that has not decided.
+#   true  -> announced on LinkedIn once the post is live. Write `linkedinText`
+#            below as well, or it goes out as this file's title and description.
+#   false -> not announced. Most posts. A real answer, not a placeholder.
+linkedin: false
+# linkedinText:
+#   - The hook. One or two sentences that stand on their own.
+#   - What you did, and what came out of it.
 draft: true
 ---
 

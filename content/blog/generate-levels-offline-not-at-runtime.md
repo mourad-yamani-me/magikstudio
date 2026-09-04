@@ -5,6 +5,7 @@ order: 2
 description: Runtime generation promises infinite levels for free. What it gives you is levels nobody has checked. The offline pipeline I use instead.
 tags: [gamedev, procedural-generation, puzzle, architecture]
 devto: true
+linkedin: false
 draft: false
 ---
 

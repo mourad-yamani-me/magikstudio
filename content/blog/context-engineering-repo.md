@@ -4,6 +4,7 @@ date: 2026-08-28
 description: The best prompt I ever wrote was a README. What changed when I moved my conventions out of the chat window and into the files they describe.
 tags: [ai, claude-code, context-engineering, workflow]
 devto: true
+linkedin: false
 draft: false
 ---
 

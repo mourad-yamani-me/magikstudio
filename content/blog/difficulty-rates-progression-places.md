@@ -7,6 +7,7 @@ tags: [gamedev, difficulty, level-design, puzzle]
 code: https://gist.github.com/IndieCoreDev/85b015318475143f35ee6df50fcf9d65
 codeLabel: The envelope, the rhythm and the tone windows
 devto: true
+linkedin: false
 draft: false
 ---
 

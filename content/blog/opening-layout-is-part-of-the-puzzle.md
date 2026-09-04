@@ -5,6 +5,7 @@ order: 5
 description: Where the loose pieces sit is a packing problem, and its objective is how large the board can be drawn. Optimise that and you leak the answer.
 tags: [gamedev, puzzle, level-design]
 devto: true
+linkedin: false
 draft: false
 ---
 

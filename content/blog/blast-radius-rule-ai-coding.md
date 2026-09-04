@@ -4,6 +4,7 @@ date: 2026-08-28
 description: How I decide what an AI agent may change on its own — sorted by what a mistake costs to undo, not by how hard the task is. Three zones, and the check for each.
 tags: [ai, claude-code, workflow, google-play]
 devto: true
+linkedin: false
 draft: false
 changes:
   - 2026-09-03 — Zone 2: what a reader caught about immutable assets, and why the fix is a query rather than a fingerprinted filename

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>IndieCore — code from the posts</title>
-<meta name="description" content="Ten gists generated from the code that actually runs, each one written up in full on indiecore.net.">
+<meta name="description" content="11 gists generated from the code that actually runs, each one written up in full on indiecore.net.">
 <link rel="canonical" href="https://indiecoredev.github.io/">
 <style>
   :root { color-scheme: light dark; --bg:#fbfbfa; --fg:#1a1a19; --dim:#5c5c58; --line:#e3e3df; --card:#fff; --link:#1d4ed8; }
@@ -41,6 +41,15 @@
         <p class="links">
           <a href="https://gist.github.com/IndieCoreDev/11369ffb01a68f04f0bfc9f803922b17">Read the code</a>
           <a href="https://www.indiecore.net/blog/static-site-cloudflare-workers/">Deploying a static site to Cloudflare Workers</a>
+        </p>
+      </li>
+      <li class="card">
+        <h2>Announce a blog post on LinkedIn from CI — the API script and the workflow</h2>
+        <p>The LinkedIn API call that publishes a post is six lines. The token that expires every 60 days with no refresh, the read scope you cannot have, and a filename that became a dead link took the rest of the afternoon.</p>
+        <p class="files"><code>linkedin.mjs</code> <code>linkedin.yml</code></p>
+        <p class="links">
+          
+          <a href="https://www.indiecore.net/blog/posting-to-linkedin-from-ci/">Four things break when CI posts to LinkedIn</a>
         </p>
       </li>
       <li class="card">

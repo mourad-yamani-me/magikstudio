@@ -71,7 +71,7 @@ import { frontmatter } from './frontmatter.mjs';
 const ROOT   = path.resolve(import.meta.dirname, '..');
 const BLOG   = path.join(ROOT, 'content/blog');
 const LEDGER = path.join(ROOT, '_source/linkedin.json');
-const SITE   = 'https://www.indiecore.net';
+const SITE   = 'https://www.example.com';
 const TODAY  = new Date().toISOString().slice(0, 10);   // UTC, same clock as the build
 const API    = 'https://api.linkedin.com';
 

@@ -7,6 +7,7 @@ tags: [gamedev, capacitor, vite, performance]
 code: https://gist.github.com/IndieCoreDev/788e88e15747179b5ee493057be4821e
 codeLabel: The plugin, both fixes included
 devto: true
+linkedin: false
 draft: false
 ---
 

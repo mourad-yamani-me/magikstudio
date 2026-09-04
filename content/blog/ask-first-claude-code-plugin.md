@@ -6,6 +6,7 @@ tags: [claude-code, ai, workflow]
 keySections: [How do I install it, The motivation, What is the difference between a skill and a hook]
 code: https://github.com/IndieCoreDev/ask-first
 codeLabel: ask-first — the skill, the hooks and the tests
+linkedin: false
 draft: false
 ---
 

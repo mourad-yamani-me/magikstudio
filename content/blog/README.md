@@ -31,7 +31,7 @@ To publish it on a later day, give it that `date` and merge it anyway — see
 | `keySections` | no | Headings to promote in the post's contents list — the two or three a reader is actually here for, e.g. `[How do I install it, The motivation]`. Matched against the heading text; a name matching none, or more than one, **fails the build** and prints the headings it found. |
 | `schedule` | no | A reason, e.g. `schedule: Play policy change`. Exempts the post from the day's quota and from the day off. Printed by every build — see [the publishing calendar](#the-publishing-calendar). |
 | `devto` | no | `true` cross-posts the whole article to dev.to, canonicalised back here. See [`docs/cross-posting.md`](../../docs/cross-posting.md). |
-| `linkedin` | no | `true` announces the post on LinkedIn — a blurb and a link card, not a copy. Run by hand: see [`docs/linkedin.md`](../../docs/linkedin.md). |
+| `linkedin` | **yes** | `true` announces the post on LinkedIn once it is live — a blurb and a link card, not a copy. `false` is a real answer and most posts carry it. The build refuses a post that has not decided, because forgetting is invisible: nothing breaks, and the post simply never leaves the site. See [`docs/linkedin.md`](../../docs/linkedin.md). |
 | `linkedinText` | no | The blurb, a block list with one paragraph per item. Without it LinkedIn gets the title and `description`, which reads like a machine wrote it. |
 
 ## Publishing on a date

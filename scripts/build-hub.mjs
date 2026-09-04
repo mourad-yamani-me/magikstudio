@@ -2,7 +2,7 @@
 /**
  * Generates the index page for the public snippet hub.
  *
- * The ten gists have no home page. Each one is findable only if you already
+ * The gists have no home page. Each one is findable only if you already
  * know it exists, and every link out of them is rel="nofollow" because that is
  * how GitHub renders user markdown. A page on GitHub Pages is ordinary HTML
  * that we write, so its links are followed.
@@ -84,7 +84,7 @@ const html = `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>IndieCore — code from the posts</title>
-<meta name="description" content="Ten gists generated from the code that actually runs, each one written up in full on indiecore.net.">
+<meta name="description" content="${entries.length} gists generated from the code that actually runs, each one written up in full on indiecore.net.">
 <link rel="canonical" href="${HUB_URL}">
 <style>
   :root { color-scheme: light dark; --bg:#fbfbfa; --fg:#1a1a19; --dim:#5c5c58; --line:#e3e3df; --card:#fff; --link:#1d4ed8; }

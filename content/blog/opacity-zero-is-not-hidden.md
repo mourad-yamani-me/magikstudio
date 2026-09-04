@@ -6,6 +6,7 @@ tags: [accessibility, css, javascript, web]
 code: https://gist.github.com/IndieCoreDev/94c7819fac39ad0f3b181aa84013a414
 codeLabel: The lightbox, dependency-free
 devto: true
+linkedin: false
 draft: false
 ---
 

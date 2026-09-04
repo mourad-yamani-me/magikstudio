@@ -637,6 +637,28 @@ const ALL_POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
     // a post that would silently never publish. Fail on it here instead.
     if (!/^\d{4}-\d{2}-\d{2}$/.test(String(meta.date)))
       throw new Error(`content/blog/${f}: "date" must be YYYY-MM-DD, got "${meta.date}"`);
+    /* `linkedin` is required rather than optional, and it is the only field here
+       that exists to force a decision rather than to describe the post.
+
+       Announcing a post is opt-in — scripts/linkedin.mjs posts nothing without
+       `linkedin: true` — and the failure mode of a pure opt-in is forgetting.
+       A post goes live, nobody thinks about the feed that day, and it is never
+       announced. That is invisible: nothing breaks, no warning fires, and the
+       post simply never leaves the site.
+
+       A warning was the other option, and the gist `code:` card is warned about
+       for a reason — there is a window where its URL genuinely does not exist
+       yet. There is no equivalent window here. The answer is knowable while you
+       are writing, so the build asks for it then. `false` is a real answer and
+       most posts should carry it. */
+    if (meta.linkedin !== true && meta.linkedin !== false)
+      throw new Error(
+        `content/blog/${f}: missing "linkedin" in frontmatter — say \`linkedin: true\` to ` +
+        `announce it on LinkedIn (with a \`linkedinText\` blurb), or \`linkedin: false\` if not. ` +
+        `See docs/linkedin.md.`);
+    if (meta.linkedin === true && !meta.draft && !meta.linkedinText)
+      console.log(`  warn  content/blog/${f}: \`linkedin: true\` with no \`linkedinText\` — ` +
+        `it will go out as its title and description, which reads like metadata.`);
     /* Post-publication edits: `changes:` is a block list of
        `YYYY-MM-DD — what changed`, newest first once sorted here.
 

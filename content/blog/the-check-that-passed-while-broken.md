@@ -6,6 +6,7 @@ tags: [ci-cd, testing, workflow, ai]
 code: https://gist.github.com/IndieCoreDev/6c707bf89e5d215225f3bdac6e4a4b25
 codeLabel: The verifier, with both checks fixed
 devto: true
+linkedin: false
 draft: false
 ---
 

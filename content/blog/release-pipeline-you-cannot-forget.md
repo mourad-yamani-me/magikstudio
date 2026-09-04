@@ -5,6 +5,7 @@ order: 10
 description: The Android project is generated, not committed — which reset the version code to 1 and nearly made the app un-updatable. Plus the checks worth failing on.
 tags: [gamedev, capacitor, android, release, gradle]
 devto: true
+linkedin: false
 draft: false
 ---
 

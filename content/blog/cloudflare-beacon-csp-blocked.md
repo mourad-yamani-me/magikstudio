@@ -6,6 +6,7 @@ tags: [cloudflare, security, privacy, performance]
 code: https://gist.github.com/IndieCoreDev/6c707bf89e5d215225f3bdac6e4a4b25
 codeLabel: The verifier, including the CSP guard
 devto: true
+linkedin: false
 draft: false
 ---
 

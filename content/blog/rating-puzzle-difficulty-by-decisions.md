@@ -7,6 +7,7 @@ tags: [gamedev, difficulty, puzzle, procedural-generation]
 code: https://gist.github.com/IndieCoreDev/02835f475522e68083df2567f1a562b5
 codeLabel: The walk and the tiers, ready to adapt
 devto: true
+linkedin: false
 draft: false
 ---
 

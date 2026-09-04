@@ -5,6 +5,7 @@ order: 1
 description: Six word puzzles built as six copies of one game. What it cost, and what an app directory looks like once the game moves out of it and only identity stays behind.
 tags: [gamedev, architecture, monorepo, capacitor]
 devto: true
+linkedin: false
 draft: false
 ---
 

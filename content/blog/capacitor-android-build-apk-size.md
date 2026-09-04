@@ -7,6 +7,7 @@ tags: [gamedev, capacitor, android, apk, r8]
 code: https://gist.github.com/IndieCoreDev/5d3ca9b6ad1add515f358883a1bf106f
 codeLabel: Gradle, ProGuard, the size script and the Vite plugin
 devto: true
+linkedin: false
 draft: false
 ---
 

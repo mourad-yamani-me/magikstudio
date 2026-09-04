@@ -7,6 +7,7 @@ tags: [gamedev, game-economy, free-to-play, difficulty]
 code: https://gist.github.com/IndieCoreDev/8f228b50bc004fc45e826368d0d1da22
 codeLabel: The economy module the simulator shares
 devto: true
+linkedin: false
 draft: false
 ---
 

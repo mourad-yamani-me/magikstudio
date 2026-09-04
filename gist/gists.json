@@ -9,6 +9,15 @@
     "live": "2026-08-26"
   },
   {
+    "dir": "linkedin-from-ci",
+    "marker": "Announce a blog post on LinkedIn from CI — the API script and the workflow",
+    "post": "posting-to-linkedin-from-ci",
+    "posts": [
+      "posting-to-linkedin-from-ci"
+    ],
+    "live": "2026-09-04"
+  },
+  {
     "dir": "build-gates",
     "marker": "Build gates for a static site — output verification and a Lighthouse budget",
     "post": "build-reviews-ai-code",

@@ -11,7 +11,8 @@ the content of the post rather than a footnote on it.
 
 ## Doing it
 
-Two frontmatter fields, one of them optional:
+Two frontmatter fields. The first is **required on every post** and the build refuses one that
+has not decided:
 
 ```yaml
 linkedin: true
@@ -20,8 +21,16 @@ linkedinText:
   - What you actually did, and what came out of it.
 ```
 
+`linkedin: false` is a real answer and most posts carry it. It is required rather than
+optional because the failure mode of a pure opt-in is invisible — a post goes live, nobody
+thinks about the feed that day, and it is simply never announced. Nothing breaks and no
+warning fires. The `code:` gist card is only warned about because there is a window where its
+URL genuinely does not exist yet; there is no equivalent window here, so the build asks while
+you are writing, when the answer is knowable.
+
 Without `linkedinText` the post goes out as its own title and description, which works and
-reads like a machine wrote it. Write the blurb.
+reads like a machine wrote it. The build warns when a `true` post has no blurb. Write the
+blurb.
 
 **New posts only. The back catalogue is deliberately not announced.** Nineteen posts were
 already published and unannounced when this shipped, most of them dated the same day, and
