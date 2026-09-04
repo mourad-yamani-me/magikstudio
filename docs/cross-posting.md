@@ -62,6 +62,55 @@ here, so an article published before its own canonical exists would point at a 4
 run is scheduled after the site's own (15:41 UTC against 14:09) for the same reason, and picks
 the post up the afternoon it goes live.
 
+## `devto` is a required decision
+
+The build refuses a post whose frontmatter does not say `devto: true` or `devto: false`, the
+same gate `linkedin` carries and for the same reason — a pure opt-in fails by being forgotten,
+and forgetting is invisible: nothing breaks, nothing goes red, the post simply never leaves the
+site.
+
+That is not a hypothetical here. Twenty posts shipped in one batch on 2026-09-01 and every one
+of them carries `devto: true`. The next three, written one at a time from a template that never
+mentioned the field, all dropped it, and none was ever cross-posted. Nobody noticed until the
+flags were listed against the dates.
+
+`false` is a real answer. A post you want kept off a developer aggregator should carry it.
+
+## Who gets the slot
+
+The flag is a **veto, not a vote**. `devto: false` means never and nothing overrules it. Among
+the posts that said yes, the queue is ordered by how much traffic the subject is worth — the
+same rank `npm run schedule` prints, from `scripts/topic-seo.mjs` — and the run takes the top
+of it.
+
+It used to be ordered by date, which meant the scarce reach went to whatever happened to be
+written first. With twenty posts opted in and three creations a run, that is spending it at
+random. A post with no topic in the ledger ranks last rather than not at all: several predate
+the ledger and should still go out, just not ahead of a subject with five thousand readers a
+year attached to it.
+
+Two caps apply and the smaller wins:
+
+| Cap | Where | Guards against |
+| --- | --- | --- |
+| `perRun` / `perWeek` | `_source/schedule.json` → `platforms.devto` | the feed — how much of this account is links to one outside domain |
+| Forem's own limit | the account's age, read from the API | the account being suspended |
+
+`npm run devto` prints the ranked queue and the cap with the reason it came out at that
+number. `--limit N` overrides both, which is the escape hatch for a backlog someone is
+watching.
+
+**The weekly budget is below the site's own rate on purpose, and that is not a backlog.**
+The site publishes 30–60 posts a month; dev.to takes about 22. The gap is what makes this a
+selection rather than a queue, and the selection is the whole point: every run re-ranks all
+the opted-in posts from scratch, so the slot goes to the best subject waiting no matter when
+it was written, and a post that is never the best is never sent. Ordering by date would have
+spent the same scarce reach on whichever post happened to be oldest.
+
+So the run says "below the cut" rather than "held for a later run". The second was what it
+used to say and it was a promise the budget cannot keep. `npm run schedule` prints the budget
+against the number opted in, so the gap is visible rather than something to discover.
+
 ## Why every post can opt in at once
 
 Because creations drip. These are Forem's own limits, read off

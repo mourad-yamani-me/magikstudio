@@ -5,6 +5,7 @@ description: No in-app purchases, no accounts, no forced timers. Here is what ou
 tags: [design, free-to-play]
 # Parked: written for players, not developers. Publish under a /notes section
 # later, or delete. Set draft:false to bring it back.
+devto: true
 linkedin: false
 draft: true
 ---

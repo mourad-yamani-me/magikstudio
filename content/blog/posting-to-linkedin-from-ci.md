@@ -4,6 +4,7 @@ date: 2026-09-04
 description: The LinkedIn API call that publishes a post is six lines. The token that expires every 60 days with no refresh, the read scope you cannot have, and a filename that became a dead link took the rest of the afternoon.
 tags: [ci-cd, github-actions, linkedin]
 keySections: [The app, and the Page you probably do not have, The token dies every 60 days and there is no refresh token, A filename became a link to a host that does not exist]
+devto: true
 linkedin: true
 linkedinText:
   - LinkedIn will let you post as yourself from a script in about twenty minutes. The four things that took the rest of the afternoon are the ones nobody writes about.

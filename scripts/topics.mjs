@@ -42,6 +42,8 @@
  *   npm run topics -- --validate       gate them: demand, winnability, indexability, repro
  *   npm run topics -- --score          judge published entries against their targets
  *   npm run topics -- --claim=<id>=<slug>   record that a candidate got written
+ *   npm run topics -- --harvest=<id>   build one subject's target block, whatever its status
+ *   npm run keywords                   check a draft against what --validate harvested
  *
  * Flags:
  *   --days=N        Search Console window for discovery (default 90)
@@ -52,10 +54,16 @@
  *   --no-google     skip Search Console
  *   --no-suggest    skip autocomplete expansion
  *   --revalidate    re-query Stack Overflow instead of reusing the cached numbers
+ *   --reharvest     rebuild the `seo` target block even where one already exists
+ *
+ * `--validate` works through the proposed subjects best first, not in file
+ * order, so a limited run spends its Stack Exchange quota on what is worth the
+ * most. `npm run schedule` prints the same ranking against the free slots.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { coreWords, rank as rankOf } from './topic-seo.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const SITE = 'https://www.indiecore.net';
@@ -75,6 +83,7 @@ const all = name => argv.filter(a => a.startsWith(`--${name}=`)).map(a => a.slic
 const DRY = has('--dry-run');
 const SCORE_MODE = has('--score');
 const CLAIM = opt('claim', '');
+const HARVEST = opt('harvest', '');
 const DAYS = Number(opt('days', 90)) || 90;
 const LIMIT = Number(opt('limit', 15)) || 15;
 const HL = opt('hl', 'en');
@@ -183,6 +192,14 @@ const SEEDS = [
   'android app bundle vs apk size',
   'proguard rules capacitor',
   'shrink android apk webp',
+  // React Native, added the day a Logo Quiz release went out with R8 off and
+  // Play Console grading the bundle "App optimisation: Low". The Capacitor
+  // seeds above cover the WebView games; this one game is RN, and its Gradle,
+  // Metro and AdMob problems are not the same file.
+  'react native android r8 minify release build',
+  'play console app optimisation low',
+  'admob limited ad serving',
+  'how to remove app from admob account',
   'procedural level generation puzzle game',
   'difficulty curve level progression',
   'vite plugin build assets',
@@ -729,6 +746,11 @@ async function demandOf(query) {
   const top = items.slice().sort((a, b) => b.view_count - a.view_count)[0];
   return {
     questions: items.length,
+    /* Kept because they are the harvest, not decoration. Every one of these is
+       a sentence a real person typed about this exact problem, already
+       downloaded to count views — throwing them away and then going looking for
+       "what questions should the post answer" would be paying twice. */
+    titles: items.map(q => q.title),
     annualViews: Math.round(annual),
     totalViews: items.reduce((a, q) => a + q.view_count, 0),
     stale, unanswered, rotted,
@@ -820,7 +842,13 @@ const TOOLCHAINS = [
   { match: /\b(claude|agents md|ai|context|prompt)\b/i,
     name: 'this repo',
     probe: () => ({ ok: true, what: 'reproducible here — the workflow is the subject' }) },
-  { match: /\b(play console|data safety|policy|rejection|listing|aso|admob earnings)\b/i,
+  /* Plain `admob`, not just `admob earnings`. "admob limited ad serving" matched
+     nothing here and fell through to `unknown`, which means "no reproduction
+     path — research only" and now costs a subject 25 rank points. It is a
+     console this studio signs into every week, and the post that came out of it
+     was written from the real account. A gap in the matcher was reading as a gap
+     in the studio. */
+  { match: /\b(play console|data safety|policy|rejection|listing|aso|admob)\b/i,
     name: 'your Play Console',
     probe: () => ({ ok: false, what: 'needs your console: the notice text, what you declared, the dates' }) },
 ];
@@ -831,13 +859,187 @@ function reproOf(query) {
   return { name: t.name, ...t.probe() };
 }
 
+/* ------------------------------------------------------------------ */
+/* the SEO target block — what the POST has to contain                 */
+/*                                                                     */
+/* Everything above answers "is this subject worth a day". None of it   */
+/* says anything about the article that comes out, and until this       */
+/* existed nothing did: content/blog/README.md asked for the variants   */
+/* verbatim and no script ever opened a post to check. Three of the     */
+/* five published posts hit 7/10, 6/7 and 2/10 against a rule everybody */
+/* believed was being followed.                                        */
+/*                                                                     */
+/* The material is already flowing through this file and being thrown   */
+/* away. Autocomplete returns the phrasings; Stack Overflow returns ten */
+/* question titles per subject and only the largest was kept. Both are  */
+/* sentences real people typed. Nothing is scraped off a result page —  */
+/* People Also Ask has no API, blocks runners, and changes shape        */
+/* without notice, which is the flaky check AGENTS.md rules out.        */
+
+const QUESTION_PREFIXES = ['how to fix ', 'why does ', 'what causes ', 'how do i ', 'can i '];
+const QUESTION_RE = /^(how|why|what|when|where|which|can|does|do|is|are|should|will)\b/i;
+
+/* Autocomplete drifts, and the drift is plausible enough to survive a careless
+   filter. Asked about "google play data safety form" it came back with "is
+   files by google safe" and "is my data safe with google" — real questions real
+   people type, about a different subject entirely. They shared one word with
+   the query, and a CAPABILITY test passed them because this repo knows the word
+   "google". Requiring most of the SUBJECT's own words is what separates a
+   phrasing of this question from a different question nearby. */
+/* 0.7, not 0.6. At 0.6 the "google play data safety form" subject harvested
+   "is it safe to clear google play store data" and "what happens when i clear
+   google play store data" — real questions about clearing a cache, nothing to
+   do with the form. Every one of the 20 questions sitting exactly on the 0.6
+   floor was that kind of drift, and the distribution has a clean cliff: 80
+   questions clear 0.6, 60 clear 0.7, and not one more is lost until 0.8. The
+   cost is one good question ("how to create privacy policy url for android
+   app") for nineteen bad ones. */
+const ON_TOPIC = 0.7;
+
+/* `coreWords` is imported from topic-seo.mjs rather than defined here: the
+   checker needs the same answer to decide where the subject must appear, and
+   two copies of that judgement would drift. */
+const onTopic = (candidate, core) => {
+  if (!core.length) return false;
+  const got = new Set(words(candidate));
+  return core.filter(w => got.has(w)).length / core.length >= ON_TOPIC;
+};
+
+/** Autocomplete, asked in question form. Only results that came back as questions count. */
+async function askSuggest(query, core) {
+  const out = new Set();
+  for (const p of QUESTION_PREFIXES) {
+    for (const s of await suggest(`${p}${query}`)) {
+      const q = String(s).toLowerCase().trim();
+      if (QUESTION_RE.test(q) && onTopic(q, core)) out.add(q);
+    }
+    await pause(120);                 // unofficial endpoint, same courtesy as expandSeeds
+  }
+  return [...out];
+}
+
+/* A Stack Overflow title is a question but rarely a searchable one: it carries
+   the asker's version numbers, their file names and their apology. What
+   survives that is the shared part, which is the part worth a heading. */
+const tidyTitle = t => String(t)
+  .replace(/&(quot|#39|amp|lt|gt);/g, ' ')
+  .replace(/\s*[[(][^\])]*[\])]\s*/g, ' ')      // "(2019)", "[closed]"
+  .replace(/\s+/g, ' ')
+  .trim()
+  .toLowerCase();
+
+/* Entities: the content words this subject is actually made of. A word earns a
+   place by appearing across at least two independent strings, which is what
+   separates the subject's own vocabulary from one asker's variable name. */
+function entitiesFrom(strings) {
+  const seen = new Map();
+  for (const s of strings) for (const w of new Set(words(s))) seen.set(w, (seen.get(w) || 0) + 1);
+  return [...seen.entries()]
+    .filter(([w, n]) => n >= 2 && w.length > 2)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 12)
+    .map(([w]) => w);
+}
+
+/**
+ * Build the block a post is checked against. Additive: an `seo.exempt` already
+ * on the entry survives, because it records a decision about a published page
+ * and a re-harvest is not a reason to reopen it.
+ */
+async function harvestSeo(entry, demand) {
+  const core = coreWords(entry.query, entry.variants || []);
+  const fromSuggest = has('--no-suggest') ? [] : await askSuggest(entry.query, core);
+  /* Stack Overflow titles are not tested for a question word. A title on Stack
+     Overflow is a question by construction — "Unity Gradle Build failed while
+     trying to build project as an APK" is somebody asking why, phrased as a
+     statement — and requiring an interrogative threw away every one of them,
+     which is how the first two subjects harvested came back with no questions
+     at all. Topicality is the test that belongs here; the site already
+     guarantees the rest. */
+  const fromSO = (demand?.titles || []).map(tidyTitle).filter(t => t && onTopic(t, core));
+
+  /* Deduplicated on content words, not on the string: "how to fix gradle build
+     failed in unity" and "how do i fix gradle build failed unity" are one
+     heading, and listing both would make the questions target unmeetable by
+     construction. */
+  /* A heading has to be able to contain every content word, because that is
+     what the check asks of it. "error on unity android build - deprecated
+     gradle features were used in this build, making it incompatible with gradle
+     6.0" is a real question and an impossible target, so the long ones are
+     dropped rather than left in to make the gate unmeetable — and the rest are
+     offered shortest first, which is also the order they are usable in. */
+  /* 12, not 8. The cap was set when a question counted as answered only if one
+     heading carried EVERY content word, which made a long question impossible
+     by construction. That reasoning was backwards: the cap threw away 46% of
+     the on-topic material — including the biggest question on the whole
+     subject, "unity gradle build failed while trying to build project as an
+     apk" with 29,731 views, and "admob ads fails to load with status details
+     limited ad serving". The matcher is what needed fixing (see ANSWER_SHARE in
+     topic-seo.mjs); 12 words is where Stack Overflow titles stop being a
+     question and start being a stack trace. */
+  const HEADING_WORDS = 12;
+  /* A bare number is a version fragment: "unity 2022 1 23 gradle build failed"
+     asks for a heading containing the token `23`, which nothing will ever
+     satisfy. Long words are NOT filtered — `commandinvokationfailure` is 24
+     characters and is the actual error string, the best heading target in this
+     repo. Length is not the signal; digits are. */
+  const unheadable = q => words(q).some(w => /^\d+$/.test(w));
+
+  /* A question identical to the subject is not a question. Six of sixteen
+     subjects harvested one, and it was a free pass — the post already has to
+     carry the primary verbatim, so making it a heading satisfied the questions
+     gate as well without asking anything extra. */
+  const primaryFp = [...new Set(words(entry.query))].sort().join(' ');
+
+  const questions = [];
+  const fingerprints = new Set();
+  const pool = [...fromSuggest, ...fromSO]
+    .filter(q => new Set(words(q)).size <= HEADING_WORDS && !unheadable(q))
+    .sort((a, b) => words(a).length - words(b).length);
+  for (const q of pool) {
+    const fp = [...new Set(words(q))].sort().join(' ');
+    if (!fp || fp === primaryFp || fingerprints.has(fp)) continue;
+    fingerprints.add(fp); questions.push(q);
+  }
+
+  const keywords = [...new Set([entry.query, ...(entry.variants || [])])];
+  return {
+    ...(entry.seo?.exempt ? { exempt: entry.seo.exempt } : {}),
+    /* Carried across a re-harvest, like `exempt`. Both record a decision about
+       a written post; re-running the harvester is not a reason to reopen one.
+       A declined question that no longer appears in the fresh list simply stops
+       mattering, which costs nothing. */
+    ...(entry.seo?.declined?.length ? { declined: entry.seo.declined } : {}),
+    primary: entry.query,
+    keywords: keywords.filter(k => k !== entry.query),
+    questions: questions.slice(0, 8),
+    entities: entitiesFrom([...keywords, ...questions]),
+    harvested: today(),
+    /* `null`, not 0, when the demand numbers were cached before titles were
+       kept: "Stack Overflow offered no questions" and "Stack Overflow was never
+       asked" produce the same empty list and are not the same fact. Recording
+       the second as a zero would make a subject look harvested when half its
+       material was never fetched — and it is the half that comes from real
+       people describing the real problem. */
+    sources: { suggest: fromSuggest.length, stackoverflow: demand?.titles ? fromSO.length : null },
+  };
+}
+
 async function validate() {
   const ledger = readLedger();
   const pending = ledger.filter(e => e.status === 'proposed');
   if (!pending.length) { say('_No proposed entries to validate — run `npm run topics` first._'); return; }
 
   const MIN_ANNUAL = 2000;        // a floor, and a low one: see the note above
-  const targets = pending.slice(0, LIMIT);
+  /* Best first, not file order. Stack Exchange allows 300 unauthenticated
+     requests a day and autocomplete is an unofficial endpoint asked politely,
+     so --limit is a real budget rather than a formality — and spending it on
+     whichever subject happened to be written into the ledger first is spending
+     it at random. Unvalidated entries have no demand number yet, so this ranks
+     on the discovery score, which is the only evidence they have. */
+  const targets = [...pending]
+    .sort((a, b) => rankOf(b).rank - rankOf(a).rank || (b.score || 0) - (a.score || 0))
+    .slice(0, LIMIT);
   say(`Validating ${targets.length} of ${pending.length} proposed subjects.`);
   say('');
 
@@ -864,6 +1066,12 @@ async function validate() {
                   : !idx.ok ? 'BLOCKED' : 'GO';
 
     e.validation = { date: today(), demand, winnability: win, indexable: idx.ok, repro, verdict };
+    /* Harvested only for subjects that cleared the gate. It costs five
+       autocomplete calls a subject, and spending them on something already
+       rejected for demand is paying an unofficial endpoint to answer a
+       question nobody will read. */
+    const stale = e.seo && e.seo.sources?.stackoverflow === null && demand?.titles;
+    if (verdict === 'GO' && (!e.seo || stale || has('--reharvest'))) e.seo = await harvestSeo(e, demand);
     results.push({ e, demand, win, idx, repro, verdict });
   }
 
@@ -885,7 +1093,18 @@ async function validate() {
     if (r.demand.top) say(`  - biggest: "${r.demand.top.title}" — ${r.demand.top.views.toLocaleString('en-US')} views`);
     say(`- winnable ${r.win.score}/100: ${r.win.why}`);
     say(`- reproducible: ${r.repro.ok ? r.repro.what : 'NO — ' + r.repro.what}`);
-    if (r.e.variants?.length) say(`- must contain verbatim: ${r.e.variants.slice(0, 4).map(v => `\`${v}\``).join(', ')}`);
+    if (r.e.seo) {
+      const t = r.e.seo;
+      say(`- must contain verbatim: \`${t.primary}\``
+        + (t.keywords.length ? `, and ${Math.ceil(t.keywords.length * 0.6)} of ${t.keywords.length} keywords` : ''));
+      if (t.questions.length) {
+        say(`- questions to answer under a heading (${Math.ceil(t.questions.length * 0.5)} of ${t.questions.length} required):`);
+        for (const q of t.questions) say(`  - ${q}`);
+      }
+      say('- check the draft against it: `npm run keywords -- --topic ' + r.e.id + ' <post-slug>`');
+    } else if (r.e.variants?.length) {
+      say(`- must contain verbatim: ${r.e.variants.slice(0, 4).map(v => `\`${v}\``).join(', ')}`);
+    }
   }
 
   const nogo = results.filter(r => r.verdict === 'NO-GO');
@@ -911,11 +1130,61 @@ async function validate() {
 }
 
 /* ------------------------------------------------------------------ */
+/* harvest one — a subject that is already written                     */
+/*                                                                     */
+/* `--validate` only looks at proposed subjects, which is right: it is  */
+/* the gate before the work. But a post can be written before its       */
+/* targets exist — every post here was — and reviewing one of those     */
+/* against the new check needs a block for a subject the gate has       */
+/* already let through and will never look at again.                   */
+
+async function harvestOne(id) {
+  const ledger = readLedger();
+  const e = ledger.find(x => x.id === id);
+  if (!e) { console.error(`no ledger entry with id "${id}"`); process.exit(1); }
+
+  /* Fetched rather than read from the cache. A subject validated before titles
+     were kept has demand numbers and no questions behind them, and harvesting
+     off that produces a block whose questions list is empty for a reason that
+     has nothing to do with the subject. */
+  const demand = e.validation?.demand?.titles && !has('--revalidate')
+    ? e.validation.demand
+    : await demandOf(e.query);
+  if (demand && e.validation) e.validation.demand = demand;
+
+  e.seo = await harvestSeo(e, demand);
+  writeLedger(ledger);
+
+  const t = e.seo;
+  say(`**${e.query}** → ${e.slug ? `/blog/${e.slug}/` : '(not written yet)'}`);
+  say('');
+  say(`- primary, verbatim: \`${t.primary}\``);
+  if (t.keywords.length) {
+    say(`- ${Math.ceil(t.keywords.length * 0.6)} of ${t.keywords.length} keywords, verbatim:`);
+    for (const k of t.keywords) say(`  - ${k}`);
+  } else {
+    say('- no keyword variants: autocomplete offered no other phrasing of this subject');
+  }
+  if (t.questions.length) {
+    say(`- ${Math.ceil(t.questions.length * 0.5)} of ${t.questions.length} questions, under a heading:`);
+    for (const q of t.questions) say(`  - ${q}`);
+  } else {
+    say('- no questions harvested — nothing on Stack Overflow or autocomplete matched closely enough');
+  }
+  say(`- sources: suggest ${t.sources.suggest}, stackoverflow ${t.sources.stackoverflow ?? 'not asked'}`);
+  say('');
+  say(e.slug
+    ? `_Check the post:_ \`npm run keywords -- --only ${e.slug}\``
+    : `_Check a draft:_ \`npm run keywords -- --topic ${e.id} <post-slug>\``);
+}
+
+/* ------------------------------------------------------------------ */
 
 say(`### Topics${DRY ? ' (dry run)' : ''} — ${today()}`);
 say('');
 
 if (CLAIM) claim(CLAIM);
+else if (HARVEST) await harvestOne(HARVEST);
 else if (has('--validate')) await validate();
 else if (SCORE_MODE) await scoreLedger();
 else await discover();

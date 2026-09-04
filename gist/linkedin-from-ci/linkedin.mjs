@@ -15,6 +15,13 @@
  * for a post without it, for a draft, or for a post dated ahead of today — the
  * link would 404, which is the one thing a promotional post must not do.
  *
+ * The flag is a veto, not a vote: `linkedin: false` still means never, and
+ * nothing here can overrule one, which is what keeps the required decision on
+ * every post meaningful. Among the posts that said yes, the one with the most
+ * demand behind it goes first — the queue is ordered by scripts/platforms.mjs
+ * rather than by date, because a feed slot is the scarcest thing here and
+ * spending it on whichever post is oldest is spending it at random.
+ *
  * This is not the dev.to cross-post, and the difference matters. dev.to gets a
  * copy of the article and therefore needs a canonical tag pointing back here or
  * it competes with the original. LinkedIn gets a few lines of commentary and a
@@ -67,6 +74,8 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import readline from 'node:readline';
 import { frontmatter } from './frontmatter.mjs';
+import { byDemand, capFor } from './platforms.mjs';
+import { readLedger as readTopics } from './topic-seo.mjs';
 
 const ROOT   = path.resolve(import.meta.dirname, '..');
 const BLOG   = path.join(ROOT, 'content/blog');
@@ -121,10 +130,12 @@ if (limit !== undefined && !/^\d+$/.test(limit)) {
   console.error('--limit needs a whole number after it, e.g. --limit 2');
   process.exit(1);
 }
-/* One per run by default. This is a personal feed, not a publication: two links
-   posted a minute apart read as a bot, and the second one earns less reach than
-   it would have earned tomorrow. Raise it deliberately or not at all. */
-const cap = limit === undefined ? 1 : Number(limit);
+/* One per run by default, and a few a week. This is a personal feed, not a
+   publication: two links posted a minute apart read as a bot, and the second
+   earns less reach than it would have earned tomorrow. Both numbers live in
+   _source/schedule.json so the site's calendar and the feed's budget are one
+   file; --limit overrides them deliberately or not at all. */
+const quotaOf = posted => capFor('linkedin', { posted, today: TODAY });
 
 const TOKEN = process.env.LINKEDIN_ACCESS_TOKEN;
 
@@ -239,7 +250,9 @@ function queue() {
     }
     out.push({ slug, meta, url, text: commentary(meta, url) });
   }
-  return out.sort((a, b) => String(a.meta.date).localeCompare(String(b.meta.date)));
+  /* Ranked, with the publish date only breaking ties. Ordered here rather than
+     at the call site so a dry run prints the same queue --publish sends. */
+  return byDemand(out, readTopics());
 }
 
 /* ───────── the API ───────── */
@@ -441,11 +454,17 @@ if (!pending.length) {
 /* Shown in both modes: --publish prints exactly what a dry run printed, so the
    confirmation is over text that has already been read once. A post to a
    personal feed cannot be quietly fixed afterwards. */
+const quota = quotaOf(Object.values(ledger.posts).map(p => p.postedAt));
+const cap   = limit === undefined ? quota.cap : Number(limit);
+if (limit === undefined) console.log(`cap ${cap} — ${quota.why}`);
+else console.log(`cap ${cap} (--limit, overriding: ${quota.why})`);
+
 const going = pending.slice(0, cap);
 const held  = pending.length - going.length;
 
 for (const p of going) {
   console.log(`\n/blog/${p.slug}/  →  ${p.url}`);
+  console.log(`  rank    ${p.rank} — ${p.why}`);
   console.log(`  card    ${p.meta.title}`);
   console.log(`  image   ${noThumb ? '(none)' : path.relative(ROOT, THUMBNAIL)}`);
   console.log(`  text    ${p.text.length}/${MAX_COMMENTARY} characters`);
@@ -463,7 +482,16 @@ for (const p of going) {
     console.log(`  ERROR   LinkedIn would turn ${links.join(', ')} into a link to a dead host. Rewrite without the dot.`);
 }
 
-if (held) console.log(`\n${held} more waiting; one per run by default, or --limit ${pending.length}.`);
+if (held) {
+  /* A feed slot is the scarcest thing here — three a week against a site that
+     publishes up to sixty a month — so this is a selection and saying "waiting"
+     would be a promise the budget cannot keep. Every run re-ranks the whole
+     list, so the best subject wins each slot no matter when it was written. */
+  console.log(`\n${held} below the cut, lowest rank last: ` +
+    pending.slice(cap).map(p => `${p.slug} (${p.rank})`).join(', '));
+  console.log('Not a queue. Each run picks the best subject still unannounced, so one of these goes');
+  console.log(`out when nothing better is waiting. --limit ${pending.length} would post them all now, which reads as a bot.`);
+}
 
 if (!publish) {
   console.log('\nDry run. Re-run with --publish to post. LINKEDIN_ACCESS_TOKEN must be set.');

@@ -27,9 +27,18 @@
  * Which day a new post may take is not this file's decision: the calendar is in
  * scripts/schedule-rule.mjs, and the build enforces the same rule from the same
  * module, so a slot handed out here can never be one the build refuses.
+ *
+ * What a free slot should be SPENT on is a second question, and it used to have
+ * no answer here at all. The ledger holds around a hundred validated subjects
+ * and the calendar hands out a few slots a week, so picking by hand is picking
+ * at random with extra steps. The queue below is ordered by demand — see
+ * scripts/topic-seo.mjs — and the off-site channels get the same treatment in
+ * scripts/platforms.mjs.
  */
 import fs from 'node:fs';
 import { calendar, posts, quotaFor, readLedger, violations, writeLedger } from './schedule-rule.mjs';
+import { platformRule } from './platforms.mjs';
+import { ranked, readLedger as readTopics } from './topic-seo.mjs';
 
 const SITE  = 'https://www.indiecore.net';
 const TODAY = new Date().toISOString().slice(0, 10);   // UTC, same clock as the build
@@ -151,6 +160,41 @@ for (const { date, quota } of calendar([TODAY, rule.from].sort().at(-1), 12, rul
   const bar = '●'.repeat(taken.length) + '○'.repeat(Math.max(0, quota - taken.length));
   console.log(`  ${date}  ${bar.padEnd(4)}  ${taken.length}/${quota}${taken.length ? '  ' + taken.join(', ') : ''}`);
 }
+
+/* ───────── what to spend the free slots on ───────── */
+
+const backlog = ranked(readTopics());
+if (backlog.length) {
+  const free = calendar([TODAY, rule.from].sort().at(-1), 30, rule)
+    .reduce((n, d) => n + Math.max(0, d.quota - takenOn(d.date).length), 0);
+  console.log(`\n  next up — ${backlog.length} validated subjects for ${free} free slots in the next 30 days\n`);
+  for (const b of backlog.slice(0, 8)) {
+    console.log(`  ${String(b.rank).padStart(3)}  ${b.entry.query}`);
+    console.log(`       ${b.why}`);
+    console.log(`       npm run keywords -- --topic ${b.entry.id} <post-slug>`);
+  }
+  console.log('\n  Rank is demand, then how winnable it is, then how often autocomplete offered it.');
+}
+
+/* ───────── the other two channels ───────── */
+
+/* Deliberately shown as budget against demand rather than as a limit on its
+   own. Off-site reach is scarcer than the site is — the site publishes up to
+   60 a month and a personal LinkedIn feed cannot absorb that — so these are
+   selections, not queues, and the gap is the point rather than a backlog to
+   worry about. Printing the gap is what stops it reading as one. */
+const withFlag = f => all.filter(p => !p.draft && p[f] === true).length;
+console.log('\n  off-site reach — a selection, not a queue\n');
+for (const name of ['devto', 'linkedin']) {
+  const r = platformRule(name);
+  const monthly = Math.round(r.perWeek * 52 / 12);
+  console.log(`  ${name.padEnd(9)} ${r.perRun}/run, ${r.perWeek}/week ≈ ${String(monthly).padStart(2)}/month` +
+    `  ·  ${withFlag(name)} opted in  ·  site publishes ${rule.perMonth[0]}-${rule.perMonth[1]}/month`);
+}
+console.log('\n  The flag is a veto. Among the posts that said yes, every run re-ranks all of');
+console.log('  them and the best subject takes the slot — so reach is spent on demand rather');
+console.log('  than on age, and a post that is never the best is never sent. That is the');
+console.log('  design. Dry runs: `npm run devto`, `npm run linkedin`.');
 
 const { errors, warnings, overrides } = violations(ledger, all);
 for (const o of overrides) console.log(`\n  override  ${o}`);

@@ -10,6 +10,11 @@ tags: [devlog, design]
 code: https://gist.github.com/IndieCoreDev/abc123
 codeLabel: The full component
 # Required — the build refuses a post that has not decided.
+#   true  -> the whole article is cross-posted to dev.to, canonicalised back
+#            here so the copy cannot outrank the original. Most posts.
+#   false -> stays on this site only. A real answer, not a placeholder.
+devto: true
+# Required — the build refuses a post that has not decided.
 #   true  -> announced on LinkedIn once the post is live. Write `linkedinText`
 #            below as well, or it goes out as this file's title and description.
 #   false -> not announced. Most posts. A real answer, not a placeholder.

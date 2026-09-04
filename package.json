@@ -20,6 +20,7 @@
     "seo:watch": "node scripts/seo-watch.mjs",
     "seo:bing": "node scripts/seo-ping.mjs --bing-only",
     "topics": "node scripts/topics.mjs",
+    "keywords": "node scripts/keywords.mjs",
     "assets:og": "node og.mjs",
     "assets:fonts": "node fonts.mjs",
     "gist": "node scripts/build-gist.mjs",

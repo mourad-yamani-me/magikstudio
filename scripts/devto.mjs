@@ -22,6 +22,12 @@
  * Opt in per post with `devto: true` in the frontmatter. Nothing is sent for a
  * post that does not carry it, and nothing is ever sent for a draft.
  *
+ * The flag is a veto, not a vote. Which of the opted-in posts takes today's
+ * slot is decided by how much traffic its subject is worth — the queue is
+ * ordered by scripts/platforms.mjs, not by date. Ordering by date spent the
+ * scarce reach on whatever happened to be written first, which with a hundred
+ * validated subjects waiting is the same as spending it at random.
+ *
  * Idempotent: articles are matched by their canonical_url, so a second run
  * updates the article it made the first time instead of posting a duplicate.
  * The API can unpublish an article (PUT /articles/{id}/unpublish) but cannot
@@ -33,6 +39,8 @@ import path from 'node:path';
 import readline from 'node:readline';
 import { GIST_RE, resolveGistEmbed } from './gist-embed.mjs';
 import { frontmatter } from './frontmatter.mjs';
+import { byDemand, capFor } from './platforms.mjs';
+import { readLedger } from './topic-seo.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const BLOG = path.join(ROOT, 'content/blog');
@@ -211,7 +219,10 @@ const ask = q => new Promise(resolve => {
 
 /* ───────── run ───────── */
 
-const queue = posts();
+/* Ranked here rather than inside posts(), so the dry run prints exactly the
+   order --publish would send in. A dry run that shows a different queue to the
+   real one is worse than no dry run. */
+const queue = byDemand(posts(), readLedger());
 if (!queue.length) {
   console.log(only
     ? `no post matched --only ${only} (is it published, and does it have \`devto: true\`?)`
@@ -220,9 +231,10 @@ if (!queue.length) {
 }
 
 if (!publish) {
-  console.log(`dry run — ${queue.length} post(s) would be sent to dev.to:\n`);
+  console.log(`dry run — ${queue.length} post(s) would be sent to dev.to, best subject first:\n`);
   for (const p of queue) {
     console.log(`  /blog/${p.slug}/`);
+    console.log(`    rank       ${p.rank} — ${p.why}`);
     console.log(`    title      ${p.article.title}`);
     console.log(`    canonical  ${p.article.canonical_url}`);
     console.log(`    tags       ${p.article.tags.join(', ') || '(none)'}`);
@@ -266,12 +278,22 @@ const NEW_ACCOUNT_DAYS = 3;
 const me = await api('GET', '/users/me');
 const ageDays = (Date.now() - new Date(me.joined_at).getTime()) / 86400000;
 const isNew = Number.isFinite(ageDays) && ageDays < NEW_ACCOUNT_DAYS;
-const cap = limit ?? (isNew ? 1 : 3);
+const existing = await mine();
+
+/* Two limits, guarding two different things, so the smaller wins and the reason
+   is printed rather than left to be inferred from a number that came out small.
+   Forem's limit is about the account being suspended; the weekly quota in
+   _source/schedule.json is about the feed. --limit overrides both, deliberately:
+   it is the escape hatch for a backlog someone is watching. */
+const safety = isNew ? 1 : 3;
+const posted = existing.filter(a => a.published_at).map(a => a.published_at.slice(0, 10));
+const quota = capFor('devto', { safety, posted, today: TODAY });
+const cap = limit ?? quota.cap;
 
 console.log(`account @${me.username}, joined ${me.joined_at}` +
   (isNew ? ` — under ${NEW_ACCOUNT_DAYS} days old, so dev.to allows one new article per 5 minutes` : ''));
+console.log(limit ? `cap ${cap} (--limit, overriding: ${quota.why})` : `cap ${cap} — ${quota.why}`);
 
-const existing = await mine();
 const byCanonical = new Map(existing.filter(a => a.canonical_url).map(a => [a.canonical_url, a]));
 
 /* An article whose stored markdown already matches what we would send needs no
@@ -333,6 +355,17 @@ try {
   console.log(`\nstopped early — ${err.message}. The next scheduled run continues.`);
 }
 
-const heldNote = held ? `, ${held} held for a later run (cap ${cap})` : '';
+const heldNote = held ? `, ${held} below the cut (cap ${cap})` : '';
 console.log(`\n${created} created, ${updated} updated, ${skipped} unchanged${heldNote}`);
-if (held) console.log('Raise the cap with --limit N, or let the daily schedule work through them.');
+if (held) {
+  /* Not "held for a later run", which is what this used to say and was not
+     true. The weekly quota is deliberately below the site's own publishing
+     rate — that is what makes this a selection rather than a queue. Ranking is
+     redone from scratch on every run, so one of these goes out when it is the
+     best thing waiting and not before; a post that is never the best is never
+     cross-posted, and that is the intended outcome rather than a backlog. */
+  const under = queue.filter(p => !byCanonical.has(p.article.canonical_url)).slice(cap);
+  console.log(`\nBelow the cut, lowest rank last: ${under.map(p => `${p.slug} (${p.rank})`).join(', ')}`);
+  console.log('These are not queued. Every run re-ranks all of them, so one goes out when it is the');
+  console.log('best subject waiting — the scarce reach is spent on demand, not on age. --limit N overrides.');
+}

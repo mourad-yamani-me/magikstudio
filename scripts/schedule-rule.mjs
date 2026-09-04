@@ -140,6 +140,11 @@ export function posts() {
         // Any non-empty value is an override; the value is the reason, and it
         // is there to be read in the diff and in the build log.
         override: field(src, 'schedule') || '',
+        // Not the calendar's business, but read here so the queue and the
+        // off-site budgets come off one pass over the directory rather than
+        // three parsers that can disagree about what `devto: true` looks like.
+        devto: field(src, 'devto') === 'true',
+        linkedin: field(src, 'linkedin') === 'true',
       };
     })
     .sort((a, b) => String(a.date).localeCompare(String(b.date)) || a.slug.localeCompare(b.slug));

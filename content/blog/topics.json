@@ -33,18 +33,30 @@
       "date": "2026-09-03",
       "demand": {
         "questions": 10,
-        "annualViews": 7460,
-        "totalViews": 48594,
+        "titles": [
+          "Gradle Issue in unity : Gradle build failed",
+          "UNITY ANDROID BUILD ERROR: &quot;CommandInvokationFailure: Gradle build failed. &quot;",
+          "Unity Gradle Build failed while trying to build project as an APK (2019)",
+          "What is this error in build adroid and build app bundle in unity 2017.4.17?",
+          "GradleBuildFailed Error In Unity Android Build",
+          "Can someone help me with the &#39;maximum 54.0, Java 10&#39; error when building my Unity Android game with Admob integration?",
+          "Unity Android Build Failure: LinkApplicationAndroidResourcesTask$TaskAction Error",
+          "Gradle build failed for unity project when building for android",
+          "Execution failed for task &#39;:launcher:processReleaseResources&#39; in Unity",
+          "Unity3D 8th Wall XR, can&#39;t compile demo project on android"
+        ],
+        "annualViews": 7447,
+        "totalViews": 48600,
         "stale": 8,
         "unanswered": 7,
         "rotted": 10,
         "top": {
           "title": "Unity Gradle Build failed while trying to build project as an APK (2019)",
-          "views": 29728,
+          "views": 29731,
           "answered": true
         },
-        "quota": 283,
-        "checked": "2026-08-30"
+        "quota": 295,
+        "checked": "2026-09-03"
       },
       "winnability": {
         "score": 100,
@@ -58,6 +70,41 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity gradle build failed see the console for details",
+      "keywords": [
+        "how to fix gradle build failed in unity",
+        "unity gradle build failed",
+        "unity error gradle build failed",
+        "unity android build failed gradle",
+        "unity commandinvokationfailure gradle build failed",
+        "unity 6 gradle build failed",
+        "unity android gradle build failed",
+        "unity firebase gradle build failed",
+        "unity 2022 gradle build failed"
+      ],
+      "questions": [
+        "gradle issue in unity : gradle build failed",
+        "gradle build failed for unity project when building for android",
+        "unity android build error: commandinvokationfailure: gradle build failed.",
+        "unity gradle build failed while trying to build project as an apk"
+      ],
+      "entities": [
+        "unity",
+        "gradle",
+        "build",
+        "failed",
+        "android",
+        "error",
+        "commandinvokationfailure",
+        "project"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 4
+      }
     }
   },
   {
@@ -90,18 +137,30 @@
       "date": "2026-09-03",
       "demand": {
         "questions": 10,
-        "annualViews": 5801,
-        "totalViews": 31492,
+        "titles": [
+          "UNITY ANDROID BUILD ERROR: &quot;CommandInvokationFailure: Gradle build failed. &quot;",
+          "Unity Gradle build failed error on Android building",
+          "Error on Unity Android Build - Deprecated Gradle features were used in this build, making it incompatible with Gradle 6.0",
+          "Unity Android Build Error Duplicate classes",
+          "Gradle Error: Colliding attributes in unity android build",
+          "Unity Android Build Failure: LinkApplicationAndroidResourcesTask$TaskAction Error",
+          "Gradle build error related to environmental variables in Unity",
+          "Unity Error building Android Project : Gradle Daemon",
+          "How To Solve Gradle Build Failed Error -Unity",
+          "Unity Android Build Errors"
+        ],
+        "annualViews": 5790,
+        "totalViews": 31505,
         "stale": 8,
         "unanswered": 7,
         "rotted": 10,
         "top": {
           "title": "Unity Android Build Error Duplicate classes",
-          "views": 12947,
+          "views": 12952,
           "answered": true
         },
-        "quota": 282,
-        "checked": "2026-08-30"
+        "quota": 295,
+        "checked": "2026-09-03"
       },
       "winnability": {
         "score": 100,
@@ -115,6 +174,41 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity android build error gradle",
+      "keywords": [
+        "unity android build error",
+        "unity error commandinvokationfailure gradle build failed",
+        "unity 6 android build error",
+        "unity android build failed",
+        "unity gradle build error"
+      ],
+      "questions": [
+        "unity android build errors",
+        "unity android build error duplicate classes",
+        "how to solve gradle build failed error -unity",
+        "unity gradle build failed error on android building",
+        "gradle error: colliding attributes in unity android build",
+        "unity android build failure: linkapplicationandroidresourcestask$taskaction error",
+        "gradle build error related to environmental variables in unity",
+        "unity error building android project : gradle daemon"
+      ],
+      "entities": [
+        "unity",
+        "build",
+        "error",
+        "android",
+        "gradle",
+        "failed",
+        "commandinvokationfailure",
+        "building"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 10
+      }
     }
   },
   {
@@ -149,18 +243,30 @@
       "date": "2026-09-03",
       "demand": {
         "questions": 10,
-        "annualViews": 8400,
-        "totalViews": 34480,
+        "titles": [
+          "Data safety section in Google Play User Data policy: Invalid Data safety form",
+          "Google Play Console Violation: Invalid Data Safety Form - How to Resolve Discrepancies?",
+          "Data safety form in google play console",
+          "Complete your Data safety form - red alert in Publishing overview of Google Play console",
+          "Issue found: Invalid Data safety form google play console error",
+          "Google Play Issue found: Invalid Encryption Declaration on your Data safety form",
+          "How to fill data safety?",
+          "Does firebase app data collection need to be declared in Data Safety Form of Play Console?",
+          "How to fill in Google Play Data Safety form taking into account Firebase Analytics and Firebase Crashlytics libraries?",
+          "Action Required: Your app is not compliant with Google Play Policies, Invalid Encryption Declaration on your Data safety form"
+        ],
+        "annualViews": 8377,
+        "totalViews": 34491,
         "stale": 8,
         "unanswered": 3,
         "rotted": 9,
         "top": {
           "title": "How to fill data safety?",
-          "views": 8970,
+          "views": 8977,
           "answered": true
         },
-        "quota": 282,
-        "checked": "2026-08-30"
+        "quota": 292,
+        "checked": "2026-09-03"
       },
       "winnability": {
         "score": 93,
@@ -174,6 +280,45 @@
         "what": "needs your console: the notice text, what you declared, the dates"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "google play data safety form",
+      "keywords": [
+        "invalid data safety form google play console",
+        "google play console data safety form",
+        "google play store data safety form",
+        "data safety form google play app",
+        "invalid data safety form google play",
+        "update data safety form google play",
+        "what is google play store data"
+      ],
+      "questions": [
+        "data safety form in google play console",
+        "google play console violation: invalid data safety form - how to resolve discrepancies?",
+        "issue found: invalid data safety form google play console error",
+        "google play issue found: invalid encryption declaration on your data safety form",
+        "complete your data safety form - red alert in publishing overview of google play console",
+        "does firebase app data collection need to be declared in data safety form of play console?",
+        "data safety section in google play user data policy: invalid data safety form"
+      ],
+      "entities": [
+        "play",
+        "data",
+        "google",
+        "safety",
+        "form",
+        "console",
+        "invalid",
+        "store",
+        "app",
+        "issue",
+        "found"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 9
+      }
     }
   },
   {
@@ -211,18 +356,30 @@
       "date": "2026-09-03",
       "demand": {
         "questions": 10,
-        "annualViews": 20142,
-        "totalViews": 140233,
+        "titles": [
+          "Can Google Play Privacy Policy URL be written in pastebin",
+          "Apple Store &amp; Google Play Store Privacy Policy URL",
+          "What does Google Play do with the Privacy Policy Link I provide it with?",
+          "Google Play considering privacy policy invalid due to 404 error",
+          "How I can add Privacy Policy to my App not only On Store Listing",
+          "Privacy Policy for app",
+          "Android app update rejected by Google Play while trying to publish it. What should I do next?",
+          "Action Required: Your app is not compliant with Google Play Policies[App Name]",
+          "Play Store: Publishing status: Removed - APK REQUIRES VALID PRIVACY POLICY​",
+          "New Google PlayStore Privacy Policy Requirements"
+        ],
+        "annualViews": 20110,
+        "totalViews": 140247,
         "stale": 10,
         "unanswered": 2,
         "rotted": 10,
         "top": {
           "title": "Android app update rejected by Google Play while trying to publish it. What should I do next?",
-          "views": 100235,
+          "views": 100241,
           "answered": true
         },
-        "quota": 280,
-        "checked": "2026-08-30"
+        "quota": 297,
+        "checked": "2026-09-03"
       },
       "winnability": {
         "score": 100,
@@ -236,6 +393,44 @@
         "what": "needs your console: the notice text, what you declared, the dates"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "google play privacy policy url",
+      "keywords": [
+        "google play console change privacy policy url",
+        "google play console update privacy policy url",
+        "google play console change privacy policy link",
+        "how to change privacy policy url in google play console",
+        "google play privacy policy link",
+        "google play console privacy policy url",
+        "google play change privacy policy url",
+        "google play store privacy policy url",
+        "google play update privacy policy url",
+        "google play console privacy policy link"
+      ],
+      "questions": [
+        "how to add privacy policy in google play console",
+        "what does google play do with the privacy policy link i provide it with?",
+        "can google play privacy policy url be written in pastebin",
+        "apple store google play store privacy policy url"
+      ],
+      "entities": [
+        "google",
+        "play",
+        "privacy",
+        "policy",
+        "url",
+        "console",
+        "change",
+        "link",
+        "update",
+        "store"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 1,
+        "stackoverflow": 4
+      }
     }
   },
   {
@@ -796,18 +991,30 @@
       "date": "2026-09-03",
       "demand": {
         "questions": 10,
-        "annualViews": 28833,
-        "totalViews": 153044,
+        "titles": [
+          "How to fix &#39;&#39;Gradle Build Failed&#39;&#39; on Unity?",
+          "UNITY 2022.1.23 Gradle build failed",
+          "Gradle build fails in Unity Android",
+          "Unity gradle build failed to transform aar",
+          "Unity Gradle Build failed while trying to build project as an APK (2019)",
+          "Unity Error: Minimum supported gradle version is 5.1.1",
+          "Unity gradle build - Error while merging dex archives",
+          "Unity gradle error: Failed to execute aapt",
+          "CommandInvokationFailure: Gradle build failed. On Unity",
+          "Unity &quot;&#39;:launcher:releaseRuntimeClasspath&#39;&quot; Failed to build gradle quesiton"
+        ],
+        "annualViews": 28800,
+        "totalViews": 153057,
         "stale": 9,
         "unanswered": 7,
         "rotted": 10,
         "top": {
           "title": "How to fix &#39;&#39;Gradle Build Failed&#39;&#39; on Unity?",
-          "views": 104620,
+          "views": 104632,
           "answered": true
         },
-        "quota": 298,
-        "checked": "2026-09-01"
+        "quota": 299,
+        "checked": "2026-09-03"
       },
       "winnability": {
         "score": 100,
@@ -821,6 +1028,45 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "how to fix gradle build failed in unity",
+      "keywords": [
+        "unity gradle build failed",
+        "unity error gradle build failed",
+        "unity error commandinvokationfailure gradle build failed",
+        "unity android build failed gradle",
+        "unity commandinvokationfailure gradle build failed",
+        "unity 6 gradle build failed",
+        "unity android gradle build failed",
+        "unity firebase gradle build failed",
+        "unity 2022 gradle build failed",
+        "unity android build failed"
+      ],
+      "questions": [
+        "gradle build fails in unity android",
+        "commandinvokationfailure: gradle build failed. on unity",
+        "unity gradle build failed to transform aar",
+        "unity gradle error: failed to execute aapt",
+        "unity :launcher:releaseruntimeclasspath failed to build gradle quesiton",
+        "unity gradle build - error while merging dex archives",
+        "unity gradle build failed while trying to build project as an apk"
+      ],
+      "entities": [
+        "unity",
+        "gradle",
+        "build",
+        "failed",
+        "error",
+        "android",
+        "commandinvokationfailure",
+        "while"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 1,
+        "stackoverflow": 9
+      }
     }
   },
   {
@@ -860,7 +1106,10 @@
       "clicks": 5,
       "basis": "provisional"
     },
-    "history": []
+    "history": [],
+    "seo": {
+      "exempt": "published 2026-08-30 to 2026-09-05, before the seo block existed — the page is indexed and rewriting it to satisfy a check invented afterwards risks the ranking it already has"
+    }
   },
   {
     "id": "invalid-data-safety-form-google-play-console",
@@ -887,11 +1136,17 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 4,
-        "annualViews": 4671,
-        "totalViews": 16443,
+        "titles": [
+          "Issue found: Invalid Data safety form google play console error",
+          "Google Play Console Violation: Invalid Data Safety Form - How to Resolve Discrepancies?",
+          "Data safety section in Google Play User Data policy: Invalid Data safety form",
+          "Action Required: Your app is not compliant with Google Play Policies. Issue found: Invalid Data safety form. What is the solution?"
+        ],
+        "annualViews": 4663,
+        "totalViews": 16445,
         "stale": 3,
         "unanswered": 2,
         "rotted": 4,
@@ -900,8 +1155,8 @@
           "views": 7786,
           "answered": true
         },
-        "quota": 297,
-        "checked": "2026-09-01"
+        "quota": 286,
+        "checked": "2026-09-03"
       },
       "winnability": {
         "score": 100,
@@ -915,6 +1170,35 @@
         "what": "needs your console: the notice text, what you declared, the dates"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "invalid data safety form google play console",
+      "keywords": [
+        "google play console data safety form",
+        "google play store data safety form",
+        "data safety form google play app",
+        "invalid data safety form google play",
+        "update data safety form google play"
+      ],
+      "questions": [
+        "issue found: invalid data safety form google play console error",
+        "google play console violation: invalid data safety form - how to resolve discrepancies?",
+        "data safety section in google play user data policy: invalid data safety form"
+      ],
+      "entities": [
+        "data",
+        "safety",
+        "form",
+        "google",
+        "play",
+        "invalid",
+        "console"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 4
+      }
     }
   },
   {
@@ -940,7 +1224,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 6797,
@@ -996,21 +1280,33 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
-        "annualViews": 11105,
-        "totalViews": 141302,
+        "titles": [
+          "how to add real admob ads in to my unity game?",
+          "How to add adsense in unity webplayer games?",
+          "apple mach-o linker (id) error after adding admob (Unity)",
+          "Admob multiple ad units when I have one activity",
+          "Admob not working in android build. Works perfectly in unity editor",
+          "Unity Admob and Google Play Game Services Build Error",
+          "Unity Gradle build failed when version changed after adding google plugins",
+          "Troubles with admob mediators",
+          "How to save AndroidManifest.xml file Unity?",
+          "2D cross-platform game engine for Android and iOS?"
+        ],
+        "annualViews": 11099,
+        "totalViews": 141305,
         "stale": 10,
         "unanswered": 4,
         "rotted": 10,
         "top": {
           "title": "2D cross-platform game engine for Android and iOS?",
-          "views": 128396,
+          "views": 128399,
           "answered": true
         },
         "quota": 296,
-        "checked": "2026-09-01"
+        "checked": "2026-09-03"
       },
       "winnability": {
         "score": 100,
@@ -1024,6 +1320,32 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "how to add admob ads in unity game",
+      "keywords": [
+        "admob vs unity ads revenue",
+        "admob vs unity ads reddit",
+        "google admob vs unity ads",
+        "admob unity ads",
+        "admob vs unity ads",
+        "admob or unity ads"
+      ],
+      "questions": [
+        "how to add real admob ads in to my unity game?"
+      ],
+      "entities": [
+        "admob",
+        "ads",
+        "unity",
+        "add",
+        "game"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 1,
+        "stackoverflow": 1
+      }
     }
   },
   {
@@ -1058,7 +1380,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -1114,7 +1436,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 1,
         "annualViews": 9,
@@ -1167,7 +1489,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 11738,
@@ -1195,6 +1517,25 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob unity sdk download",
+      "keywords": [
+        "admob unity sdk",
+        "admob unity",
+        "admob vs unity"
+      ],
+      "questions": [],
+      "entities": [
+        "admob",
+        "unity",
+        "sdk"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -1222,7 +1563,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -1271,7 +1612,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 1891,
@@ -1326,7 +1667,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 3362,
@@ -1378,7 +1719,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 3,
         "annualViews": 1492,
@@ -1429,7 +1770,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 6293,
@@ -1478,7 +1819,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 13326,
@@ -1527,7 +1868,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 3230,
@@ -1626,6 +1967,9 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "exempt": "published 2026-08-30 to 2026-09-05, before the seo block existed — the page is indexed and rewriting it to satisfy a check invented afterwards risks the ranking it already has"
     }
   },
   {
@@ -1660,7 +2004,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -1715,7 +2059,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -1764,11 +2108,23 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
-        "annualViews": 5997,
-        "totalViews": 22200,
+        "titles": [
+          "Google Play Console Violation: Invalid Data Safety Form - How to Resolve Discrepancies?",
+          "Data safety form in google play console",
+          "Issue found: Invalid Data safety form google play console error",
+          "Complete your Data safety form - red alert in Publishing overview of Google Play console",
+          "Does firebase app data collection need to be declared in Data Safety Form of Play Console?",
+          "Data safety section in Google Play User Data policy: Invalid Data safety form",
+          "What is this red warning I&#39;m seeing on Google Play Console?",
+          "Action Required: Issue found: Invalid Data safety form , what is the solution?",
+          "Data safety form in google play console does it require a publishing of the app?",
+          "Understanding Data Collection &amp; Security in Google Play Console"
+        ],
+        "annualViews": 5987,
+        "totalViews": 22203,
         "stale": 9,
         "unanswered": 5,
         "rotted": 10,
@@ -1777,8 +2133,8 @@
           "views": 7977,
           "answered": true
         },
-        "quota": 282,
-        "checked": "2026-09-01"
+        "quota": 289,
+        "checked": "2026-09-03"
       },
       "winnability": {
         "score": 100,
@@ -1792,6 +2148,39 @@
         "what": "needs your console: the notice text, what you declared, the dates"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "google play console data safety form",
+      "keywords": [
+        "google play store data safety form",
+        "data safety form google play app",
+        "invalid data safety form google play",
+        "update data safety form google play"
+      ],
+      "questions": [
+        "data safety form in google play console does it require a publishing of the app?",
+        "google play console violation: invalid data safety form - how to resolve discrepancies?",
+        "issue found: invalid data safety form google play console error",
+        "complete your data safety form - red alert in publishing overview of google play console",
+        "does firebase app data collection need to be declared in data safety form of play console?",
+        "data safety section in google play user data policy: invalid data safety form"
+      ],
+      "entities": [
+        "play",
+        "data",
+        "safety",
+        "form",
+        "google",
+        "console",
+        "invalid",
+        "app",
+        "publishing"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 7
+      }
     }
   },
   {
@@ -1821,7 +2210,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -1872,7 +2261,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 3756,
@@ -1921,7 +2310,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 2314,
@@ -1975,7 +2364,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 1,
         "annualViews": 198,
@@ -2024,7 +2413,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 6,
         "annualViews": 2008,
@@ -2073,7 +2462,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 1359,
@@ -2125,7 +2514,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 6,
         "annualViews": 762,
@@ -2177,7 +2566,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -2221,7 +2610,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 1,
         "annualViews": 110,
@@ -2270,7 +2659,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 4,
         "annualViews": 831,
@@ -2319,7 +2708,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 5111,
@@ -2342,9 +2731,9 @@
       },
       "indexable": true,
       "repro": {
+        "name": "your Play Console",
         "ok": false,
-        "name": "unknown",
-        "what": "no reproduction path — this would be written from research alone"
+        "what": "needs your console: the notice text, what you declared, the dates"
       },
       "verdict": "GO"
     }
@@ -2379,7 +2768,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 2114,
@@ -2441,7 +2830,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -2495,7 +2884,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 1,
         "annualViews": 152,
@@ -2551,7 +2940,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -2599,10 +2988,19 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 7,
-        "annualViews": 4798,
+        "titles": [
+          "Policy Declaration - Data Safety Section: Personal Info Data Type - Email Address - Google play",
+          "Play Store App publishing without a webserver",
+          "Do I need to disclose use of Google Play billing library in the data safety form?",
+          "SPLIT_BUNDLE 2: Policy Declaration - Data Safety Section: Personal Info Data Type - Email Address | any solution for this ? received on 25 Feb 2023",
+          "How should I handle Google Play requesting data safety forms for long-unpublished / EOL apps?",
+          "Unity. Package signatures do not match previously installed version; ignoring",
+          "Specific value from http response content c#"
+        ],
+        "annualViews": 4792,
         "totalViews": 27171,
         "stale": 7,
         "unanswered": 4,
@@ -2612,8 +3010,8 @@
           "views": 11294,
           "answered": true
         },
-        "quota": 265,
-        "checked": "2026-09-01"
+        "quota": 285,
+        "checked": "2026-09-03"
       },
       "winnability": {
         "score": 100,
@@ -2627,6 +3025,31 @@
         "what": "needs your console: the notice text, what you declared, the dates"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "google play store data safety form",
+      "keywords": [
+        "data safety form google play app",
+        "invalid data safety form google play",
+        "update data safety form google play"
+      ],
+      "questions": [
+        "do i need to disclose use of google play billing library in the data safety form?",
+        "how should i handle google play requesting data safety forms for long-unpublished / eol apps?",
+        "policy declaration - data safety section: personal info data type - email address - google play"
+      ],
+      "entities": [
+        "google",
+        "play",
+        "data",
+        "safety",
+        "form"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 3
+      }
     }
   },
   {
@@ -2693,6 +3116,9 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "exempt": "published 2026-08-30 to 2026-09-05, before the seo block existed — the page is indexed and rewriting it to satisfy a check invented afterwards risks the ranking it already has"
     }
   },
   {
@@ -2720,7 +3146,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 5189,
@@ -2801,6 +3227,9 @@
         "what": "no reproduction path — this would be written from research alone"
       },
       "verdict": "UNMEASURED"
+    },
+    "seo": {
+      "exempt": "published 2026-08-30 to 2026-09-05, before the seo block existed — the page is indexed and rewriting it to satisfy a check invented afterwards risks the ranking it already has"
     }
   },
   {
@@ -2824,7 +3253,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 1,
         "annualViews": 198,
@@ -2876,7 +3305,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -2921,7 +3350,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -2965,7 +3394,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 9,
         "annualViews": 4184,
@@ -3014,7 +3443,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 10,
         "annualViews": 3060,
@@ -3063,7 +3492,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 1,
         "annualViews": 548,
@@ -3112,7 +3541,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-01",
+      "date": "2026-09-03",
       "demand": {
         "questions": 4,
         "annualViews": 482,
@@ -3167,7 +3596,85 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "titles": [
+          "UNITY ANDROID BUILD ERROR: &quot;CommandInvokationFailure: Gradle build failed. &quot;",
+          "Unity - CommandInvokationFailure: Gradle build failed",
+          "Unity CommandInvokationFailure: Gradle build failed Error",
+          "CommandInvokationFailure: Gradle build failed",
+          "Build and run error on Unity: Gradle Build Failed",
+          "I just added Firebase to my Unity Project and am now getting a Gradle Build Failed Error",
+          "CommandInvokationFailure: Gradle build failed (Same error again and again)",
+          "Gradle build failed in Unityv 2021.2.14 (gradle 6.1.1)",
+          "Gradle and SDK build failed",
+          "Unity ARFoundation Gradle build fails - last-build.bin access denied"
+        ],
+        "annualViews": 7352,
+        "totalViews": 50082,
+        "stale": 9,
+        "unanswered": 5,
+        "rotted": 9,
+        "top": {
+          "title": "Unity - CommandInvokationFailure: Gradle build failed",
+          "views": 26333,
+          "answered": true
+        },
+        "quota": 293,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 93,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity error commandinvokationfailure gradle build failed",
+      "keywords": [
+        "unity android build failed gradle",
+        "unity commandinvokationfailure gradle build failed",
+        "unity 6 gradle build failed",
+        "unity android gradle build failed",
+        "unity firebase gradle build failed",
+        "unity 2022 gradle build failed",
+        "unity gradle build error"
+      ],
+      "questions": [
+        "commandinvokationfailure: gradle build failed",
+        "gradle and sdk build failed",
+        "unity - commandinvokationfailure: gradle build failed",
+        "build and run error on unity: gradle build failed",
+        "unity android build error: commandinvokationfailure: gradle build failed.",
+        "unity arfoundation gradle build fails - last-build.bin access denied",
+        "i just added firebase to my unity project and am now getting a gradle build failed error"
+      ],
+      "entities": [
+        "gradle",
+        "build",
+        "unity",
+        "failed",
+        "error",
+        "commandinvokationfailure",
+        "android",
+        "firebase"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 10
+      }
+    }
   },
   {
     "id": "claude-code-agents-md-github",
@@ -3199,7 +3706,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 299,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "google-admob-vs-unity-ads",
@@ -3224,7 +3756,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 1,
+        "annualViews": 187,
+        "totalViews": 1689,
+        "stale": 1,
+        "unanswered": 0,
+        "rotted": 1,
+        "top": {
+          "title": "Unity - Google Mobile Ads vs Unity-Admob",
+          "views": 1689,
+          "answered": true
+        },
+        "quota": 299,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "1 of 1 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "data-safety-form-google-play-app",
@@ -3246,7 +3808,82 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "titles": [
+          "Does firebase app data collection need to be declared in Data Safety Form of Play Console?",
+          "Google Play Console Violation: Invalid Data Safety Form - How to Resolve Discrepancies?",
+          "Complete your Data safety form - red alert in Publishing overview of Google Play console",
+          "Issue found: Invalid Data safety form google play console error",
+          "Data safety section in Google Play User Data policy: Invalid Data safety form",
+          "How to fill data safety?",
+          "Google Play Issue found: Invalid Encryption Declaration on your Data safety form",
+          "Action Required: Your app is not compliant with Google Play Policies, Invalid Encryption Declaration on your Data safety form",
+          "Data safety form in google play console",
+          "Action Required: Issue found: Invalid Data safety form , what is the solution?"
+        ],
+        "annualViews": 7546,
+        "totalViews": 30322,
+        "stale": 9,
+        "unanswered": 4,
+        "rotted": 10,
+        "top": {
+          "title": "How to fill data safety?",
+          "views": 8977,
+          "answered": true
+        },
+        "quota": 292,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    },
+    "seo": {
+      "primary": "data safety form google play app",
+      "keywords": [
+        "invalid data safety form google play",
+        "update data safety form google play"
+      ],
+      "questions": [
+        "data safety form in google play console",
+        "google play console violation: invalid data safety form - how to resolve discrepancies?",
+        "issue found: invalid data safety form google play console error",
+        "google play issue found: invalid encryption declaration on your data safety form",
+        "does firebase app data collection need to be declared in data safety form of play console?",
+        "complete your data safety form - red alert in publishing overview of google play console",
+        "data safety section in google play user data policy: invalid data safety form"
+      ],
+      "entities": [
+        "data",
+        "safety",
+        "form",
+        "play",
+        "google",
+        "invalid",
+        "console",
+        "app",
+        "issue",
+        "found"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 8
+      }
+    }
   },
   {
     "id": "logo-quiz-guess-brand-trivia-solution",
@@ -3270,7 +3907,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 296,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "unity-android-build-failed",
@@ -3289,7 +3951,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 2175,
+        "totalViews": 10411,
+        "stale": 10,
+        "unanswered": 8,
+        "rotted": 10,
+        "top": {
+          "title": "Unity Failed to Build apk Android",
+          "views": 2508,
+          "answered": true
+        },
+        "quota": 294,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "logo-quiz-guess-the-brand-answers-level-1",
@@ -3311,7 +4003,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 294,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "admob-unity-github",
@@ -3335,7 +4052,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 4805,
+        "totalViews": 31252,
+        "stale": 9,
+        "unanswered": 6,
+        "rotted": 9,
+        "top": {
+          "title": "AndroidManifest.xml is missing try reimporting the plugin",
+          "views": 12829,
+          "answered": true
+        },
+        "quota": 294,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 73,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "cloudflare-pages-vs-workers-nextjs",
@@ -3354,7 +4101,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 291,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this site",
+        "ok": true,
+        "what": "reproducible against this repo and its live deploy"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "github-actions-disable-job",
@@ -3373,7 +4145,48 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 16268,
+        "totalViews": 64119,
+        "stale": 8,
+        "unanswered": 1,
+        "rotted": 9,
+        "top": {
+          "title": "How to always disable/skip a job in Github actions? (Not step/action)",
+          "views": 29297,
+          "answered": true
+        },
+        "quota": 291,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 73,
+        "why": "8 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this site",
+        "ok": true,
+        "what": "reproducible against this repo and its live deploy"
+      },
+      "verdict": "GO"
+    },
+    "seo": {
+      "primary": "github actions disable job",
+      "keywords": [],
+      "questions": [],
+      "entities": [],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
+    }
   },
   {
     "id": "unity-il2cpp-android",
@@ -3394,7 +4207,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 4863,
+        "totalViews": 29855,
+        "stale": 10,
+        "unanswered": 6,
+        "rotted": 10,
+        "top": {
+          "title": "Unity Android Build Works in Mono but Fails in IL2CPP due to Undefined References, Missing Library",
+          "views": 9373,
+          "answered": true
+        },
+        "quota": 289,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "guess-the-logo-examples",
@@ -3413,7 +4256,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 877,
+        "totalViews": 5801,
+        "stale": 10,
+        "unanswered": 6,
+        "rotted": 10,
+        "top": {
+          "title": "How to test containers/divs in react-testing-library",
+          "views": 1980,
+          "answered": false
+        },
+        "quota": 289,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "unity-vs-unified",
@@ -3432,7 +4305,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 2,
+        "annualViews": 479,
+        "totalViews": 3668,
+        "stale": 2,
+        "unanswered": 1,
+        "rotted": 2,
+        "top": {
+          "title": "Unity injection with too many constructor parameters",
+          "views": 2773,
+          "answered": true
+        },
+        "quota": 289,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "2 of 2 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "what-is-a-github-deployment",
@@ -3451,7 +4354,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 14399,
+        "totalViews": 198688,
+        "stale": 9,
+        "unanswered": 2,
+        "rotted": 9,
+        "top": {
+          "title": "How to push different local Git branches to Heroku/master",
+          "views": 180698,
+          "answered": true
+        },
+        "quota": 286,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 73,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "unity-android-build-failed-gradle",
@@ -3477,7 +4410,86 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "titles": [
+          "UNITY ANDROID BUILD ERROR: &quot;CommandInvokationFailure: Gradle build failed. &quot;",
+          "Gradle build fails in Unity Android",
+          "Unity Gradle build failed error on Android building",
+          "Why is my Gradle Failing on my Unity Android Build?",
+          "How to solve this problem &quot;unity android gradle build failed&quot;?",
+          "Gradle build for Android in Unity fails, saying that it could not find intellij-core.jar",
+          "Gradle build failed, unity bundle build",
+          "Gradle Issue in unity : Gradle build failed",
+          "gradle build failed while building android app on Unity",
+          "Unity Android build failing"
+        ],
+        "annualViews": 6032,
+        "totalViews": 38168,
+        "stale": 8,
+        "unanswered": 5,
+        "rotted": 9,
+        "top": {
+          "title": "Gradle build for Android in Unity fails, saying that it could not find intellij-core.jar",
+          "views": 18817,
+          "answered": true
+        },
+        "quota": 290,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 93,
+        "why": "8 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity android build failed gradle",
+      "keywords": [
+        "unity commandinvokationfailure gradle build failed",
+        "unity 6 gradle build failed",
+        "unity android gradle build failed",
+        "unity firebase gradle build failed",
+        "unity 2022 gradle build failed",
+        "unity gradle build error"
+      ],
+      "questions": [
+        "how to fix gradle build failed in unity",
+        "gradle build fails in unity android",
+        "why is my gradle failing on my unity android build?",
+        "gradle build failed, unity bundle build",
+        "gradle issue in unity : gradle build failed",
+        "unity gradle build failed error on android building",
+        "how to solve this problem unity android gradle build failed ?",
+        "unity android build error: commandinvokationfailure: gradle build failed."
+      ],
+      "entities": [
+        "unity",
+        "build",
+        "gradle",
+        "failed",
+        "android",
+        "error",
+        "commandinvokationfailure",
+        "fails",
+        "building"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 1,
+        "stackoverflow": 9
+      }
+    }
   },
   {
     "id": "claude-code-agents-md-location",
@@ -3508,7 +4520,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 286,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "logo-quiz-guess-the-brand-answers-level-2",
@@ -3532,7 +4569,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 283,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "admob-unity-integration",
@@ -3560,7 +4622,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 3281,
+        "totalViews": 36686,
+        "stale": 10,
+        "unanswered": 5,
+        "rotted": 10,
+        "top": {
+          "title": "How to integrate admob interstitial in Unity?",
+          "views": 20876,
+          "answered": true
+        },
+        "quota": 283,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "invalid-data-safety-form-google-play",
@@ -3581,7 +4673,80 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 9,
+        "titles": [
+          "Data safety section in Google Play User Data policy: Invalid Data safety form",
+          "Issue found: Invalid Data safety form google play console error",
+          "Google Play Console Violation: Invalid Data Safety Form - How to Resolve Discrepancies?",
+          "Google Play Issue found: Invalid Encryption Declaration on your Data safety form",
+          "Action Required: Your app is not compliant with Google Play Policies, Invalid Encryption Declaration on your Data safety form",
+          "Policy Declaration - Data Safety Section: Personal Info Data Type - Email Address - Google play",
+          "Action Required: Your app is not compliant with Google Play Policies. Issue found: Invalid Data safety form. What is the solution?",
+          "Data Safety Form - How can as a Developer know which Data third party SDK collects and sends off?",
+          "Invalid Encryption Declaration - Play Store app rejection"
+        ],
+        "annualViews": 6078,
+        "totalViews": 21463,
+        "stale": 8,
+        "unanswered": 5,
+        "rotted": 9,
+        "top": {
+          "title": "Issue found: Invalid Data safety form google play console error",
+          "views": 7786,
+          "answered": true
+        },
+        "quota": 288,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "8 of 9 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    },
+    "seo": {
+      "primary": "invalid data safety form google play",
+      "keywords": [
+        "update data safety form google play"
+      ],
+      "questions": [
+        "issue found: invalid data safety form google play console error",
+        "google play console violation: invalid data safety form - how to resolve discrepancies?",
+        "google play issue found: invalid encryption declaration on your data safety form",
+        "data safety section in google play user data policy: invalid data safety form",
+        "policy declaration - data safety section: personal info data type - email address - google play"
+      ],
+      "entities": [
+        "data",
+        "safety",
+        "google",
+        "play",
+        "form",
+        "invalid",
+        "issue",
+        "found",
+        "console",
+        "declaration",
+        "section",
+        "policy"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 7
+      }
+    }
   },
   {
     "id": "unity-il2cpp-vs-mono",
@@ -3600,7 +4765,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 1,
+        "annualViews": 263,
+        "totalViews": 1735,
+        "stale": 1,
+        "unanswered": 0,
+        "rotted": 1,
+        "top": {
+          "title": "How to get profiling data on cache misses in Unity?",
+          "views": 1735,
+          "answered": true
+        },
+        "quota": 280,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "1 of 1 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "NO-GO"
+    }
   },
   {
     "id": "unity-commandinvokationfailure-gradle-build-failed",
@@ -3625,7 +4820,82 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "titles": [
+          "Unity - CommandInvokationFailure: Gradle build failed",
+          "UNITY ANDROID BUILD ERROR: &quot;CommandInvokationFailure: Gradle build failed. &quot;",
+          "CommandInvokationFailure: Gradle build failed. On Unity",
+          "CommandInvokationFailure: Gradle build failed. Unity",
+          "Unity CommandInvokationFailure: Gradle build failed Error",
+          "Unity build failed; CommandInvokationFailure: Gradle build failed",
+          "UNITY 2022.1.23 Gradle build failed",
+          "CommandInvokationFailure: Gradle build failed",
+          "Build and run error on Unity: Gradle Build Failed",
+          "I just added Firebase to my Unity Project and am now getting a Gradle Build Failed Error"
+        ],
+        "annualViews": 6390,
+        "totalViews": 44555,
+        "stale": 8,
+        "unanswered": 6,
+        "rotted": 8,
+        "top": {
+          "title": "Unity - CommandInvokationFailure: Gradle build failed",
+          "views": 26333,
+          "answered": true
+        },
+        "quota": 287,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 86,
+        "why": "8 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.8
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity commandinvokationfailure gradle build failed",
+      "keywords": [
+        "unity 6 gradle build failed",
+        "unity android gradle build failed",
+        "unity firebase gradle build failed",
+        "unity 2022 gradle build failed",
+        "unity gradle build error"
+      ],
+      "questions": [
+        "commandinvokationfailure: gradle build failed",
+        "how to fix gradle build failed in unity",
+        "unity commandinvokationfailure: gradle build failed error",
+        "build and run error on unity: gradle build failed",
+        "unity android build error: commandinvokationfailure: gradle build failed.",
+        "i just added firebase to my unity project and am now getting a gradle build failed error"
+      ],
+      "entities": [
+        "gradle",
+        "build",
+        "unity",
+        "failed",
+        "error",
+        "commandinvokationfailure",
+        "android",
+        "firebase"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 1,
+        "stackoverflow": 10
+      }
+    }
   },
   {
     "id": "claude-code-agents-md-symlink",
@@ -3654,7 +4924,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 278,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "admob-unity-ads",
@@ -3681,7 +4976,37 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 2955,
+        "totalViews": 15513,
+        "stale": 9,
+        "unanswered": 5,
+        "rotted": 10,
+        "top": {
+          "title": "Google AdMob Unity: Only test ads work (in Unity Editor) but no real ads",
+          "views": 5313,
+          "answered": true
+        },
+        "quota": 278,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
   },
   {
     "id": "logo-quiz-guess-the-brand-answers-level-3",
@@ -3704,7 +5029,32 @@
     "slug": null,
     "published": null,
     "target": null,
-    "history": []
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 278,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
   },
   {
     "id": "update-data-safety-form-google-play",
@@ -3718,6 +5068,1169 @@
       ]
     },
     "variants": [],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 8,
+        "annualViews": 2709,
+        "totalViews": 11799,
+        "stale": 8,
+        "unanswered": 4,
+        "rotted": 8,
+        "top": {
+          "title": "Does firebase app data collection need to be declared in Data Safety Form of Play Console?",
+          "views": 7977,
+          "answered": true
+        },
+        "quota": 275,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "8 of 8 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "claude-code-error-unknown-skill",
+    "query": "claude code error unknown skill",
+    "shape": "problem",
+    "score": 80,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code skill error"
+      ]
+    },
+    "variants": [
+      "claude code skill tutorial",
+      "claude code skill guide",
+      "claude code skill creator",
+      "claude code walkthrough skill",
+      "claude code skill vs command",
+      "claude code skill vs tool",
+      "claude code skill vs subagent",
+      "claude code skill vs mcp"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 275,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "best-app-store-optimization-tools",
+    "query": "best app store optimization tools",
+    "shape": "store",
+    "score": 73,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "best app store optimization",
+        "best aso tools"
+      ]
+    },
+    "variants": [
+      "how to do app store optimization",
+      "what is app store optimization (aso)",
+      "app store optimization tools free",
+      "best app store optimization services",
+      "app store optimization best practices",
+      "what is app store optimization",
+      "app store optimization (aso)",
+      "app store optimization jobs",
+      "app store optimization tools",
+      "app store optimization course"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 1908,
+        "totalViews": 14999,
+        "stale": 10,
+        "unanswered": 3,
+        "rotted": 10,
+        "top": {
+          "title": "Hardcoded strings/static contents in React/Redux app",
+          "views": 6034,
+          "answered": true
+        },
+        "quota": 275,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 100,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "how-to-make-claude-code-use-agents-md",
+    "query": "how to make claude code use agents md",
+    "shape": "howto",
+    "score": 66,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to claude code agents md"
+      ]
+    },
+    "variants": [
+      "how to make claude code read agents md",
+      "claude code agents md",
+      "claude code agents md vs claude md",
+      "claude code agents md or claude md",
+      "claude code skills vs agents.md",
+      "why claude code does not support agents md"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 272,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "admob-unity-tutorial",
+    "query": "admob unity tutorial",
+    "shape": "store",
+    "score": 57,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity tutorial"
+      ]
+    },
+    "variants": [
+      "admob unity guide",
+      "admob vs unity ads",
+      "admob or unity ads",
+      "how to integrate admob in unity",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 3414,
+        "totalViews": 36737,
+        "stale": 10,
+        "unanswered": 3,
+        "rotted": 10,
+        "top": {
+          "title": "How do I setup rewarded ads in unity",
+          "views": 10406,
+          "answered": true
+        },
+        "quota": 272,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "aso-tools-free",
+    "query": "aso tools free",
+    "shape": "store",
+    "score": 57,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "aso tools"
+      ]
+    },
+    "variants": [
+      "aso tools extension",
+      "aso tools list",
+      "aso tools astro",
+      "aso tools meaning",
+      "aso tools for android",
+      "aso tools ios"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 272,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "how-to-make-claude-code-read-agents-md",
+    "query": "how to make claude code read agents md",
+    "shape": "howto",
+    "score": 62,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to claude code agents md"
+      ]
+    },
+    "variants": [
+      "claude code agents md",
+      "claude code agents md vs claude md",
+      "claude code agents md or claude md",
+      "claude code skills vs agents.md",
+      "why claude code does not support agents md"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 269,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "admob-unity-guide",
+    "query": "admob unity guide",
+    "shape": "store",
+    "score": 53,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity tutorial"
+      ]
+    },
+    "variants": [
+      "admob vs unity ads",
+      "admob or unity ads",
+      "how to integrate admob in unity",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 1693,
+        "totalViews": 14964,
+        "stale": 10,
+        "unanswered": 6,
+        "rotted": 10,
+        "top": {
+          "title": "How do I setup rewarded ads in unity",
+          "views": 10406,
+          "answered": true
+        },
+        "quota": 269,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "logo-quiz-guess-brand",
+    "query": "logo quiz guess brand",
+    "shape": "other",
+    "score": 46,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand",
+        "how to Logo Quiz: Guess Brand",
+        "why Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess the brand level 1",
+      "logo quiz guess the brand level 2"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 2,
+        "annualViews": 161,
+        "totalViews": 818,
+        "stale": 2,
+        "unanswered": 1,
+        "rotted": 2,
+        "top": {
+          "title": "Android Studio Mediaplayer",
+          "views": 692,
+          "answered": false
+        },
+        "quota": 267,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "2 of 2 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "claude-code-agents-md",
+    "query": "claude code agents md",
+    "shape": "other",
+    "score": 54,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md",
+        "how to claude code agents md",
+        "why claude code agents md"
+      ]
+    },
+    "variants": [
+      "claude code agents md vs claude md",
+      "claude code agents md or claude md",
+      "claude code skills vs agents.md",
+      "why claude code does not support agents md"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 267,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "admob-vs-unity-ads",
+    "query": "admob vs unity ads",
+    "shape": "store",
+    "score": 49,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity vs"
+      ]
+    },
+    "variants": [
+      "admob or unity ads",
+      "how to integrate admob in unity",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 2,
+        "annualViews": 317,
+        "totalViews": 3355,
+        "stale": 2,
+        "unanswered": 1,
+        "rotted": 2,
+        "top": {
+          "title": "Unity - Google Mobile Ads vs Unity-Admob",
+          "views": 1689,
+          "answered": true
+        },
+        "quota": 265,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "2 of 2 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "logo-quiz-guess-the-brand-level-1",
+    "query": "logo quiz guess the brand level 1",
+    "shape": "other",
+    "score": 40,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [
+      "logo quiz guess the brand level 2"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 265,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "how-to-remove-app-from-admob-account",
+    "query": "how to remove app from admob account",
+    "shape": "store",
+    "score": 54,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to remove app from admob account",
+        "how to how to remove app from admob account",
+        "why how to remove app from admob account"
+      ]
+    },
+    "variants": [
+      "remove app from admob"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 5,
+        "annualViews": 1462,
+        "totalViews": 9100,
+        "stale": 5,
+        "unanswered": 3,
+        "rotted": 5,
+        "top": {
+          "title": "How to remove or stop ads from admob old app?",
+          "views": 4442,
+          "answered": false
+        },
+        "quota": 265,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "5 of 5 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "admob-limited-ad-serving",
+    "query": "admob limited ad serving",
+    "shape": "store",
+    "score": 50,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob limited ad serving",
+        "how to admob limited ad serving",
+        "why admob limited ad serving"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-03",
+    "status": "published",
+    "slug": "admob-limited-ad-serving-wrong-app",
+    "published": "2026-09-05",
+    "target": {
+      "indexDays": 14,
+      "impressionsDays": 60,
+      "impressions": 50,
+      "positionDays": 90,
+      "position": 20,
+      "clicksDays": 90,
+      "clicks": 5,
+      "basis": "provisional"
+    },
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "titles": [
+          "Admob limits ad serving again, because of an app suspended by google play store",
+          "How I can remove admob app ad serving limit?",
+          "How to remove ad serving limit on Admob?",
+          "Temporary ad serving limit placed on your AdMob account",
+          "How to deal with ad serving is limited and very low match rate on admob",
+          "Admob : Ad serving is limited - The number of ads you can show has been limited. For details, go to the Policy center",
+          "Admob ads fails to load with status details Limited ad serving",
+          "Admob limitation effects other bidding partners",
+          "Using admob again in the application that received the warning &quot;Ad serving is limited&quot;",
+          "temporary ad serving limit on Admob"
+        ],
+        "annualViews": 6515,
+        "totalViews": 31767,
+        "stale": 9,
+        "unanswered": 3,
+        "rotted": 9,
+        "top": {
+          "title": "Admob : Ad serving is limited - The number of ads you can show has been limited. For details, go to the Policy center",
+          "views": 23497,
+          "answered": true
+        },
+        "quota": 284,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 73,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    },
+    "seo": {
+      "declined": [
+        {
+          "q": "temporary ad serving limit placed on your admob account",
+          "why": "the policy-review limit, not the verification one. The post names it in the second paragraph and says plainly that nothing in it will lift one."
+        },
+        {
+          "q": "using admob again in the application that received the warning ad serving is limited",
+          "why": "a policy warning on an existing app. Same words, different problem — this post never had a warning."
+        },
+        {
+          "q": "admob limits ad serving again because of an app suspended by google play store",
+          "why": "a Play suspension. Nothing here was suspended; the app was simply never linked to a listing."
+        },
+        {
+          "q": "how to deal with ad serving is limited and very low match rate on admob",
+          "why": "match rate is a fill problem, not a verification one. Answering it would mean writing about ads this studio never ran."
+        }
+      ],
+      "primary": "admob limited ad serving",
+      "keywords": [],
+      "questions": [
+        "how to remove ad serving limit on admob?",
+        "temporary ad serving limit on admob",
+        "how i can remove admob app ad serving limit?",
+        "temporary ad serving limit placed on your admob account",
+        "how to deal with ad serving is limited and very low match rate on admob",
+        "admob ads fails to load with status details limited ad serving",
+        "using admob again in the application that received the warning ad serving is limited",
+        "admob limits ad serving again, because of an app suspended by google play store"
+      ],
+      "entities": [
+        "admob",
+        "serving",
+        "limited",
+        "limit",
+        "remove",
+        "temporary",
+        "app",
+        "again"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": 9
+      }
+    }
+  },
+  {
+    "id": "claude-code-agents-md-vs-claude-md",
+    "query": "claude code agents md vs claude md",
+    "shape": "other",
+    "score": 48,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md vs"
+      ]
+    },
+    "variants": [
+      "claude code agents md or claude md",
+      "claude code skills vs agents.md",
+      "why claude code does not support agents md"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 262,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "name": "this repo",
+        "ok": true,
+        "what": "reproducible here — the workflow is the subject"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "admob-or-unity-ads",
+    "query": "admob or unity ads",
+    "shape": "store",
+    "score": 45,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity vs"
+      ]
+    },
+    "variants": [
+      "how to integrate admob in unity",
+      "admob unity",
+      "admob vs unity"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 2828,
+        "totalViews": 14447,
+        "stale": 9,
+        "unanswered": 5,
+        "rotted": 10,
+        "top": {
+          "title": "Google AdMob Unity: Only test ads work (in Unity Editor) but no real ads",
+          "views": 5313,
+          "answered": true
+        },
+        "quota": 262,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "Unity Android build",
+        "ok": true,
+        "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "admob-ad-sizes",
+    "query": "admob ad sizes",
+    "shape": "store",
+    "score": 39,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob limited ad serving",
+        "why admob limited ad serving"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "annualViews": 3434,
+        "totalViews": 34333,
+        "stale": 10,
+        "unanswered": 5,
+        "rotted": 10,
+        "top": {
+          "title": "Admob Native Advanced Ads sizes",
+          "views": 16043,
+          "answered": true
+        },
+        "quota": 259,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "10 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "GO"
+    }
+  },
+  {
+    "id": "logo-quiz-guess-the-brand-level-2",
+    "query": "logo quiz guess the brand level 2",
+    "shape": "other",
+    "score": 36,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "Logo Quiz: Guess Brand"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 0,
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 259,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "how-to-delete-admob-account",
+    "query": "how to delete admob account",
+    "shape": "store",
+    "score": 33,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to remove app from admob account"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 4,
+        "annualViews": 1016,
+        "totalViews": 6395,
+        "stale": 4,
+        "unanswered": 3,
+        "rotted": 4,
+        "top": {
+          "title": "AdMob Rewarded Video not showing ads",
+          "views": 2890,
+          "answered": false
+        },
+        "quota": 257,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 80,
+        "why": "4 of 4 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 1
+      },
+      "indexable": true,
+      "repro": {
+        "name": "your Play Console",
+        "ok": false,
+        "what": "needs your console: the notice text, what you declared, the dates"
+      },
+      "verdict": "NO-GO"
+    }
+  },
+  {
+    "id": "how-remove-app-from-app-library",
+    "query": "how remove app from app library",
+    "shape": "other",
+    "score": 26,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "why how to remove app from admob account"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-03",
+      "demand": {
+        "questions": 10,
+        "titles": [
+          "Duplicate class in Kotlin Android",
+          "Google Play Developer Console - How to Remove App from &quot;Family Library&quot; Eligibility?",
+          "Can I safely delete contents of Xcode Derived data folder?",
+          "React native + IOS app:How to remove the core location library from IOS app?",
+          "How does one remove a deleted library from an apps script?",
+          "Flutter iOS app submission issue warning: Missing Push Notification Entitlement",
+          "How to remove specific permission when build Android app with gradle?",
+          "How to force composer to reinstall a library?",
+          "ios inapp purchase receipt",
+          "Does the addition of a library affect the app version?"
+        ],
+        "annualViews": 146477,
+        "totalViews": 1039707,
+        "stale": 9,
+        "unanswered": 1,
+        "rotted": 9,
+        "top": {
+          "title": "How to force composer to reinstall a library?",
+          "views": 327105,
+          "answered": true
+        },
+        "quota": 298,
+        "checked": "2026-09-03"
+      },
+      "winnability": {
+        "score": 73,
+        "why": "9 of 10 answers untouched for 2+ years — the answer has rotted",
+        "staleShare": 0.9
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "GO"
+    },
+    "seo": {
+      "primary": "how remove app from app library",
+      "keywords": [],
+      "questions": [
+        "how do i remove app from app library",
+        "why can't i remove apps from app library",
+        "why can ti delete app from app library",
+        "how do i remove app from app library on iphone",
+        "how do i remove apps from app library on ipad",
+        "how do i delete an app from app library on iphone",
+        "how to remove app from app library android",
+        "how to remove app from app library without deleting"
+      ],
+      "entities": [
+        "app",
+        "library",
+        "remove",
+        "apps",
+        "delete",
+        "iphone",
+        "ipad",
+        "android",
+        "ios"
+      ],
+      "harvested": "2026-09-03",
+      "sources": {
+        "suggest": 17,
+        "stackoverflow": 5
+      }
+    }
+  },
+  {
+    "id": "claude-code-agents-md-or-claude-md",
+    "query": "claude code agents md or claude md",
+    "shape": "other",
+    "score": 44,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md vs"
+      ]
+    },
+    "variants": [
+      "claude code skills vs agents.md",
+      "why claude code does not support agents md"
+    ],
+    "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "how-to-integrate-admob-in-unity",
+    "query": "how to integrate admob in unity",
+    "shape": "store",
+    "score": 41,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "how to admob unity"
+      ]
+    },
+    "variants": [
+      "admob unity",
+      "admob vs unity"
+    ],
     "proposed": "2026-09-03",
     "status": "proposed",
     "slug": null,

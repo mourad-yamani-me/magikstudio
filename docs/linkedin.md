@@ -55,9 +55,25 @@ today — the link is the whole post, so publishing before the page exists would
 feed. **Run it after the site's daily build has released the post**, the same ordering the gist
 and the dev.to article follow.
 
-One post per run by default. This is a personal feed, not a publication: two links a minute
-apart read as a bot, and the second earns less reach than it would have earned the next day.
-`--limit N` overrides it.
+One post per run and three a week by default, both in `_source/schedule.json` under
+`platforms.linkedin`. This is a personal feed, not a publication: two links a minute apart read
+as a bot, and the second earns less reach than it would have earned the next day. `--limit N`
+overrides it.
+
+**Which post takes the slot is decided by demand, not by date.** `linkedin: true` is a veto,
+not a vote — `false` still means never, which is what keeps the required decision on every post
+meaningful — but among the posts that said yes, the one whose subject is worth the most traffic
+goes first. That is the same rank `npm run schedule` prints; the arithmetic is in
+`scripts/topic-seo.mjs` and the ordering in `scripts/platforms.mjs`. A dry run shows the rank
+beside each post and names what fell below the cut.
+
+**Three a week is far below what the site publishes, and deliberately.** The site puts out
+30–60 posts a month and a personal feed cannot absorb that — fifteen links a week is the
+pattern that suppresses reach and reads as automated. So LinkedIn *selects*: each run re-ranks
+every unannounced post and takes the best one, which means a post goes out when nothing better
+is waiting and a post that is never the best is never announced. That is the intended
+behaviour, not a queue falling behind, and the run says "below the cut" rather than "waiting"
+for exactly that reason.
 
 ## The daily workflow
 

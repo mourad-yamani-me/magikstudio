@@ -30,7 +30,7 @@ To publish it on a later day, give it that `date` and merge it anyway — see
 | `draft` | no | `true` keeps it out of the site, sitemap and RSS entirely. |
 | `keySections` | no | Headings to promote in the post's contents list — the two or three a reader is actually here for, e.g. `[How do I install it, The motivation]`. Matched against the heading text; a name matching none, or more than one, **fails the build** and prints the headings it found. |
 | `schedule` | no | A reason, e.g. `schedule: Play policy change`. Exempts the post from the day's quota and from the day off. Printed by every build — see [the publishing calendar](#the-publishing-calendar). |
-| `devto` | no | `true` cross-posts the whole article to dev.to, canonicalised back here. See [`docs/cross-posting.md`](../../docs/cross-posting.md). |
+| `devto` | **yes** | `true` cross-posts the whole article to dev.to, canonicalised back here. `false` keeps it on this site. The build refuses a post that has not decided, for the reason below. See [`docs/cross-posting.md`](../../docs/cross-posting.md). |
 | `linkedin` | **yes** | `true` announces the post on LinkedIn once it is live — a blurb and a link card, not a copy. `false` is a real answer and most posts carry it. The build refuses a post that has not decided, because forgetting is invisible: nothing breaks, and the post simply never leaves the site. See [`docs/linkedin.md`](../../docs/linkedin.md). |
 | `linkedinText` | no | The blurb, a block list with one paragraph per item. Without it LinkedIn gets the title and `description`, which reads like a machine wrote it. |
 
@@ -208,7 +208,19 @@ npm run topics                                  # rank subjects, merge into topi
 npm run topics -- --validate                    # gate them BEFORE writing anything
 npm run topics -- --claim=<id>=<post-slug>      # this one became a post: stamp its target
 npm run topics -- --score                       # did the published ones work?
+npm run schedule                                # the queue, best subject first
 ```
+
+**Do not pick from the list by eye.** `npm run schedule` ends with the validated subjects in
+rank order and the number of free slots in the next thirty days beside them. There are around
+a hundred of the first and a few dozen of the second, so choosing by which line caught your
+attention is choosing at random. Rank is one 0–100 number per subject:
+
+| Term | Worth | Why that weight |
+| --- | --- | --- |
+| Demand | up to 60 | Logged and anchored at a hundred readers a year: 1k → 20, 10k → 40, 100k → 60. The gap between 500 and 5,000 decides what to write; the gap between 40,000 and 50,000 does not. |
+| Winnable | up to 30 | Demand you cannot take is worth nothing — a maintained answer already sits where the post would go. |
+| Discovery | up to 10 | How many autocomplete prefixes offered it. Proves a phrasing is real, says nothing about volume, so it only breaks ties. |
 
 Write nothing that has not passed `--validate`. It answers four questions per subject, and a
 subject that fails any of the first three is a day of work spent on a page nobody will reach:
@@ -274,6 +286,93 @@ real versions and the real false leads.
 was predicted, not a snapshot of what is trending: a subject that missed its condition is
 worth more than one that was never written down, because `--score` names which of the four
 failures it was and what to do about it.
+
+## The targets a post is written against
+
+`--validate` leaves an `seo` block on every subject that cleared the gate. It is the answer to
+"what does this post actually have to say", and it is harvested rather than invented:
+
+| Field | Where it comes from | Checked how |
+| --- | --- | --- |
+| `primary` | the subject itself | must appear **verbatim**, in the title or the body |
+| `keywords` | the autocomplete variants | **60%** must appear verbatim |
+| `questions` | autocomplete asked in question form, plus the real Stack Overflow question titles `--validate` already downloads | **50%** must be answered under a heading |
+| `declined` | written by you | questions this subject does not answer, each with a reason. Removed from the target list, printed on every run |
+| `entities` | words two or more of the above agree on | reported, never enforced |
+
+Four more ask *where* the subject appears rather than whether it does. All three shares compare
+the subject's **core words** — the ones its own variants agree on — not the whole phrase, because
+a title has 48 characters and some primaries are longer than that:
+
+| Placement | Threshold | Why |
+| --- | --- | --- |
+| Title | 60% of core words | the title decides the click; a reader scanning results must recognise their problem |
+| Slug | 60% of core words | **the only one with a deadline** — free to change until the post ships, a permanent 301 after |
+| First 100 words | **reported, not enforced** | see below — this repo's own posts cannot justify a threshold |
+| Density | under 2.5% | a ceiling, not a target. The highest here is 0.69%, so it fires only on a post written for a crawler |
+
+The four posts that did the work score 75–100% on the title and 83–100% on the slug; the one
+that did not scores 29% on both, which is where 60% comes from.
+
+**The opening share is printed and never enforced, and that took two attempts to get right.**
+Requiring the exact phrase there was tried first and rejected — one post in this repo carries
+it and the four that do not include the two best. A core-word share at 50% replaced it, on a
+measurement that turned out to be wrong: it matched words as substrings, so the core word `ad`
+scored a hit on "already" and "advanced". With word matching the real spread is 33–100% for the
+good posts against 29% for the weak one. A four-point gap is not a threshold, it is a coin
+toss, and AGENTS.md is explicit that a flaky check is worse than no check. So the number is
+reported for a human to glance at and nothing fails on it.
+
+```bash
+npm run keywords                                      # every post that has a topic behind it
+npm run keywords -- --only <slug>                     # one post
+npm run keywords -- --topic <topic-id> <post-slug>    # a draft, before it claims the topic
+npm run keywords -- --list                            # what each post is supposed to cover
+```
+
+**This is a drafting loop and it is deliberately not in CI.** Write, run it, read the four
+phrasings you did not use, work them into prose that was going to exist anyway, run it again.
+It exits non-zero so an agent can iterate against it without a human reading the output.
+`npm run check` does not call it and no workflow does — a check that is meant to fail on an
+unfinished file cannot also be a merge gate.
+
+**A question counts as answered when one heading carries 70% of its words**, not when the
+heading is the question verbatim. "How do I fix gradle build failed in unity" is answered by
+`## Fixing the Gradle build`. Demanding the interrogative back would turn every post into an
+FAQ page, which is a shape Google has spent two years demoting.
+
+*Most* of its words, not all of them. Requiring every word was satisfiable for a four-word
+question and impossible for a ten-word one, so questions were capped at eight words to
+compensate — which threw away 46% of the on-topic material, including the biggest question on
+several subjects: "unity gradle build failed while trying to build project as an apk", 29,731
+views. The cap is now 12 words and the matcher scales with the question.
+
+**Two problems can share every word.** "Limited ad serving" is a verification problem and also
+a policy-review problem, and no topicality threshold can tell them apart — they use identical
+vocabulary. When a harvested question is a different problem, decline it:
+
+```json
+"declined": [
+  { "q": "temporary ad serving limit placed on your admob account",
+    "why": "the policy-review limit, not the verification one. The post says so and cannot lift it." }
+]
+```
+
+A declined question leaves the target list entirely, so the shares are of what the post
+actually undertook. Every decline is printed on every run, pass or fail, and the reason is
+required — otherwise the field is just a way to make anything pass. Declining is for a
+different problem, never for a question you would rather not answer.
+
+**Why shares and not "all of them".** Requiring every variant verbatim was the rule here for
+months, and measuring the published posts against it afterwards gave 7/10, 6/7 and 2/10 — it
+would have failed the two best posts in the repo and passed nothing. Ten autocomplete variants
+are ten spellings of one sentence, and a post containing all ten reads like it was written for
+a crawler. 60% and 50% are the numbers that separate the posts that did the work from the one
+that did not, measured off this repo.
+
+The five posts published before the block existed carry `seo.exempt` and are reported as
+exempt rather than skipped. They are already indexed, and rewriting an indexed page to satisfy
+a check invented afterwards risks the ranking it has.
 
 ## Four shapes that work
 

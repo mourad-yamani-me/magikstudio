@@ -1,5 +1,5 @@
 {
-  "note": "The publishing calendar. `rule` is read by scripts/schedule-rule.mjs and enforced by the build; `claims` is what has taken which day. Claim a slot with `npm run schedule -- --claim <slug>` rather than editing this by hand. Explained in content/blog/README.md#the-publishing-calendar.",
+  "note": "The publishing calendar. `rule` is read by scripts/schedule-rule.mjs and enforced by the build; `platforms` is read by scripts/platforms.mjs and caps the two off-site channels; `claims` is what has taken which day. Claim a slot with `npm run schedule -- --claim <slug>` rather than editing this by hand. Explained in content/blog/README.md#the-publishing-calendar.",
   "rule": {
     "from": "2026-09-02",
     "dayOff": 0,
@@ -12,12 +12,26 @@
       60
     ]
   },
+  "platforms": {
+    "note": "Off-site reach, which is scarcer than the site is. `perRun` is the most one invocation may send; `perWeek` is the feed budget. The highest-ranked post that opted in takes the slot — see scripts/platforms.mjs.",
+    "devto": {
+      "perRun": 3,
+      "perWeek": 5
+    },
+    "linkedin": {
+      "perRun": 1,
+      "perWeek": 3
+    }
+  },
   "claims": {
     "2026-09-03": [
       "unity-gradle-build-failed-is-not-the-error"
     ],
     "2026-09-04": [
       "posting-to-linkedin-from-ci"
+    ],
+    "2026-09-05": [
+      "admob-limited-ad-serving-wrong-app"
     ],
     "2026-09-08": [
       "ask-first-claude-code-plugin"

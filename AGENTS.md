@@ -30,7 +30,8 @@ npm run gist       # regenerate gist/ from the live files
 npm run seo        # submit new URLs, then report index status and search performance
 npm run seo:watch  # what Search Console says changed, and what to do about it
 npm run schedule   # the publishing queue and calendar; `-- --claim <slug>` takes a date
-npm run topics     # what to write next, and the success condition for each subject
+npm run topics     # what to write next, ranked by demand, with each subject's targets
+npm run keywords   # does the draft contain what its subject was picked for? (local only)
 npm run devto      # dry run: which posts would be cross-posted to dev.to
 npm run linkedin   # dry run: the LinkedIn post a `linkedin: true` article would get
 node scripts/linkedin.mjs --check-token   # days left on the LinkedIn token
@@ -70,6 +71,11 @@ npm run hub        # regenerate hub/ — the public snippet index
   Everything the SEO findings ask you to *change* still goes through a branch and a PR; the
   LinkedIn ledger records what has already happened rather than deciding anything.
 
+- **`npm run keywords` is a drafting loop, not a gate — keep it out of CI.** It fails on an
+  unfinished post on purpose, which is what makes it useful while writing and useless as a
+  merge check. `npm run check` does not call it and no workflow does. Wiring it in would
+  either turn every draft PR red or force the thresholds down until nobody reads the output.
+
 ## Staging changes
 
 **Stage explicit paths. Never `git add -A` or `git add .`** — unrelated work is often sitting
@@ -88,6 +94,8 @@ git add -A                                            # no
 | Publishing a post on a later date | [`content/blog/README.md`](content/blog/README.md#publishing-on-a-date) — date it ahead, merge it, the daily build puts it out |
 | Picking the date for a new post | [`content/blog/README.md`](content/blog/README.md#the-publishing-calendar) — never by hand: `npm run schedule -- --claim <slug>` |
 | Choosing what to write | [`content/blog/README.md`](content/blog/README.md#choosing-what-to-write) — `npm run topics`, and the success condition every subject carries |
+| Checking a draft against its keywords | [`content/blog/README.md`](content/blog/README.md#the-targets-a-post-is-written-against) — `npm run keywords`, and why it is not in CI |
+| Deciding which post goes to which platform | [`docs/cross-posting.md`](docs/cross-posting.md#who-gets-the-slot) — the flag is a veto; demand picks |
 | Branching, local commands | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Stack, deploy setup, secrets | [`README.md`](README.md) |
 | Changing game copy or routes | the `GAMES` array in `build.mjs`; store metadata in `_source/play-data.json` |

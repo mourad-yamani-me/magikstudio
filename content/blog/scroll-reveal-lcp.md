@@ -3,6 +3,7 @@ title: Scroll reveals are killing your LCP score
 date: 2026-08-26
 description: A fade-in-on-scroll effect cost this site 2.1 seconds of Largest Contentful Paint. The fix took one line, and the Lighthouse score went from 69 to 99.
 tags: [performance, web, lighthouse]
+devto: true
 linkedin: false
 draft: true
 ---

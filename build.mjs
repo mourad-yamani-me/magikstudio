@@ -637,8 +637,9 @@ const ALL_POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
     // a post that would silently never publish. Fail on it here instead.
     if (!/^\d{4}-\d{2}-\d{2}$/.test(String(meta.date)))
       throw new Error(`content/blog/${f}: "date" must be YYYY-MM-DD, got "${meta.date}"`);
-    /* `linkedin` is required rather than optional, and it is the only field here
-       that exists to force a decision rather than to describe the post.
+    /* `devto` and `linkedin` are required rather than optional. They are the
+       only fields here that exist to force a decision rather than to describe
+       the post.
 
        Announcing a post is opt-in — scripts/linkedin.mjs posts nothing without
        `linkedin: true` — and the failure mode of a pure opt-in is forgetting.
@@ -650,7 +651,19 @@ const ALL_POSTS = (fs.existsSync(BLOG_DIR) ? fs.readdirSync(BLOG_DIR) : [])
        for a reason — there is a window where its URL genuinely does not exist
        yet. There is no equivalent window here. The answer is knowable while you
        are writing, so the build asks for it then. `false` is a real answer and
-       most posts should carry it. */
+       most posts should carry it.
+
+       `devto` was added to this gate afterwards, and the evidence for it is the
+       same shape. Twenty posts shipped in one batch, all carrying `devto: true`;
+       the next three, written one at a time from a template that never mentions
+       the field, all dropped it and none of them was ever cross-posted. That is
+       the pure-opt-in failure exactly as described above, observed rather than
+       predicted. */
+    if (meta.devto !== true && meta.devto !== false)
+      throw new Error(
+        `content/blog/${f}: missing "devto" in frontmatter — say \`devto: true\` to ` +
+        `cross-post it to dev.to (canonicalised back here), or \`devto: false\` to keep it ` +
+        `on this site only. See docs/cross-posting.md.`);
     if (meta.linkedin !== true && meta.linkedin !== false)
       throw new Error(
         `content/blog/${f}: missing "linkedin" in frontmatter — say \`linkedin: true\` to ` +
