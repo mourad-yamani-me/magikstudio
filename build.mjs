@@ -849,6 +849,143 @@ for (const p of SCHEDULED) console.log(
 const humanDate = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB',
   { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
 
+/* ───────── ASO reports ───────── */
+/* A second content type, deliberately not a blog post. An issue is mostly a
+   table, it is dated by the month it measures rather than by the day somebody
+   felt like writing, and its numbers come out of a database this build cannot
+   reach. So it gets its own directory, its own route and its own rules instead
+   of three special cases inside the post pipeline.
+
+   The numbers live in _source/aso/<slug>.json, written by `npm run aso` on a
+   machine that can see the ideaminer analytics database and committed with the
+   issue. CI has no route to that database and never will — a build that
+   queried it would pass on a laptop and fail on the runner. See the header of
+   scripts/aso.mjs.
+
+   Issues stay out of the publishing calendar on purpose. That calendar paces
+   writing, and it draws a quota so a person does not have to decide; a monthly
+   data report has its own cadence and would only ever be competing with posts
+   for slots it does not need. */
+const ASO_DIR  = path.join(ROOT, 'content/aso');
+const ASO_SNAP = path.join(ROOT, '_source/aso');
+
+const MONTH_NAME = ym => {
+  const [y, m] = ym.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString('en-GB',
+    { month: 'long', year: 'numeric', timeZone: 'UTC' });
+};
+
+/* Installs come off Play as an order of magnitude, not a count — 1000000 means
+   "somewhere past a million". Printing it with separators would claim a
+   precision the source does not have. */
+const installs = n => {
+  if (n === null || n === undefined) return '—';
+  if (n >= 1e9) return `${n / 1e9}B+`;
+  if (n >= 1e6) return `${n / 1e6}M+`;
+  if (n >= 1e3) return `${n / 1e3}k+`;
+  return `${n}+`;
+};
+
+/* How long the current number one has been on Play. Years past two, because
+   "3,844 days" is a number a reader has to convert before it means anything,
+   and the point of the column is how entrenched the holder is. */
+const heldFor = d => {
+  if (d === null || d === undefined) return '—';
+  return d >= 730 ? `${(d / 365).toFixed(1)} yrs` : `${d} d`;
+};
+
+/* Demand arrives as a 0–1 confidence-blended score. It is shown out of 100
+   because that is how a reader reads a score, and it is never called volume:
+   it ranks terms against each other, it does not estimate searches. */
+const demandScore = d => Math.round(d * 100);
+
+const ALL_ASO = (fs.existsSync(ASO_DIR) ? fs.readdirSync(ASO_DIR) : [])
+  .filter(f => f.endsWith('.md') && !f.startsWith('_') && f.toLowerCase() !== 'readme.md')
+  .map(f => {
+    const { meta, body } = frontmatter(fs.readFileSync(path.join(ASO_DIR, f), 'utf8'));
+    const slug = f.replace(/\.md$/, '');
+    if (!meta.title) throw new Error(`content/aso/${f}: missing "title" in frontmatter`);
+    if (!meta.date)  throw new Error(`content/aso/${f}: missing "date" in frontmatter`);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(meta.date)))
+      throw new Error(`content/aso/${f}: "date" must be YYYY-MM-DD, got "${meta.date}"`);
+
+    /* The snapshot is the page. Without it there is no report — so this is an
+       error naming the command that produces the file, not a warning. */
+    const dataSlug = meta.data || slug;
+    const snap = path.join(ASO_SNAP, `${dataSlug}.json`);
+    if (!fs.existsSync(snap)) throw new Error(
+      `content/aso/${f}: no data snapshot at _source/aso/${dataSlug}.json — ` +
+      `run \`npm run aso -- --harvest <category>\` on a machine that can reach the ` +
+      `analytics database, and commit the JSON with the issue.`);
+    const data = JSON.parse(fs.readFileSync(snap, 'utf8'));
+
+    return {
+      slug,
+      title: meta.title,
+      date: meta.date,
+      description: meta.description || '',
+      draft: meta.draft === true,
+      /* Orders issues sharing a date, ascending — the same field a post series
+         uses. It matters here because a month's run can go out several on one
+         day, and without it the tie falls to slug, which would open the run on
+         "arcade" for no reason other than the alphabet. */
+      order: Number.isFinite(Number(meta.order)) && String(meta.order).trim() !== ''
+        ? Number(meta.order)
+        : null,
+      data,
+      ...outline(marked.parse(body, { mangle: false, headerIds: false })),
+    };
+  })
+  .filter(i => !i.draft)
+  /* Newest first, then `order` ascending, then slug — so the result never
+     depends on the order the filesystem happened to list the directory in,
+     which differs between macOS and the CI runner. MAX_SAFE_INTEGER rather than
+     Infinity: Infinity - Infinity is NaN, which a comparator reads as "equal"
+     and silently drops back to filesystem order. */
+  .sort((a, b) => {
+    const rank = i => (i.order === null ? Number.MAX_SAFE_INTEGER : i.order);
+    return b.date.localeCompare(a.date) || rank(a) - rank(b) || a.slug.localeCompare(b.slug);
+  });
+
+/* Held exactly as a post is, and for the same reason: an issue dated ahead is
+   finished and merged, and the daily build puts it out without anyone flipping
+   a flag on the day. ASO_LIVE is what the sitemap may claim exists; ASO_VISIBLE
+   additionally renders the held ones on a preview build so a PR can be read. */
+/* The Rankgrip page — the canonical definition of the score every report uses.
+   It is `_rankgrip.md` so the issue loader above skips it — a
+   leading underscore already means "not a post" everywhere else in this repo —
+   and it is read here by name instead.
+
+   It exists because the alternative was printing the same six hundred words of
+   methodology at the bottom of every issue. At one issue a month across six
+   categories that is seventy-two copies a year of identical text, which is the
+   pattern Google's scaled-content-abuse policy describes and, separately, a
+   waste of the reader's scroll. One canonical page can also answer the question
+   the reports get asked most — why there is no search volume column — properly
+   rather than in a bullet.
+
+   It is also the thing that makes the score citable. A metric with one permanent
+   URL, a published formula and a name nobody else uses can be quoted and linked;
+   an unnamed methodology repeated across seventy pages cannot. */
+const ASO_RANKGRIP = (() => {
+  const f = path.join(ASO_DIR, '_rankgrip.md');
+  if (!fs.existsSync(f)) return null;
+  const { meta, body } = frontmatter(fs.readFileSync(f, 'utf8'));
+  if (!meta.title) throw new Error('content/aso/_rankgrip.md: missing "title" in frontmatter');
+  return {
+    title: meta.title,
+    description: meta.description || '',
+    date: meta.date || TODAY,
+    ...outline(marked.parse(body, { mangle: false, headerIds: false })),
+  };
+})();
+
+const ASO_LIVE      = ALL_ASO.filter(i => i.date <= TODAY);
+const ASO_SCHEDULED = ALL_ASO.filter(i => i.date > TODAY);
+const ASO_VISIBLE   = PREVIEW ? ALL_ASO : ASO_LIVE;
+for (const i of ASO_SCHEDULED) console.log(
+  `  held  /aso/${i.slug}/ — publishes ${i.date}${PREVIEW ? ' (rendered for preview)' : ''}`);
+
 /* ───────── shared chrome ───────── */
 const LOGO = (s=30) => `<svg width="${s}" height="${s}" viewBox="0 0 48 48" fill="none" aria-hidden="true">
 <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFC53D"/><stop offset="1" stop-color="#FF2D8E"/></linearGradient></defs>
@@ -863,6 +1000,7 @@ const NAV = cur => `
   <nav class="nav-links" aria-label="Primary">
     <a href="/#games"${cur==='games'?' aria-current="page"':''}>Games</a>
     <a href="/blog/"${cur==='blog'?' aria-current="page"':''}>Blog</a>
+    <a href="/aso/"${cur==='aso'?' aria-current="page"':''}>ASO reports</a>
     <a href="/subscribe/?from=nav"${cur==='subscribe'?' aria-current="page"':''}>Newsletter</a>
     <a href="/about/"${cur==='about'?' aria-current="page"':''}>About</a>
     <a href="/privacy/"${cur==='privacy'?' aria-current="page"':''}>Privacy</a>
@@ -872,7 +1010,7 @@ const NAV = cur => `
   <button class="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobmenu"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFF6E9" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </div>
 <nav class="mobmenu" id="mobmenu" aria-label="Primary, compact">
-  <a href="/#games">Games</a><a href="/blog/">Blog</a><a href="/subscribe/?from=nav">Newsletter</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a><a href="/legal/">Legal</a>
+  <a href="/#games">Games</a><a href="/blog/">Blog</a><a href="/aso/">ASO reports</a><a href="/subscribe/?from=nav">Newsletter</a><a href="/about/">About</a><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a><a href="/legal/">Legal</a>
 </nav></header>`;
 
 const FOOT = `
@@ -893,6 +1031,7 @@ const FOOT = `
     </ul></div>
     <div><h2 class="foot-h">Studio</h2><ul>
       <li><a href="/blog/">Blog</a></li>
+      <li><a href="/aso/">ASO reports</a></li>
       <li><a href="/subscribe/?from=footer">Mailing list</a></li>
       <li><a href="/about/">About</a></li>
       <li><a href="/contact/">Contact</a></li>
@@ -1384,6 +1523,433 @@ function pagePost(p, i){
       publisher: { '@type':'Organization', name:'Indie Core Dev', url: SITE },
       mainEntityOfPage: { '@type':'WebPage', '@id': SITE + `/blog/${p.slug}/` },
     }, crumbLD([['Home','/'],['Blog','/blog/'],[p.title, `/blog/${p.slug}/`]])],
+  });
+}
+
+/* ───────── page: ASO reports ───────── */
+
+/* The winnable table. Every column is a fact somebody could act on, and none of
+   them is a search-volume estimate — the whole point of the report is that
+   volume is the half everyone already sells and the half that does not decide
+   anything. `min-width` on the table plus the scrolling wrapper keeps seven
+   columns readable on a phone without collapsing them into cards, which loses
+   the comparison between rows that makes a table worth printing. */
+/* The app holding a keyword, linked to its Play listing.
+
+   Every row here is an assertion a reader cannot otherwise check — "this app is
+   number one for this phrase" — and the series' whole claim is that it measures
+   rather than estimates. A claim nobody can verify is worth exactly as much as
+   the estimates it criticises, so the name is a link.
+
+   `rel="noopener"` and nothing else, deliberately:
+     - not `noreferrer`, which would strip the Referer header and hide that the
+       visit came from here. The referral is the point.
+     - not `nofollow`. These are editorial citations, not paid or user-submitted
+       placements, and Google's own guidance reserves nofollow for those.
+
+   `hl`/`gl` carry the report's own locale, so the reader opens the same store
+   the measurement was taken in rather than their own. Without them a reader in
+   Paris checks a US claim against a French listing and concludes the report is
+   wrong.
+
+   Falls back to plain text when the id is missing — a snapshot harvested before
+   app_id was collected still renders. */
+/* Rankgrip, or an explicit blank where one of the four factors was never
+   observed.
+
+   A missing factor coalesces to zero in scripts/rankgrip.mjs, which lands at
+   the most-open end of the scale — so an uncrawled keyword would render as a
+   green, confident "Open", the single most misleading thing this table could
+   say. /aso/rankgrip/ promises the opposite in as many words: "marked
+   unmeasured rather than scored as open — an absent number is not a good one".
+   The harvest already records `rankgripMeasured`; nothing read it until now. */
+function gripCell(r){
+  if (r.rankgripMeasured === false)
+    return `<span class="grip g-unmeasured">—<span class="sr-only">not measured</span></span>`;
+  return `<span class="grip g-${r.rankgripBand}">${r.rankgrip}</span>`;
+}
+
+function leaderCell(r, d){
+  if (!r.app_name) return '—';
+  const name = esc(r.app_name);
+  if (!r.app_id) return name;
+  const href = `https://play.google.com/store/apps/details?id=${encodeURIComponent(r.app_id)}` +
+    `&hl=${encodeURIComponent(d.language)}&gl=${encodeURIComponent(d.country.toUpperCase())}`;
+  /* The arrow is a ::after on the link, and an inline-block after text is a
+     break opportunity — so on a wrapping two-line app name it landed alone on
+     the second line, reading as a bullet rather than as part of the link. Tying
+     it to the last word with a nowrap span is the fix; `name` is already
+     escaped, and entities contain no spaces, so splitting on one is safe. */
+  const words = name.split(' ');
+  const last  = words.pop();
+  const head  = words.length ? `${words.join(' ')} ` : '';
+  return `<a class="xlink" href="${href}" target="_blank" rel="noopener">${head}<span class="nb">${last}</span></a>`;
+}
+
+function keywordTable(rows, caption, d){
+  return `<div class="kwrap"><table class="ktable">
+  <caption>${esc(caption)}</caption>
+  <thead><tr>
+    <th scope="col">Keyword</th>
+    <th scope="col" class="n"><a href="/aso/rankgrip/">Rankgrip</a></th>
+    <th scope="col" class="n">Demand</th>
+    <th scope="col" class="n">Top 10</th>
+    <th scope="col" class="n">Titles</th>
+    <th scope="col" class="n">Tenure</th>
+    <th scope="col">Number one</th>
+  </tr></thead>
+  <tbody>${rows.map(r => `<tr>
+    <td class="kw">${esc(r.keyword)}</td>
+    <td class="n">${gripCell(r)}</td>
+    <td class="n">${demandScore(r.demand_final)}</td>
+    <td class="n">${r.big_dev_slots}/10</td>
+    <td class="n">${r.title_matches}</td>
+    <td class="n">${heldFor(r.oldest_leader_days)}</td>
+    <td class="held">${leaderCell(r, d)}</td>
+  </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function wallTable(rows, d){
+  return `<div class="kwrap"><table class="ktable">
+  <caption>The demand in this category that is not available, and who is sitting on it.</caption>
+  <thead><tr>
+    <th scope="col">Keyword</th>
+    <th scope="col" class="n"><a href="/aso/rankgrip/">Rankgrip</a></th>
+    <th scope="col" class="n">Demand</th>
+    <th scope="col" class="n">Top 10</th>
+    <th scope="col">Number one</th>
+    <th scope="col" class="n">Installs</th>
+  </tr></thead>
+  <tbody>${rows.map(r => `<tr>
+    <td class="kw">${esc(r.keyword)}</td>
+    <td class="n">${gripCell(r)}</td>
+    <td class="n">${demandScore(r.demand_final)}</td>
+    <td class="n">${r.big_dev_slots}/10</td>
+    <td class="held">${leaderCell(r, d)}</td>
+    <td class="n">${installs(r.app_installs)}</td>
+  </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+function pageAsoIssue(issue){
+  const d = issue.data;
+  const held = issue.date > TODAY;
+  const body = `
+<article class="post"><div class="shell post-shell"><div class="postgrid">
+  <div class="post-head">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/aso/">ASO reports</a> <span>/</span> <span style="color:var(--text)">${esc(issue.title)}</span></nav>
+  ${held ? `<div class="ptags" style="margin-top:26px"><span class="tcode">Not published yet — this page goes live on ${humanDate(issue.date)}</span></div>` : ''}
+  <div class="pmeta" style="margin-top:26px"><time datetime="${issue.date}">${humanDate(issue.date)}</time><span>·</span><span>${esc(d.categoryLabel)}</span><span>·</span><span>${d.country.toUpperCase()} · ${d.language}</span></div>
+  <h1>${esc(issue.title)}</h1>
+  ${issue.description ? `<p class="lede" style="margin-top:20px">${esc(issue.description)}</p>` : ''}
+  <div class="kstat">
+    <span><strong>${d.winnable.length}</strong> terms open</span>
+    <span><strong>${d.counts.keywords_in_category.toLocaleString('en-GB')}</strong> keywords in the category</span>
+    <span>ranks observed <strong>${d.window.from}</strong> to <strong>${d.window.to}</strong></span>
+  </div>
+  <hr class="prule">
+  </div>
+  ${/* The three sections below are rendered by this function rather than
+        written in the markdown, so they are absent from the outline the body
+        produced. Appending them here keeps the contents list honest: a reader
+        looking for "the wall" finds it, and no entry points at a heading that
+        is not on the page. */''}
+  ${tocBlock([...issue.toc,
+    { level: 2, id: 'the-open-terms',        text: 'The open terms' },
+    { level: 2, id: 'the-wall',              text: 'The wall' },
+    { level: 2, id: 'how-this-was-measured', text: 'How this was measured' }])}
+  <div class="article">
+    ${issue.html}
+    <h2 id="the-open-terms">The open terms</h2>
+    <p>Ordered by demand, and every term below is one a Play Store search actually returns. This
+    is app store optimization research measured against the live store rather than estimated:
+    <strong>Top 10</strong> is how many of the ten results belong to a
+    developer big enough that outranking them is not a listing problem; <strong>titles</strong>
+    is how many put the phrase in their app name, which is the single hardest signal to beat.
+    <strong>Demand</strong> ranks these terms against each other — it is not an estimate of
+    searches per month, and no honest number on this page is.</p>
+    <p>Each app name is a link, marked <span class="xlink" aria-hidden="true"><span class="nb"></span></span>, that opens
+    that app's Google Play listing in a new tab — in the country and language this report measured,
+    so every row can be checked against the store itself.</p>
+    ${keywordTable(d.winnable, `${d.winnable.length} winnable keywords in ${d.categoryLabel.toLowerCase()}, ${MONTH_NAME(d.month)}.`, d)}
+
+    <div class="kwall">
+    <h2 id="the-wall">The wall</h2>
+    <p>The other half, and the reason to trust the first: the highest demand in
+    ${esc(d.categoryLabel.toLowerCase())} that is <em>not</em> worth chasing, with the app standing on it.
+    No amount of listing work takes these.</p>
+    ${wallTable(d.wall, d)}
+    </div>
+
+    <div class="kgate">
+    <h2 id="how-this-was-measured">How this was measured</h2>
+    <p><strong>Rankgrip</strong> scores how tightly a keyword is already held, 0–100, over four
+    factors: big-developer slot share (40%), exact title matches (25%), leader maturity (20%) and
+    leader tenure (15%). Under 30 is open, 30–69 is a fight worth having, 70 and up will not move.</p>
+    <p>Terms are attributed to ${esc(d.categoryLabel.toLowerCase())} by the categories of the apps
+    holding their top ten, then filtered to phrases Play's own autocomplete offers, built only from
+    words at least ${d.gate.brandMinDf} different app names use. Rankings were measured daily between
+    ${d.window.from} and ${d.window.to}. The gate proposed ${d.counts.winnable};
+    ${d.counts.excluded ? `${d.counts.excluded} were struck off by hand and ` : ''}${d.winnable.length} are printed here.</p>
+    <p><a href="/aso/rankgrip/">Rankgrip in full — the four factors, their weights, every filter a
+    keyword passes, and why there is no search volume column</a>.</p>
+    </div>
+  </div>
+  ${/* Same category, newest first — so the pair reads as a series rather than
+        as whatever happened to publish next. Without this each issue had exactly
+        one internal link pointing at it, from the index, and nothing else on the
+        site connected two issues that are otherwise the same report a month
+        apart. */''}
+  ${(() => {
+    const sibs = ASO_VISIBLE.filter(x => x.data.category === d.category);
+    const at   = sibs.findIndex(x => x.slug === issue.slug);
+    const prev = sibs[at + 1], next = sibs[at - 1];
+    if (!prev && !next) return '';
+    return `<div class="pnav">
+      ${prev ? `<a href="/aso/${prev.slug}/"><span>← ${MONTH_NAME(prev.data.month)}</span><strong>${esc(prev.title)}</strong></a>` : '<span></span>'}
+      ${next ? `<a href="/aso/${next.slug}/" class="r"><span>${MONTH_NAME(next.data.month)} →</span><strong>${esc(next.title)}</strong></a>` : '<span></span>'}
+    </div>`;
+  })()}
+</div></div></article>
+<section class="sec-tight"><div class="shell narrow">
+  <div class="band">
+    <h2 style="font-size:clamp(26px,3.4vw,38px)">Next month's report</h2>
+    <p>A new category every month, measured the same way. By email when it lands.</p>
+    <div class="cta-row" style="justify-content:center">
+      <a class="btn btn-primary" href="/subscribe/?from=aso">Get it by email</a>
+      <a class="btn btn-ghost" href="/aso/${d.categorySlug}/">Every ${esc(d.categoryLabel.toLowerCase())} report</a>
+    </div>
+  </div>
+</div></section>`;
+  return layout({
+    title: `${issue.title} — Indie Core Dev`,
+    desc: issue.description || `Winnable Google Play keywords in ${d.categoryLabel.toLowerCase()}, ${MONTH_NAME(d.month)}.`,
+    canonical: `/aso/${issue.slug}/`, cur: 'aso', body,
+    noindex: held,
+    /* Article, not Dataset. Dataset validates here and would even be defensible
+       — but its rich results live in Google Dataset Search rather than in web
+       search, and Google's own guidance expects a `distribution` pointing at a
+       downloadable file plus a `license`, neither of which this page has. What
+       the page actually is, is an article about data. Claiming otherwise buys
+       nothing and misdescribes it.
+
+       dateModified is carried separately because a report does get corrected,
+       and a page that goes on telling Google it is untouched after a fix is the
+       same lie the sitemap's lastmod used to tell. */
+    jsonld: [{
+      '@context':'https://schema.org','@type':'Article',
+      headline: issue.title,
+      description: issue.description ||
+        `Google Play keywords in ${d.categoryLabel.toLowerCase()} scored for winnability, ${MONTH_NAME(d.month)}.`,
+      url: SITE + `/aso/${issue.slug}/`,
+      datePublished: issue.date,
+      /* The later of the two, never the snapshot date alone. Every scheduled
+         issue is harvested before the day it comes out, so a bare generatedAt
+         claims the page was modified before it was published — which is not a
+         thing that can happen, and which verify.mjs rejects. It only becomes a
+         real modification date once a re-harvest lands after publication. */
+      dateModified: [issue.date, (d.generatedAt || '').slice(0, 10)].filter(Boolean).sort().at(-1),
+      about: `App store optimisation for ${d.categoryLabel.toLowerCase()} on Google Play`,
+      temporalCoverage: `${d.window.from}/${d.window.to}`,
+      inLanguage: d.language,
+      isAccessibleForFree: true,
+      /* Every issue points back at the one definition, so the score and the
+         reports that use it read as one body of work rather than as a column
+         heading that recurs. */
+      mentions: { '@type':'DefinedTerm', name:'Rankgrip', '@id': SITE + '/aso/rankgrip/#rankgrip' },
+      author: { '@type':'Person', name:'Othmane Ettaib' },
+      publisher: { '@type':'Organization', name:'Indie Core Dev', url: SITE },
+      mainEntityOfPage: { '@type':'WebPage', '@id': SITE + `/aso/${issue.slug}/` },
+    }, crumbLD([['Home','/'],['ASO reports','/aso/'],[issue.title, `/aso/${issue.slug}/`]])],
+  });
+}
+
+function asoCard(i){
+  const d = i.data;
+  const pills = [
+    i.date > TODAY ? `<span class="tcode">Publishes ${humanDate(i.date)}</span>` : '',
+    `<span>${esc(d.categoryLabel)}</span>`,
+    `<span>${d.country.toUpperCase()}</span>`,
+    `<span class="tcode">${d.winnable.length} open terms</span>`,
+  ].filter(Boolean);
+  return `<a class="pcard rv" href="/aso/${i.slug}/">
+    <div class="pmeta"><time datetime="${i.date}">${humanDate(i.date)}</time><span>·</span><span>${MONTH_NAME(d.month)} data</span></div>
+    <h2>${esc(i.title)}</h2>
+    ${i.description ? `<p>${esc(i.description)}</p>` : ''}
+    <div class="ptags">${pills.join('')}</div>
+    <span class="plink">Read the report<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M12 5l7 7-7 7"/></svg></span>
+  </a>`;
+}
+
+/* The method page, and the archive that gathers one category's issues.
+
+   Both exist for the same reason: an issue used to be reachable from exactly
+   one place, the index, and the index grows into a single undifferentiated
+   list. An archive per category is the page somebody searching for
+   "aso keywords for puzzle games" should land on — it accumulates rather than
+   scrolling away, and every issue in the series links up to it. */
+function pageAsoRankgrip(){
+  const m = ASO_RANKGRIP;
+  const body = `
+<article class="post"><div class="shell post-shell"><div class="postgrid">
+  <div class="post-head">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/aso/">ASO reports</a> <span>/</span> <span style="color:var(--text)">Rankgrip</span></nav>
+  <h1 style="margin-top:26px">${esc(m.title)}</h1>
+  ${m.description ? `<p class="lede" style="margin-top:20px">${esc(m.description)}</p>` : ''}
+  <hr class="prule">
+  </div>
+  ${tocBlock(m.toc)}
+  <div class="article">${m.html}</div>
+</div></div></article>
+<section class="sec-tight"><div class="shell narrow">
+  <div class="band">
+    <h2 style="font-size:clamp(26px,3.4vw,38px)">The reports themselves</h2>
+    <p>One Play category a month, measured exactly as described above.</p>
+    <div class="cta-row" style="justify-content:center">
+      <a class="btn btn-primary" href="/aso/">Read the reports</a>
+    </div>
+  </div>
+</div></section>`;
+  return layout({
+    title: `${m.title} — Indie Core Dev`,
+    desc: m.description,
+    canonical: '/aso/rankgrip/', cur: 'aso', body,
+    /* DefinedTerm is what makes a named metric legible to a machine: it says
+       this page IS the definition of a term, rather than an article that happens
+       to mention one. That is the difference between a score people quote and a
+       methodology paragraph nobody can point at. */
+    jsonld: [{
+      '@context':'https://schema.org','@type':'DefinedTerm',
+      '@id': SITE + '/aso/rankgrip/#rankgrip',
+      name: 'Rankgrip',
+      alternateName: 'Rankgrip Score',
+      description: 'A 0-100 score for how tightly a Google Play search keyword is already held ' +
+        'by incumbent apps, weighted over big-developer slot share, exact title matches, ' +
+        'leader maturity and leader tenure. Zero is an open field; one hundred cannot be moved ' +
+        'by any listing rewrite.',
+      url: SITE + '/aso/rankgrip/',
+      inDefinedTermSet: {
+        '@type':'DefinedTermSet',
+        name: 'Indie Core Dev Google Play keyword metrics',
+        url: SITE + '/aso/',
+      },
+      /* Named author with a page behind them, rather than a bare string. A
+         metric people are asked to cite should say who stands behind it, and
+         "who made this" is a question both a reader and a crawler ask. */
+      creator: { '@type':'Person', name:'Othmane Ettaib', url: SITE + '/about/' },
+      publisher: { '@type':'Organization', name:'Indie Core Dev', url: SITE },
+      dateCreated: '2026-09',
+      isPartOf: { '@type':'WebSite', name:'Indie Core Dev', url: SITE },
+    }, crumbLD([['Home','/'],['ASO reports','/aso/'],['Rankgrip','/aso/rankgrip/']])],
+  });
+}
+
+/* One entry per category that has at least one published issue. */
+const ASO_CATEGORIES = [...new Map(ASO_VISIBLE.map(i =>
+  [i.data.categorySlug, { slug: i.data.categorySlug, label: i.data.categoryLabel }])).values()]
+  .sort((a, b) => a.label.localeCompare(b.label));
+
+function pageAsoCategory(cat){
+  const issues = ASO_VISIBLE.filter(i => i.data.categorySlug === cat.slug);
+  const low = cat.label.toLowerCase();
+  /* An archive whose every issue is still held exists only on a preview build,
+     so a person can read the PR. It must not be indexable, for the same reason
+     the held issue itself is not: a leaked preview URL would otherwise put a
+     page into Google ahead of the content it lists — and this one would list
+     unpublished issues by name. */
+  const anyLive = ASO_LIVE.some(i => i.data.categorySlug === cat.slug);
+  const body = `
+<section class="hero" style="padding-bottom:32px"><div class="shell narrow">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="/">Home</a> <span>/</span> <a href="/aso/">ASO reports</a> <span>/</span> <span style="color:var(--text)">${esc(cat.label)}</span></nav>
+  <h1 style="font-size:clamp(34px,5vw,58px);margin-top:26px">Google Play keywords for<br><span class="grad">${esc(low)}.</span></h1>
+    <p class="lede">Every month, the search terms in ${esc(low)} that a small studio can still rank for —
+  and the ones held so tightly that no listing rewrite would move them. App store optimization
+  research measured against the live Play Store rather than estimated from search volume.
+  <a href="/aso/rankgrip/">How Rankgrip works</a>.</p>
+</div></section>
+<section class="sec-tight"><div class="shell narrow">
+  <div class="plist">${issues.map(asoCard).join('')}</div>
+</div></section>`;
+  return layout({
+    title: `Google Play keywords for ${low} — Indie Core Dev`,
+    desc: `Which Google Play search terms in ${low} a small studio can still rank for — who holds ` +
+          `the top ten, and for how long. A new report every month.`,
+    canonical: `/aso/${cat.slug}/`, cur: 'aso', body,
+    noindex: !anyLive,
+    jsonld: [crumbLD([['Home','/'],['ASO reports','/aso/'],[cat.label, `/aso/${cat.slug}/`]])],
+  });
+}
+
+function pageAsoIndex(){
+  const body = `
+<section class="hero" style="padding-bottom:32px"><div class="shell narrow">
+  <span class="eyebrow">ASO reports</span>
+  <h1 style="font-size:clamp(38px,5.6vw,68px)">Which Play keywords<br><span class="grad">you can actually take.</span></h1>
+  <p class="lede">Every ASO tool sells search volume. Volume is the half that does not decide anything —
+  the highest-demand term in a category is usually held by a billion-install app that has been there for
+  years. These reports measure the other half: who is standing on a keyword, how long they have been
+  there, and whether a listing rewrite could move them. One Play category a month, measured against the
+  live store rather than estimated by a model.</p>
+  <div class="cta-row rv" style="margin-top:22px">
+    <a class="btn btn-primary" href="/subscribe/?from=aso-index">Get each report by email</a>
+    <a class="btn btn-ghost" href="/aso/rankgrip/">What Rankgrip measures</a>
+  </div>
+  ${ASO_CATEGORIES.length > 1 ? `<div class="ptags" style="margin-top:24px">${
+    ASO_CATEGORIES.map(c => `<a class="tcat" href="/aso/${c.slug}/">${esc(c.label)}</a>`).join('')}</div>` : ''}
+</div></section>
+<section class="sec-tight"><div class="shell narrow">
+  ${ASO_VISIBLE.length
+    ? `<div class="plist">${ASO_VISIBLE.map(asoCard).join('')}</div>`
+    : `<p class="lede">No reports yet — the first one is being measured.</p>`}
+</div></section>
+${/* The questions below are the ones people actually type. Checked against
+     Google's autocomplete rather than guessed: "google play keyword research",
+     "google play keyword search volume" and "play store ranking algorithm"
+     all return suggestions, where "google play keywords for games" and "how to
+     find keywords for google play" return nothing at all.
+
+     They are plain h2s, not FAQPage schema. FAQ rich results were restricted to
+     government and health sites in 2023, so the markup would buy nothing; the
+     headings still answer the query. */''}
+<section class="sec-tight"><div class="shell narrow"><div class="article">
+  <h2 id="what-these-are">What these reports are</h2>
+  <p>App store optimization research for Google Play, published in full instead of sold. Each
+  issue takes one Play Store category and lists the search terms a small studio can still rank
+  for, naming the app holding each one. Everything is measured against the live store — no
+  estimated volumes, no third-party panel.</p>
+
+  <h2 id="how-to-find-keywords">How do you find keywords for a Google Play listing?</h2>
+  <p>In this order. Start from phrases the Play Store's own autocomplete offers, which proves a
+  wording is real. Drop anything built from a word only one studio uses, or you are chasing a
+  brand rather than a market. Then — and this is the step most keyword research skips — look at
+  who currently holds the top ten for each survivor, how long they have been there, and whether
+  any of them carries the phrase in its app name. A term with demand you cannot reach is worth
+  nothing. That last step is what <a href="/aso/rankgrip/">Rankgrip</a> scores.</p>
+
+  <h2 id="search-volume">Is there a Google Play keyword search volume tool?</h2>
+  <p>Not an honest one. Google publishes no search volume for Play, so every figure sold as one
+  is inferred from something else — web search data, autocomplete ordering, a panel of installs —
+  and scaled by a constant somebody picked. These reports carry no volume column for that reason,
+  and the <a href="/aso/rankgrip/#search-volume">full argument is on the Rankgrip page</a>.</p>
+
+  <h2 id="ranking">What decides where an app ranks in the Play Store?</h2>
+  <p>Nobody outside Google knows the ranking algorithm, and any page claiming otherwise is
+  guessing. What is observable is who ends up in the top ten and what those apps have in common:
+  install scale, how long they have held the slot, and whether the search phrase appears in the
+  app title. Those three are what these reports measure, because they are the ones you can check
+  rather than infer.</p>
+
+  <h2 id="cadence">How often is this updated?</h2>
+  <p>One Play category a month, covering the month just ended. Every issue keeps the numbers it
+  shipped with, so a score quoted last year still reads the same today.</p>
+</div></div></section>`;
+  return layout({
+    title: 'Google Play keyword research reports — Indie Core Dev',
+    desc: 'Which Google Play search terms a small studio can actually rank for — who holds the ' +
+          'top ten and for how long, measured from daily ranks. One category a month.',
+    canonical: '/aso/', cur: 'aso', body,
+    jsonld: [crumbLD([['Home','/'],['ASO reports','/aso/']])],
   });
 }
 
@@ -1889,6 +2455,10 @@ write('privacy/index.html', pagePrivacyIndex());
 write('legal/index.html', pageLegal());
 write('blog/index.html', pageBlogIndex());
 VISIBLE.forEach((p, i) => write(`blog/${p.slug}/index.html`, pagePost(p, i)));
+write('aso/index.html', pageAsoIndex());
+if (ASO_RANKGRIP) write('aso/rankgrip/index.html', pageAsoRankgrip());
+ASO_CATEGORIES.forEach(c => write(`aso/${c.slug}/index.html`, pageAsoCategory(c)));
+ASO_VISIBLE.forEach(i => write(`aso/${i.slug}/index.html`, pageAsoIssue(i)));
 write('about/index.html', pageAbout());
 write('contact/index.html', pageContact());
 write('subscribe/index.html', pageSubscribe());
@@ -2126,6 +2696,19 @@ const urls = [
   ['/', '1.0', newest(...ALL.map(gameDate), ...POSTS.map(postDate))],
   ...ALL.map(g=>[`/games/${g.slug}/`, '0.9', gameDate(g)]),
   ['/blog/','0.8', newest(...POSTS.map(postDate))],
+  /* The reports are a second content stream, and a fresh one: an issue's
+     lastmod is its own publication date, and the index is as fresh as the
+     newest issue on it. */
+  ...(ASO_LIVE.length ? [['/aso/','0.8', newest(...ASO_LIVE.map(i => i.date))]] : []),
+  ...(ASO_RANKGRIP ? [['/aso/rankgrip/', '0.8', gitDate('content/aso/_rankgrip.md') || today]] : []),
+  ...ASO_CATEGORIES
+    .map(c => [c, ASO_LIVE.filter(i => i.data.categorySlug === c.slug)])
+    /* Live issues only. ASO_CATEGORIES is built from ASO_VISIBLE so the
+       archives render for review on a preview build; the sitemap is a claim
+       about the real site and may only list what is actually published. */
+    .filter(([, own]) => own.length)
+    .map(([c, own]) => [`/aso/${c.slug}/`, '0.7', newest(...own.map(i => i.date))]),
+  ...ASO_LIVE.map(i => [`/aso/${i.slug}/`, '0.7', i.date]),
   ...POSTS.map(p=>[`/blog/${p.slug}/`, '0.7', postDate(p)]),
   ['/about/','0.6', gitDate('_source/legacy/txt_about.txt') || today],
   // Generated by build.mjs rather than from a content file, same as /legal/.
@@ -2174,4 +2757,6 @@ fs.writeFileSync(path.join(OUT,"app-ads.txt"),
 
 console.log(`v${BUILD.version} (${BUILD.sha}) — built ${urls.length} pages → dist/  (${webp} webp encoded, ${cached} from cache, ${(saved/1024/1024).toFixed(2)} MB saved)`);
 console.log(`  blog: ${POSTS.length} post(s)${SCHEDULED.length ? ` · ${SCHEDULED.length} held` : ''}`);
+if (ALL_ASO.length) console.log(`  aso: ${ASO_LIVE.length} report(s)${ASO_SCHEDULED.length ? ` · ${ASO_SCHEDULED.length} held` : ''}` +
+  ` · ${ASO_LIVE.reduce((n, i) => n + i.data.winnable.length, 0)} keyword rows`);
 for (const g of ALL) console.log(`  /games/${g.slug}/  ·  /privacy/${g.slug}/  (${g.shots.length} shots)`);

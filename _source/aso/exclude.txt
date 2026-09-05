@@ -1,0 +1,21 @@
+# Terms struck off the winnable-keywords report by hand.
+#
+# The query can prove a phrase is searched on Google Play and that nobody big
+# holds it. It cannot know that the phrase is a film title, a fad that will be
+# over before an issue ships, a mistranslation, or something this studio would
+# rather not rank for. That judgement is a person's, and it is recorded here so
+# next month's issue makes the same call without anyone re-reading the list.
+#
+# One phrase per line, matched case-insensitively against the whole keyword.
+# Say why — the note is the only thing that stops a later reader undoing it.
+
+ai girlfriend simulator escape room   # adult-adjacent; not a market this site sends readers to
+ai simulator games                    # same cluster
+ai girlfriend puzzle game             # same cluster
+ai girl puzzle game                   # same cluster
+ai girlfriend game escape home        # same cluster
+blocks love blocks love blocks        # scraped description text, not a phrase anyone types
+court flow                            # legal case-management app; lands in puzzle by attribution only
+salah block                           # prayer-times app; same attribution artefact
+forge master overlay                  # modding tool, not a game search
+wtools injector                       # cheat tool

@@ -54,6 +54,78 @@ const only  = flag('only');
 const topic = flag('topic');
 const list  = args.includes('--list');
 
+/* ───────── the ASO pages ─────────
+ *
+ *   npm run keywords -- --aso        (after `npm run build`)
+ *
+ * A different check from the one below, for a different kind of page. A post is
+ * written against one harvested subject in topics.json; an ASO page has no
+ * subject of its own — it is one of four page types, each of which has to carry
+ * the head vocabulary a searcher uses for that type.
+ *
+ * It reads dist/ rather than content/, and it has to: the hub's copy is
+ * generated inside build.mjs and exists in no markdown file, so a source-only
+ * check would silently skip the single page most likely to rank.
+ *
+ * The targets are in _source/aso/targets.json, each marked with whether Google's
+ * autocomplete actually returns it. That file also records the phrases that
+ * returned nothing, so the next person does not spend an afternoon optimising
+ * for "how to find keywords for google play" the way this one nearly did.
+ *
+ * Same contract as the rest of this script: a drafting loop, exits non-zero,
+ * never in CI. */
+if (args.includes('--aso')) {
+  const DIST    = path.join(ROOT, 'dist/aso');
+  const TARGETS = path.join(ROOT, '_source/aso/targets.json');
+  if (!fs.existsSync(DIST)) {
+    console.error('dist/aso not found — run `npm run build` first.');
+    process.exit(2);
+  }
+  const { terms } = JSON.parse(fs.readFileSync(TARGETS, 'utf8'));
+
+  /* Which of the four page types a built path is. Order matters: an issue slug
+     starts with the same prefix as nothing else, but the archives are bare
+     category slugs and would otherwise swallow everything. */
+  const kindOf = dir =>
+    dir === '.'                              ? 'hub'
+    : dir === 'rankgrip'                     ? 'rankgrip'
+    : dir.startsWith('google-play-keywords-') ? 'issue'
+    : 'archive';
+
+  const text = file => fs.readFileSync(file, 'utf8')
+    .replace(/<script[\s\S]*?<\/script>/g, ' ')
+    .replace(/<style[\s\S]*?<\/style>/g, ' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .toLowerCase();
+
+  const pages = [
+    ...(fs.existsSync(path.join(DIST, 'index.html')) ? [['.', path.join(DIST, 'index.html')]] : []),
+    ...fs.readdirSync(DIST, { withFileTypes: true })
+      .filter(e => e.isDirectory() && fs.existsSync(path.join(DIST, e.name, 'index.html')))
+      .map(e => [e.name, path.join(DIST, e.name, 'index.html')]),
+  ];
+
+  let bad = 0;
+  for (const [dir, file] of pages.sort()) {
+    const kind = kindOf(dir);
+    const body = text(file);
+    const want = terms.filter(t => t.pages.includes(kind));
+    const miss = want.filter(t => !body.includes(t.phrase.toLowerCase()));
+    const url  = dir === '.' ? '/aso/' : `/aso/${dir}/`;
+    if (miss.length) {
+      bad++;
+      console.log(`  MISS  ${url}  (${kind})`);
+      for (const m of miss) console.log(`          no "${m.phrase}"`);
+    } else {
+      console.log(`  ok    ${url}  (${kind}) — ${want.length}/${want.length}`);
+    }
+  }
+  console.log(`\n  ${pages.length} page(s), ${bad} missing vocabulary.`);
+  if (bad) console.log('  Work the missing phrases into prose that was going to exist anyway.\n');
+  process.exit(bad ? 1 : 0);
+}
+
 const ledger = readLedger();
 
 /* `--topic <id> <slug>` is the drafting case: the post exists, the topic has

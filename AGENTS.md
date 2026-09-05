@@ -10,7 +10,7 @@ bite you if you guess.
 ## The one command
 
 ```bash
-npm run check      # build + verify — the same gate CI runs
+npm run check      # build + verify + style — the same gate CI runs
 ```
 
 Run it before every push. If it fails, the branch cannot deploy, so there is no value in
@@ -21,17 +21,25 @@ committed, and both have gone stale in a PR that edited a file they mirror — h
 only the published gists read them, and not harmless since `scripts/devto.mjs` began
 composing articles out of them.
 
+`npm run style` is part of it, and is no longer advisory. It reads every
+publishable file in `content/blog/` and `content/aso/` and fails the gate on
+writing that reads as machine-written. **Drafts are exempt** — `draft: true` is
+skipped — so the loop while writing is unchanged; only a file you have declared
+finished has to pass. Run `npm run style` alone for the report without the
+failure.
+
 Optional, and worth it when the change is prose or performance:
 
 ```bash
-npm run style      # flags writing that reads as machine-written (advisory)
 npm run lighthouse # the performance/a11y/SEO budget
 npm run gist       # regenerate gist/ from the live files
 npm run seo        # submit new URLs, then report index status and search performance
 npm run seo:watch  # what Search Console says changed, and what to do about it
 npm run schedule   # the publishing queue and calendar; `-- --claim <slug>` takes a date
 npm run topics     # what to write next, ranked by demand, with each subject's targets
+npm run aso        # the Google Play keyword reports: what to publish next, and the data for it
 npm run keywords   # does the draft contain what its subject was picked for? (local only)
+npm run keywords -- --aso   # do the ASO pages carry the head phrases people actually search?
 npm run devto      # dry run: which posts would be cross-posted to dev.to
 npm run linkedin   # dry run: the LinkedIn post a `linkedin: true` article would get
 node scripts/linkedin.mjs --check-token   # days left on the LinkedIn token
@@ -71,6 +79,36 @@ npm run hub        # regenerate hub/ — the public snippet index
   Everything the SEO findings ask you to *change* still goes through a branch and a PR; the
   LinkedIn ledger records what has already happened rather than deciding anything.
 
+- **The ASO reports are site-only. Never cross-post or announce them off this domain.**
+  No dev.to, no LinkedIn, no syndication — the frontmatter carries no `devto` or `linkedin`
+  field and must not gain one. The series is worth something because these numbers exist at
+  exactly one address that people cite and link; a copy elsewhere splits those citations and
+  gives the ranking to the larger domain. `scripts/devto.mjs` and `scripts/linkedin.mjs` read
+  `content/blog/` only, which enforces this by accident rather than by rule — both carry a
+  comment at the line that would have to change. Blog posts are unaffected and still decide
+  per post.
+
+- **An ASO issue needs 500+ words of its own analysis.** Six categories at one a month is
+  72 pages a year that share a layout, a method note and a set of columns, and differ only in
+  their table. That is the shape Google's scaled-content-abuse policy describes, and the
+  defence is that each issue genuinely says something the others do not — so the methodology
+  lives once at `/aso/rankgrip/` and never in the issue, and the prose floor is a floor.
+
+- **Rankgrip's weights are versioned into every snapshot, and published reports keep the
+  ones they shipped with.** Retuning the formula must not silently restate the back
+  catalogue: a reader who quoted "Rankgrip 47" should still find 47 there next year. Change
+  the weights in `scripts/rankgrip.mjs` only alongside a note on `/aso/rankgrip/` saying what
+  changed and when.
+  `npm run style` checks how those words read; nothing can check that they are worth reading.
+
+- **The ASO snapshots are committed because CI cannot reach the database that makes
+  them.** `_source/aso/*.json` comes out of the ideaminer analytics Postgres, which lives in
+  a Docker container on the crawling machine. `npm run aso -- --harvest <category>` writes
+  one; commit it with the issue that reads it. A build that queried that database would pass
+  on a laptop and fail on the runner, and `npm run aso` is therefore local-only for the same
+  reason `npm run keywords` is. `verify.mjs` catches a snapshot whose month disagrees with
+  its filename — the failure that renders a perfectly good page full of last month's numbers.
+
 - **`npm run keywords` is a drafting loop, not a gate — keep it out of CI.** It fails on an
   unfinished post on purpose, which is what makes it useful while writing and useless as a
   merge check. `npm run check` does not call it and no workflow does. Wiring it in would
@@ -96,6 +134,9 @@ git add -A                                            # no
 | Choosing what to write | [`content/blog/README.md`](content/blog/README.md#choosing-what-to-write) — `npm run topics`, and the success condition every subject carries |
 | Checking a draft against its keywords | [`content/blog/README.md`](content/blog/README.md#the-targets-a-post-is-written-against) — `npm run keywords`, and why it is not in CI |
 | Deciding which post goes to which platform | [`docs/cross-posting.md`](docs/cross-posting.md#who-gets-the-slot) — the flag is a veto; demand picks |
+| Publishing a keyword report | [`content/aso/README.md`](content/aso/README.md) — the second content type, its snapshot, and why it is not on the calendar |
+| Changing the Rankgrip score | [`scripts/rankgrip.mjs`](scripts/rankgrip.mjs) — the formula and weights; the public definition at [`content/aso/_rankgrip.md`](content/aso/_rankgrip.md) must be edited with it, and nothing checks that the two agree |
+| Changing what counts as winnable | [`scripts/aso-sql.mjs`](scripts/aso-sql.mjs) — one query, every clause commented as the claim it is |
 | Branching, local commands | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Stack, deploy setup, secrets | [`README.md`](README.md) |
 | Changing game copy or routes | the `GAMES` array in `build.mjs`; store metadata in `_source/play-data.json` |
@@ -153,7 +194,11 @@ Every rule in `scripts/verify.mjs` exists because something got past a review. F
 - **A flaky check is worse than no check.** The Lighthouse gate re-measures performance rather
   than failing on one noisy sample, for exactly this reason.
 - **Calibrate against this repo, not a generic list.** `scripts/style-check.mjs` deliberately
-  does not flag em dashes: the site runs about ten per thousand words and always has.
+  does not flag em dashes: the site runs about ten per thousand words and always has. The
+  `contrast` rule was added the same way: generated pages ran at twice the rate of anything
+  hand-written here, so the limit sits at 8.0 per thousand words — just above
+  `free-without-dark-patterns.md` at 7.6, the heaviest post in the archive. Nothing already
+  written is flagged, and a doubling is.
 
 ## Assets that CI cannot regenerate
 

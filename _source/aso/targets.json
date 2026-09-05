@@ -1,0 +1,21 @@
+{
+  "note": "The head phrases the ASO pages have to actually contain. Each one was checked against Google's autocomplete rather than guessed: `confirmed` means the phrase returns suggestions, so people demonstrably type it. Phrases that returned nothing are listed under `rejected` so nobody re-argues for them. Re-check when the set changes: curl 'https://suggestqueries.google.com/complete/search?client=firefox&hl=en&q=<phrase>'",
+  "checked": "2026-09-05",
+  "terms": [
+    { "phrase": "app store optimization", "demand": "confirmed", "pages": ["hub", "rankgrip", "issue"] },
+    { "phrase": "play store",             "demand": "confirmed", "pages": ["hub", "rankgrip", "issue", "archive"] },
+    { "phrase": "google play",            "demand": "confirmed", "pages": ["hub", "rankgrip", "issue", "archive"] },
+    { "phrase": "keyword research",       "demand": "confirmed", "pages": ["hub", "rankgrip"] },
+    { "phrase": "search volume",          "demand": "confirmed", "pages": ["hub", "rankgrip"] },
+    { "phrase": "ranking algorithm",      "demand": "confirmed", "pages": ["hub"] }
+  ],
+  "rejected": [
+    "google play keywords for games",
+    "aso keywords for games",
+    "google play keyword research puzzle",
+    "how to find keywords for google play",
+    "keyword difficulty play store",
+    "best keywords for android game",
+    "how to rank higher on google play"
+  ]
+}

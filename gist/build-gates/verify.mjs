@@ -622,6 +622,106 @@ for (const f of ['robots.txt', 'app-ads.txt', '_headers', '404.html', 'favicon.s
   }
 }
 
+/* ---- ASO reports ----
+   The data snapshots are generated on a laptop and committed, because CI cannot
+   reach the database that produces them (see scripts/aso.mjs). That trade buys
+   a build which cannot fail on the runner, and it costs the one thing a
+   generated-and-committed file always costs: the file can be stale, or orphaned,
+   and nothing about the page it renders would look wrong.
+
+   build.mjs already fails on an issue with no snapshot at all. These are the
+   failures it cannot see, all of them observed in gist/ and hub/ before they
+   were checked here too. */
+{
+  const ROOT     = path.resolve(import.meta.dirname, '..');
+  const ASO_DIR  = path.join(ROOT, 'content/aso');
+  const SNAP_DIR = path.join(ROOT, '_source/aso');
+
+  if (fs.existsSync(ASO_DIR) && fs.existsSync(SNAP_DIR)) {
+    const issues = fs.readdirSync(ASO_DIR)
+      .filter(f => f.endsWith('.md') && !f.startsWith('_') && f.toLowerCase() !== 'readme.md');
+    const used = new Set();
+
+    for (const f of issues) {
+      const src  = fs.readFileSync(path.join(ASO_DIR, f), 'utf8');
+      const slug = f.replace(/\.md$/, '');
+      const data = src.match(/^data:\s*(.+?)\s*$/m)?.[1]?.replace(/^["']|["']$/g, '') || slug;
+      used.add(data);
+
+      const snapPath = path.join(SNAP_DIR, `${data}.json`);
+      if (!fs.existsSync(snapPath)) continue;            // build.mjs fails on this first
+      let snap;
+      try { snap = JSON.parse(fs.readFileSync(snapPath, 'utf8')); }
+      catch (e) { fail(`_source/aso/${data}.json`, `not valid JSON: ${e.message}`); continue; }
+
+      /* A snapshot whose month does not match its name is the failure that
+         looks like nothing: the page renders, the numbers are real, and they
+         are last month's. */
+      const named = data.match(/(\d{4}-\d{2})$/)?.[1];
+      if (named && snap.month !== named) fail(`_source/aso/${data}.json`,
+        `is named for ${named} but its data says ${snap.month} — re-run ` +
+        `\`npm run aso -- --harvest ${snap.category}\`, or rename the file to match.`);
+
+      if (!snap.winnable?.length) fail(`_source/aso/${data}.json`,
+        'has no winnable rows — an issue with an empty table is not a report.');
+
+      /* The measured window has to END inside the month on the cover.
+         Too early means the issue reports on a month it has no data for; too
+         late means it is built partly from a month it does not name, which is
+         what the unbounded query used to do — an August issue whose ranks ran
+         to 3 September.
+
+         The previous version of this check compared against the FIRST of the
+         month, which `reportMonth()` (always the month just gone) makes it
+         impossible to fail: the window always ends after that date. It was a
+         rule that could never fire. */
+      if (snap.month && snap.window?.to) {
+        const [y, m] = snap.month.split('-').map(Number);
+        const end = new Date(Date.UTC(y, m, 0)).toISOString().slice(0, 10);   // last day of the month
+        if (snap.window.to < `${snap.month}-01`) fail(`_source/aso/${data}.json`,
+          `covers ${snap.month} but its ranks stop at ${snap.window.to} — the window ends ` +
+          `before the month it claims to report on.`);
+        else if (snap.window.to > end) fail(`_source/aso/${data}.json`,
+          `covers ${snap.month} but its ranks run to ${snap.window.to}, past the end of that ` +
+          `month — re-harvest so the issue only contains data from the month it names.`);
+      }
+
+      for (const row of [...(snap.winnable || []), ...(snap.wall || [])]) {
+        if (typeof row.keyword !== 'string' || !row.keyword.trim())
+          fail(`_source/aso/${data}.json`, 'a row has no keyword');
+        if (typeof row.demand_final !== 'number' || typeof row.big_dev_slots !== 'number')
+          fail(`_source/aso/${data}.json`, `row "${row.keyword}" is missing a scored column`);
+        /* Rankgrip is the headline column and it is written by the harvest, not
+           computed at render time — so a snapshot produced before the score
+           existed renders a table of blanks and still builds. That is exactly
+           what the first committed snapshot did. */
+        if (typeof row.rankgrip !== 'number' || !row.rankgripBand)
+          fail(`_source/aso/${data}.json`,
+            `row "${row.keyword}" has no Rankgrip — re-run \`npm run aso -- --harvest ${snap.category}\`.`);
+      }
+    }
+
+    /* An orphan is not broken, it is just a snapshot nobody reads — and the
+       next harvest of the same category will silently sit beside it rather
+       than replacing it. Worth saying, not worth failing. */
+    for (const f of fs.readdirSync(SNAP_DIR).filter(f => f.endsWith('.json'))) {
+      if (used.has(f.replace(/\.json$/, ''))) continue;
+      /* Not every JSON here is a harvest. targets.json holds the head phrases
+         `npm run keywords -- --aso` checks for, and it is read by a script
+         rather than by an issue — warning that no issue reads it is noise, and
+         a check nobody can act on is the kind that gets ignored and then
+         switched off. Identify a snapshot by its shape, not its extension. */
+      let looksLikeSnapshot = false;
+      try {
+        const j = JSON.parse(fs.readFileSync(path.join(SNAP_DIR, f), 'utf8'));
+        looksLikeSnapshot = Array.isArray(j.winnable) && typeof j.month === 'string';
+      } catch { /* unparseable is reported above, for files an issue does name */ }
+      if (looksLikeSnapshot)
+        warn(`_source/aso/${f}`, 'no issue in content/aso/ reads this snapshot');
+    }
+  }
+}
+
 // ---- report ----
 console.log(`checked ${pages.length} pages, ${allFiles.length} files\n`);
 for (const w of warnings) console.log(`  warn   ${w}`);

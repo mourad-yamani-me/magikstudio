@@ -72,7 +72,21 @@ export function start(port = 4321) {
     res.writeHead(status, headers);
     res.end(req.method === 'HEAD' ? undefined : body);
   });
-  return new Promise(resolve => server.listen(port, () => resolve(server)));
+  /* A port already in use throws an unhandled 'error' event, which Node prints
+     as a stack trace ending in EADDRINUSE — technically accurate and useless at
+     the moment you hit it, because it does not say which port or what to do.
+     Anything else on the machine holding 4321 breaks `npm run dev` this way. */
+  return new Promise((resolve, reject) => {
+    server.once('error', err => {
+      if (err.code !== 'EADDRINUSE') return reject(err);
+      console.error(
+        `\n  port ${port} is already in use — something else on this machine is holding it.\n\n` +
+        `  see what:   lsof -nP -iTCP:${port} -sTCP:LISTEN\n` +
+        `  or move:    PORT=${port + 1} npm run dev\n`);
+      process.exit(1);
+    });
+    server.listen(port, () => resolve(server));
+  });
 }
 
 if (import.meta.filename === process.argv[1]) {

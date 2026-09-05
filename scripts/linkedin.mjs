@@ -78,6 +78,9 @@ import { byDemand, capFor } from './platforms.mjs';
 import { readLedger as readTopics } from './topic-seo.mjs';
 
 const ROOT   = path.resolve(import.meta.dirname, '..');
+/* content/blog only, and deliberately. The ASO keyword reports in content/aso
+   are site-only: they are never cross-posted or announced anywhere off this
+   domain. See "Never break these" in AGENTS.md before widening this path. */
 const BLOG   = path.join(ROOT, 'content/blog');
 const LEDGER = path.join(ROOT, '_source/linkedin.json');
 const SITE   = 'https://www.indiecore.net';

@@ -15,7 +15,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const DIR = path.resolve(import.meta.dirname, '..', 'content', 'blog');
+/* Both prose directories. An ASO issue is mostly a table, but the two or three
+   paragraphs wrapped around it are still writing somebody reads, and they were
+   the part most likely to drift into machine voice — the tables give a page an
+   air of rigour that the prose can coast on. */
+const DIRS = ['blog', 'aso']
+  .map(d => path.resolve(import.meta.dirname, '..', 'content', d))
+  .filter(d => fs.existsSync(d));
 const STRICT = process.argv.includes('--strict');
 const DRAFTS = process.argv.includes('--drafts');   // drafts are skipped unless asked for
 
@@ -25,6 +31,16 @@ const LIMITS = {
   antithesis: { hi: 2.5, label: '"not X, it\'s Y"',     note: 'the single most recognisable LLM cadence' },
   aiVocab:    { hi: 1.0, label: 'AI-flavoured words',   note: 'delve, leverage, crucial, ecosystem, …' },
   formula:    { hi: 3.0, label: 'filler formulas',      note: '"that\'s the point", "which is why", …' },
+  /* Reaching for "rather than" to join every pair of ideas. Added because a
+     batch of generated pages ran at twice the rate of anything hand-written
+     here — the Rankgrip page hit 10.9 before it was edited — while passing
+     every other rule in this file. It reads as balanced and says little.
+
+     Calibrated against this repo, not a generic list: the posts here run a
+     median of 1.4 per thousand words and the heaviest, free-without-dark-
+     patterns.md, reaches 7.6. The limit sits just above that, so nothing
+     already written is flagged and a doubling is. */
+  contrast:   { hi: 8.0, label: '"rather than" joins',  note: 'balanced-sounding filler; say which one and move on' },
 };
 /** share of sections carrying a bolded claim. Posts here sit around 0.5; a
  *  bolded thesis in nearly every section is formula rather than emphasis. */
@@ -33,9 +49,10 @@ const MIN_BURSTINESS = 5;   // stdev of sentence length; detectors flag below 4
 
 const PATTERNS = {
   emDash:     /—/g,
-  antithesis: /\b(?:not|isn'?t|wasn'?t|aren'?t)\b[^.?!]{2,60}?\b(?:it'?s|but|it is)\b/gi,
+  antithesis: /\b(?:not|isn'?t|wasn'?t|aren'?t)\b[^.?!]{2,60}?\b(?:it['’]s|but|it is)\b/gi,
   aiVocab:    /\b(?:delve|leverage|crucial|robust|seamless|underscor\w+|moreover|furthermore|ecosystem|landscape|tapestry|realm|holistic|pivotal|myriad|testament|utilise|utilize)\b/gi,
   formula:    /(?:that'?s the (?:point|whole|idea)|the (?:tell|thing) is|which is why|it'?s worth noting|at the end of the day|in today'?s|when it comes to|the key (?:is|takeaway))/gi,
+  contrast:   /\b(?:rather than|instead of|as against|in place of)\b/gi,
 };
 
 const mean = a => a.reduce((s, n) => s + n, 0) / a.length;
@@ -51,13 +68,21 @@ const prose = src => src
 const sentences = t => t.replace(/\s+/g, ' ').split(/(?<=[.!?])\s+/)
   .map(s => s.trim()).filter(s => s.split(' ').length > 2);
 
-const files = fs.readdirSync(DIR)
-  .filter(f => f.endsWith('.md') && !f.startsWith('_') && f !== 'README.md');
+/* The leading underscore means "not an issue", not "not prose" — content/aso/
+   _rankgrip.md is a published page carrying nearly a thousand words, and skipping
+   it here would leave the one hand-written page in the series unchecked. The
+   template stays out: it is scaffolding, and it is meant to read like it. */
+const PROSE_UNDERSCORE = new Set(['_rankgrip.md']);
+const files = DIRS.flatMap(dir => fs.readdirSync(dir)
+  .filter(f => f.endsWith('.md') && f !== 'README.md' &&
+               (!f.startsWith('_') || PROSE_UNDERSCORE.has(f)))
+  .map(f => ({ dir, f })))
+  .sort((a, b) => a.f.localeCompare(b.f));
 
 let flagged = 0;
 
-for (const f of files.sort()) {
-  const src = fs.readFileSync(path.join(DIR, f), 'utf8');
+for (const { dir, f } of files) {
+  const src = fs.readFileSync(path.join(dir, f), 'utf8');
   if (/^draft:\s*true/m.test(src) && !DRAFTS) continue;
 
   const body  = prose(src);

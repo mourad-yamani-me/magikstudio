@@ -12,6 +12,12 @@
  * — it needs a build on the day. ci-cd.yml runs one daily and asks this script
  * whether that build is worth deploying.
  *
+ * It answers for two content types: the posts in content/blog, and the keyword
+ * reports in content/aso. The reports are deliberately absent from the calendar
+ * below — they have their own monthly cadence — but they are held by date in
+ * exactly the same way, so they need the same question asked on their behalf or
+ * a scheduled report is never released.
+ *
  * "Worth deploying" is not "a post is dated today". A cron can be delayed, a
  * runner can fail, and GitHub disables schedules on a repo that goes quiet —
  * any of which would make a post dated today the only one ever noticed and
@@ -36,6 +42,7 @@
  * scripts/platforms.mjs.
  */
 import fs from 'node:fs';
+import path from 'node:path';
 import { calendar, posts, quotaFor, readLedger, violations, writeLedger } from './schedule-rule.mjs';
 import { platformRule } from './platforms.mjs';
 import { ranked, readLedger as readTopics } from './topic-seo.mjs';
@@ -76,6 +83,33 @@ const takenOn = (date, ignore = null) => {
 
 /* ───────── claiming ───────── */
 
+/* ───────── the ASO issues ───────── */
+
+/* Read here rather than in schedule-rule.mjs on purpose. That module is the
+   publishing *calendar* — quotas, claims, violations — and the reports are
+   deliberately not on it (content/aso/README.md says why). What they do share
+   with a post is the only question this file answers for CI: is something dated
+   for today that the live site does not serve yet?
+
+   Without this, an issue dated tomorrow is held for ever. build.mjs releases it
+   on the first build on or after its date, but nothing would ever ask for that
+   build: `due` was computed from content/blog alone, so a week of scheduled
+   reports would sit in the repo publishing nothing. */
+const ASO_DIR = path.resolve(import.meta.dirname, '..', 'content/aso');
+const asoIssues = () => (fs.existsSync(ASO_DIR) ? fs.readdirSync(ASO_DIR) : [])
+  .filter(f => f.endsWith('.md') && !f.startsWith('_') && f.toLowerCase() !== 'readme.md')
+  .map(f => {
+    const src = fs.readFileSync(path.join(ASO_DIR, f), 'utf8');
+    const field = k => src.match(new RegExp(`^${k}:\\s*(.+?)\\s*$`, 'm'))?.[1]?.replace(/^["']|["']$/g, '');
+    return { slug: f.replace(/\.md$/, ''), date: field('date'), draft: field('draft') === 'true' };
+  })
+  .filter(i => !i.draft && /^\d{4}-\d{2}-\d{2}$/.test(i.date ?? ''))
+  .sort((a, b) => a.date.localeCompare(b.date));
+
+const aso     = asoIssues();
+const asoHeld = aso.filter(i => i.date > TODAY);
+const asoOut  = aso.filter(i => i.date <= TODAY);
+
 if (claim) {
   const where = Object.entries(ledger.claims).find(([, list]) => list.includes(claim))?.[0];
 
@@ -86,6 +120,21 @@ if (claim) {
     writeLedger(ledger);
     console.log(`  released ${where} — ${claim} no longer holds a slot.`);
     process.exit(0);
+  }
+
+  /* The reports are not on this calendar, and the claim path is the one place
+     that boundary can be crossed by accident: `--claim` takes a slug string and
+     never checks it exists, so claiming an ASO issue would write a blog slot in
+     _source/schedule.json for a page that is not a post — quietly consuming a
+     day's quota, and surfacing weeks later only as "claim never became a post".
+
+     The reports pace themselves monthly; see content/aso/README.md. */
+  if (aso.some(i => i.slug === claim)) {
+    console.error(
+      `\n  ${claim} is an ASO report, and the reports are not on this calendar.\n\n` +
+      `  Put the date straight in content/aso/${claim}.md — the daily build\n` +
+      `  releases it on the day, and nothing here needs to know.\n`);
+    process.exit(1);
   }
 
   if (where && where !== on) {
@@ -127,11 +176,13 @@ const out   = dated.filter(p => p.date <= TODAY);
    cheapest honest answer to "what is actually live" — one request, no HTML
    parsing, and no 404 storm from probing each URL in turn. */
 let liveSlugs = null;
+let liveAso   = null;
 try {
   const res = await fetch(`${SITE}/sitemap.xml`, { headers: { 'user-agent': 'indiecore-schedule' } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const xml = await res.text();
   liveSlugs = new Set([...xml.matchAll(/\/blog\/([^/<]+)\//g)].map(m => m[1]));
+  liveAso   = new Set([...xml.matchAll(/\/aso\/([^/<]+)\//g)].map(m => m[1]));
 } catch (e) {
   console.log(`  could not read ${SITE}/sitemap.xml (${e.message}) — falling back to the date alone`);
 }
@@ -140,14 +191,23 @@ const missing = liveSlugs
   ? out.filter(p => !liveSlugs.has(p.slug))
   : out.filter(p => p.date === TODAY);
 
+const asoMissing = liveAso
+  ? asoOut.filter(i => !liveAso.has(i.slug))
+  : asoOut.filter(i => i.date === TODAY);
+
 console.log(`\n  today is ${TODAY} (UTC) · ${out.length} published · ${held.length} held\n`);
 for (const p of held)    console.log(`  held   /blog/${p.slug}/ — publishes ${p.date}`);
+for (const i of asoHeld) console.log(`  held   /aso/${i.slug}/ — publishes ${i.date}`);
 for (const p of missing) console.log(`  due    /blog/${p.slug}/ — dated ${p.date}, not live yet`);
+for (const i of asoMissing) console.log(`  due    /aso/${i.slug}/ — dated ${i.date}, not live yet`);
 
-console.log(missing.length
-  ? `\n  ${missing.length} post(s) due — a deploy would put ${missing.length === 1 ? 'it' : 'them'} out.`
-  : held.length
-    ? `\n  nothing due today. Next: /blog/${held[0].slug}/ on ${held[0].date}.`
+const dueCount = missing.length + asoMissing.length;
+const nextHeld = [...held.map(p => ({ ...p, kind: 'blog' })), ...asoHeld.map(i => ({ ...i, kind: 'aso' }))]
+  .sort((a, b) => a.date.localeCompare(b.date))[0];
+console.log(dueCount
+  ? `\n  ${dueCount} page(s) due — a deploy would put ${dueCount === 1 ? 'it' : 'them'} out.`
+  : nextHeld
+    ? `\n  nothing due today. Next: /${nextHeld.kind}/${nextHeld.slug}/ on ${nextHeld.date}.`
     : '\n  nothing due, nothing held.');
 
 /* The next fortnight of the calendar, so the state of the queue and the room
@@ -205,6 +265,7 @@ if (errors.length) {
 }
 
 if (process.env.GITHUB_OUTPUT) {
-  fs.appendFileSync(process.env.GITHUB_OUTPUT, `due=${missing.length ? 'true' : 'false'}\n`);
+  fs.appendFileSync(process.env.GITHUB_OUTPUT, `due=${dueCount ? 'true' : 'false'}\n`);
   fs.appendFileSync(process.env.GITHUB_OUTPUT, `slugs=${missing.map(p => p.slug).join(' ')}\n`);
+  fs.appendFileSync(process.env.GITHUB_OUTPUT, `aso=${asoMissing.map(i => i.slug).join(' ')}\n`);
 }

@@ -42,10 +42,10 @@ env:
   WRANGLER_SEND_METRICS: "false"
 
 jobs:
-  # Only ever asked on a scheduled run: is there a post whose date has arrived
-  # that the live site does not serve yet? Asking the live sitemap rather than
-  # "is anything dated today" means a missed or delayed run catches up by itself
-  # instead of leaving a post held forever.
+  # Only ever asked on a scheduled run: is there a post or an ASO report whose
+  # date has arrived that the live site does not serve yet? Asking the live
+  # sitemap rather than "is anything dated today" means a missed or delayed run
+  # catches up by itself instead of leaving a page held forever.
   due:
     name: Anything due?
     if: github.event_name == 'schedule'

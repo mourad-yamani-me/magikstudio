@@ -41,6 +41,11 @@ main,header,footer{position:relative;z-index:2}
 .nav.stuck .nav-in{height:62px}
 .brand{display:flex;align-items:center;gap:11px;font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:-.01em}
 .nav-links{display:flex;align-items:center;gap:30px}
+/* Seven links plus the CTA is one more than this row was built for, and the row
+   has to survive down to 981px — one pixel above the width where it collapses
+   into the burger. Tightening the gap below 1080px buys back what the new item
+   costs without touching the type, which is calibrated on these labels. */
+@media(max-width:1080px){.nav-links{gap:22px}}
 /* :not(.btn) because the CTA lives inside this nav too, and `.nav-links a` beats
    `.btn-primary` on specificity — which painted the button's label in --muted,
    light purple on gold, while the identical button elsewhere on the site kept
@@ -569,3 +574,79 @@ main,header,footer{position:relative;z-index:2}
 @media (prefers-reduced-motion:reduce){
   .ml-invite{transition:none;opacity:1;transform:none}
 }
+
+/* ASO reports — the winnable-keywords data pages.
+   The table is the product here, so it gets the room: .kwrap scrolls it on its
+   own axis rather than letting a seven-column table push the page sideways,
+   which is the one layout failure a phone cannot recover from. */
+/* The table is wider than the article measure and scrolls sideways, which is
+   correct — collapsing seven columns into cards would lose the row-to-row
+   comparison that is the whole point of printing a table. What was missing was
+   any sign that it scrolls: the last column simply ended mid-word and read as
+   broken layout rather than as more content.
+
+   These are the classic scroll shadows. The two `local` gradients scroll with
+   the content and mask the shadows at each end; the two `scroll` radials stay
+   put. The result is a shadow that appears only on the side that has more to
+   show, with no JavaScript and nothing to keep in sync. */
+.kwrap{margin-top:26px;overflow-x:auto;border:1px solid var(--line);border-radius:18px;
+  background:
+    linear-gradient(to right,var(--table-bg) 30%,rgba(22,17,33,0)) left/44px 100% no-repeat local,
+    linear-gradient(to left,var(--table-bg) 30%,rgba(22,17,33,0)) right/44px 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%,rgba(0,0,0,.55),rgba(0,0,0,0)) left/16px 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%,rgba(0,0,0,.55),rgba(0,0,0,0)) right/16px 100% no-repeat scroll,
+    var(--card)}
+/* Keeps an icon, or the last word of a wrapping link, from being left alone on
+   its own line. */
+.nb{white-space:nowrap}
+.ktable{width:100%;border-collapse:collapse;font-size:14.5px;min-width:680px}
+.ktable caption{text-align:left;padding:18px 22px 0;font-size:13.5px;color:var(--muted)}
+.ktable th,.ktable td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+.ktable thead th{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  position:sticky;top:0;background:var(--table-bg)}
+.ktable tbody tr:last-child td{border-bottom:0}
+.ktable tbody tr:hover{background:rgba(255,255,255,.04)}
+.ktable .n{text-align:right;font-variant-numeric:tabular-nums}
+.ktable .kw{font-weight:600;color:var(--text);white-space:normal;min-width:200px}
+.ktable .held{color:var(--muted);white-space:normal;min-width:150px;max-width:230px}
+.kfree{color:#4ADE80;font-weight:700}
+.ktight{color:var(--accent);font-weight:700}
+.kgone{color:#FF6B9A;font-weight:700}
+.kwall{margin-top:44px}
+.kgate{margin-top:44px;padding:24px 26px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.kgate h2{font-family:var(--display);font-size:17px;font-weight:700;color:var(--muted);margin:0}
+.kgate ul{margin:16px 0 0;padding-left:20px;display:grid;gap:9px}
+.kgate li{font-size:14.5px;line-height:1.6;color:var(--muted)}
+.kstat{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.kstat span{padding:7px 14px;border-radius:100px;border:1px solid var(--line);background:rgba(255,255,255,.04);
+  font-size:12.5px;font-weight:600;color:var(--muted)}
+.kstat strong{color:var(--text)}
+@media (max-width:640px){.ktable th,.ktable td{padding:10px 13px}}
+
+.tcat{padding:6px 14px;border-radius:100px;border:1px solid var(--line);background:rgba(255,255,255,.04);
+  font-size:13px;font-weight:600;color:var(--muted);transition:color .25s,border-color .25s,background .25s}
+.tcat:hover{color:var(--text);border-color:rgba(255,255,255,.26);background:rgba(255,255,255,.08)}
+
+.grip{display:inline-block;min-width:34px;padding:3px 9px;border-radius:8px;font-weight:700;font-variant-numeric:tabular-nums}
+.g-open{color:#4ADE80;background:rgba(74,222,128,.12)}
+.g-tight{color:var(--accent);background:rgba(255,197,61,.12)}
+.g-held{color:#FF6B9A;background:rgba(255,107,154,.12)}
+.g-unmeasured{color:var(--muted);background:rgba(255,255,255,.05)}
+
+/* External links in the report tables.
+
+   The same arrow the repo and gist cards draw inline, but as a mask on a
+   pseudo-element rather than sixty-nine <svg> elements: the markup stays a
+   plain link, the icon inherits the link's colour, and nothing is added to any
+   accessible name — the sentence above the table is what tells a screen-reader
+   user the links open a new tab, once, instead of per row.
+
+   A data: URI in CSS is governed by `img-src`, which this site's CSP allows.
+   Spaces are percent-encoded because the stylesheet is minified before it is
+   inlined, and a raw space inside url() does not survive that. */
+:root{--table-bg:#161121;--ext-arrow:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2.6'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M7%2017%2017%207M9%207h8v8'/%3E%3C/svg%3E")}
+.xlink .nb::after{content:"";display:inline-block;width:.6em;height:.6em;margin-left:.34em;
+  vertical-align:baseline;background:currentColor;opacity:.7;
+  -webkit-mask:var(--ext-arrow) center/contain no-repeat;
+  mask:var(--ext-arrow) center/contain no-repeat}
+.xlink:hover .nb::after{opacity:1}

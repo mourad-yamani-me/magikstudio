@@ -37,6 +37,11 @@ const TARGETS = process.env.LH_TARGETS
       // the blog post template is the only one with code blocks and gist
       // embeds; leaving it untested let a contrast failure ship
       ['post',    '/blog/static-site-cloudflare-workers/'],
+      // the ASO issue is the only page built around a data table, and the only
+      // one whose palette says something with colour — open/tight/held are
+      // three custom foregrounds on the card background. That is the same
+      // shape as the contrast failure the post template shipped.
+      ['aso',     '/aso/google-play-keywords-puzzle-games-2026-08/'],
     ];
 
 const run = promisify(execFile);
