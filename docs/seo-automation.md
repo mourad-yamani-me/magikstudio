@@ -192,6 +192,20 @@ The key is not needed for Bing to hear about new pages: IndexNow already does
 that, with no credentials, and keeps doing it if this is never set up. What the
 key buys is the answer coming back.
 
+## Yandex Webmaster — the ownership token
+
+Yandex verifies the site with a file at the root, `/yandex_<token>.html`, whose
+body repeats the token. `dist/` is generated, so it cannot be uploaded by hand:
+the token is a constant in `build.mjs`, the file is written beside `app-ads.txt`
+and the IndexNow key, and `scripts/verify.mjs` fails the build if the filename
+and the body ever disagree. It is skipped by the page checks — an `.html` file
+because Yandex says so, not a page.
+
+Verification only takes effect once the file is live, so deploy before pressing
+*Check* in Yandex Webmaster. Nothing else in this repo reads the token: IndexNow
+already tells Yandex about new pages without it, and what verifying buys is the
+index and query reporting coming back.
+
 ## Google Search Console — one-time setup
 
 This is the part you have to do by hand once. IndexNow needs none of it, and the

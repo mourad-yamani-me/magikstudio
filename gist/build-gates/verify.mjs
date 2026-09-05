@@ -22,7 +22,13 @@ if (!fs.existsSync(DIST)) {
 const walk = d => fs.readdirSync(d, { withFileTypes: true })
   .flatMap(e => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
 const allFiles = walk(DIST);
-const pages = allFiles.filter(f => f.endsWith('.html'));
+// A search engine's ownership token is an .html file by the crawler's
+// requirement, not a page: the filename and the body are both dictated, and
+// nothing links to it. Every page check below would be right about it and
+// useless — no title, no canonical, no h1 — so it is not a page here. Its own
+// check is further down.
+const isOwnershipToken = f => /^yandex_[0-9a-f]{16}\.html$/.test(path.basename(f));
+const pages = allFiles.filter(f => f.endsWith('.html') && !isOwnershipToken(f));
 const rel = f => '/' + path.relative(DIST, f).split(path.sep).join('/');
 
 /** does a site-absolute URL resolve to a real file? */
@@ -600,6 +606,23 @@ for (const f of ['robots.txt', 'app-ads.txt', '_headers', '404.html', 'favicon.s
   if (!/^[a-f0-9]{8,128}$/.test(key)) fail('indexnow', `key is not 8-128 hex chars: "${key}"`);
   else if (!fs.existsSync(p)) fail('indexnow', `missing key file /${key}.txt`);
   else if (fs.readFileSync(p, 'utf8').trim() !== key) fail('indexnow', 'key file contents do not match the key');
+}
+
+// ---- Yandex ownership token ----
+// Yandex Webmaster fetches /yandex_<token>.html and reads the token out of the
+// body. The filename and the contents carry the same string twice, so they can
+// disagree — and a property that silently loses its verification reports no
+// error anywhere except in Yandex's own UI, months later.
+{
+  const found = fs.readdirSync(DIST).filter(f => isOwnershipToken(f));
+  if (found.length !== 1)
+    fail('yandex', `expected exactly 1 yandex_<token>.html at the site root, found ${found.length}`);
+  else {
+    const token = found[0].slice('yandex_'.length, -'.html'.length);
+    const body = fs.readFileSync(path.join(DIST, found[0]), 'utf8');
+    if (!body.includes(`Verification: ${token}`))
+      fail('yandex', `${found[0]} does not contain "Verification: ${token}"`);
+  }
 }
 
 // ---- app-ads.txt (IAB Tech Lab spec) ----

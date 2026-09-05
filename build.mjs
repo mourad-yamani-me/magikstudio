@@ -69,6 +69,11 @@ LEGAL.address = `${LEGAL.street}, ${LEGAL.postalCode} ${LEGAL.city}, ${LEGAL.cou
    while it is readable at https://www.indiecore.net/<key>.txt, which is why
    the same file feeds both the build and scripts/seo-ping.mjs. */
 const INDEXNOW_KEY = fs.readFileSync(path.join(ROOT, '_source/indexnow-key.txt'), 'utf8').trim();
+/* Yandex site-ownership token, from Yandex Webmaster. Public by design, like
+   the IndexNow key: it proves ownership only by being readable at
+   https://www.indiecore.net/yandex_<token>.html, and authorises nothing else.
+   Replacing it means replacing the property in Yandex Webmaster too. */
+const YANDEX_TOKEN = '3cf90792cb0bb7de';
 const play = JSON.parse(fs.readFileSync(path.join(ROOT, '_source/play-data.json'), 'utf8'));
 const pkg  = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 
@@ -2749,6 +2754,21 @@ fs.writeFileSync(path.join(OUT,'robots.txt'),
 /* IndexNow key file — the crawlers fetch this to confirm we own the host
    before accepting a URL submission. Must sit at the site root. */
 fs.writeFileSync(path.join(OUT, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY + '\n');
+
+/* Yandex ownership token. The filename and the body are both dictated by
+   Yandex Webmaster, which fetches the file at the site root and reads the
+   token out of it; there is nothing to design here and nothing to link it
+   from. It is emitted rather than committed because dist/ is generated.
+   verify.mjs skips it in the page checks — it is an .html file by Yandex's
+   requirement, not a page — and checks the two halves of the token agree. */
+fs.writeFileSync(path.join(OUT, `yandex_${YANDEX_TOKEN}.html`),
+`<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>Verification: ${YANDEX_TOKEN}</body>
+</html>
+`);
 
 /* app-ads.txt — IAB Tech Lab authorised sellers, crawled by AdMob from the
    developer website listed on the Play Store. Must stay at the site root. */
