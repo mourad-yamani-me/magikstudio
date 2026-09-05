@@ -22,13 +22,7 @@ if (!fs.existsSync(DIST)) {
 const walk = d => fs.readdirSync(d, { withFileTypes: true })
   .flatMap(e => e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]);
 const allFiles = walk(DIST);
-// A search engine's ownership token is an .html file by the crawler's
-// requirement, not a page: the filename and the body are both dictated, and
-// nothing links to it. Every page check below would be right about it and
-// useless — no title, no canonical, no h1 — so it is not a page here. Its own
-// check is further down.
-const isOwnershipToken = f => /^yandex_[0-9a-f]{16}\.html$/.test(path.basename(f));
-const pages = allFiles.filter(f => f.endsWith('.html') && !isOwnershipToken(f));
+const pages = allFiles.filter(f => f.endsWith('.html'));
 const rel = f => '/' + path.relative(DIST, f).split(path.sep).join('/');
 
 /** does a site-absolute URL resolve to a real file? */
@@ -609,20 +603,21 @@ for (const f of ['robots.txt', 'app-ads.txt', '_headers', '404.html', 'favicon.s
 }
 
 // ---- Yandex ownership token ----
-// Yandex Webmaster fetches /yandex_<token>.html and reads the token out of the
-// body. The filename and the contents carry the same string twice, so they can
-// disagree — and a property that silently loses its verification reports no
-// error anywhere except in Yandex's own UI, months later.
+// Yandex verifies the property by reading one meta tag on the home page. It is
+// not referenced anywhere else in the build, so an edit to the <head> can drop
+// it and nothing downstream complains — the property just quietly comes back
+// unverified in Yandex's own UI, months later, taking the index and query
+// reporting with it. The alternative Yandex offers, a /yandex_<token>.html
+// file at the root, is not available here: html_handling in wrangler.jsonc
+// strips .html from every URL, so that exact address answers 307 and Yandex
+// wants a 200 (checked on production, not something dist/ can show).
 {
-  const found = fs.readdirSync(DIST).filter(f => isOwnershipToken(f));
-  if (found.length !== 1)
-    fail('yandex', `expected exactly 1 yandex_<token>.html at the site root, found ${found.length}`);
-  else {
-    const token = found[0].slice('yandex_'.length, -'.html'.length);
-    const body = fs.readFileSync(path.join(DIST, found[0]), 'utf8');
-    if (!body.includes(`Verification: ${token}`))
-      fail('yandex', `${found[0]} does not contain "Verification: ${token}"`);
-  }
+  const token = fs.readFileSync(path.join(import.meta.dirname, '..', '_source/yandex-verification.txt'), 'utf8').trim();
+  const home = path.join(DIST, 'index.html');
+  if (!/^[a-f0-9]{16}$/.test(token)) fail('yandex', `token is not 16 hex chars: "${token}"`);
+  else if (!fs.existsSync(home)) fail('yandex', 'missing /index.html');
+  else if (!fs.readFileSync(home, 'utf8').includes(`<meta name="yandex-verification" content="${token}">`))
+    fail('yandex', `home page does not carry <meta name="yandex-verification" content="${token}">`);
 }
 
 // ---- app-ads.txt (IAB Tech Lab spec) ----

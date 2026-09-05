@@ -194,17 +194,31 @@ key buys is the answer coming back.
 
 ## Yandex Webmaster — the ownership token
 
-Yandex verifies the site with a file at the root, `/yandex_<token>.html`, whose
-body repeats the token. `dist/` is generated, so it cannot be uploaded by hand:
-the token is a constant in `build.mjs`, the file is written beside `app-ads.txt`
-and the IndexNow key, and `scripts/verify.mjs` fails the build if the filename
-and the body ever disagree. It is skipped by the page checks — an `.html` file
-because Yandex says so, not a page.
+The token lives in `_source/yandex-verification.txt` and `build.mjs` puts it on
+the home page as `<meta name="yandex-verification" content="…">`. Pick the
+**Meta tag** method in Yandex Webmaster; the token is the same string whichever
+tab is showing.
 
-Verification only takes effect once the file is live, so deploy before pressing
-*Check* in Yandex Webmaster. Nothing else in this repo reads the token: IndexNow
-already tells Yandex about new pages without it, and what verifying buys is the
-index and query reporting coming back.
+**Not the root file**, which is the method Yandex offers first. It was tried and
+reverted: the file was correct in `dist/`, and production still answered
+
+```
+GET /yandex_<token>.html   307 → /yandex_<token>
+GET /yandex_<token>        200   Verification: <token>
+```
+
+because `html_handling: "auto-trailing-slash"` in `wrangler.jsonc` strips `.html`
+from every URL on this site — the rule that gives the pages their clean paths.
+Yandex fetches the exact `.html` address and wants a 200 there. Nothing local
+could have caught it: `verify.mjs` reads `dist/`, where the file was right, and
+the asset server is what rewrites the URL. Serving that one path would mean
+giving an assets-only Worker a `main` script and a `run_worker_first` rule, for
+one URL that a meta tag replaces.
+
+So `verify.mjs` checks the home page carries the tag. Nothing else reads the
+token: IndexNow already tells Yandex about new pages without it, and what
+verifying buys is the index and query reporting coming back. Verification is
+read from the live site, so deploy before pressing *Check*.
 
 ## Google Search Console — one-time setup
 
