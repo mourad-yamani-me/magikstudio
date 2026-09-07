@@ -1,0 +1,126 @@
+class='post-body entry-content float-container' id='post-body-4820117336095512204'>
+Privacy Policy
+
+Effective Date: 07-09-2026
+
+Last Updated: 07-09-2026
+
+Package ID: com.footballquiz.logos
+
+Contact Email: [email&#160;protected]
+
+1. Overview
+
+This Privacy Policy explains how Football Logo Quiz (developed by Indie Core Dev) handles your information when you use our game. We are committed to protecting your privacy and ensuring a safe experience for all users.
+
+2. Personal Information
+
+We do not collect or store any personally identifiable information (PII) such as your name, email address, phone number, or precise location. We do not ask you to create an account or provide any personal details to play.
+
+3. Cloud Save & Game Progress
+
+Football Logo Quiz offers an optional Cloud Save feature so your game progress (such as solved badges, unlocked levels, coins, and settings) can be synced and restored. This feature uses Google Play Games Services &#8212; specifically a Saved Game, which Google stores in your own Play Games account rather than on any server of ours.
+
+How this works:
+
+  - Cloud Save is active only if you are signed in to Google Play Games on your device. Play Games signs most players in automatically at launch; if you decline, the game simply stays local-only and nothing is uploaded.
+
+  - Your game progress is written to a Saved Game held in your Play Games account. It contains no personal information, and it is readable only by you and by this game.
+
+  - This data is used only to restore your progress on the device and is never used for advertising, profiling, or tracking.
+
+  - The game also submits your total number of solved badges to a Play Games leaderboard, so players can compare scores. The name shown beside your score is the Play Games gamertag you chose with Google, not anything this game asks you for. You can hide your Play Games profile, or change that name, in the Play Games app.
+
+  - You may delete this data at any time (see Section 14).
+
+4. Analytics
+
+We use Firebase Analytics to understand how users interact with our game. This data helps us improve gameplay and fix bugs. Firebase may collect anonymized usage data such as session length, crash events, and interaction patterns.
+
+For more details, see the Firebase Privacy and Security page.
+
+5. Crash Reporting
+
+We use Firebase Crashlytics to monitor, log, and analyze crash reports. This helps us maintain app stability and improve performance. Data collected is anonymized and does not contain personal identifiers.
+
+6. Third-Party Services & Ads
+
+Our game displays advertisements using the following ad provider:
+
+  - AdMob (by Google)
+
+These ad networks may use device identifiers or cookies to show you relevant ads. You can opt out of personalized ads via your device settings.
+
+The third-party services we rely on (Google AdMob, Google Play Games Services, and Firebase) are governed by their own privacy policies. We encourage you to review the Google Privacy Policy for more information.
+
+7. Notifications
+
+Football Logo Quiz may send you local notifications (for example, gentle reminders to come back and play). These notifications are scheduled and displayed entirely on your device. We do not use push notification tokens, and no notification data is sent to or stored on any server we own. You can disable notifications at any time in your device settings.
+
+8. User Accounts
+
+Football Logo Quiz does not require account creation or login. The Cloud Save and leaderboard features described in Section 3 use the Google Play Games account already on your device, and are handled entirely by Google. We never ask you for a username, password, or email address, and we never see your Google credentials.
+
+9. In-App Purchases
+
+Our game does not offer in-app purchases (IAPs).
+
+10. Children's Privacy
+
+Our game is not specifically directed at children under 13. We do not knowingly collect data from users in this age group. If you believe we have unknowingly collected personal information from a child, please contact us at [email&#160;protected].
+
+11. Offline Use
+
+You can enjoy Football Logo Quiz offline without an internet connection. Ads, Firebase Analytics, crash reporting, and Cloud Save syncing require an internet connection. When offline, your progress is saved locally on your device and synced the next time you are online (if you are signed in to Play Games).
+
+12. Data Sharing
+
+We do not share or sell your data with any third parties. Any data collected by third-party services (like AdMob, Firebase Analytics, Crashlytics, or Google Play Games Services) is governed by their respective privacy policies.
+
+13. Data Storage & Retention
+
+We do not store any personally identifiable information on our own servers, and we do not operate a game server of our own. Your Cloud Save is held by Google Play Games Services inside your own Play Games account for as long as you keep the game installed and signed in, so that your progress can be restored. You may delete it at any time.
+
+14. Your Rights
+
+The game includes an "Erase my data" option in its settings. Using it deletes your Saved Game from Play Games and clears your progress on the device. This action cannot be undone.
+
+Your Play Games player profile and gamertag belong to you rather than to us, so we cannot delete them &#8212; you manage them, and your leaderboard visibility, in Google's own Play Games app. You can also remove all local data by uninstalling the game or clearing its storage. For data handled by third-party services (such as Google AdMob and Firebase), you may exercise your rights through Google's own settings and privacy tools. If you have any concerns about how your information is handled, please contact us at [email&#160;protected] and we will assist you.
+
+15. Changes to This Policy
+
+We may update this Privacy Policy from time to time. Any changes will be reflected by updating the "Last Updated" date at the top of this page. We encourage you to review this page periodically.
+
+16. Contact
+
+If you have any questions about this Privacy Policy or how we handle your data, please contact:
+
+Indie Core Dev
+
+[email&#160;protected]
+
+-
+
+Obtenir le lien
+
+-
+
+Facebook
+
+-
+
+X
+
+-
+
+Pinterest
+
+-
+
+E-mail
+
+-
+
+Autres applications
+
+&copy; 2025 Othmane Ettaib &#8212; Indie Core Dev. All rights reserved.

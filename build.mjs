@@ -340,6 +340,11 @@ const GAMES = [
     tagline:'Word Slot in French — the same fill-in crossword, built around French words.',
     blurb:'The French edition of Word Slot. A crossword cut into blocks and scattered across the board; slot every piece back until each row and column reads as a real French word.',
     feats:['French word list','No timer, no fail state','Cloud save','Plays offline'] },
+  { key:'football-logo-quiz', slug:'football-logo-quiz',   legacy:'privacy-policy-for-football-logo-quiz',
+    live:false, name:'Football Logo Quiz', pkg:'com.footballquiz.logos', category:'Trivia',
+    tagline:'Logo Quiz for football — name the club, the country and the cup from the crest alone.',
+    blurb:'Same game as Logo Quiz, played entirely on football badges. Name the club, the national side or the competition from its crest, with the letters and nothing else to go on.',
+    feats:['790 badges across 57 levels','Clubs, nations & competitions','Cloud save','Plays offline'] },
 ].map(g => {
   const p = play[g.key] || {};                       // no Play listing yet -> entry carries its own
   const art = f => fs.existsSync(path.join(ROOT, 'public/assets/games', f)) ? f : '';
@@ -358,6 +363,11 @@ const GAMES = [
 });
 
 const ALL = GAMES;
+/* The hero chip counts what a visitor can actually install today. Using
+   GAMES.length there quietly inflated the claim by one for every unreleased
+   entry, and the hand-written "Five games on Google Play" a few lines below
+   then disagreed with it on the same screen. */
+const LIVE = GAMES.filter(g => g.live);
 
 
 /* ───────── privacy policy parsing ───────── */
@@ -1171,7 +1181,7 @@ function pageHome(){
   const body = `
 <section class="hero"><div class="shell hero-grid">
   <div>
-    <div class="chip rv"><span class="dot"></span> ${GAMES.length} games live · 100% free</div>
+    <div class="chip rv"><span class="dot"></span> ${LIVE.length} games live · 100% free</div>
     <h1 class="rv">FIVE PUZZLES.<br><span class="grad">ZERO PAYWALLS.</span></h1>
     <p class="lede rv">Free puzzle games for Android that never ask for your wallet. No in-app purchases, no sign-up, and every one of them works without a signal.</p>
     <div class="cta-row rv">
