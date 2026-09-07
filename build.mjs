@@ -2482,6 +2482,12 @@ fs.cpSync(path.join(ROOT,'public/assets/games'),  path.join(OUT,'assets/games'),
 fs.cpSync(path.join(ROOT,'public/assets/fonts'),  path.join(OUT,'assets/fonts'), {recursive:true});
 if (fs.existsSync(path.join(ROOT,'public/assets/og')))
   fs.cpSync(path.join(ROOT,'public/assets/og'),   path.join(OUT,'assets/og'),   {recursive:true});
+/* Post images. content/blog/README.md has documented /assets/blog/ since before
+   any post used one, so the first post to add a screenshot failed verify with a
+   dead image link and no hint that the path was never wired up. Guarded because
+   the directory only exists once somebody needs it. */
+if (fs.existsSync(path.join(ROOT,'public/assets/blog')))
+  fs.cpSync(path.join(ROOT,'public/assets/blog'), path.join(OUT,'assets/blog'), {recursive:true});
 
 /* gist:image-pipeline */
 /* ── WebP derivatives (served via <picture>, the JPEG stays as fallback) ──

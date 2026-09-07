@@ -30,7 +30,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -134,7 +134,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -240,7 +240,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -353,7 +353,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -466,7 +466,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -511,7 +511,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 206,
@@ -628,7 +628,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -672,7 +672,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 113,
@@ -723,7 +723,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 2880,
@@ -751,6 +751,17 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity build not working",
+      "keywords": [],
+      "questions": [],
+      "entities": [],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -877,7 +888,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 649,
@@ -926,7 +937,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 2,
         "annualViews": 646,
@@ -988,7 +999,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -1136,7 +1147,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 4,
         "titles": [
@@ -1224,7 +1235,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 6797,
@@ -1252,6 +1263,28 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity android build error",
+      "keywords": [
+        "unity 6 android build error"
+      ],
+      "questions": [
+        "how to install android build support unity",
+        "how to add android build support unity"
+      ],
+      "entities": [
+        "unity",
+        "android",
+        "build",
+        "error",
+        "support"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 2,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -1280,7 +1313,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -1380,7 +1413,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -1436,7 +1469,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 9,
@@ -1489,7 +1522,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 11738,
@@ -1612,7 +1645,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 1891,
@@ -1667,7 +1700,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 3362,
@@ -1695,6 +1728,27 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity android il2cpp or mono",
+      "keywords": [
+        "bepinex unity il2cpp android",
+        "unity android mono vs il2cpp",
+        "unity il2cpp android",
+        "unity il2cpp vs mono"
+      ],
+      "questions": [],
+      "entities": [
+        "unity",
+        "il2cpp",
+        "android",
+        "mono"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -1719,7 +1773,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 3,
         "annualViews": 1492,
@@ -1770,7 +1824,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 6293,
@@ -1798,6 +1852,36 @@
         "what": "no reproduction path — this would be written from research alone"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "what is google play store data",
+      "keywords": [
+        "what is the url for google play store"
+      ],
+      "questions": [
+        "why does google play store use data",
+        "how do i clear google play store data",
+        "how to delete google play store data",
+        "how to reset google play store data",
+        "how to download google play store data",
+        "why does google play store use background data",
+        "how do i clear google play store cache and data",
+        "how to transfer google play store data to iphone"
+      ],
+      "entities": [
+        "google",
+        "play",
+        "store",
+        "data",
+        "use",
+        "clear",
+        "much"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 13,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -1819,7 +1903,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 13326,
@@ -1847,6 +1931,25 @@
         "what": "no reproduction path — this would be written from research alone"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "is google play services safe",
+      "keywords": [],
+      "questions": [
+        "can google play services be hacked",
+        "is google play services free",
+        "what permissions does google play services really need"
+      ],
+      "entities": [
+        "google",
+        "play",
+        "services"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 4,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -1862,13 +1965,22 @@
     },
     "variants": [],
     "proposed": "2026-08-30",
-    "status": "proposed",
-    "slug": null,
-    "published": null,
-    "target": null,
+    "status": "published",
+    "slug": "admob-unity-test-ids-and-two-error-codes",
+    "published": "2026-09-07",
+    "target": {
+      "indexDays": 14,
+      "impressionsDays": 60,
+      "impressions": 50,
+      "positionDays": 90,
+      "position": 20,
+      "clicksDays": 90,
+      "clicks": 5,
+      "basis": "provisional"
+    },
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 3230,
@@ -1896,6 +2008,17 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob unity test ids",
+      "keywords": [],
+      "questions": [],
+      "entities": [],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -2004,7 +2127,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -2108,7 +2231,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -2255,13 +2378,22 @@
       "how to integrate admob in unity"
     ],
     "proposed": "2026-08-31",
-    "status": "proposed",
-    "slug": null,
-    "published": null,
-    "target": null,
+    "status": "published",
+    "slug": "admob-unity-sdk-empty-app-id",
+    "published": "2026-09-07",
+    "target": {
+      "indexDays": 14,
+      "impressionsDays": 60,
+      "impressions": 50,
+      "positionDays": 90,
+      "position": 20,
+      "clicksDays": 90,
+      "clicks": 5,
+      "basis": "provisional"
+    },
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 3756,
@@ -2289,6 +2421,27 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob unity sdk",
+      "keywords": [
+        "admob unity mediation",
+        "admob unity github",
+        "admob unity integration",
+        "admob unity tutorial",
+        "admob unity guide",
+        "how to integrate admob in unity"
+      ],
+      "questions": [],
+      "entities": [
+        "admob",
+        "unity"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -2310,7 +2463,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 2314,
@@ -2338,6 +2491,17 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity 6 android build error",
+      "keywords": [],
+      "questions": [],
+      "entities": [],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -2364,7 +2528,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 198,
@@ -2413,7 +2577,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 6,
         "annualViews": 2008,
@@ -2441,6 +2605,23 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "how to check admob version in unity",
+      "keywords": [],
+      "questions": [
+        "how to check unity version"
+      ],
+      "entities": [
+        "check",
+        "version",
+        "unity"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 2,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -2462,7 +2643,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 1359,
@@ -2514,7 +2695,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 6,
         "annualViews": 762,
@@ -2610,7 +2791,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 110,
@@ -2659,7 +2840,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 4,
         "annualViews": 831,
@@ -2708,7 +2889,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 5111,
@@ -2736,6 +2917,22 @@
         "what": "needs your console: the notice text, what you declared, the dates"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "what is admob and how it works",
+      "keywords": [],
+      "questions": [
+        "what is google admob and how it works"
+      ],
+      "entities": [
+        "admob",
+        "works"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 2,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -2768,7 +2965,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 2114,
@@ -2796,6 +2993,37 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity error gradle build failed",
+      "keywords": [
+        "unity error commandinvokationfailure gradle build failed",
+        "unity android build failed gradle",
+        "unity commandinvokationfailure gradle build failed",
+        "unity 6 gradle build failed",
+        "unity android gradle build failed",
+        "unity firebase gradle build failed",
+        "unity 2022 gradle build failed",
+        "unity android build failed",
+        "unity gradle build error"
+      ],
+      "questions": [
+        "how to fix gradle build failed in unity"
+      ],
+      "entities": [
+        "unity",
+        "build",
+        "gradle",
+        "failed",
+        "error",
+        "android",
+        "commandinvokationfailure"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 1,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -2830,7 +3058,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -2884,7 +3112,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 152,
@@ -2988,7 +3216,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 7,
         "titles": [
@@ -3146,7 +3374,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 5189,
@@ -3174,6 +3402,26 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob unity mediation",
+      "keywords": [
+        "admob unity github",
+        "admob unity integration",
+        "admob unity tutorial",
+        "admob unity guide",
+        "how to integrate admob in unity"
+      ],
+      "questions": [],
+      "entities": [
+        "admob",
+        "unity"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -3253,7 +3501,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 198,
@@ -3394,7 +3642,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 9,
         "annualViews": 4184,
@@ -3422,6 +3670,17 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "why gradle is better than maven",
+      "keywords": [],
+      "questions": [],
+      "entities": [],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 2,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -3443,7 +3702,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 3060,
@@ -3471,6 +3730,17 @@
         "what": "no reproduction path — this would be written from research alone"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "capacitor android app builder",
+      "keywords": [],
+      "questions": [],
+      "entities": [],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -3492,7 +3762,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 548,
@@ -3541,7 +3811,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 4,
         "annualViews": 482,
@@ -3598,7 +3868,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -3758,7 +4028,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 187,
@@ -3810,7 +4080,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -3953,7 +4223,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 2175,
@@ -3981,6 +4251,25 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity android build failed",
+      "keywords": [],
+      "questions": [
+        "how to install android build support unity",
+        "how to add android build support unity"
+      ],
+      "entities": [
+        "unity",
+        "android",
+        "build",
+        "support"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 2,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -4054,7 +4343,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 4805,
@@ -4082,6 +4371,25 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob unity github",
+      "keywords": [
+        "admob unity integration",
+        "admob unity tutorial",
+        "admob unity guide",
+        "how to integrate admob in unity"
+      ],
+      "questions": [],
+      "entities": [
+        "admob",
+        "unity"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -4147,7 +4455,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 16268,
@@ -4209,7 +4517,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 4863,
@@ -4237,6 +4545,22 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "unity il2cpp android",
+      "keywords": [
+        "unity il2cpp vs mono"
+      ],
+      "questions": [],
+      "entities": [
+        "unity",
+        "il2cpp"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -4258,7 +4582,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 877,
@@ -4307,7 +4631,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 2,
         "annualViews": 479,
@@ -4356,7 +4680,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 14399,
@@ -4384,6 +4708,17 @@
         "what": "no reproduction path — this would be written from research alone"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "what is a github deployment",
+      "keywords": [],
+      "questions": [],
+      "entities": [],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -4412,7 +4747,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -4624,7 +4959,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 3281,
@@ -4652,6 +4987,30 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob unity integration",
+      "keywords": [
+        "admob unity ads",
+        "admob unity tutorial",
+        "admob unity guide",
+        "admob vs unity ads",
+        "admob or unity ads",
+        "how to integrate admob in unity",
+        "admob unity",
+        "admob vs unity"
+      ],
+      "questions": [],
+      "entities": [
+        "admob",
+        "unity",
+        "ads"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -4675,7 +5034,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 9,
         "titles": [
@@ -4767,7 +5126,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 1,
         "annualViews": 263,
@@ -4822,7 +5181,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -4978,7 +5337,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 2955,
@@ -5006,6 +5365,29 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob unity ads",
+      "keywords": [
+        "admob unity tutorial",
+        "admob unity guide",
+        "admob vs unity ads",
+        "admob or unity ads",
+        "how to integrate admob in unity",
+        "admob unity",
+        "admob vs unity"
+      ],
+      "questions": [],
+      "entities": [
+        "admob",
+        "unity",
+        "ads"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -5075,7 +5457,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 8,
         "annualViews": 2709,
@@ -5103,6 +5485,17 @@
         "what": "needs your console: the notice text, what you declared, the dates"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "update data safety form google play",
+      "keywords": [],
+      "questions": [],
+      "entities": [],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -5133,7 +5526,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 0,
         "annualViews": 0,
@@ -5189,7 +5582,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 1908,
@@ -5296,7 +5689,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 3414,
@@ -5324,6 +5717,28 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob unity tutorial",
+      "keywords": [
+        "admob unity guide",
+        "admob vs unity ads",
+        "admob or unity ads",
+        "how to integrate admob in unity",
+        "admob unity",
+        "admob vs unity"
+      ],
+      "questions": [],
+      "entities": [
+        "admob",
+        "unity",
+        "ads"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -5452,7 +5867,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 1693,
@@ -5506,7 +5921,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 2,
         "annualViews": 161,
@@ -5611,7 +6026,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 2,
         "annualViews": 317,
@@ -5710,7 +6125,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 5,
         "annualViews": 1462,
@@ -5930,7 +6345,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 2828,
@@ -5958,6 +6373,24 @@
         "what": "Unity 6000.4.0f1 with the Android module, Android SDK present"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob or unity ads",
+      "keywords": [
+        "how to integrate admob in unity",
+        "admob unity",
+        "admob vs unity"
+      ],
+      "questions": [],
+      "entities": [
+        "admob",
+        "unity"
+      ],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -5980,7 +6413,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "annualViews": 3434,
@@ -6008,6 +6441,17 @@
         "what": "needs your console: the notice text, what you declared, the dates"
       },
       "verdict": "GO"
+    },
+    "seo": {
+      "primary": "admob ad sizes",
+      "keywords": [],
+      "questions": [],
+      "entities": [],
+      "harvested": "2026-09-06",
+      "sources": {
+        "suggest": 0,
+        "stackoverflow": null
+      }
     }
   },
   {
@@ -6073,7 +6517,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 4,
         "annualViews": 1016,
@@ -6122,7 +6566,7 @@
     "target": null,
     "history": [],
     "validation": {
-      "date": "2026-09-03",
+      "date": "2026-09-06",
       "demand": {
         "questions": 10,
         "titles": [
@@ -6232,6 +6676,233 @@
       "admob vs unity"
     ],
     "proposed": "2026-09-03",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "couldn-t-find-dso-to-load-libreactnative-so",
+    "query": "couldn t find dso to load libreactnative so",
+    "shape": "other",
+    "score": 73,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "couldn't find dso to load libreactnative.so",
+        "how to couldn't find dso to load libreactnative.so",
+        "why couldn't find dso to load libreactnative.so"
+      ]
+    },
+    "variants": [
+      "soloaderdsonotfounderror couldn t find dso to load libreactnative so",
+      "couldn t find dso to load libreactnative so existing so sources",
+      "couldn't find dso to load libreactnative.so existing so source source",
+      "com facebook soloader soloaderdsonotfounderror couldn t find dso to load libreactnative so",
+      "com.facebook.soloader.b couldn't find dso to load libreactnative.so"
+    ],
+    "proposed": "2026-09-06",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-06",
+      "demand": {
+        "questions": 0,
+        "titles": [],
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 299,
+        "checked": "2026-09-06"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "can-t-load-this-add-in-because-we-couldn-t-connect-to-the-ca",
+    "query": "can't load this add-in because we couldn't connect to the catalog",
+    "shape": "other",
+    "score": 41,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "couldn't find dso to load libreactnative.so"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-06",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "couldn-t-load-discover",
+    "query": "couldn't load discover",
+    "shape": "other",
+    "score": 38,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "couldn't find dso to load libreactnative.so",
+        "how to couldn't find dso to load libreactnative.so",
+        "why couldn't find dso to load libreactnative.so"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-06",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "claude-code-skills-vs-agents-md",
+    "query": "claude code skills vs agents.md",
+    "shape": "other",
+    "score": 35,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "claude code agents md vs"
+      ]
+    },
+    "variants": [
+      "why claude code does not support agents md"
+    ],
+    "proposed": "2026-09-06",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-unity",
+    "query": "admob unity",
+    "shape": "store",
+    "score": 32,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity"
+      ]
+    },
+    "variants": [
+      "admob vs unity"
+    ],
+    "proposed": "2026-09-06",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "install-failed-missing-split-android-studio",
+    "query": "install_failed_missing_split android studio",
+    "shape": "other",
+    "score": 72,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "install_failed_missing_split",
+        "how to install_failed_missing_split",
+        "why install_failed_missing_split"
+      ]
+    },
+    "variants": [
+      "install_failed_missing_split adb",
+      "install_failed_missing_split missing split for com.instagram.android",
+      "install_failed_missing_split missing split for com.google.android.googlequicksearchbox",
+      "install_failed_missing_split missing split for com whatsapp",
+      "install_failed_missing_split",
+      "install_failed_missing_split install with options"
+    ],
+    "proposed": "2026-09-06",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": [],
+    "validation": {
+      "date": "2026-09-06",
+      "demand": {
+        "questions": 0,
+        "titles": [],
+        "annualViews": 0,
+        "totalViews": 0,
+        "stale": 0,
+        "unanswered": 0,
+        "rotted": 0,
+        "top": null,
+        "quota": 298,
+        "checked": "2026-09-06"
+      },
+      "winnability": {
+        "score": 0,
+        "why": "no Stack Overflow questions found — unproven either way"
+      },
+      "indexable": true,
+      "repro": {
+        "ok": false,
+        "name": "unknown",
+        "what": "no reproduction path — this would be written from research alone"
+      },
+      "verdict": "UNMEASURED"
+    }
+  },
+  {
+    "id": "why-claude-code-does-not-support-agents-md",
+    "query": "why claude code does not support agents md",
+    "shape": "other",
+    "score": 31,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "why claude code agents md"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-06",
+    "status": "proposed",
+    "slug": null,
+    "published": null,
+    "target": null,
+    "history": []
+  },
+  {
+    "id": "admob-vs-unity",
+    "query": "admob vs unity",
+    "shape": "store",
+    "score": 28,
+    "evidence": {
+      "source": "suggest",
+      "prefixes": [
+        "admob unity vs"
+      ]
+    },
+    "variants": [],
+    "proposed": "2026-09-06",
     "status": "proposed",
     "slug": null,
     "published": null,
