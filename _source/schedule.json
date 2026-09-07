@@ -35,10 +35,17 @@
     ],
     "2026-09-07": [
       "admob-unity-sdk-empty-app-id",
-      "admob-unity-test-ids-and-two-error-codes"
+      "admob-unity-test-ids-and-two-error-codes",
+      "unity-6-android-build-errors-that-exit-zero"
     ],
     "2026-09-08": [
       "ask-first-claude-code-plugin"
+    ],
+    "2026-09-09": [
+      "unity-il2cpp-vs-mono-android-measured"
+    ],
+    "2026-09-10": [
+      "admob-unity-mediation-adapter-status"
     ]
   }
 }
