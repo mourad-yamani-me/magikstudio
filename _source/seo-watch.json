@@ -1,431 +1,431 @@
 {
   "site": "sc-domain:indiecore.net",
-  "updated": "2026-09-09",
-  "runs": 12,
+  "updated": "2026-09-10",
+  "runs": 13,
   "urls": {
     "https://www.indiecore.net/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/games/word-slot/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-06"
     },
     "https://www.indiecore.net/games/soda-jam-color-sort/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-06"
+      "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/games/color-block-puzzle-master/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/games/logo-quiz-guess-brand/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-08-27"
     },
     "https://www.indiecore.net/games/number-match-merge-puzzle/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-05"
     },
     "https://www.indiecore.net/games/mot-malin/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-08-28"
     },
     "https://www.indiecore.net/games/football-logo-quiz/": {
       "first_seen": "2026-09-08",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-07"
+      "crawled": "2026-09-10"
     },
     "https://www.indiecore.net/blog/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-08"
     },
     "https://www.indiecore.net/aso/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
-      "coverage": "URL is unknown to Google",
+      "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/rankgrip/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/arcade-games/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/board-games/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/casual-games/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
-      "coverage": "Discovered - currently not indexed",
+      "coverage": "URL is unknown to Google",
       "crawled": null
     },
     "https://www.indiecore.net/aso/puzzle-games/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
-      "coverage": "Discovered - currently not indexed",
+      "coverage": "URL is unknown to Google",
       "crawled": null
     },
     "https://www.indiecore.net/aso/simulation-games/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/word-games/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-arcade-games-2026-08/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "URL is unknown to Google",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-board-games-2026-08/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-word-games-2026-08/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-puzzle-games-2026-08/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
-      "coverage": "Discovered - currently not indexed",
+      "coverage": "URL is unknown to Google",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-simulation-games-2026-08/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-casual-games-2026-08/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
-      "coverage": "Discovered - currently not indexed",
+      "coverage": "URL is unknown to Google",
       "crawled": null
     },
     "https://www.indiecore.net/blog/ask-first-claude-code-plugin/": {
       "first_seen": "2026-09-09",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-08"
     },
     "https://www.indiecore.net/blog/admob-unity-test-ids-and-two-error-codes/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-07"
     },
     "https://www.indiecore.net/blog/unity-6-android-build-errors-that-exit-zero/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/admob-unity-sdk-empty-app-id/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-07"
     },
     "https://www.indiecore.net/blog/admob-limited-ad-serving-wrong-app/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-05"
     },
     "https://www.indiecore.net/blog/posting-to-linkedin-from-ci/": {
       "first_seen": "2026-09-04",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-07"
     },
     "https://www.indiecore.net/blog/unity-gradle-build-failed-is-not-the-error/": {
       "first_seen": "2026-09-03",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-07"
     },
     "https://www.indiecore.net/blog/one-engine-many-games/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/generate-levels-offline-not-at-runtime/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/rating-puzzle-difficulty-by-decisions/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-05"
+      "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/difficulty-rates-progression-places/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-07"
+      "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/opening-layout-is-part-of-the-puzzle/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/shipping-a-4mb-level-pack/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
-      "coverage": "Discovered - currently not indexed",
+      "coverage": "URL is unknown to Google",
       "crawled": null
     },
     "https://www.indiecore.net/blog/testing-a-level-pack-you-did-not-write/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/blog/pricing-an-economy-off-its-difficulty-model/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-08"
+      "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/capacitor-android-build-apk-size/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-07"
     },
     "https://www.indiecore.net/blog/release-pipeline-you-cannot-forget/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-02"
     },
     "https://www.indiecore.net/blog/cloudflare-beacon-csp-blocked/": {
       "first_seen": "2026-09-01",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/lighthouse-image-budget/": {
       "first_seen": "2026-09-01",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-01"
     },
     "https://www.indiecore.net/blog/opacity-zero-is-not-hidden/": {
       "first_seen": "2026-09-01",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-07"
+      "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/the-check-that-passed-while-broken/": {
       "first_seen": "2026-09-01",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-07"
     },
     "https://www.indiecore.net/blog/change-privacy-policy-url-google-play/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-07"
     },
     "https://www.indiecore.net/blog/blast-radius-rule-ai-coding/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-08"
     },
     "https://www.indiecore.net/blog/build-reviews-ai-code/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-06"
+      "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/context-engineering-repo/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-07"
+      "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/static-site-cloudflare-workers/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-08-27"
     },
     "https://www.indiecore.net/about/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/subscribe/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/contact/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-08"
     },
     "https://www.indiecore.net/privacy/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-08"
     },
     "https://www.indiecore.net/legal/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-08"
+      "crawled": "2026-09-10"
     },
     "https://www.indiecore.net/privacy/word-slot/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-06"
     },
     "https://www.indiecore.net/privacy/soda-jam-color-sort/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/privacy/color-block-puzzle-master/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/privacy/logo-quiz-guess-brand/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/privacy/number-match-merge-puzzle/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-07"
     },
     "https://www.indiecore.net/privacy/mot-malin/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/privacy/football-logo-quiz/": {
       "first_seen": "2026-09-08",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-07"
@@ -434,7 +434,7 @@
   "queries": {
     "how to change privacy policy url in play console": {
       "first_seen": "2026-09-03",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 7.6,
       "impressions": 5,
       "clicks": 2,
@@ -442,15 +442,15 @@
     },
     "indiecore": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
-      "position": 7.5,
-      "impressions": 26,
+      "seen": "2026-09-10",
+      "position": 7.7,
+      "impressions": 33,
       "clicks": 2,
       "best": 7.5
     },
     "perfect match puzzle": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 29,
       "impressions": 2,
       "clicks": 2,
@@ -458,7 +458,7 @@
     },
     "guess brand game": {
       "first_seen": "2026-09-04",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 21,
       "impressions": 2,
       "clicks": 1,
@@ -466,7 +466,7 @@
     },
     "how to change privacy policy link in google play console": {
       "first_seen": "2026-09-04",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 8.8,
       "impressions": 6,
       "clicks": 1,
@@ -474,15 +474,15 @@
     },
     "indie core": {
       "first_seen": "2026-08-31",
-      "seen": "2026-09-09",
-      "position": 9.7,
-      "impressions": 32,
+      "seen": "2026-09-10",
+      "position": 9.6,
+      "impressions": 35,
       "clicks": 1,
       "best": 9.6
     },
     "change privacy policy google play console": {
       "first_seen": "2026-09-04",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 10,
       "impressions": 1,
       "clicks": 0,
@@ -490,15 +490,15 @@
     },
     "commandinvokationfailure: gradle build failed.": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
-      "position": 10,
-      "impressions": 1,
+      "seen": "2026-09-10",
+      "position": 9,
+      "impressions": 2,
       "clicks": 0,
-      "best": 10
+      "best": 9
     },
     "commandinvokationfailure: gradle build failed. unity": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 10,
       "impressions": 1,
       "clicks": 0,
@@ -506,7 +506,7 @@
     },
     "google play console change privacy policy url": {
       "first_seen": "2026-09-06",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 6.5,
       "impressions": 2,
       "clicks": 0,
@@ -514,7 +514,7 @@
     },
     "google play privacy policy url": {
       "first_seen": "2026-09-04",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 14,
       "impressions": 1,
       "clicks": 0,
@@ -522,7 +522,7 @@
     },
     "gradle build failed": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 15.3,
       "impressions": 3,
       "clicks": 0,
@@ -530,7 +530,7 @@
     },
     "gradle failure": {
       "first_seen": "2026-09-06",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 15.5,
       "impressions": 2,
       "clicks": 0,
@@ -538,7 +538,7 @@
     },
     "https://static.cloudflareinsights.com/beacon.min.js": {
       "first_seen": "2026-09-08",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 81,
       "impressions": 1,
       "clicks": 0,
@@ -546,7 +546,7 @@
     },
     "play console change privacy policy url": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 7,
       "impressions": 1,
       "clicks": 0,
@@ -554,15 +554,31 @@
     },
     "play console privacy policy url": {
       "first_seen": "2026-09-07",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 9,
       "impressions": 1,
       "clicks": 0,
       "best": 9
     },
+    "soda jam": {
+      "first_seen": "2026-09-10",
+      "seen": "2026-09-10",
+      "position": 5.5,
+      "impressions": 2,
+      "clicks": 0,
+      "best": 5.5
+    },
+    "test ids": {
+      "first_seen": "2026-09-10",
+      "seen": "2026-09-10",
+      "position": 48,
+      "impressions": 1,
+      "clicks": 0,
+      "best": 48
+    },
     "unity gradle build failed": {
       "first_seen": "2026-09-08",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 11.3,
       "impressions": 3,
       "clicks": 0,
@@ -570,7 +586,7 @@
     },
     "update privacy policy play store": {
       "first_seen": "2026-09-04",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "position": 7,
       "impressions": 1,
       "clicks": 0,
@@ -582,427 +598,427 @@
     "urls": {
       "https://www.indiecore.net/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "2026-09-06",
         "http": 0
       },
       "https://www.indiecore.net/games/word-slot/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "2026-08-29",
         "http": 0
       },
       "https://www.indiecore.net/games/soda-jam-color-sort/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/games/color-block-puzzle-master/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "2026-08-29",
         "http": 0
       },
       "https://www.indiecore.net/games/logo-quiz-guess-brand/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/games/number-match-merge-puzzle/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/games/mot-malin/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "2026-08-29",
         "http": 0
       },
       "https://www.indiecore.net/games/football-logo-quiz/": {
         "first_seen": "2026-09-08",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/aso/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/rankgrip/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/arcade-games/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/board-games/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/casual-games/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/puzzle-games/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/simulation-games/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/word-games/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-arcade-games-2026-08/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-board-games-2026-08/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-word-games-2026-08/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-puzzle-games-2026-08/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-simulation-games-2026-08/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-casual-games-2026-08/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/ask-first-claude-code-plugin/": {
         "first_seen": "2026-09-09",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/admob-unity-test-ids-and-two-error-codes/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/unity-6-android-build-errors-that-exit-zero/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/admob-unity-sdk-empty-app-id/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-07",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/admob-limited-ad-serving-wrong-app/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/posting-to-linkedin-from-ci/": {
         "first_seen": "2026-09-04",
-        "seen": "2026-09-09",
-        "checked": "2026-09-04",
-        "crawled": "2026-09-04",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
+        "crawled": "2026-09-10",
         "http": 0
       },
       "https://www.indiecore.net/blog/unity-gradle-build-failed-is-not-the-error/": {
         "first_seen": "2026-09-03",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/one-engine-many-games/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/generate-levels-offline-not-at-runtime/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/rating-puzzle-difficulty-by-decisions/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/difficulty-rates-progression-places/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/opening-layout-is-part-of-the-puzzle/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/shipping-a-4mb-level-pack/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/testing-a-level-pack-you-did-not-write/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/pricing-an-economy-off-its-difficulty-model/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/capacitor-android-build-apk-size/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/release-pipeline-you-cannot-forget/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-09",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/cloudflare-beacon-csp-blocked/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
-        "checked": "2026-09-03",
-        "crawled": "2026-09-01",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
+        "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/lighthouse-image-budget/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
-        "checked": "2026-09-04",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/opacity-zero-is-not-hidden/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
-        "checked": "2026-09-04",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
         "crawled": "2026-08-31",
         "http": 0
       },
       "https://www.indiecore.net/blog/the-check-that-passed-while-broken/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
-        "checked": "2026-09-04",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
         "crawled": "2026-09-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/change-privacy-policy-url-google-play/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
-        "checked": "2026-09-04",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/blast-radius-rule-ai-coding/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
-        "checked": "2026-09-04",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/build-reviews-ai-code/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
-        "checked": "2026-09-04",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/context-engineering-repo/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
-        "checked": "2026-09-04",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/static-site-cloudflare-workers/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
-        "checked": "2026-09-04",
-        "crawled": "2026-08-26",
+        "seen": "2026-09-10",
+        "checked": "2026-09-10",
+        "crawled": "2026-09-05",
         "http": 0
       },
       "https://www.indiecore.net/about/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-04",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/subscribe/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-05",
         "crawled": "2026-08-31",
         "http": 0
       },
       "https://www.indiecore.net/contact/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/privacy/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/legal/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "2026-08-28",
         "http": 0
       },
       "https://www.indiecore.net/privacy/word-slot/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/privacy/soda-jam-color-sort/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "2026-08-29",
         "http": 0
       },
       "https://www.indiecore.net/privacy/color-block-puzzle-master/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/privacy/logo-quiz-guess-brand/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/privacy/number-match-merge-puzzle/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/privacy/mot-malin/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-06",
         "crawled": "2026-08-29",
         "http": 0
       },
       "https://www.indiecore.net/privacy/football-logo-quiz/": {
         "first_seen": "2026-09-08",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "checked": "2026-09-08",
         "crawled": "0001-01-01",
         "http": 0
@@ -1011,7 +1027,7 @@
     "queries": {
       "indiecore": {
         "first_seen": "2026-09-05",
-        "seen": "2026-09-09",
+        "seen": "2026-09-10",
         "position": 6,
         "impressions": 2,
         "clicks": 0
@@ -1071,10 +1087,10 @@
       "id": "near-miss:indiecore",
       "kind": "near-miss",
       "subject": "indiecore",
-      "detail": "position 7.5 on 26 impressions, 7.7% CTR",
+      "detail": "position 7.7 on 33 impressions, 6.1% CTR",
       "fix": "Sharpen the <title> and meta description of the page that ranks for it, so the phrase people typed is visible in the result.",
       "opened": "2026-08-31",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "status": "open",
       "closed": null,
       "note": null
@@ -1083,10 +1099,10 @@
       "id": "near-miss:indie-core",
       "kind": "near-miss",
       "subject": "indie core",
-      "detail": "position 9.7 on 32 impressions, 3.1% CTR",
+      "detail": "position 9.6 on 35 impressions, 2.9% CTR",
       "fix": "Sharpen the <title> and meta description of the page that ranks for it, so the phrase people typed is visible in the result.",
       "opened": "2026-09-02",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "status": "open",
       "closed": null,
       "note": null
@@ -1107,10 +1123,10 @@
       "id": "zero-click:blog-static-site-cloudflare-workers",
       "kind": "zero-click",
       "subject": "/blog/static-site-cloudflare-workers/",
-      "detail": "68 impressions and no clicks in 28 days (position 4.9)",
+      "detail": "74 impressions and no clicks in 28 days (position 4.8)",
       "fix": "Google shows it and nobody picks it. Either the title does not match the intent behind the query, or the position is too low to be seen.",
       "opened": "2026-09-06",
-      "seen": "2026-09-09",
+      "seen": "2026-09-10",
       "status": "open",
       "closed": null,
       "note": null
