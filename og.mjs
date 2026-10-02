@@ -80,20 +80,23 @@ const heroCard = (kick, title, sub, icons) => page(`
 </div></div>`);
 
 /* targets */
-const KEYS = { 'word-slot':'word-slot', 'soda-jam':'soda-jam', 'gridsmash':'gridsmash',
-               'logo-quiz':'logo-quiz', 'perfectmatch':'perfectmatch' };
+/* play-data key -> image file prefix. They differ where build.mjs gives the
+   game an `asset` name, so the two maps have to be kept in step by hand. */
+const KEYS = { 'football-logo-quiz':'football-logo-quiz', 'word-slot':'word-slot', 'soda-jam':'soda-jam',
+               'gridsmash':'color-block-puzzle-master', 'logo-quiz':'logo-quiz',
+               'perfectmatch':'number-match-merge-puzzle' };
 const targets = {};
-for (const k of Object.keys(KEYS)) {
+for (const [k, a] of Object.entries(KEYS)) {
   const p = play[k];
-  const shots = fs.readdirSync(G).filter(f => f.startsWith(k+'-') && /-\d+\.jpg$/.test(f)).sort();
-  targets[k] = gameCard(p.title, p.short, b64(`${k}-icon.jpg`), shots.length ? b64(shots[0]) : null);
+  const shots = fs.readdirSync(G).filter(f => f.startsWith(a+'-') && /-\d+\.jpg$/.test(f)).sort();
+  targets[k] = gameCard(p.title, p.short, b64(`${a}-icon.jpg`), shots.length ? b64(shots[0]) : null);
 }
 
-const allIcons = Object.keys(KEYS).map(k => b64(`${k}-icon.jpg`));
-targets['home']    = heroCard('5 games · 100% free', 'FIVE PUZZLES.<br>ZERO PAYWALLS.',
+const allIcons = Object.values(KEYS).map(a => b64(`${a}-icon.jpg`));
+targets['home']    = heroCard('6 games · 100% free', 'SIX PUZZLES.<br>ZERO PAYWALLS.',
   'Free puzzle games for Android with no in-app purchases, no sign-up, and offline play.', allIcons);
 targets['default'] = heroCard('Indie Core Dev', 'FREE PUZZLE<br>GAMES.',
-  'A one-person game studio in France. Five games on Google Play, all free, all playable offline.', allIcons);
+  'A one-person game studio in France. Six games on Google Play, all free, all playable offline.', allIcons);
 
 /* render */
 let n = 0;

@@ -49,7 +49,7 @@ npm run hub        # regenerate hub/ — the public snippet index
 ## Never break these
 
 - **Privacy policy URLs are referenced from Google Play Console listings.** `/privacy/<game>/`
-  and the legacy Blogger paths that 301 to them. They are entered in five live store listings
+  and the legacy Blogger paths that 301 to them. They are entered in six live store listings
   and are not ours to break. Renaming one is a store problem, not a bug. If a route must move,
   it moves *and* keeps a 301.
 - **Deploys happen through GitHub Actions only.** Never `wrangler deploy` by hand, never

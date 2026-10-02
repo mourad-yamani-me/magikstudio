@@ -312,6 +312,9 @@ function enhanceImages(html){
 
 /* ───────── game data ───────── */
 const GAMES = [
+  { key:'football-logo-quiz', slug:'football-logo-quiz',   legacy:'privacy-policy-for-football-logo-quiz',
+    blurb:'Same game as Logo Quiz, played entirely on football badges. Name the club, the national side or the competition from its crest, with the letters and nothing else to go on.',
+    feats:['790 badges across 57 levels','Clubs, nations & competitions','Cloud save','Plays offline'] },
   { key:'word-slot',    slug:'word-slot',                 legacy:'privacy-policy-for-word-slot',
     blurb:'A crossword cut into blocks and scattered across the board. Slot every piece back until each row and column reads as a real word \u2014 and nothing on screen tells you when you are right. Working that out is the game.',
     feats:['392 hand-built stages','No timer, no fail state','Cloud save','Plays offline'] },
@@ -340,11 +343,6 @@ const GAMES = [
     tagline:'Word Slot in French — the same fill-in crossword, built around French words.',
     blurb:'The French edition of Word Slot. A crossword cut into blocks and scattered across the board; slot every piece back until each row and column reads as a real French word.',
     feats:['French word list','No timer, no fail state','Cloud save','Plays offline'] },
-  { key:'football-logo-quiz', slug:'football-logo-quiz',   legacy:'privacy-policy-for-football-logo-quiz',
-    live:false, name:'Football Logo Quiz', pkg:'com.footballquiz.logos', category:'Trivia',
-    tagline:'Logo Quiz for football — name the club, the country and the cup from the crest alone.',
-    blurb:'Same game as Logo Quiz, played entirely on football badges. Name the club, the national side or the competition from its crest, with the letters and nothing else to go on.',
-    feats:['790 badges across 57 levels','Clubs, nations & competitions','Cloud save','Plays offline'] },
   /* The first game that sells something, so it says so: `iap` turns the game
      page's "No purchases" claims into the truth for this one entry. */
   { key:'asmr-logo-craft-block', slug:'asmr-logo-craft-block', legacy:'privacy-policy-for-asmr-logo-craft-block',
@@ -372,7 +370,7 @@ const GAMES = [
 const ALL = GAMES;
 /* The hero chip counts what a visitor can actually install today. Using
    GAMES.length there quietly inflated the claim by one for every unreleased
-   entry, and the hand-written "Five games on Google Play" a few lines below
+   entry, and the hand-written "Six games on Google Play" a few lines below
    then disagreed with it on the same screen. */
 const LIVE = GAMES.filter(g => g.live);
 
@@ -1189,7 +1187,7 @@ function pageHome(){
 <section class="hero"><div class="shell hero-grid">
   <div>
     <div class="chip rv"><span class="dot"></span> ${LIVE.length} games live · 100% free</div>
-    <h1 class="rv">FIVE PUZZLES.<br><span class="grad">ZERO PAYWALLS.</span></h1>
+    <h1 class="rv">SIX PUZZLES.<br><span class="grad">ZERO PAYWALLS.</span></h1>
     <p class="lede rv">Free puzzle games for Android that never ask for your wallet. No in-app purchases, no sign-up, and every one of them works without a signal.</p>
     <div class="cta-row rv">
       <a class="btn btn-primary" href="#games">${PLAY_ICON} Browse the games</a>
@@ -1213,7 +1211,7 @@ function pageHome(){
   <div class="sec-head rv">
     <span class="eyebrow">The catalogue</span>
     <h2>Pick your next obsession.</h2>
-    <p>Five games on Google Play right now. Every one of them free, start to finish.</p>
+    <p>Six games on Google Play right now. Every one of them free, start to finish.</p>
   </div>
   ${ALL.map(gameRow).join('\n')}
 </div></section>
@@ -1258,7 +1256,7 @@ function pageHome(){
 </div></section>`;
   return layout({
     title:'Indie Core Dev — Free puzzle games for Android',
-    desc:'Five free puzzle games for Android with no in-app purchases, no sign-up and offline play. Made in France by Indie Core Dev.',
+    desc:'Six free puzzle games for Android with no in-app purchases, no sign-up and offline play. Made in France by Indie Core Dev.',
     canonical:'/', cur:'games', body,
     ogimg:'/assets/og/home.jpg',
     jsonld:[{'@context':'https://schema.org','@type':'Organization',name:'Indie Core Dev',url:SITE,email:EMAIL,
@@ -2088,7 +2086,7 @@ function pageLegal(){
 /* ───────── page: site privacy policy ───────── */
 /* The website's own policy, distinct from the per-game ones. Kept at /privacy/
    because that URL is already in the nav and linked from the game pages; the
-   five /privacy/<game>/ URLs are referenced from Play Console listings and are
+   six /privacy/<game>/ URLs are referenced from Play Console listings and are
    linked from the last section rather than moved. */
 const SITE_PRIVACY_UPDATED = '28 August 2026';
 const SITE_PRIVACY = [
@@ -2324,7 +2322,7 @@ function pageAbout(){
   const body = `
 <section class="hero" style="padding-bottom:40px"><div class="shell narrow">
   <span class="eyebrow rv">The studio</span>
-  <h1 class="rv" style="font-size:clamp(38px,5.6vw,68px)">One person,<br><span class="grad">five games,</span><br>no publisher.</h1>
+  <h1 class="rv" style="font-size:clamp(38px,5.6vw,68px)">One person,<br><span class="grad">six games,</span><br>no publisher.</h1>
   <p class="lede rv" style="max-width:640px">Indie Core Dev is a sole proprietorship founded by Othmane Ettaib, specialising in the development, publishing and distribution of video games, applications and websites.</p>
   <p class="lede rv" style="max-width:640px">Established in April 2025, the business operates in France under self-employed status. The mission is to deliver accessible, creative and high-quality digital experiences, distributed through Google Play and the web.</p>
   <div class="cta-row rv"><a class="btn btn-primary" href="/#games">See the games</a><a class="btn btn-ghost" href="/contact/">Get in touch</a></div>
