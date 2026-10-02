@@ -1,0 +1,186 @@
+class='post-body entry-content float-container' id='post-body-asmr-logo-craft-block'>
+Privacy Policy
+
+Effective Date: 02-10-2026
+
+Last Updated: 02-10-2026
+
+Package ID: com.indiecoredev.asmrlogocraftblock
+
+Contact Email: [email&#160;protected]
+
+1. Overview
+
+This Privacy Policy explains how ASMR Logo Craft Block (developed by Indie Core Dev) handles your information when you use our game, on Android and on iOS. It says what the game collects, why, on what legal basis, who else receives it, how long it is kept, and how to have it deleted. The game is available in English and French; this policy applies to both.
+
+2. Who Is Responsible
+
+The data controller for the game, within the meaning of the General Data Protection Regulation (Regulation (EU) 2016/679, "GDPR"), is Othmane Ettaib, trading as Indie Core Dev &#8212; a sole proprietorship (entreprise individuelle) registered in France, SIREN 943 647 503, 4 rue de Bretagne, 94000 Cr&#233;teil, France. Contact: [email&#160;protected].
+
+The studio has not appointed a Data Protection Officer and is not required to. Write to the address above about anything in this policy.
+
+3. Personal Information
+
+You can play the whole game without an account. We do not ask for your name, email address, phone number or precise location, and we do not sell any information about you.
+
+Your progress, coins, hints, daily-challenge streak and settings are saved on your device. If your device's own backup is switched on, Android or iOS may include that saved data in the backup it keeps of your apps; that backup belongs to your Google or Apple account, not to us.
+
+Some services the game relies on (Google AdMob and Firebase, described below) process device identifiers &#8212; for example the advertising ID, or an identifier Firebase assigns to this installation &#8212; and your IP address. Each use is described in its own section.
+
+4. Your Consent Choices
+
+If you are in the European Economic Area or the United Kingdom, the game shows Google's consent message the first time you open it, before any ad is requested. Your answer decides whether ads may be personalised and whether Google Analytics may store identifiers (see Sections 7 and 9).
+
+You can change your answer at any time: Settings &#8594; Advanced &#8594; "Privacy choices" reopens the same message. Outside those regions the message is not required by law and is not shown.
+
+5. Optional Sign-In & Cloud Save
+
+Signing in is optional and exists for one reason: to keep your progress if you change or reset your phone. It is offered in Settings &#8594; Advanced. On Android you sign in with Google; on iOS with Apple. If you never sign in, nothing about your progress leaves your device.
+
+When you sign in, the sign-in is handled by Google or Apple and by Firebase Authentication. Firebase creates an account identifier for you and keeps the identifier of your Google or Apple account &#8212; and, depending on the provider, the email address that account passes on. The game itself does not read, display, store or use that email address, and we never contact you through it. Sign in with Apple's "Hide My Email" option works normally.
+
+Once you are signed in, the game saves a copy of your progress in Cloud Firestore (a Google service), in a single record keyed to your account identifier. That record contains:
+
+  - the levels you have finished and the stars earned on each;
+
+  - your coins and hints, and whether you have removed ads;
+
+  - the store transaction identifiers of your purchases, so that one purchase is never credited twice;
+
+  - your daily-challenge record and streak, and the time of the last update.
+
+It contains no name, no email address and no payment information. It is readable and writable only by your own account. If your progress already exists on another device, the two copies are merged so that nothing you earned is lost.
+
+The Firebase project behind sign-in and cloud save is one we also use for our other games, such as Logo Quiz: Guess Brand. If you sign in to more than one of them with the same Google or Apple account, Firebase recognises the same account identifier in each.
+
+6. Leaderboard
+
+On Android the game has a leaderboard on Google Play Games; on iOS, on Apple Game Center. The only thing the game sends to it is the number of levels you have finished. The game signs you in to Play Games or Game Center quietly at launch, using the account already on your device; if you are not signed in there, nothing is sent.
+
+The name and picture shown beside your score are your Play Games or Game Center profile, which you set up with Google or Apple, not anything this game asks you for. You can hide that profile, or change it, in Google's Play Games app or in your iPhone's Game Center settings.
+
+7. Analytics
+
+We use Firebase Analytics (Google Analytics for Firebase) to understand how the game is played and where players get stuck, so we can improve level design and fix problems. It records events such as levels started, finished and restarted, hints and shuffles used, coins earned and spent, which store product was bought (never payment details), ads shown, settings changed and the tutorial finished, together with an identifier Firebase assigns to this installation, your device model, operating system, app version and approximate country. If you have signed in, these events are also labelled with your Firebase account identifier from the next launch on.
+
+Analytics runs in Google's Consent Mode. In the regions where Section 4's message is shown, the game starts with analytics storage, ad storage, ad user data and ad personalisation all denied, and they are granted only if you agree in that message. Until then Firebase receives only cookieless, identifier-free signals. Elsewhere, where no consent is required, they are granted at launch.
+
+For details, see the Firebase Privacy and Security page and the Google Privacy Policy.
+
+8. Crash Reporting & Performance
+
+We use Firebase Crashlytics to receive a report when the game crashes or hits an error, and Firebase Performance Monitoring to measure how long the game takes to start, to load a level and to load an ad. These reports contain technical information &#8212; the error and where in the code it happened, the device model, operating system, app version, and an identifier Firebase assigns to this installation &#8212; and, if you have signed in, your Firebase account identifier, so that repeated crashes affecting one player can be recognised as the same problem.
+
+Crash and performance reports are collected from the first launch and do not depend on your answer in Section 4. They are used only to keep the game working, never for advertising or profiling.
+
+9. Ads
+
+The game shows ads through Google AdMob: a banner, an interstitial between screens, and rewarded ads that you choose to watch in exchange for help &#8212; a short look at the colours of three groups, or a free clue.
+
+To choose and show ads, measure them and prevent fraud, AdMob processes your device's advertising ID, your IP address and information about your device and how you interact with ads. Whether those ads may be personalised follows your answer in Section 4; if you decline, Google serves non-personalised or limited ads, and if the message cannot be answered no ad is requested at all. You can also reset or delete your advertising ID, or opt out of personalised ads, in your device settings.
+
+Buying "Remove Ads" or the "Ad-Free Pack" removes the banner and the interstitials. Rewarded ads stay available, because you choose when to watch them.
+
+10. In-App Purchases
+
+The game offers optional in-app purchases: coin packs, "Remove Ads", and an "Ad-Free Pack" that removes ads and adds coins. Nothing in the game requires buying anything.
+
+Purchases are made through Google Play Billing on Android and Apple's App Store on iOS. Google or Apple handles the payment; we never receive or store your card details, billing address or any other payment information. The game receives only the product bought and a transaction identifier, which it uses to deliver the coins or remove ads, and to restore ad removal if you reinstall.
+
+11. Notifications, Vibration & Sharing
+
+The game can send you local reminders &#8212; for example when your daily reward is ready, or a nudge to come back and play. They are scheduled and shown entirely by your own device; we do not use push notifications, and no notification token or message passes through any server. The game asks for the notification permission inside the game, not at launch, and you can turn reminders off in the game's settings or in your device's settings.
+
+The game can vibrate as feedback while you play. This uses your device's vibration motor and nothing else; it can be turned off in the game's settings.
+
+When you share a result, the game draws a picture of it on your device and hands it to your device's share sheet. Where it goes next is the app you choose; nothing is sent to us.
+
+When the game asks whether you would like to rate it, the rating sheet is Google Play's or the App Store's own. Your rating and review go to Google or Apple, not to us.
+
+12. Children's Privacy
+
+Our game is not specifically directed at children under 13. We do not knowingly collect data from users in this age group. If you believe we have unknowingly collected personal information from a child, please contact us at [email&#160;protected].
+
+13. Offline Use
+
+You can play ASMR Logo Craft Block offline. Your progress is always saved on your device first, and, if you have signed in, synced to the cloud the next time you have a connection. Ads, the leaderboard, in-app purchases, analytics and cloud save need an internet connection; local reminders do not.
+
+14. Who Receives Your Data
+
+We do not sell your data or share it with data brokers. We do not run a server of our own: the data described above is processed by these providers on our behalf or as independent controllers under their own terms:
+
+  - Google Ireland Ltd / Google LLC &#8212; Firebase Authentication, Cloud Firestore, Analytics, Crashlytics and Performance Monitoring; AdMob and its consent message; Google Play Games; Google Play Billing; Google Sign-In.
+
+  - Apple Inc. / Apple Distribution International Ltd &#8212; on iOS only: Sign in with Apple, Game Center and App Store purchases.
+
+Some of these providers process data in the United States. Those transfers rely on the European Commission's Standard Contractual Clauses and, where the provider is certified, the EU&#8211;US Data Privacy Framework.
+
+15. Data Storage & Retention
+
+Local data stays on your device until you delete it in the game, clear the app's storage or uninstall the game.
+
+Your cloud save and your Firebase sign-in account are kept until you delete them (see Section 17), or until we retire the game's backend.
+
+Analytics, crash and performance data are kept by Google for the limited periods Firebase applies to each service, and then deleted automatically. AdMob data is kept under Google's own retention rules. Your leaderboard score is kept by Google Play Games or Game Center for as long as you keep your profile there. Records of your purchases are kept by Google or Apple, as their own terms require.
+
+16. Legal Basis for Each Processing
+
+  - Cloud save and sign-in: performance of the service you asked for when you chose to sign in (Article 6(1)(b) GDPR).
+
+  - Delivering and restoring in-app purchases: performance of the contract of sale (Article 6(1)(b)).
+
+  - Leaderboard: our legitimate interest in offering a shared ranking, through the profile you set up with Google or Apple (Article 6(1)(f)).
+
+  - Personalised ads, and analytics storage in the regions where Section 4's message is shown: your consent (Article 6(1)(a)), which you can withdraw at any time in "Privacy choices".
+
+  - Non-personalised ads: our legitimate interest in funding a game that is free to play (Article 6(1)(f)).
+
+  - Analytics where no consent message is required, crash reporting and performance monitoring: our legitimate interest in keeping the game stable and improving it (Article 6(1)(f)).
+
+17. Your Rights
+
+The game includes a "Delete My Data" option in Settings &#8594; Advanced. Using it permanently deletes your cloud save from Firestore (if you are signed in) and every piece of game data on your device &#8212; progress, coins, streaks, settings &#8212; and restarts the game. This action cannot be undone. Coins you bought are deleted with the rest; ad removal is not lost, because Google Play or the App Store keeps that purchase and it can be restored from the shop.
+
+"Delete My Data" does not delete the Firebase sign-in account itself, nor the data Google keeps for Analytics, Crashlytics, Performance Monitoring and AdMob. To have your sign-in account deleted, or for any other request, write to us at [email&#160;protected] from any address and, if you can, include the Google or Apple account you signed in with; we will delete it. Your Play Games or Game Center profile and score belong to your Google or Apple account, so you manage them in Google's or Apple's settings.
+
+Under the GDPR you have the right to access your personal data, to have it corrected or erased, to restrict its processing, to receive it in a portable form, and to object to processing based on legitimate interest (Articles 15 to 22). Where processing is based on consent, you can withdraw it at any time, without affecting what was done before. Write to [email&#160;protected] to exercise any of these rights; you will get an answer within one month.
+
+If you believe your data has been mishandled, you may lodge a complaint with the French supervisory authority, the Commission Nationale de l'Informatique et des Libert&#233;s (CNIL), 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07, France &#8212; www.cnil.fr &#8212; or with the supervisory authority where you live.
+
+18. Changes to This Policy
+
+We may update this Privacy Policy from time to time. Any changes will be reflected by updating the "Last Updated" date at the top of this page. We encourage you to review this page periodically.
+
+19. Contact
+
+If you have any questions about this Privacy Policy or how we handle your data, please contact:
+
+Indie Core Dev
+
+[email&#160;protected]
+
+-
+
+Obtenir le lien
+
+-
+
+Facebook
+
+-
+
+X
+
+-
+
+Pinterest
+
+-
+
+E-mail
+
+-
+
+Autres applications
+
+&copy; 2025 Othmane Ettaib &#8212; Indie Core Dev. All rights reserved.

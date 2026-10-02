@@ -345,6 +345,13 @@ const GAMES = [
     tagline:'Logo Quiz for football — name the club, the country and the cup from the crest alone.',
     blurb:'Same game as Logo Quiz, played entirely on football badges. Name the club, the national side or the competition from its crest, with the letters and nothing else to go on.',
     feats:['790 badges across 57 levels','Clubs, nations & competitions','Cloud save','Plays offline'] },
+  /* The first game that sells something, so it says so: `iap` turns the game
+     page's "No purchases" claims into the truth for this one entry. */
+  { key:'asmr-logo-craft-block', slug:'asmr-logo-craft-block', legacy:'privacy-policy-for-asmr-logo-craft-block',
+    live:false, iap:true, name:'ASMR Logo Craft Block', pkg:'com.indiecoredev.asmrlogocraftblock', category:'Puzzle',
+    tagline:'Swap the picture tiles until every row of four belongs together.',
+    blurb:'Thirty-two picture tiles, eight hidden groups of four. Drag one tile onto another to swap them; line up four from the same group and the row locks into a banner. Forty collections, and a daily challenge on top.',
+    feats:['400 levels in 40 collections','Daily challenge','English & French','Plays offline'] },
 ].map(g => {
   const p = play[g.key] || {};                       // no Play listing yet -> entry carries its own
   const art = f => fs.existsSync(path.join(ROOT, 'public/assets/games', f)) ? f : '';
@@ -1271,7 +1278,7 @@ function pageGame(g){
     ['Category', g.category],
     ['Content rating', g.contentRating],
     ['Updated', g.updated],
-    ['In-app purchases', 'None'],
+    ['In-app purchases', g.iap ? 'Optional' : 'None'],
   ].filter(([, v]) => v);            // a game with no listing has no rating or update date
   const body = `
 <section class="ghero"><div class="shell ghero-grid">
@@ -1289,7 +1296,7 @@ function pageGame(g){
            <a class="btn btn-primary" href="/subscribe/?from=${g.slug}">Tell me when it ships</a>`}
       <a class="btn btn-ghost" href="/privacy/${g.slug}/">Privacy policy</a>
     </div>
-    <div class="trust rv"><span>${TICK} Free to play</span><span>${TICK} No purchases</span>${g.offline===false?'':`<span>${TICK} Plays offline</span>`}</div>
+    <div class="trust rv"><span>${TICK} Free to play</span>${g.iap?'':`<span>${TICK} No purchases</span>`}${g.offline===false?'':`<span>${TICK} Plays offline</span>`}</div>
     <dl class="meta rv">${metaRows.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
   </div>
   <div class="game-media rv"><div class="halo"></div>
@@ -1351,7 +1358,7 @@ ${g.video ? `<section class="sec-tight"><div class="shell">
 </div></section>`;
   return layout({
     title:`${g.name} — free ${String(g.category).toLowerCase()} game for Android`,
-    desc:`${g.tagline} Free on Google Play — no in-app purchases, no sign-up, plays offline.`,
+    desc:`${g.tagline} Free on Google Play — ${g.iap?'optional purchases':'no in-app purchases'}, no sign-up, plays offline.`,
     canonical:`/games/${g.slug}/`, cur:'games', body,
     ogimg:fs.existsSync(path.join(ROOT, `public/assets/og/${g.key}.jpg`))
       ? `/assets/og/${g.key}.jpg` : '/assets/og/default.jpg',
