@@ -1,454 +1,468 @@
 {
   "site": "sc-domain:indiecore.net",
-  "updated": "2026-10-02",
-  "runs": 33,
+  "updated": "2026-10-03",
+  "runs": 34,
   "urls": {
     "https://www.indiecore.net/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-30"
+      "crawled": "2026-10-03"
+    },
+    "https://www.indiecore.net/games/football-logo-quiz/": {
+      "first_seen": "2026-09-08",
+      "seen": "2026-10-03",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-10-03"
     },
     "https://www.indiecore.net/games/word-slot/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-30"
     },
     "https://www.indiecore.net/games/soda-jam-color-sort/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-21"
+      "crawled": "2026-09-28"
     },
     "https://www.indiecore.net/games/color-block-puzzle-master/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-30"
     },
     "https://www.indiecore.net/games/logo-quiz-guess-brand/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-20"
     },
     "https://www.indiecore.net/games/number-match-merge-puzzle/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-21"
     },
     "https://www.indiecore.net/games/mot-malin/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-24"
     },
-    "https://www.indiecore.net/games/football-logo-quiz/": {
-      "first_seen": "2026-09-08",
-      "seen": "2026-10-02",
+    "https://www.indiecore.net/games/asmr-logo-craft-block/": {
+      "first_seen": "2026-10-03",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-21"
+      "crawled": "2026-10-03"
     },
     "https://www.indiecore.net/blog/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-28"
+      "crawled": "2026-10-03"
     },
     "https://www.indiecore.net/aso/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
-      "coverage": "URL is unknown to Google",
+      "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/rankgrip/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/arcade-games/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/board-games/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
-      "verdict": "NEUTRAL",
-      "coverage": "URL is unknown to Google",
-      "crawled": null
-    },
-    "https://www.indiecore.net/aso/casual-games/": {
-      "first_seen": "2026-09-05",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
+    "https://www.indiecore.net/aso/casual-games/": {
+      "first_seen": "2026-09-05",
+      "seen": "2026-10-03",
+      "verdict": "NEUTRAL",
+      "coverage": "URL is unknown to Google",
+      "crawled": null
+    },
     "https://www.indiecore.net/aso/puzzle-games/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/simulation-games/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/word-games/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-arcade-games-2026-08/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-board-games-2026-08/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-word-games-2026-08/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-puzzle-games-2026-08/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-simulation-games-2026-08/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
       "coverage": "URL is unknown to Google",
       "crawled": null
     },
     "https://www.indiecore.net/aso/google-play-keywords-casual-games-2026-08/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
-      "coverage": "URL is unknown to Google",
+      "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/blog/admob-unity-mediation-adapter-status/": {
       "first_seen": "2026-09-11",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-26"
     },
     "https://www.indiecore.net/blog/unity-il2cpp-vs-mono-android-measured/": {
       "first_seen": "2026-09-11",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-27"
     },
     "https://www.indiecore.net/blog/ask-first-claude-code-plugin/": {
       "first_seen": "2026-09-09",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-27"
     },
     "https://www.indiecore.net/blog/admob-unity-test-ids-and-two-error-codes/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-26"
     },
     "https://www.indiecore.net/blog/unity-6-android-build-errors-that-exit-zero/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-12"
     },
     "https://www.indiecore.net/blog/admob-unity-sdk-empty-app-id/": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-28"
     },
     "https://www.indiecore.net/blog/admob-limited-ad-serving-wrong-app/": {
       "first_seen": "2026-09-05",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-26"
     },
     "https://www.indiecore.net/blog/posting-to-linkedin-from-ci/": {
       "first_seen": "2026-09-04",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-26"
     },
     "https://www.indiecore.net/blog/unity-gradle-build-failed-is-not-the-error/": {
       "first_seen": "2026-09-03",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-14"
+      "crawled": "2026-10-03"
     },
     "https://www.indiecore.net/blog/one-engine-many-games/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-27"
     },
     "https://www.indiecore.net/blog/generate-levels-offline-not-at-runtime/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-10-01"
     },
     "https://www.indiecore.net/blog/rating-puzzle-difficulty-by-decisions/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-26"
     },
     "https://www.indiecore.net/blog/difficulty-rates-progression-places/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-29"
+      "crawled": "2026-10-03"
     },
     "https://www.indiecore.net/blog/opening-layout-is-part-of-the-puzzle/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-10-01"
     },
     "https://www.indiecore.net/blog/shipping-a-4mb-level-pack/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-28"
     },
     "https://www.indiecore.net/blog/testing-a-level-pack-you-did-not-write/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "NEUTRAL",
-      "coverage": "URL is unknown to Google",
+      "coverage": "Discovered - currently not indexed",
       "crawled": null
     },
     "https://www.indiecore.net/blog/pricing-an-economy-off-its-difficulty-model/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-27"
     },
     "https://www.indiecore.net/blog/capacitor-android-build-apk-size/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-27"
     },
     "https://www.indiecore.net/blog/release-pipeline-you-cannot-forget/": {
       "first_seen": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-02"
     },
     "https://www.indiecore.net/blog/cloudflare-beacon-csp-blocked/": {
       "first_seen": "2026-09-01",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/lighthouse-image-budget/": {
       "first_seen": "2026-09-01",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-01"
     },
     "https://www.indiecore.net/blog/opacity-zero-is-not-hidden/": {
       "first_seen": "2026-09-01",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-28"
+      "crawled": "2026-10-03"
     },
     "https://www.indiecore.net/blog/the-check-that-passed-while-broken/": {
       "first_seen": "2026-09-01",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-26"
     },
     "https://www.indiecore.net/blog/change-privacy-policy-url-google-play/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-25"
+      "crawled": "2026-10-03"
     },
     "https://www.indiecore.net/blog/blast-radius-rule-ai-coding/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-25"
     },
     "https://www.indiecore.net/blog/build-reviews-ai-code/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/blog/context-engineering-repo/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-20"
     },
     "https://www.indiecore.net/blog/static-site-cloudflare-workers/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-26"
     },
     "https://www.indiecore.net/about/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-27"
     },
     "https://www.indiecore.net/subscribe/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-25"
     },
     "https://www.indiecore.net/contact/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-30"
+      "crawled": "2026-10-03"
     },
     "https://www.indiecore.net/privacy/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-21"
     },
     "https://www.indiecore.net/legal/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-21"
+      "crawled": "2026-10-01"
+    },
+    "https://www.indiecore.net/privacy/football-logo-quiz/": {
+      "first_seen": "2026-09-08",
+      "seen": "2026-10-03",
+      "verdict": "PASS",
+      "coverage": "Submitted and indexed",
+      "crawled": "2026-09-27"
     },
     "https://www.indiecore.net/privacy/word-slot/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-25"
     },
     "https://www.indiecore.net/privacy/soda-jam-color-sort/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-30"
     },
     "https://www.indiecore.net/privacy/color-block-puzzle-master/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-30"
     },
     "https://www.indiecore.net/privacy/logo-quiz-guess-brand/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-29"
     },
     "https://www.indiecore.net/privacy/number-match-merge-puzzle/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-09"
     },
     "https://www.indiecore.net/privacy/mot-malin/": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
       "crawled": "2026-09-28"
     },
-    "https://www.indiecore.net/privacy/football-logo-quiz/": {
-      "first_seen": "2026-09-08",
-      "seen": "2026-10-02",
+    "https://www.indiecore.net/privacy/asmr-logo-craft-block/": {
+      "first_seen": "2026-10-03",
+      "seen": "2026-10-03",
       "verdict": "PASS",
       "coverage": "Submitted and indexed",
-      "crawled": "2026-09-27"
+      "crawled": "2026-10-03"
     }
   },
   "queries": {
     "indie core": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 8.9,
       "impressions": 83,
       "clicks": 2,
@@ -456,7 +470,7 @@
     },
     "guess brand game": {
       "first_seen": "2026-09-04",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 19.3,
       "impressions": 3,
       "clicks": 1,
@@ -464,15 +478,15 @@
     },
     "how to change privacy policy link in google play console": {
       "first_seen": "2026-09-04",
-      "seen": "2026-10-02",
-      "position": 8.8,
-      "impressions": 4,
+      "seen": "2026-10-03",
+      "position": 8.7,
+      "impressions": 3,
       "clicks": 1,
       "best": 7
     },
     "how to change privacy policy url in play console": {
       "first_seen": "2026-09-03",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 7.3,
       "impressions": 3,
       "clicks": 1,
@@ -480,7 +494,7 @@
     },
     "indiecore": {
       "first_seen": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 7.2,
       "impressions": 111,
       "clicks": 1,
@@ -488,7 +502,7 @@
     },
     "admob dummy id": {
       "first_seen": "2026-09-16",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 17,
       "impressions": 1,
       "clicks": 0,
@@ -496,7 +510,7 @@
     },
     "admob sample id": {
       "first_seen": "2026-09-16",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 24,
       "impressions": 1,
       "clicks": 0,
@@ -504,7 +518,7 @@
     },
     "admob test ad unit id": {
       "first_seen": "2026-09-17",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 23,
       "impressions": 1,
       "clicks": 0,
@@ -512,7 +526,7 @@
     },
     "admob test ads id": {
       "first_seen": "2026-09-12",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 2,
       "impressions": 2,
       "clicks": 0,
@@ -520,7 +534,7 @@
     },
     "admob test app id": {
       "first_seen": "2026-09-12",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 18,
       "impressions": 2,
       "clicks": 0,
@@ -528,7 +542,7 @@
     },
     "admob test app id unity": {
       "first_seen": "2026-09-17",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 7.1,
       "impressions": 14,
       "clicks": 0,
@@ -536,7 +550,7 @@
     },
     "admob test id": {
       "first_seen": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 21.3,
       "impressions": 3,
       "clicks": 0,
@@ -544,7 +558,7 @@
     },
     "admob test ids": {
       "first_seen": "2026-09-17",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 15,
       "impressions": 3,
       "clicks": 0,
@@ -552,7 +566,7 @@
     },
     "admob testing id": {
       "first_seen": "2026-09-12",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 18,
       "impressions": 1,
       "clicks": 0,
@@ -560,7 +574,7 @@
     },
     "admob unity test ids": {
       "first_seen": "2026-09-12",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 6,
       "impressions": 1,
       "clicks": 0,
@@ -568,7 +582,7 @@
     },
     "araynimax": {
       "first_seen": "2026-09-14",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 43,
       "impressions": 1,
       "clicks": 0,
@@ -576,7 +590,7 @@
     },
     "bepinex mono vs il2cpp": {
       "first_seen": "2026-09-17",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 17,
       "impressions": 1,
       "clicks": 0,
@@ -584,7 +598,7 @@
     },
     "commandinvokationfailure: gradle build failed.": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 9,
       "impressions": 2,
       "clicks": 0,
@@ -592,7 +606,7 @@
     },
     "commandinvokationfailure: gradle build failed. unity": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 10,
       "impressions": 1,
       "clicks": 0,
@@ -600,7 +614,7 @@
     },
     "difference between mono and il2cpp": {
       "first_seen": "2026-09-18",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 9,
       "impressions": 1,
       "clicks": 0,
@@ -608,7 +622,7 @@
     },
     "google mobile ads": {
       "first_seen": "2026-09-18",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 8,
       "impressions": 1,
       "clicks": 0,
@@ -616,7 +630,7 @@
     },
     "google play console change privacy policy url": {
       "first_seen": "2026-09-06",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 6.5,
       "impressions": 2,
       "clicks": 0,
@@ -624,7 +638,7 @@
     },
     "gradle build failed": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 15.3,
       "impressions": 3,
       "clicks": 0,
@@ -632,7 +646,7 @@
     },
     "gradle failure": {
       "first_seen": "2026-09-06",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 15.5,
       "impressions": 2,
       "clicks": 0,
@@ -640,7 +654,7 @@
     },
     "https://static.cloudflareinsights.com/beacon.min.js": {
       "first_seen": "2026-09-08",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 81,
       "impressions": 1,
       "clicks": 0,
@@ -648,7 +662,7 @@
     },
     "il2cpp android": {
       "first_seen": "2026-09-20",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 8,
       "impressions": 3,
       "clicks": 0,
@@ -656,7 +670,7 @@
     },
     "il2cpp github": {
       "first_seen": "2026-09-17",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 14,
       "impressions": 1,
       "clicks": 0,
@@ -664,7 +678,7 @@
     },
     "il2cpp mono": {
       "first_seen": "2026-09-17",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 10,
       "impressions": 1,
       "clicks": 0,
@@ -672,7 +686,7 @@
     },
     "il2cpp vs mono": {
       "first_seen": "2026-09-17",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 9.8,
       "impressions": 4,
       "clicks": 0,
@@ -680,7 +694,7 @@
     },
     "inde core": {
       "first_seen": "2026-10-01",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 7,
       "impressions": 1,
       "clicks": 0,
@@ -688,7 +702,7 @@
     },
     "independent games free": {
       "first_seen": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 16,
       "impressions": 1,
       "clicks": 0,
@@ -696,7 +710,7 @@
     },
     "indi core": {
       "first_seen": "2026-09-18",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 10,
       "impressions": 1,
       "clicks": 0,
@@ -704,7 +718,7 @@
     },
     "indircore": {
       "first_seen": "2026-09-26",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 6,
       "impressions": 1,
       "clicks": 0,
@@ -712,7 +726,7 @@
     },
     "mono vs il2cpp": {
       "first_seen": "2026-09-17",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 8.8,
       "impressions": 4,
       "clicks": 0,
@@ -720,7 +734,7 @@
     },
     "mono vs il2cpp unity": {
       "first_seen": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 10,
       "impressions": 1,
       "clicks": 0,
@@ -728,7 +742,7 @@
     },
     "mot malin": {
       "first_seen": "2026-10-01",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 6,
       "impressions": 2,
       "clicks": 0,
@@ -736,7 +750,7 @@
     },
     "my text and files are available under creative commons attribution 3.0 except this private data: password, email address, im address, and phone number. lodibet": {
       "first_seen": "2026-09-20",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 67,
       "impressions": 1,
       "clicks": 0,
@@ -744,7 +758,7 @@
     },
     "nillerusr": {
       "first_seen": "2026-09-26",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 45,
       "impressions": 1,
       "clicks": 0,
@@ -752,7 +766,7 @@
     },
     "paraphore dev code": {
       "first_seen": "2026-09-25",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 18,
       "impressions": 1,
       "clicks": 0,
@@ -760,7 +774,7 @@
     },
     "partiality launcher": {
       "first_seen": "2026-09-17",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 40.5,
       "impressions": 2,
       "clicks": 0,
@@ -768,7 +782,7 @@
     },
     "play console change privacy policy url": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 7,
       "impressions": 1,
       "clicks": 0,
@@ -776,7 +790,7 @@
     },
     "play console privacy policy url": {
       "first_seen": "2026-09-07",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 9,
       "impressions": 1,
       "clicks": 0,
@@ -784,7 +798,7 @@
     },
     "soda jam": {
       "first_seen": "2026-09-10",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 6.4,
       "impressions": 7,
       "clicks": 0,
@@ -792,7 +806,7 @@
     },
     "test admob app id": {
       "first_seen": "2026-09-12",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 18,
       "impressions": 1,
       "clicks": 0,
@@ -800,7 +814,7 @@
     },
     "test ids": {
       "first_seen": "2026-09-10",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 41.5,
       "impressions": 2,
       "clicks": 0,
@@ -808,7 +822,7 @@
     },
     "unity ads test id": {
       "first_seen": "2026-09-14",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 9.8,
       "impressions": 4,
       "clicks": 0,
@@ -816,7 +830,7 @@
     },
     "unity gradle build failed": {
       "first_seen": "2026-09-08",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 11.3,
       "impressions": 3,
       "clicks": 0,
@@ -824,19 +838,11 @@
     },
     "unity mono vs il2cpp": {
       "first_seen": "2026-09-16",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "position": 10,
       "impressions": 5,
       "clicks": 0,
       "best": 9.5
-    },
-    "google play privacy policy url": {
-      "first_seen": "2026-09-04",
-      "seen": "2026-10-01",
-      "position": 14,
-      "impressions": 1,
-      "clicks": 0,
-      "best": 14
     }
   },
   "bing": {
@@ -844,442 +850,456 @@
     "urls": {
       "https://www.indiecore.net/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
-        "checked": "2026-09-25",
-        "crawled": "2026-09-23",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
+        "crawled": "2026-10-01",
+        "http": 0
+      },
+      "https://www.indiecore.net/games/football-logo-quiz/": {
+        "first_seen": "2026-09-08",
+        "seen": "2026-10-03",
+        "checked": "2026-09-27",
+        "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/games/word-slot/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "2026-08-29",
         "http": 0
       },
       "https://www.indiecore.net/games/soda-jam-color-sort/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-27",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/games/color-block-puzzle-master/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-27",
         "crawled": "2026-08-29",
         "http": 0
       },
       "https://www.indiecore.net/games/logo-quiz-guess-brand/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-27",
         "crawled": "2026-09-19",
         "http": 0
       },
       "https://www.indiecore.net/games/number-match-merge-puzzle/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-27",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/games/mot-malin/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-27",
         "crawled": "2026-08-29",
         "http": 0
       },
-      "https://www.indiecore.net/games/football-logo-quiz/": {
-        "first_seen": "2026-09-08",
-        "seen": "2026-10-02",
-        "checked": "2026-09-27",
-        "crawled": "0001-01-01",
+      "https://www.indiecore.net/games/asmr-logo-craft-block/": {
+        "first_seen": "2026-10-03",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
+        "crawled": "2026-10-02",
         "http": 0
       },
       "https://www.indiecore.net/blog/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/aso/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-02",
         "crawled": "2026-09-29",
         "http": 0
       },
       "https://www.indiecore.net/aso/rankgrip/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
-        "checked": "2026-09-24",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/arcade-games/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-27",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/board-games/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/casual-games/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-02",
         "crawled": "2026-09-29",
         "http": 0
       },
       "https://www.indiecore.net/aso/puzzle-games/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-02",
         "crawled": "2026-09-15",
         "http": 0
       },
       "https://www.indiecore.net/aso/simulation-games/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-02",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/word-games/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-arcade-games-2026-08/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "2026-09-12",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-board-games-2026-08/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-word-games-2026-08/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-puzzle-games-2026-08/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
-        "checked": "2026-09-24",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
         "crawled": "2026-09-21",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-simulation-games-2026-08/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
-        "checked": "2026-09-25",
-        "crawled": "0001-01-01",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
+        "crawled": "2026-09-30",
         "http": 0
       },
       "https://www.indiecore.net/aso/google-play-keywords-casual-games-2026-08/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-25",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/admob-unity-mediation-adapter-status/": {
         "first_seen": "2026-09-11",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-25",
         "crawled": "2026-09-24",
         "http": 0
       },
       "https://www.indiecore.net/blog/unity-il2cpp-vs-mono-android-measured/": {
         "first_seen": "2026-09-11",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-25",
         "crawled": "2026-09-24",
         "http": 0
       },
       "https://www.indiecore.net/blog/ask-first-claude-code-plugin/": {
         "first_seen": "2026-09-09",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-09-22",
         "http": 0
       },
       "https://www.indiecore.net/blog/admob-unity-test-ids-and-two-error-codes/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-09-18",
         "http": 0
       },
       "https://www.indiecore.net/blog/unity-6-android-build-errors-that-exit-zero/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-09-22",
         "http": 0
       },
       "https://www.indiecore.net/blog/admob-unity-sdk-empty-app-id/": {
         "first_seen": "2026-09-07",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-09-24",
         "http": 0
       },
       "https://www.indiecore.net/blog/admob-limited-ad-serving-wrong-app/": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-25",
         "crawled": "2026-09-17",
         "http": 0
       },
       "https://www.indiecore.net/blog/posting-to-linkedin-from-ci/": {
         "first_seen": "2026-09-04",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-20",
         "http": 0
       },
       "https://www.indiecore.net/blog/unity-gradle-build-failed-is-not-the-error/": {
         "first_seen": "2026-09-03",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-09-28",
         "http": 0
       },
       "https://www.indiecore.net/blog/one-engine-many-games/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-09-28",
         "http": 0
       },
       "https://www.indiecore.net/blog/generate-levels-offline-not-at-runtime/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-28",
         "http": 0
       },
       "https://www.indiecore.net/blog/rating-puzzle-difficulty-by-decisions/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-28",
         "http": 0
       },
       "https://www.indiecore.net/blog/difficulty-rates-progression-places/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/opening-layout-is-part-of-the-puzzle/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-28",
         "http": 0
       },
       "https://www.indiecore.net/blog/shipping-a-4mb-level-pack/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-29",
         "http": 0
       },
       "https://www.indiecore.net/blog/testing-a-level-pack-you-did-not-write/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-28",
         "http": 0
       },
       "https://www.indiecore.net/blog/pricing-an-economy-off-its-difficulty-model/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-28",
         "http": 0
       },
       "https://www.indiecore.net/blog/capacitor-android-build-apk-size/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/release-pipeline-you-cannot-forget/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-01",
         "crawled": "2026-09-28",
         "http": 0
       },
       "https://www.indiecore.net/blog/cloudflare-beacon-csp-blocked/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-02",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/lighthouse-image-budget/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-10-02",
         "crawled": "2026-09-21",
         "http": 0
       },
       "https://www.indiecore.net/blog/opacity-zero-is-not-hidden/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
-        "checked": "2026-09-24",
-        "crawled": "2026-09-24",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
+        "crawled": "2026-10-01",
         "http": 0
       },
       "https://www.indiecore.net/blog/the-check-that-passed-while-broken/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
-        "checked": "2026-09-24",
-        "crawled": "2026-09-01",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
+        "crawled": "2026-10-02",
         "http": 0
       },
       "https://www.indiecore.net/blog/change-privacy-policy-url-google-play/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
-        "checked": "2026-09-24",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
         "crawled": "2026-09-23",
         "http": 0
       },
       "https://www.indiecore.net/blog/blast-radius-rule-ai-coding/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
-        "checked": "2026-09-24",
-        "crawled": "2026-09-23",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
+        "crawled": "2026-09-25",
         "http": 0
       },
       "https://www.indiecore.net/blog/build-reviews-ai-code/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-25",
         "crawled": "2026-09-24",
         "http": 0
       },
       "https://www.indiecore.net/blog/context-engineering-repo/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-25",
         "crawled": "2026-09-04",
         "http": 0
       },
       "https://www.indiecore.net/blog/static-site-cloudflare-workers/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-25",
         "crawled": "2026-09-24",
         "http": 0
       },
       "https://www.indiecore.net/about/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-25",
         "crawled": "2026-08-26",
         "http": 0
       },
       "https://www.indiecore.net/subscribe/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "2026-08-31",
         "http": 0
       },
       "https://www.indiecore.net/contact/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "2026-09-20",
         "http": 0
       },
       "https://www.indiecore.net/privacy/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "2026-09-17",
         "http": 0
       },
       "https://www.indiecore.net/legal/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-26",
         "crawled": "2026-08-28",
         "http": 0
       },
+      "https://www.indiecore.net/privacy/football-logo-quiz/": {
+        "first_seen": "2026-09-08",
+        "seen": "2026-10-03",
+        "checked": "2026-10-02",
+        "crawled": "0001-01-01",
+        "http": 0
+      },
       "https://www.indiecore.net/privacy/word-slot/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-27",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/privacy/soda-jam-color-sort/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-27",
         "crawled": "2026-08-29",
         "http": 0
       },
       "https://www.indiecore.net/privacy/color-block-puzzle-master/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-27",
         "crawled": "0001-01-01",
         "http": 0
       },
       "https://www.indiecore.net/privacy/logo-quiz-guess-brand/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-09-09",
         "http": 0
       },
       "https://www.indiecore.net/privacy/number-match-merge-puzzle/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-09-23",
         "http": 0
       },
       "https://www.indiecore.net/privacy/mot-malin/": {
         "first_seen": "2026-09-02",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "checked": "2026-09-28",
         "crawled": "2026-09-20",
         "http": 0
       },
-      "https://www.indiecore.net/privacy/football-logo-quiz/": {
-        "first_seen": "2026-09-08",
-        "seen": "2026-10-02",
-        "checked": "2026-10-02",
+      "https://www.indiecore.net/privacy/asmr-logo-craft-block/": {
+        "first_seen": "2026-10-03",
+        "seen": "2026-10-03",
+        "checked": "2026-10-03",
         "crawled": "0001-01-01",
         "http": 0
       }
@@ -1287,288 +1307,288 @@
     "queries": {
       "indiecore": {
         "first_seen": "2026-09-05",
-        "seen": "2026-10-02",
-        "position": 7,
-        "impressions": 20,
+        "seen": "2026-10-03",
+        "position": 7.1,
+        "impressions": 18,
         "clicks": 0
       },
       "cd \"c:/users/dudi1/documents/github/grace-claude/grace-push-worker\" && npx wrangler login": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 8,
         "impressions": 2,
         "clicks": 0
       },
-      "cloudflare+workers+and+pages": {
+      "article writing repo": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
+        "position": 10,
+        "impressions": 2,
+        "clicks": 0
+      },
+      "google play offline puzzle game zero data no in-app purchases": {
+        "first_seen": "2026-09-12",
+        "seen": "2026-10-03",
+        "position": 6,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "table, list, div structure which is appropriate for deploying file in cloudflare": {
+        "first_seen": "2026-09-12",
+        "seen": "2026-10-03",
+        "position": 10,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "cloudflare workers static hosting documentation": {
+        "first_seen": "2026-09-12",
+        "seen": "2026-10-03",
         "position": 7,
         "impressions": 1,
         "clicks": 0
       },
-      "google play edit privacy policy url": {
-        "first_seen": "2026-09-13",
-        "seen": "2026-10-02",
-        "position": 3,
+      "cloudflare+workers+and+pages": {
+        "first_seen": "2026-09-12",
+        "seen": "2026-10-03",
+        "position": 7,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "cloudflare use worker to deploy static website": {
+        "first_seen": "2026-09-12",
+        "seen": "2026-10-03",
+        "position": 9,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "cloudflare worker static assets": {
+        "first_seen": "2026-09-12",
+        "seen": "2026-10-03",
+        "position": 10,
         "impressions": 1,
         "clicks": 0
       },
       "cloudflare workers edit static assets dashboard upload files": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 6,
         "impressions": 1,
         "clicks": 0
       },
       "cloudflare workers ebook library drive index github pages static site openlist alist": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 7,
         "impressions": 1,
         "clicks": 0
       },
       "cloudflare pages legacy dashboard create static site workers assets": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 6,
         "impressions": 1,
         "clicks": 0
       },
-      "cloudflare use worker to deploy static website": {
+      "hostname 'ceylonunfolded.com' already has externally managed dns records (a, cname, etc). delete them first or try a different hostname.\\": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 9,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "google play edit privacy policy url": {
+        "first_seen": "2026-09-13",
+        "seen": "2026-10-03",
+        "position": 3,
         "impressions": 1,
         "clicks": 0
       },
       "pipe.boringways.workers.dev/configure": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 4,
         "impressions": 1,
         "clicks": 0
       },
-      "get the whole context of a repo": {
+      "cloudflare pages api add custom domain \"invalid tld\" error fix": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
-        "position": 9,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "deployed html to cloudflare worker": {
-        "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 8,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "google play offline puzzle game zero data no in-app purchases": {
-        "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
-        "position": 6,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "article writing repo": {
-        "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
-        "position": 10,
-        "impressions": 2,
-        "clicks": 0
-      },
-      "cloudflare workers static hosting documentation": {
-        "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
-        "position": 7,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "table, list, div structure which is appropriate for deploying file in cloudflare": {
-        "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
-        "position": 10,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "cloudflare worker static assets": {
-        "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
-        "position": 10,
         "impressions": 1,
         "clicks": 0
       },
       "runable site deploy custom subdomain": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 4,
         "impressions": 1,
         "clicks": 0
       },
       "pipe.boringways.workers.dev/configure.": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 8,
         "impressions": 1,
         "clicks": 0
       },
       "cloudflare workers.dev subdomain deployment static website": {
         "first_seen": "2026-09-13",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 5,
         "impressions": 1,
         "clicks": 0
       },
-      "cloudflare pages api add custom domain \"invalid tld\" error fix": {
+      "get the whole context of a repo": {
         "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
-        "position": 8,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "hostname 'ceylonunfolded.com' already has externally managed dns records (a, cname, etc). delete them first or try a different hostname.\\": {
-        "first_seen": "2026-09-12",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 9,
         "impressions": 1,
         "clicks": 0
       },
-      "will the google play store id change if the url of a website changes": {
-        "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
-        "position": 6,
+      "deployed html to cloudflare worker": {
+        "first_seen": "2026-09-12",
+        "seen": "2026-10-03",
+        "position": 8,
         "impressions": 1,
         "clicks": 0
       },
       "admob unity  sdk": {
         "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 10,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "build static website cloudflare worker": {
-        "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
-        "position": 6,
         "impressions": 1,
         "clicks": 0
       },
       "what is a will vs trust": {
         "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 5,
         "impressions": 1,
         "clicks": 0
       },
       "\"misabargains\" -site:ebay.com -site:ebay.co.uk -site:ebay.de -site:ebay.fr -site:ebay.it -site:ebay.es -site:ebay.ie -site:ebay.at -site:ebay.ca -site:ebay.com.au -site:amazon.com -site:amazon.co.uk -site:amazon.de -site:facebook.com -site:linkedin.com -site:instagram.com -site:twitter.com -site:x.com -site:yell.com -site:companieshouse.gov.uk": {
         "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 5,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "will the google play store id change if the url of a website changes": {
+        "first_seen": "2026-09-19",
+        "seen": "2026-10-03",
+        "position": 6,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "change privacy policy google play console": {
+        "first_seen": "2026-09-19",
+        "seen": "2026-10-03",
+        "position": 9,
         "impressions": 1,
         "clicks": 0
       },
       "indiecroe": {
         "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 10,
         "impressions": 1,
         "clicks": 0
       },
       "play console change privacy policy link": {
         "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 5,
         "impressions": 1,
         "clicks": 0
       },
       "unity gradle build failed": {
         "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 8,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "change privacy policy google play console": {
-        "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
-        "position": 9,
         "impressions": 1,
         "clicks": 0
       },
       "cloudflare workers deployed static site edit settings dashboard github pages settings": {
         "first_seen": "2026-09-19",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 7,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "build static website cloudflare worker": {
+        "first_seen": "2026-09-19",
+        "seen": "2026-10-03",
+        "position": 6,
         "impressions": 1,
         "clicks": 0
       },
       "indiecoredev": {
         "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 2,
         "impressions": 2,
         "clicks": 1
       },
-      "unity 6000.3.15 code error": {
-        "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
-        "position": 8,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "cloudflare workers static assets index.html serving dashboard deploy documentation": {
-        "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
-        "position": 5,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "imdie core": {
-        "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
-        "position": 6,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "cloudlfare workers static page dns": {
-        "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
-        "position": 8,
-        "impressions": 1,
-        "clicks": 0
-      },
       "cloudflare workers static site dynamic data user-generated pages": {
         "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
-        "position": 7,
-        "impressions": 1,
-        "clicks": 0
-      },
-      "cloudflare worker static ip for api integraton": {
-        "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 7,
         "impressions": 1,
         "clicks": 0
       },
       "cloudflare workers deploy static site socios.casadopessoal.workers.dev": {
         "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 5,
         "impressions": 1,
         "clicks": 0
       },
-      "unity android mono armv7 il2cpp arm64 player settings official": {
+      "cloudflare worker static ip for api integraton": {
         "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
-        "position": 2,
+        "seen": "2026-10-03",
+        "position": 7,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "cloudflare workers static assets index.html serving dashboard deploy documentation": {
+        "first_seen": "2026-09-26",
+        "seen": "2026-10-03",
+        "position": 5,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "imdie core": {
+        "first_seen": "2026-09-26",
+        "seen": "2026-10-03",
+        "position": 6,
         "impressions": 1,
         "clicks": 0
       },
       "i remember the person did a blog post explaining the repo, can you find it ?": {
         "first_seen": "2026-09-26",
-        "seen": "2026-10-02",
+        "seen": "2026-10-03",
         "position": 4,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "unity android mono armv7 il2cpp arm64 player settings official": {
+        "first_seen": "2026-09-26",
+        "seen": "2026-10-03",
+        "position": 2,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "cloudlfare workers static page dns": {
+        "first_seen": "2026-09-26",
+        "seen": "2026-10-03",
+        "position": 8,
+        "impressions": 1,
+        "clicks": 0
+      },
+      "unity 6000.3.15 code error": {
+        "first_seen": "2026-09-26",
+        "seen": "2026-10-03",
+        "position": 8,
         "impressions": 1,
         "clicks": 0
       }
@@ -1630,7 +1650,7 @@
       "detail": "position 7.2 on 111 impressions, 0.9% CTR",
       "fix": "Sharpen the <title> and meta description of the page that ranks for it, so the phrase people typed is visible in the result.",
       "opened": "2026-08-31",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1642,7 +1662,7 @@
       "detail": "position 8.9 on 83 impressions, 2.4% CTR",
       "fix": "Sharpen the <title> and meta description of the page that ranks for it, so the phrase people typed is visible in the result.",
       "opened": "2026-09-02",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1663,10 +1683,10 @@
       "id": "zero-click:blog-static-site-cloudflare-workers",
       "kind": "zero-click",
       "subject": "/blog/static-site-cloudflare-workers/",
-      "detail": "137 impressions and no clicks in 28 days (position 6.1)",
+      "detail": "128 impressions and no clicks in 28 days (position 6.1)",
       "fix": "Google shows it and nobody picks it. Either the title does not match the intent behind the query, or the position is too low to be seen.",
       "opened": "2026-09-06",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1687,10 +1707,10 @@
       "id": "never-crawled:blog-testing-a-level-pack-you-did-not-write",
       "kind": "never-crawled",
       "subject": "/blog/testing-a-level-pack-you-did-not-write/",
-      "detail": "never crawled — Google reports \"URL is unknown to Google\", and it has been in the sitemap since 2026-09-02 (30 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-02 (31 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-16",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1702,7 +1722,7 @@
       "detail": "203 impressions and no clicks in 28 days (position 7.8)",
       "fix": "Google shows it and nobody picks it. Either the title does not match the intent behind the query, or the position is too low to be seen.",
       "opened": "2026-09-16",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1711,10 +1731,10 @@
       "id": "never-crawled:aso",
       "kind": "never-crawled",
       "subject": "/aso/",
-      "detail": "never crawled — Google reports \"URL is unknown to Google\", and it has been in the sitemap since 2026-09-05 (27 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (28 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1723,10 +1743,10 @@
       "id": "never-crawled:aso-rankgrip",
       "kind": "never-crawled",
       "subject": "/aso/rankgrip/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (27 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (28 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1735,10 +1755,10 @@
       "id": "never-crawled:aso-casual-games",
       "kind": "never-crawled",
       "subject": "/aso/casual-games/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (27 days)",
+      "detail": "never crawled — Google reports \"URL is unknown to Google\", and it has been in the sitemap since 2026-09-05 (28 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1747,10 +1767,10 @@
       "id": "never-crawled:aso-puzzle-games",
       "kind": "never-crawled",
       "subject": "/aso/puzzle-games/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (27 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (28 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1759,10 +1779,10 @@
       "id": "never-crawled:aso-simulation-games",
       "kind": "never-crawled",
       "subject": "/aso/simulation-games/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (27 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (28 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1771,10 +1791,10 @@
       "id": "never-crawled:aso-google-play-keywords-puzzle-games-2026-08",
       "kind": "never-crawled",
       "subject": "/aso/google-play-keywords-puzzle-games-2026-08/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (27 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (28 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1783,10 +1803,10 @@
       "id": "never-crawled:aso-google-play-keywords-casual-games-2026-08",
       "kind": "never-crawled",
       "subject": "/aso/google-play-keywords-casual-games-2026-08/",
-      "detail": "never crawled — Google reports \"URL is unknown to Google\", and it has been in the sitemap since 2026-09-05 (27 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-05 (28 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1795,10 +1815,10 @@
       "id": "never-crawled:aso-google-play-keywords-simulation-games-2026-08",
       "kind": "never-crawled",
       "subject": "/aso/google-play-keywords-simulation-games-2026-08/",
-      "detail": "never crawled — Google reports \"URL is unknown to Google\", and it has been in the sitemap since 2026-09-05 (27 days)",
+      "detail": "never crawled — Google reports \"URL is unknown to Google\", and it has been in the sitemap since 2026-09-05 (28 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-19",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1819,10 +1839,10 @@
       "id": "never-crawled:aso-arcade-games",
       "kind": "never-crawled",
       "subject": "/aso/arcade-games/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (25 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (26 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-21",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1831,10 +1851,10 @@
       "id": "never-crawled:aso-board-games",
       "kind": "never-crawled",
       "subject": "/aso/board-games/",
-      "detail": "never crawled — Google reports \"URL is unknown to Google\", and it has been in the sitemap since 2026-09-07 (25 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (26 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-21",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1843,10 +1863,10 @@
       "id": "never-crawled:aso-word-games",
       "kind": "never-crawled",
       "subject": "/aso/word-games/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (25 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (26 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-21",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1855,10 +1875,10 @@
       "id": "never-crawled:aso-google-play-keywords-arcade-games-2026-08",
       "kind": "never-crawled",
       "subject": "/aso/google-play-keywords-arcade-games-2026-08/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (25 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (26 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-21",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1867,10 +1887,10 @@
       "id": "never-crawled:aso-google-play-keywords-board-games-2026-08",
       "kind": "never-crawled",
       "subject": "/aso/google-play-keywords-board-games-2026-08/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (25 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (26 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-21",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1879,10 +1899,10 @@
       "id": "never-crawled:aso-google-play-keywords-word-games-2026-08",
       "kind": "never-crawled",
       "subject": "/aso/google-play-keywords-word-games-2026-08/",
-      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (25 days)",
+      "detail": "never crawled — Google reports \"Discovered - currently not indexed\", and it has been in the sitemap since 2026-09-07 (26 days)",
       "fix": "Link to it from a page Google already crawls often. Discovery is an internal-linking problem, not a submission one — resubmitting a sitemap Google has already read changes nothing.",
       "opened": "2026-09-21",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1894,7 +1914,7 @@
       "detail": "60 impressions and no clicks in 28 days (position 4.7)",
       "fix": "Google shows it and nobody picks it. Either the title does not match the intent behind the query, or the position is too low to be seen.",
       "opened": "2026-09-24",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1906,7 +1926,7 @@
       "detail": "68 impressions and no clicks in 28 days (position 8.2)",
       "fix": "Google shows it and nobody picks it. Either the title does not match the intent behind the query, or the position is too low to be seen.",
       "opened": "2026-09-26",
-      "seen": "2026-10-02",
+      "seen": "2026-10-03",
       "status": "open",
       "closed": null,
       "note": null
@@ -1921,6 +1941,18 @@
       "seen": "2026-09-28",
       "status": "resolved",
       "closed": "2026-10-01",
+      "note": null
+    },
+    {
+      "id": "zero-click:blog-opacity-zero-is-not-hidden",
+      "kind": "zero-click",
+      "subject": "/blog/opacity-zero-is-not-hidden/",
+      "detail": "102 impressions and no clicks in 28 days (position 7.7)",
+      "fix": "Google shows it and nobody picks it. Either the title does not match the intent behind the query, or the position is too low to be seen.",
+      "opened": "2026-10-03",
+      "seen": "2026-10-03",
+      "status": "open",
+      "closed": null,
       "note": null
     }
   ]
