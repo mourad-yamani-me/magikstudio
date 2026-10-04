@@ -1,17 +1,17 @@
 {
-  "name": "indie-core-dev-site",
+  "name": "magikstudio",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing site for Indie Core Dev — static generator, deploys to Cloudflare Pages.",
+  "description": "Magikstudio — independent mobile game studio. Static site adapted from indie-core-dev.",
   "type": "module",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "build": "node build.mjs",
-    "verify": "node scripts/verify.mjs",
+    "build": "node scripts/build-magikstudio.mjs",
+    "verify": "node scripts/verify-magikstudio.mjs",
     "serve": "node scripts/serve.mjs",
-    "dev": "PREVIEW_SCHEDULED=1 npm run build && npm run serve",
+    "dev": "npm run build && npm run serve",
     "check": "npm run build && npm run verify && npm run check:generated && npm run style -- --strict",
     "check:generated": "node scripts/check-generated.mjs",
     "lighthouse": "node scripts/lighthouse-check.mjs",
@@ -30,7 +30,9 @@
     "devto": "node scripts/devto.mjs",
     "devto:publish": "node scripts/devto.mjs --publish",
     "linkedin": "node scripts/linkedin.mjs",
-    "linkedin:publish": "node scripts/linkedin.mjs --publish"
+    "linkedin:publish": "node scripts/linkedin.mjs --publish",
+    "build:reference": "node build.mjs",
+    "verify:reference": "node scripts/verify.mjs"
   },
   "devDependencies": {
     "highlight.js": "^11.12.0",

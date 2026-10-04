@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "indie-core-dev",
+  "name": "magikstudio",
   "compatibility_date": "2026-08-26",
 
   // Keep the *.workers.dev URL alive as a staging target, and keep per-version
@@ -25,7 +25,7 @@
   // every deploy. custom_domain:true means Cloudflare manages the record and
   // the TLS certificate for each hostname.
   "routes": [
-    { "pattern": "www.indiecore.net", "custom_domain": true },
-    { "pattern": "indiecore.net", "custom_domain": true }
+    { "pattern": "www.magikstudio.me", "custom_domain": true },
+    { "pattern": "magikstudio.me", "custom_domain": true }
   ]
 }
