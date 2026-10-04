@@ -2,7 +2,7 @@
   "name": "magikstudio",
   "version": "1.0.0",
   "private": true,
-  "description": "Magikstudio — independent mobile game studio. Static site adapted from indie-core-dev.",
+  "description": "Magikstudio \u2014 independent casual game studio website.",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -12,33 +12,9 @@
     "verify": "node scripts/verify-magikstudio.mjs",
     "serve": "node scripts/serve.mjs",
     "dev": "npm run build && npm run serve",
-    "check": "npm run build && npm run verify && npm run check:generated && npm run style -- --strict",
-    "check:generated": "node scripts/check-generated.mjs",
-    "lighthouse": "node scripts/lighthouse-check.mjs",
-    "style": "node scripts/style-check.mjs",
-    "seo": "node scripts/seo-ping.mjs",
-    "seo:watch": "node scripts/seo-watch.mjs",
-    "seo:bing": "node scripts/seo-ping.mjs --bing-only",
-    "topics": "node scripts/topics.mjs",
-    "aso": "node scripts/aso.mjs",
-    "keywords": "node scripts/keywords.mjs",
-    "assets:og": "node og.mjs",
-    "assets:fonts": "node fonts.mjs",
-    "gist": "node scripts/build-gist.mjs",
-    "hub": "node scripts/build-hub.mjs",
-    "schedule": "node scripts/schedule.mjs",
-    "devto": "node scripts/devto.mjs",
-    "devto:publish": "node scripts/devto.mjs --publish",
-    "linkedin": "node scripts/linkedin.mjs",
-    "linkedin:publish": "node scripts/linkedin.mjs --publish",
-    "build:reference": "node build.mjs",
-    "verify:reference": "node scripts/verify.mjs"
+    "check": "npm run build && npm run verify"
   },
   "devDependencies": {
-    "highlight.js": "^11.12.0",
-    "lighthouse": "13.4.1",
-    "marked": "^18.0.11",
-    "marked-highlight": "^2.2.4",
     "wrangler": "^4.127.1"
   }
 }

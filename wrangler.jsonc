@@ -3,10 +3,7 @@
   "name": "magikstudio",
   "compatibility_date": "2026-08-26",
 
-  // Keep the *.workers.dev URL alive as a staging target, and keep per-version
-  // Preview URLs on — the CI preview job publishes with `wrangler versions
-  // upload` and reads the preview URL from its output. Wrangler disables both
-  // by default when they are absent from this file.
+  // Keep a workers.dev address available alongside the custom domains.
   "workers_dev": true,
   "preview_urls": true,
 

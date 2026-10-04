@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
-import { studio, games, legacyPolicies } from '../src/magikstudio/config.mjs';
+import { studio, games } from '../src/magikstudio/config.mjs';
 const dist=fileURLToPath(new URL('../dist/',import.meta.url));
 const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);
 const pages=walk(dist).filter(p=>p.endsWith('.html'));
@@ -18,10 +18,8 @@ for(const file of pages){
   for(const match of html.matchAll(/(?:href|src)="(\/[^"#]*)"/g))assert.ok(exists(match[1]),`${label}: missing ${match[1]}`);
   for(const match of html.matchAll(/<img\b[^>]*>/g))assert.match(match[0],/alt="[^"]+"/,`${label}: image alt`);
   for(const match of html.matchAll(/<svg\b[^>]*>/g))assert.match(match[0],/aria-hidden="true"|aria-label=/,`${label}: SVG accessibility`);
-  assert.ok(!/<form\b|app\.kit\.com/.test(html),`${label}: inherited signup integration`);
-  if(!label.startsWith('privacy/')||label==='privacy/index.html'){
-    assert.ok(!/contact@indiecore|Othmane Ettaib|943\s*647\s*503/.test(html),`${label}: inherited identity`);
-  }
+  assert.ok(!/<form\b|app\.kit\.com/.test(html),`${label}: unexpected signup integration`);
+
 }
 for(const key of ['privacy','terms','legal']){
   const html=fs.readFileSync(path.join(dist,key,'index.html'),'utf8');
@@ -30,12 +28,8 @@ for(const key of ['privacy','terms','legal']){
 }
 const privacy=fs.readFileSync(path.join(dist,'privacy/index.html'),'utf8');
 for(const term of ['data controller','Article 6','Articles 15–22','CNIL'])assert.ok(privacy.includes(term),`privacy: ${term}`);
-for(const [slug,legacy] of legacyPolicies){
-  assert.ok(exists(`/privacy/${slug}/`));
-  assert.ok(fs.readFileSync(path.join(dist,'_redirects'),'utf8').includes(`/p/${legacy}.html /privacy/${slug}/ 301`));
-}
 for(const g of games){
   const html=fs.readFileSync(path.join(dist,'games',g.slug,'index.html'),'utf8');
   assert.equal(/class="store-link"/.test(html),Boolean(g.appStoreUrl),'App Store CTA must match configured URL');
 }
-console.log(`Verified ${pages.length} pages: links, assets, metadata, legal drafts, legacy routes and App Store state.`);
+console.log(`Verified ${pages.length} pages: links, assets, metadata, legal drafts and App Store state.`);

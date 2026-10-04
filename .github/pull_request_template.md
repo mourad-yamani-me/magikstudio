@@ -1,14 +1,9 @@
 ## What changed
 
-<!-- One or two sentences. Link an issue if there is one. -->
+Describe the change and its purpose.
 
-## Why
+## Validation
 
-<!-- The reason, not the mechanics. -->
-
-## Checklist
-
-- [ ] `npm run check` passes locally (build + verify)
-- [ ] Checked the Cloudflare preview link posted by CI
-- [ ] Content changes are factually accurate (store data, privacy policies, legal identity)
-- [ ] If a game's Play Store listing changed, re-ran `npm run assets:og` and committed the result
+- [ ] `npm run check` passes.
+- [ ] Relevant desktop and mobile views have been checked.
+- [ ] Game information and legal details are accurate or clearly marked as drafts.

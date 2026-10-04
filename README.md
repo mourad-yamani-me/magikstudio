@@ -1,64 +1,66 @@
 # Magikstudio
 
-Site de studio de jeux vidéo, adapté du dépôt `oettaib/indie-core-dev`. La nouvelle version reprend sa génération statique Node, ses polices locales, son serveur de prévisualisation et ses principes de navigation et d’accessibilité.
+English-language website for Magikstudio, an independent casual game studio.
+Built with static HTML, local fonts, CSS animations, and lightweight JavaScript.
 
-## Développement
+## Development
+
+Requires Node.js 22 or newer.
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Le serveur démarre sur http://localhost:4321. Pour l’aperçu de cette session :
+Preview: http://localhost:4321. Use `PORT=5173 npm run dev` for port 5173.
+After editing, run `npm run build` and reload the browser.
 
-```sh
-PORT=5173 npm run dev
-```
-
-Après une modification : `npm run build`, puis recharger le navigateur. Ce serveur statique n’utilise pas de HMR.
-
-## Vérifications
+## Checks
 
 ```sh
 npm run check
 ```
 
-Compile les pages Magikstudio, vérifie les liens, fichiers, métadonnées, états App Store, brouillons légaux et anciennes adresses de confidentialité, puis vérifie les extraits générés et les articles de référence conservés. Node 22 est utilisé pour le site ; le Lighthouse optionnel du dépôt nécessite Node 22.19 ou ultérieur.
+Builds the site and checks page structure, links, assets, metadata, accessibility
+attributes, legal draft status, and App Store links.
 
-## Sources
+## Project structure
 
-- `src/magikstudio/config.mjs` : identité, contact et jeux.
-- `src/magikstudio/site.mjs` : pages et composants HTML.
-- `src/magikstudio/styles.css` : identité visuelle et responsive.
-- `src/magikstudio/app.js` : navigation mobile, animations et copie du contact.
-- `src/magikstudio/legal.mjs` : confidentialité, CGU et mentions légales.
-- `scripts/build-magikstudio.mjs` : génération de `dist/`.
-- `scripts/verify-magikstudio.mjs` : contrôle de la version Magikstudio.
-- `public/assets/magikstudio/play-world.jpg` : illustration originale d’ambiance.
-- `docs/design/IMAGE-PROMPT.md` : méthode et prompt du visuel.
+- `src/magikstudio/config.mjs`: studio details and game information.
+- `src/magikstudio/site.mjs`: page templates and shared components.
+- `src/magikstudio/styles.css`: shared layouts.
+- `src/magikstudio/casual.css`: casual theme and playful animations.
+- `src/magikstudio/app.js`: navigation, motion controls, stars, and email copying.
+- `src/magikstudio/legal.mjs`: privacy policy, terms, and legal notice.
+- `public/assets/`: local fonts and studio illustrations.
+- `scripts/build-magikstudio.mjs`: generates `dist/`.
+- `scripts/verify-magikstudio.mjs`: validates the generated site.
+- `docs/design/`: visual explorations, prompts, and previews.
 
-## Jeu provisoire
+## Games and legal information
 
-Le propriétaire a demandé un placeholder. Aucun nom, capture ni lien réel n’a été fourni. Le projet est donc présenté comme en développement, et les visuels sont explicitement des concepts du studio.
+The first game is a placeholder requested by the studio. Its name, screenshots,
+and release details are not yet announced. Add an official HTTPS `apps.apple.com`
+URL in `config.mjs` to enable the App Store link. Current artwork is studio concept
+art, not gameplay imagery.
 
-Renseigner le nom, la description, le statut et `appStoreUrl` dans `config.mjs`. Un lien HTTPS `apps.apple.com` transforme automatiquement l’état « À venir » en lien de téléchargement officiel.
+Privacy, terms, and legal notice remain working drafts marked `noindex`.
+Complete the legal entity, address, jurisdiction, hosting, retention periods,
+and contact details before production publication.
 
-## Pages et publication
+## GitHub and Cloudflare
 
-Accueil `/`, studio `/about/`, contact `/contact/`, jeu `/games/prochain-jeu/`, confidentialité `/privacy/`, conditions `/terms/`, mentions légales `/legal/`.
+Repository: https://github.com/mourad-yamani-me/magikstudio
 
-Les pages légales sont des brouillons en `noindex`. L’identité juridique, le pays, le responsable de publication, les prestataires, les durées de conservation et le contact doivent être confirmés avant publication. La politique du futur jeu devra décrire ses données et SDK réels.
+GitHub Actions runs `npm ci` and `npm run check` on pushes and pull requests.
+Cloudflare deployment is a separate manual action named **Deploy Magikstudio**.
+It requires GitHub secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
+The Worker configuration targets `magikstudio.me` and `www.magikstudio.me` and
+serves `dist/`. Run the deployment workflow only when ready to publish.
+Do not enable a second deployment pipeline in Cloudflare.
 
-Le Worker de destination est nommé `magikstudio` et ses routes ciblent `magikstudio.me`. Aucun déploiement, changement DNS, push ou message externe n’a été effectué. Les automatisations GitHub de SEO et de publication sociale héritées du dépôt restent à adapter avant tout raccordement de production. Les déploiements doivent passer par GitHub Actions, conformément à `AGENTS.md`.
+## Credits
 
-## Référence conservée
-
-Le générateur original `build.mjs`, ses sources et ses contenus sont conservés. `npm run build:reference` et `npm run verify:reference` permettent de travailler sur cette version ; attention, elle écrit également dans `dist/`. Relancer `npm run build` pour revenir à Magikstudio.
-
-Les politiques `/privacy/<ancien-jeu>/` et leurs redirections Blogger sont préservées et attribuées à l’éditeur d’origine. Elles ne constituent pas le catalogue Magikstudio. Les anciennes adresses de newsletter restent accessibles, avec un état inactif et aucun formulaire relié au compte d’origine.
-
-Voir `docs/REFERENCE-README.md` pour la documentation historique. Références utilisées pour les brouillons légaux : [CNIL — Informer les personnes](https://www.cnil.fr/fr/informer-les-personnes).
-
-### Direction visuelle actuelle
-
-Le thème casual est dans `src/magikstudio/casual.css`, assemblé après les styles partagés. L’illustration est `public/assets/magikstudio/casual-world.jpg`. Les anciens visuels sont conservés comme variantes ; ils ne sont plus référencés par les pages. Voir `docs/design/IMAGE-PROMPT.md` pour la provenance et `docs/design/preview-casual.jpg` pour l’aperçu.
+Fonts: Bricolage Grotesque and Plus Jakarta Sans, served locally.
+Studio concept illustrations were created with an image-generation tool;
+see `docs/design/IMAGE-PROMPT.md` for prompts and asset details.
