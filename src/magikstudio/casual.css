@@ -10,3 +10,9 @@
 .motion-paused *,.motion-paused *::before,.motion-paused *::after{animation:none!important;transition:none!important}.motion-paused .rv{opacity:1!important;transform:none!important}.motion-paused{scroll-behavior:auto}.motion-paused .magic-spark{display:none}.motion-paused .project-art>img{transform:none!important}.motion-paused .value-icon,.motion-paused .brand svg{transform:none!important}
 @media(max-width:760px){.goodie-star{font-size:38px;left:auto;right:9%;top:37%}.goodie-ring{width:28px;height:28px;border-width:8px;left:10%;bottom:22%}.goodie-square{width:24px;height:24px;right:8%;bottom:12%;border-radius:8px}.happy-sticker{min-width:85px;min-height:85px}.hero-note{max-width:270px}.casual-hero h1{font-size:clamp(51px,12.5vw,78px)}.motion-toggle{padding:10px 14px}.project-lock>span{font-size:6px;letter-spacing:.6px}}
 @media(prefers-reduced-motion:reduce){.magic-spark{display:none}.rv{opacity:1!important;transform:none!important}}
+
+/* Service subsections in the privacy policy use the existing document palette. */
+.doc-content h3 { font-size: 20px; line-height: 1.35; margin: 28px 0 12px; }
+.doc-content h2 + h3 { margin-top: 18px; }
+.doc-content p, .toc a { overflow-wrap: anywhere; }
+@media (max-width: 700px) { .doc-content h3 { font-size: 18px; } }
